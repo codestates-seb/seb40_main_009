@@ -1,0 +1,31 @@
+pring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # ?? ? ????!!!
+    show-sql: true      # ??????
+    properties:
+      hibernate:
+        format_sql: true # ??? ????
+  sql:
+    init:
+      data-locations: classpath*:db/h2/data.sql
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+
+#postman ???? ??? ??? ?? ???.
+server:
+  servlet:
+    encoding:
+      force-response: true
+      charset: utf-8
+      force: true
