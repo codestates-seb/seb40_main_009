@@ -1,10 +1,10 @@
 package be.wiselife.order.service;
 
 import be.wiselife.order.dto.OrderDto;
+import be.wiselife.order.entity.Order;
 import be.wiselife.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.manager.util.SessionUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -26,24 +26,33 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public OrderDto.OrderReadyResponse startKakaoPay() {
+    /**
+     * 결제번호 수령
+     * @param order
+     * @return
+     */
+    public OrderDto.OrderReadyResponse startKakaoPay(Order order) {
+        orderRepository.save(order); //ORDERID 값을 지정받기 위해 값을 저장한다.
         //로그인한 맴버 아이디를 구해오는 로직
         //주문번호
         //카카오톡에서 요청하는 기본 양식
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
-        parameters.add("partner_order_id", "orderNum_1"); // 주문번호
-        parameters.add("partner_user_id", "memberId_1"); // 맴버아이디
-        parameters.add("item_name", "wiselife"); //상품명
-        parameters.add("quantity", "1"); // 상품수량
-        parameters.add("total_amount", "10000"); //결재 총액
-        parameters.add("vat_amount", "200"); //상품 비과세 금액
+        parameters.add("partner_order_id", String.valueOf(order.getOrderId())); // 주문번호
+        parameters.add("partner_user_id", "memberId_1"); // 맴버아이디 로그인 추가시 수정필요
+        parameters.add("item_name", order.getItemName()); //상품명
+        parameters.add("quantity", String.valueOf(order.getQuantity())); // 상품수량
+        parameters.add("total_amount", String.valueOf((int)order.getTotalAmount())); //결재 총액
+        parameters.add("vat_amount", String.valueOf(order.getOrderTax())); //상품 비과세 금액
         parameters.add("tax_free_amount", "0"); // 상품 부가세 금액
         parameters.add("approval_url", successUrl);
         parameters.add("cancel_url", cancelUrl);
         parameters.add("fail_url", failUrl);
 
         log.info("주문한 맴버아이디:" + parameters.get("partner_user_id"));
+        log.info("결제번호 : {}", parameters.get("partner_order_id"));
+
+
         // 보낼 파라미터와 헤더
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
 
@@ -57,14 +66,15 @@ public class OrderService {
         return ready;
     }
 
-    public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) {
-
+    public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) { //로그인 메소드 생기면 그떄 수정
+        log.info("요청 tid {}", tid);
+        Order order = orderRepository.findByTid(tid).orElseThrow(()->new RuntimeException()); //비지니스 exception 추가시 변경, 로그인 추가시 찾는로직도 변경 필요
         //카카오톡에서 요청하는 기본 양식
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
         parameters.add("tid", tid);
-        parameters.add("partner_order_id", "orderNum_1"); //주문번호 수정예정
-        parameters.add("partner_user_id", "memberId_1");
+        parameters.add("partner_order_id", String.valueOf(order.getOrderId())); //주문번호 수정예정
+        parameters.add("partner_user_id", "memberId_1"); //회원 아이디 로그인 구현시 수정예정
         parameters.add("pg_token", pgtoken);
 
         log.info("결제승인 요청을 인증하는 토큰: " + pgtoken);
@@ -90,4 +100,13 @@ public class OrderService {
     }
 
 
+    public void saveTid(Order order, String tid) {
+        Order verifyOrderId = verifyOrderId(order);
+        verifyOrderId.setTid(tid);
+        orderRepository.save(verifyOrderId);
+    }
+
+    private Order verifyOrderId(Order order) {
+        return orderRepository.findById(order.getOrderId()).orElseThrow(() -> new RuntimeException());
+    }
 }

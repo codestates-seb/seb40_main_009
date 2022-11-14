@@ -1,7 +1,6 @@
 package be.wiselife.order.entity;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +8,9 @@ import java.util.List;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Entity
 @Table(name = "ORDER_TABLE")
 public class Order {
@@ -23,11 +25,12 @@ public class Order {
     private int quantity;
     @Column(nullable = false)
     private int orderTax;
+    @Column(unique = true)
+    private String tid; //결제번호
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
-    private List<OrderLog> orderLogList = new ArrayList<>();
 
-    public Order() {
 
-    }
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+//    private List<OrderLog> orderLogList = new ArrayList<>();
+
 }

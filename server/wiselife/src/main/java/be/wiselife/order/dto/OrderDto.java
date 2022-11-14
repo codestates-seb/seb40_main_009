@@ -24,14 +24,6 @@ public class OrderDto {
         private String tid;
         private String next_redirect_pc_url;
         private String created_at;
-//        private String tid;
-//        private String tms_result;
-//        private String next_redirect_app_url;
-//        private String next_redirect_mobile_url;
-//        private String next_redirect_pc_url;
-//        private String android_app_scheme;
-//        private String ios_app_scheme;
-
     }
 
 
@@ -74,9 +66,10 @@ public class OrderDto {
     @Getter
     @Setter
     public static class OrderPostinfo{
-        private String memberId;
-        private String ItemName;
+        private String itemName;
+        private double totalAmount;
         private int quantity;
+        private int orderTax;
 
     }
 

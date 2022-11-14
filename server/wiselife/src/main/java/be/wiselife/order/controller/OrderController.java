@@ -25,23 +25,22 @@ import java.net.http.HttpResponse;
 @RequestMapping("/order")
 @Slf4j
 @RequiredArgsConstructor
-
 public class OrderController {
 
-    private String tid;
+    private String tid; //결제고유번호
     private final OrderService orderService;
     private final OrderMapper orderMapper;
 
-    //결제준비
+    //결제준비 , 결제고유번호를 받기 위한 메소드
     @GetMapping("/ready")
-    public @ResponseBody ResponseEntity startContract() throws IOException { //나중에 order값 받아올 필요있음
+    public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postinfo) throws IOException { //나중에 order값 받아올 필요있음
+        log.info("주문정보 ={}", postinfo.getItemName()); log.info("결재 총액 ={}", postinfo.getTotalAmount());
 
-        //주문정보 로그 추가 필요
-        //총액 로그 추가 필요
-        //결제요청을 위한 서비스 실행
-        OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(); //총액값 넘기기
-        this.tid = readyForPay.getTid();
-        log.info("카톡에서 보낸 결제 고유 번호 = {}", readyForPay.getTid());
+        Order order = orderMapper.postInfoToOrder(postinfo);
+        OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order);  //결제요청을 위한 서비스 실행
+        orderService.saveTid(order,readyForPay.getTid()); // 거래고유번호 저장
+
+        this.tid = readyForPay.getTid(); //로그인 기능시 삭제예정
         return new ResponseEntity(readyForPay, HttpStatus.ACCEPTED);
     }
 
@@ -65,4 +64,6 @@ public class OrderController {
     public String payFail() {
         return "redirect:/";
     }
+
+
 }
