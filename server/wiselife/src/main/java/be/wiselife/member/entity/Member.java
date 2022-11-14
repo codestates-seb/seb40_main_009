@@ -1,6 +1,8 @@
 package be.wiselife.member.entity;
 
 import be.wiselife.audit.TimeAudit;
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,6 +45,9 @@ public class Member extends TimeAudit {
 
     @Enumerated(EnumType.STRING)
     private MemberBadge memberBadge = MemberBadge.IRON;
+
+
+    private int memberLevel = 1;
 
     @Column(nullable = false)
     private boolean hasRedCard = false;
@@ -90,10 +95,23 @@ public class Member extends TimeAudit {
         CHALLENGE(7);
 
         @Getter
-        private int level;
+        public int level;
 
         MemberBadge(int level) {
             this.level = level;
+        }
+
+        public static MemberBadge badgeOfLevel(int level) {
+            switch (level) {
+                case 1:return IRON;
+                case 2:return SILVER;
+                case 3:return GOLD;
+                case 4:return PLATINUM;
+                case 5:return DIAMOND;
+                case 6:return MASTER;
+                case 7:return CHALLENGE;
+                default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
+            }
         }
     }
 

@@ -23,12 +23,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class MemberController {
+    /**
+     * 추가 예정 매핑메소드
+     * 도전중인 챌린지 조회
+     * 전체 도전내역 조회
+     * 결제내역 조회
+     */
 
+
+    //추가 의존성 주입 필요, voter, image, challenge, challengeReview 관련 Service 클래스
     private final MemberService memberService;
 
     private final MemberMapper mapper;
 
-    //추가 의존성 주입 필요, voter, image, challenge, challengeReview 관련 Service 클래스
+
 
     /**
      * 회원등록
@@ -95,5 +103,17 @@ public class MemberController {
 
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(member)),HttpStatus.OK);
+    }
+
+    //follower 기준 sort 동작 확인용 추후 삭제 예정
+    @GetMapping("/testfollowers/{memberId}")
+    public void followerCount(@PathVariable("memberId") Long memberId) {
+       memberService.addFollowers(memberId);
+    }
+
+    //Badge 기준 sort 동작 확인용 추후 삭제 예정
+    @GetMapping("/testbadge/{memberId}")
+    public void patchBadge(@PathVariable("memberId") Long memberId) {
+        memberService.changeBadge(memberId);
     }
 }

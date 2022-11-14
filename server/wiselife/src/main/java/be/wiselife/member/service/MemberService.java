@@ -19,6 +19,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
+
+    /**
+     * 추가 예정 서비스 로직
+     * 뱃지 업그레이드 로직
+     * 챌린지 성공률(성공한 챌린지/참여했던 챌린지) 계산 로직
+     * 경험치 변동 로직
+     *
+     */
     private final MemberRepository memberRepository;
 
     public Member createMember(Member member) {
@@ -47,11 +55,9 @@ public class MemberService {
      */
     public Page<Member> findAllMember(int page, int size,String sort) {
 
-        Sort standard;
-
         switch (sort) {
             case "memberBadge":
-                sort = "memberBadge";
+                sort = "memberLevel";
                 break;
             case "followers":
                 sort = "followers";
@@ -95,5 +101,21 @@ public class MemberService {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member foundMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return foundMember;
+    }
+
+    //follower 기준 sort 동작 확인용 추후 삭제 예정
+    public void addFollowers(Long memberId) {
+        Member member = verifiedMemberById(memberId);
+        member.setFollowers(member.getFollowers()+1);
+        memberRepository.save(member);
+    }
+
+    //Badge 기준 sort 동작 확인용 추후 삭제 예정
+    public void changeBadge(Long memberId) {
+        Member member = verifiedMemberById(memberId);
+        int memberLevel = member.getMemberBadge().getLevel()+1;
+        member.setMemberLevel(memberLevel);
+        member.setMemberBadge(Member.MemberBadge.badgeOfLevel(memberLevel));
+        memberRepository.save(member);
     }
 }
