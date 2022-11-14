@@ -25,15 +25,17 @@ public class Member extends TimeAudit {
     @Column(nullable = false,unique = true)
     private String memberEmail;
 
-    //로그인 기능이 추가되어도 로그인 멤버의 토큰에서 가져오지 않으며
-    //생성시에 uuid를 통한 기본값 배정이며,
-    //멤버가 수정시 원하는 값 입력 가능하나, 중복되는 memberName 없이 유효성 동작
+    /**
+     * 로그인 기능이 추가되어도 로그인 멤버의 토큰에서 가져오지 않으며
+     * 생성시에 uuid를 통한 기본값 배정이며,
+     * 멤버가 수정시 원하는 값 입력 가능하나, 중복되는 memberName 없이 유효성 동작
+     */
     @Column(nullable = false,unique = true)
     private String memberName;
 
     /**
      * 연관관계 매핑이 필요한 필드
-     * 참여중인 챌린지가 없으므로 생성시 기본값 0건, 0원
+     * 참여중인 챌린지가 없으므로 생성시 기본값 0건, 0원, 이미지는 image
      */
 
     @Column(nullable = false)
@@ -59,6 +61,12 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private double memberMoney=0;
 
+    @Column(nullable = false)
+    private String memberImage = "image";
+
+    @Column(nullable = false)
+    private int followers = 0;
+
 
 
     /**
@@ -71,14 +79,22 @@ public class Member extends TimeAudit {
      * 생성자는 필요시 작성예정
      */
 
-    enum MemberBadge {
+    public enum MemberBadge {
         // 레벨로 나타내면 몇이 최대인지 몰라서 우선 롤 계급제로 분류
-        IRON,
-        SILVER,
-        GOLD,
-        PLATINUM,
-        DIAMOND,
-        MASTER,
-        CHALLENGE
+        IRON(1),
+        SILVER(2),
+        GOLD(3),
+        PLATINUM(4),
+        DIAMOND(5),
+        MASTER(6),
+        CHALLENGE(7);
+
+        @Getter
+        private int level;
+
+        MemberBadge(int level) {
+            this.level = level;
+        }
     }
+
 }
