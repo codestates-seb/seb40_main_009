@@ -15,6 +15,7 @@ public class MemberDto {
     @Getter
     @AllArgsConstructor
     public static class Patch {
+        private long memberId;
 
         @Pattern(regexp = "^[a-z0-9]{4,20}$", message = "닉네임은 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.")
         private String memberName;

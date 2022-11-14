@@ -8,9 +8,8 @@ public enum ExceptionCode {
      */
 
     //Member 부분 예외 ==============시작
-    USER_NOT_FOUND(404, "User not exists"),
-    USER_EMAIL_ALREADY_EXISTS(400, "This useremail already exists"),
-    USER_NAME_ALREADY_EXISTS(400, "This username already exists");
+    MEMBER_NOT_FOUND(404, "Member not exists"),
+    MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists");
     //Member 부분 예외 ==============끝
     @Getter
     private int code;

@@ -17,7 +17,7 @@ public interface MemberMapper {
 
         member.setMemberName(patchMember.getMemberName());
         member.setMemberDescription(patchMember.getMemberDescription());
-        member.setMemberImage(member.getMemberImage());
+        member.setMemberImage(patchMember.getMemberImage());
 
         return member;
     }

@@ -2,6 +2,7 @@ package be.wiselife.member.controller;
 
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
+import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.mapper.MemberMapper;
 import be.wiselife.member.service.MemberService;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/member")
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 public class MemberController {
 
     private final MemberService memberService;
@@ -85,9 +88,10 @@ public class MemberController {
      * 회원이 본인의 정보를 수정할때,
      * 차후 로그인 기능 구현시 본인만 회원정보를 수정할 수 있게 파라미터를 수정해야한다.
      */
-    @PatchMapping("/{memberName}")
-    public ResponseEntity patchMember(@PathVariable("memberName") String memberName) {
-        Member member = memberService.updateMemberInfo(memberName);
+    @PatchMapping("/{memberId}")
+    public ResponseEntity patchMember(@PathVariable("memberId") Long memberId,
+                                      @Validated @RequestBody MemberDto.Patch patchData) {
+        Member member = memberService.updateMemberInfo(memberId,mapper.memberPatchToMember(patchData));
 
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(member)),HttpStatus.OK);
