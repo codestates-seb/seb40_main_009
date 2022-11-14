@@ -11,7 +11,6 @@ function KakaoLogin() {
   const setLoginState = useSetRecoilState(LoginState);
 
   const KAKAO_CODE = location.search.split('=')[1]; // 인가코드
-  console.log('hi');
 
   // 로그인
   // Todo 리프레시 토큰
@@ -26,6 +25,7 @@ function KakaoLogin() {
       localStorage.setItem('authorizationToken', response.data.accessToken);
       localStorage.setItem('LoginId', response.data.memberId);
       localStorage.setItem('LoginName', response.data.memberName);
+      localStorage.setItem('memberMoney', response.data.memberMoney);
       setLoginState(true);
       navigate('/');
       // .catch(async (error) => {

@@ -56,16 +56,19 @@ export default function ChallengeDetail({ challengeData }) {
         cancelButtonText: '다음에...',
       });
       if (response.isConfirmed) {
-        //결제페이지로 이동
-        return navigate('/ordersheet', {
-          state: {
-            title: challengeData.challengeTitle,
-            startDate: challengeData.challengeStartDate,
-            endDate: challengeData.challengeEndDate,
-            price: challengeData.challengeFeePerPerson,
-            image: challengeData.challengeRepImagePath,
+        await axios.post(
+          `/challenges/participate/${challengeId}`,
+          {
+            data: '',
           },
-        });
+          {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        );
+        // await navigate('/');
       }
     } else {
       const response = await Swal.fire({

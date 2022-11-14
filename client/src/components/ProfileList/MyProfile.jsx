@@ -20,6 +20,7 @@ function MyProfile({
   memberExpObjRate,
   followStatus,
   followerCount,
+  memberMoney,
 }) {
   const profileData = {
     memberImagePath,
@@ -66,6 +67,10 @@ function MyProfile({
               챌린지성공률:
               {memberChallengePercentage}%
             </p>
+            <p>
+              현재 포인트:
+              {memberMoney} 포인트
+            </p>
           </div>
           <textarea
             className="readonly-box"
@@ -77,6 +82,9 @@ function MyProfile({
           {memberName === LoginName ? (
             <div className="buttonLists">
               <ProfileEditButton>환급받기</ProfileEditButton>
+              <Link to={'/ordersheet'}>
+                <ProfileEditButton>충전하기</ProfileEditButton>
+              </Link>
               <Link
                 to={`/profile/edit/${memberName}`}
                 state={{

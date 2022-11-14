@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   HeaderContainer,
   Container,
@@ -22,6 +22,7 @@ import { LoginState } from '../Login/KakaoLoginData';
 import { FaRunning } from 'react-icons/fa';
 import { TiArrowDownThick, TiArrowUpThick } from 'react-icons/ti';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { moneyState } from '../../atoms/atoms';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -34,12 +35,14 @@ export default function Header() {
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
   // 카카오로그인 api로 이동
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
 
   const memberName = localStorage.getItem('LoginName');
+  const memberMoney = localStorage.getItem('memberMoney');
 
   // 메인페이지로 이동
   const NavigateMainPage = () => {
@@ -124,6 +127,7 @@ export default function Header() {
     window.localStorage.removeItem('LoginName');
     window.localStorage.removeItem('createChallengeData');
     window.localStorage.removeItem('challengeId');
+    window.localStorage.removeItem('memberMoney');
     setLoginState(false);
   };
 
@@ -145,7 +149,6 @@ export default function Header() {
           src={LogoImage}
           alt="슬기로운생활로고 사진"
         />
-
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
@@ -244,6 +247,7 @@ export default function Header() {
             >
               반가워요,
             </div>
+
             <div style={{ color: '#8672FF' }}> {memberName} 님!</div>
 
             <ul
@@ -306,6 +310,18 @@ export default function Header() {
               onClick={handleLogin}
             />
           </div>
+        )}
+        {loginState && (
+          <Link to={'/ordersheet'}>
+            <div
+              style={{
+                width: '100px',
+                color: 'black',
+              }}
+            >
+              {memberMoney} 포인트
+            </div>
+          </Link>
         )}
       </Container>
     </HeaderContainer>

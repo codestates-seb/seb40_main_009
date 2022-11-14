@@ -7,7 +7,35 @@ import { AiFillHeart } from 'react-icons/ai';
 // 2. 하트를 다시 누르면 빈하트가 나오고 숫자는 다시 내려간다 => followStatus = 'FOLLOW'
 
 function Follower({ followStatus, followerCount }) {
-  console.log('팔로우 상태 확인 중', followStatus);
+  const data = { followStatus, followerCount };
+
+  //   const [clickedHeart, setClickedHeart] = useState(followStatus);
+
+  const clickedHeart = () => {
+    if (followStatus === 'UNFOLLOW') {
+    }
+  };
+
+  //   // get요청
+  //   const getFollowers = async () => {
+  //     try {
+  //       axios
+  //         .get(`/follow/like/${name}`, {
+  //           headers: {
+  //             'ngrok-skip-browser-warning': 'none',
+  //             Authorization:
+  //               'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.FlS9lUOnWzAi9UFkZOT2UqT4FYmGiiRsST2wfPJErEiQLYYsJw9jSMwYaEwrM1DceWXltVQ5r8o0_OWjFGJa8w',
+  //           },
+  //         })
+  //         .then((response) => {
+  //           const myProfile = response.data;
+  //           console.log('my', myProfile);
+  //           setMyProfileLists(myProfile.data);
+  //         });
+  //     } catch (error) {
+  //       console.log('error: ', error);
+  //     }
+  //   };
 
   return (
     <>
