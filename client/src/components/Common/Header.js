@@ -1,22 +1,22 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import * as S from '../../style/Common/HeaderStyle';
 
 function Header() {
-  const navigate = useNavigate();
-  const LinkMainPage = () => {
-    navigate('/');
-  };
+  //   const navigate = useNavigate();
+  //   const LinkMainPage = () => {
+  //     navigate('/');
+  //   };
 
-  const LinkChallengePage = () => {
-    navigate('/challengelist');
-  };
+  //   const LinkChallengePage = () => {
+  //     navigate('/challengelist');
+  //   };
 
   return (
     <S.HeaderContainer>
       <S.Container>
-        <S.Logo onClick={LinkMainPage}>슬기로운 생활</S.Logo>
-        <S.ChallengeBtn onClick={LinkChallengePage}>Challenge</S.ChallengeBtn>
+        <S.Logo>슬기로운 생활</S.Logo>
+        <S.ChallengeBtn>Challenge</S.ChallengeBtn>
         <S.Search>
           <input
             type="text"
