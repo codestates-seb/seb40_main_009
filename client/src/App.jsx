@@ -25,6 +25,7 @@ import CancellationPayment from './components/KakaoPay/PaymentLists/Cancellation
 
 import ProfileBoxChallenge from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
 import ProfileBoxOrderList from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
+import { FollowersDetailComponent } from './style/MyProfilePageStyle/MyProfilePageStyle';
 
 export default function App() {
   return (
@@ -58,13 +59,13 @@ export default function App() {
             path="/profile/:name/chellenge"
             element={<ProfileBoxChallenge />}
           />
-          {/* <Route
-            path="/profile/:name/challengelist"
-            element={<ProfileBoxChallengeList />}
-          /> */}
           <Route
             path="/profile/:name/orderlist"
             element={<ProfileBoxOrderList />}
+          />
+          <Route
+            path="/profile/:name/followers"
+            element={<FollowersDetailComponent />}
           />
         </Routes>
         <Footer />

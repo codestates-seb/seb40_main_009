@@ -15,6 +15,7 @@ function ProfileBoxLists({
 }) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
   const [challenges, setChallenges] = useState(participatingChallenges);
+
   const LoginName = localStorage.getItem('LoginName');
   const tabName = {
     0: '도전 중',
@@ -56,7 +57,7 @@ function ProfileBoxLists({
         {clickedTab !== 2 &&
           challenges.map((challenge) => (
             <ProfileBoxChallenge
-              key={challenge.challengeId}
+              challengeId={challenge.challengeId}
               challengeTitle={challenge.challengeTitle}
               memberReward={challenge.memberReward}
               memberSuccessDay={challenge.memberSuccessDay}

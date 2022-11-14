@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   MyProfileComponent,
@@ -21,6 +21,7 @@ function MyProfile({
   followerCount,
   memberMoney,
 }) {
+  //edit페이지로 가져갈 데이터
   const profileData = {
     memberImagePath,
     memberName,
@@ -31,7 +32,15 @@ function MyProfile({
     objectPeriod: '',
     followerCount: '',
   };
+
+  const navigate = useNavigate();
   const LoginName = localStorage.getItem('LoginName');
+  const name = memberName;
+  console.log('이건 이름', name);
+
+  const onClickFollowers = () => {
+    navigate(`/profile/${name}/followers`);
+  };
 
   return (
     <MyProfileComponent>
@@ -39,7 +48,7 @@ function MyProfile({
         <img src={memberImagePath} className="image-size" alt="profile-img" />
         <div>
           <ProfileList>
-            <p>{memberName}</p>
+            <button onClick={onClickFollowers}>{memberName}</button>
             <Follower
               followStatus={followStatus}
               followerCount={followerCount}
@@ -48,8 +57,7 @@ function MyProfile({
           <div className="profile-list">
             <p>
               챌린지성공률:
-              {memberChallengePercentage}%{/* 0% */}
-              {/* 임시 */}
+              {memberChallengePercentage}%
             </p>
             <p>
               현재 포인트:
