@@ -25,6 +25,7 @@ dependencies {
 	implementation 'com.google.code.gson:gson'    //GSON JSON 데이터 변환
 	implementation 'log4j:log4j:1.2.17'
 
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 //  runtimeOnly 'com.mysql:mysql-connector-j' //서버 배포할때
@@ -33,7 +34,6 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
 
 }
 
