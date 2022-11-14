@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -65,5 +67,15 @@ public class OrderController {
         return "redirect:/";
     }
 
+
+    //마이페이지 결제한내역 리스트 조회
+    @GetMapping("/{userId}")
+    public ResponseEntity getOrderlistByUserId(@PathVariable("userId") Long userId) {
+        Page<Order> orderList = orderService.getOrderList(userId);
+
+        return new ResponseEntity(orderList, HttpStatus.OK); //수정필요
+    }
+
+    //결제 취소리스트 구현 필요할까? v2
 
 }

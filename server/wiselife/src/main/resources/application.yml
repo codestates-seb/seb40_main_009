@@ -23,6 +23,11 @@ logging:
         orm:
           jpa: DEBUG
 
+log4j:
+  appender:
+    sql:
+#https://kafcamus.tistory.com/23
+
 #postman ???? ??? ??? ?? ???.
 server:
   servlet:

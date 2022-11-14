@@ -3,8 +3,9 @@
 <configuration>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
-              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
-<!--                             시간 4초는 4개까지만 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-1relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+<!-- 시간 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
+<!-- 로깅을 저장하고 싶으면 profile을 prod 상태로 바꾼다. 3개의 공통사항을 지정한 console appender.xml-->
     <springProfile name="!prod">
         <include resource="console-appender.xml"/>
 

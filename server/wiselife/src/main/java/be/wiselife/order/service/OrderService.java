@@ -5,12 +5,17 @@ import be.wiselife.order.entity.Order;
 import be.wiselife.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -108,5 +113,11 @@ public class OrderService {
 
     private Order verifyOrderId(Order order) {
         return orderRepository.findById(order.getOrderId()).orElseThrow(() -> new RuntimeException());
+    }
+
+    public Page<Order> getOrderList(Long userId) {
+        //userID로 찾는 로직 구현 필요
+
+        return orderRepository.findAll(PageRequest.of(0, 10, Sort.by("orderId")));
     }
 }
