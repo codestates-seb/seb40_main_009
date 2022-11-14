@@ -15,7 +15,7 @@ function App() {
           <Route path="/userlist" element={<UserList />} />
         </Routes>
       </BrowserRouter>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
