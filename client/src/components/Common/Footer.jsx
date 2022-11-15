@@ -1,7 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as S from '../../style/Common/FooterStyle';
 
 function Footer() {
+  const navigate = useNavigate();
+
+  const LinkChallengePage = () => {
+    navigate('/challengelist');
+  };
+
+  const LinkUserPage = () => {
+    navigate('/userlist');
+  };
+
   return (
     <S.FooterContainer>
       <S.Container>
@@ -14,8 +25,8 @@ function Footer() {
           </S.Logo>
 
           <S.LinkContainer>
-            <div>Challenge</div>
-            <div>User</div>
+            <div onClick={LinkChallengePage}>Challenge</div>
+            <div onClick={LinkUserPage}>User</div>
           </S.LinkContainer>
           <S.LinkContainer>
             <div>About us</div>
