@@ -23,8 +23,8 @@ public enum ExceptionCode {
     //Challenge 부분 예외 ===========끝
 
     //Follower 부분 예외 ==========시작
-    FOLLOWERS_NOT_FOUND(404, "Followers not found"),
-    OVERLAP_VOTE(400,"You can one time vote for one post");
+    CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself");
+
 
     @Getter
     private int code;

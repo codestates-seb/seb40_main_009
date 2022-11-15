@@ -18,17 +18,22 @@ public class Follower extends TimeAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followerId;
 
-    private Long followingId;
+    private Long followerMemberId;
 
     @Column(nullable = false)
     private boolean isFollow = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private String followerName;
 
-    public Follower(Long followingId, Member member) {
-        this.followingId = followingId;
-        this.member = member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member followingMember;
+
+    public Follower(Long followerMemberId,Member followingMember) {
+        this.followerMemberId = followerMemberId;
+        this.followingMember = followingMember;
+
     }
 
     public void setFollow(boolean isFollow) {

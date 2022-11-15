@@ -100,6 +100,7 @@ public class MemberService {
     private Member verifiedMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member foundMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        log.info("follower size={}",foundMember.getFollowers().size());
         return foundMember;
     }
 

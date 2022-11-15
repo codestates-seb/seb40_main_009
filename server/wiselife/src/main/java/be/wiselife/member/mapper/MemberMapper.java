@@ -1,5 +1,6 @@
 package be.wiselife.member.mapper;
 
+import be.wiselife.follower.entity.Follower;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import org.mapstruct.Mapper;
@@ -7,6 +8,8 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMapper {
@@ -39,7 +42,8 @@ public interface MemberMapper {
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
         memberDetailResponse.setFollowerCount(member.getFollowerCount());
         memberDetailResponse.setMemberImage(member.getMemberImage());
-
+        //멤버에 팔로워 정보뜨게 추가
+        memberDetailResponse.setFollowers(followersToFollowResponseDto(member.getFollowers()));
         return memberDetailResponse;
     }
 
@@ -54,5 +58,19 @@ public interface MemberMapper {
         memberListResponse.setCreated_at(member.getCreated_at());
 
         return memberListResponse;
+    }
+
+    default List<MemberDto.MemberFollowerResponseDto> followersToFollowResponseDto(Set<Follower> followers) {
+        return followers
+                .stream()
+                .map(follower -> MemberDto.MemberFollowerResponseDto
+                        .builder()
+                        .followId(follower.getFollowerId())
+                        .followingId(follower.getFollowingMember().getMemberId())
+                        .followerId(follower.getFollowerMemberId())
+                        .followerName(follower.getFollowerName())
+                        .followStatus(follower.isFollow())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

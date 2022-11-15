@@ -1,15 +1,13 @@
 package be.wiselife.member.dto;
 
 import be.wiselife.member.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import javax.persistence.Column;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -47,6 +45,7 @@ public class MemberDto {
         private double memberMoney;
         private String memberImage;
         private int followerCount;
+        private List<MemberFollowerResponseDto> followers;
 
         public void setHasRedCard(boolean hasRedCard) {
             this.hasRedCard = hasRedCard;
@@ -63,5 +62,17 @@ public class MemberDto {
         private Member.MemberBadge memberBadge;
         private int followerCount;
         private LocalDateTime created_at;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberFollowerResponseDto {
+        private Long followId;
+        private Long followingId;
+        private Long followerId;
+        private String followerName;
+        private boolean followStatus;
     }
 }

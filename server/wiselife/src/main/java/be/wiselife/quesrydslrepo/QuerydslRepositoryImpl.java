@@ -13,11 +13,11 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
 
 
     @Override
-    public Follower findByFollowingIdAndFollowerMember(Long followingId, Member followerMember) {
+    public Follower findByFollowerMemberIdAndFollowingMember(Long followerMemberId, Member followingMember) {
         return queryFactory
                 .selectFrom(follower)
-                .where(follower.followingId.eq(followingId)
-                        .and(follower.member.eq(followerMember)))
+                .where(follower.followerMemberId.eq(followerMemberId)
+                        .and(follower.followingMember.eq(followingMember)))
                 .fetchOne();
     }
 }

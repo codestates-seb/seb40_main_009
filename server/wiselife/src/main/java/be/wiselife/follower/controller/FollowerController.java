@@ -24,15 +24,13 @@ public class FollowerController {
 
     /**
      *
-     * @param followingId 팔로워가 누를 대상
-     * @param followerId 팔로워를 누른 사람 -> 로그인 기능 후 부터는 파라미터 전달하지 않을 예
+     * @param followingMemberId 팔로워가 누를 대상
+     * @param followerMemberId 팔로워를 누른 사람 -> 로그인 기능 후 부터는 파라미터 전달하지 않을 예
      */
     @PostMapping("/like")
-    public void plusFollower(@Positive @RequestParam("followingId") Long followingId,
-                                 @Positive @RequestParam("followerId") Long followerId
+    public void plusFollower(@Positive @RequestParam("followingMemberId") Long followingMemberId,
+                                 @Positive @RequestParam("followerMemberId") Long followerMemberId
                                  ) {
-        Member followingMember = memberService.findMemberById(followingId);
-        Member followerMember = memberService.findMemberById(followerId);
-        followerService.updateFollower(followingMember, followerMember);
+        followerService.updateFollower(followingMemberId, followerMemberId);
     }
 }

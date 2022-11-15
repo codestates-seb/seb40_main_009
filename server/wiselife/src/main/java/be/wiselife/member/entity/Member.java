@@ -72,12 +72,15 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private String memberImage = "image";
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    Set<Follower> followers = new HashSet<>();
+    @OneToMany(mappedBy = "followingMember", cascade = CascadeType.PERSIST)
+    private Set<Follower> followers = new HashSet<>();
 
     @Column(nullable = false)
     private int followerCount = 0;
 
+    public void setFollowers(Set<Follower> followers) {
+        this.followers = followers;
+    }
 
 
     /**
