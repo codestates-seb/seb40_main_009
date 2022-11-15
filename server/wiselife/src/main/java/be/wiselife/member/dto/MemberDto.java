@@ -46,6 +46,7 @@ public class MemberDto {
         private String memberImage;
         private int followerCount;
         private List<MemberFollowerResponseDto> followers;
+        private Member.FollowStatus followStatus;
 
         public void setHasRedCard(boolean hasRedCard) {
             this.hasRedCard = hasRedCard;

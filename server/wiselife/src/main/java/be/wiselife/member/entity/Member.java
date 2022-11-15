@@ -49,7 +49,6 @@ public class Member extends TimeAudit {
     @Enumerated(EnumType.STRING)
     private MemberBadge memberBadge = MemberBadge.새내기;
 
-
     private int memberLevel = 1;
 
     @Column(nullable = false)
@@ -72,6 +71,10 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private String memberImage = "image";
 
+    //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
+    @Enumerated(EnumType.STRING)
+    private FollowStatus followStatus=FollowStatus.SELF;
+
     @OneToMany(mappedBy = "followingMember", cascade = CascadeType.PERSIST)
     private Set<Follower> followers = new HashSet<>();
 
@@ -93,6 +96,9 @@ public class Member extends TimeAudit {
      * 생성자는 필요시 작성예정
      */
 
+    public enum FollowStatus {
+        SELF,FOLLOW,UNFOLLOW;
+    }
     public enum MemberBadge {
         // 레벨로 나타내면 몇이 최대인지 몰라서 우선 롤 계급제로 분류
         새내기(1),

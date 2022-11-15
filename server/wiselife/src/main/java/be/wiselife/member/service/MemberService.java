@@ -2,6 +2,7 @@ package be.wiselife.member.service;
 
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
+import be.wiselife.follower.entity.Follower;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
@@ -41,6 +42,26 @@ public class MemberService {
 
     public Member findMemberById(Long memberId) {
         return verifiedMemberById(memberId);
+    }
+
+    /**
+     * 팔로워가 팔로우하는 사람 페이지에 갔을떄
+     * 테스트 용도로 작동하는 것으로 memberId(팔로우 하는 사람) 페이지에 접근할때, 팔로우 인지 아닌지를 확인하는 용도
+     * 아마 여기에 로그인 기능 추가해서 사용하게 될 듯
+     */
+    public Member findMemberById(Long followId,Long followerId) {
+        Member followedMember = verifiedMemberById(followId);
+        Follower follower =memberRepository.findByFollowerMemberIdAndFollowingMember(followerId, followedMember);
+        if (follower == null) {
+            followedMember.setFollowStatus(Member.FollowStatus.SELF);
+            return memberRepository.save(followedMember);
+        }
+        if (follower.isFollow()) {
+            followedMember.setFollowStatus(Member.FollowStatus.FOLLOW);
+        } else {
+            followedMember.setFollowStatus(Member.FollowStatus.UNFOLLOW);
+        }
+        return memberRepository.save(followedMember);
     }
     public Member findMemberByMemberName(String memberName) {
         return verifiedMemberByMemberName(memberName);

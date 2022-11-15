@@ -44,6 +44,7 @@ public interface MemberMapper {
         memberDetailResponse.setMemberImage(member.getMemberImage());
         //멤버에 팔로워 정보뜨게 추가
         memberDetailResponse.setFollowers(followersToFollowResponseDto(member.getFollowers()));
+        memberDetailResponse.setFollowStatus(member.getFollowStatus());
         return memberDetailResponse;
     }
 
