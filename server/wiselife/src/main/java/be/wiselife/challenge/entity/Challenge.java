@@ -42,7 +42,7 @@ public class Challenge {
     private String challengeAuthDescription;
 
     @Column(nullable = false)
-    private int challengeAuthCycle;
+    private int challengeAuthCycle; //인증 빈도
 
     private String challengeDirectLink;//이건 프런트가 해야하지 않나??
 
@@ -53,6 +53,7 @@ public class Challenge {
     private int challengeViewCount;
 
     private Boolean isClosed;
+
 
     @Builder
     public Challenge(ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {

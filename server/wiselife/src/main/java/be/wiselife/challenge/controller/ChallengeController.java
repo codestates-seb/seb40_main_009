@@ -1,10 +1,10 @@
 package be.wiselife.challenge.controller;
 
-import be.wiselife.challenge.dto.ChallengePostDto;
+import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
-import be.wiselife.response.SingleResponseDto;
+import be.wiselife.dto.SingleResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +28,7 @@ public class ChallengeController {
     }
 
     @PostMapping()
-    public ResponseEntity postChallenge(@Valid @RequestBody ChallengePostDto challengePostDto){
+    public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto){
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
         challenge =  challengeService.createChallenge(challenge);
 
