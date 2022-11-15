@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
+    <property name="LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-1relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+<!-- 시간 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
+<!-- 로깅을 저장하고 싶으면 profile을 prod 상태로 바꾼다. 3개의 공통사항을 지정한 console appender.xml-->
+    <springProfile name="!prod">
+        <include resource="console-appender.xml"/>
+
+<!--  info 레벨 이상만 출력되게 한다.      -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+<!--    prod 프로파일일떄는 아래와 같이 실행하겠다.-->
+    <springProfile name="prod">
+        <include resource="file-info-appender.xml"/>
+        <include resource="file-warn-appender.xml"/>
+        <include resource="file-error-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+        </root>
+    </springProfile>
+</configuration>
