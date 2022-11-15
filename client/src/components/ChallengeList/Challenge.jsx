@@ -35,12 +35,12 @@ const ContentB = styled.div`
 `;
 
 const Face = styled.div`
-  width: 280px;
   transition: 0.5s;
   border-radius: 10px;
 
   &.face1 {
-    height: 220px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     position: relative;
     background: #eff1fe;
     display: flex;
@@ -67,6 +67,7 @@ const Face = styled.div`
 const Card = styled.div`
   position: relative;
   margin-top: -90px;
+  margin-bottom: -30px;
   cursor: pointer;
 
   :hover {
