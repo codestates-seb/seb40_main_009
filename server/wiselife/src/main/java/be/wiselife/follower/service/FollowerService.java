@@ -32,42 +32,30 @@ public class FollowerService {
         if (findFollower==null) {
             Follower follower = followerRepository.save(new Follower(followingMember.getMemberId(), followerMember));
             follower.setFollow(true);
-            Set<Follower> followers = followingMember.getFollowers();
-            followers.add(follower);
-
             int followerCount = followingMember.getFollowerCount() + 1;
-
-            followingMember.setFollowers(followers);
-            followingMember.setFollowerCount(followerCount);
-            memberRepository.save(followingMember);
-            log.info("follower add");
+            saveUpdateFollower(followingMember, follower, followerCount);
         } else {
-            log.info("follower minus");
             if (findFollower.isFollow()) {
                 findFollower.setFollow(false);
                 followerRepository.save(findFollower);
-                Set<Follower> followers = followingMember.getFollowers();
-                followers.add(findFollower);
-
                 int followerCount = followingMember.getFollowerCount() - 1;
-
-                followingMember.setFollowers(followers);
-                followingMember.setFollowerCount(followerCount);
-                memberRepository.save(followingMember);
+                saveUpdateFollower(followingMember, findFollower, followerCount);
             } else {
                 findFollower.setFollow(true);
                 followerRepository.save(findFollower);
-                Set<Follower> followers = followingMember.getFollowers();
-                followers.add(findFollower);
-
                 int followerCount = followingMember.getFollowerCount() + 1;
-
-                followingMember.setFollowers(followers);
-                followingMember.setFollowerCount(followerCount);
-                memberRepository.save(followingMember);
+                saveUpdateFollower(followingMember, findFollower, followerCount);
             }
         }
 
+    }
+
+    private void saveUpdateFollower(Member followingMember, Follower follower, int followerCount) {
+        Set<Follower> followers = followingMember.getFollowers();
+        followers.add(follower);
+        followingMember.setFollowers(followers);
+        followingMember.setFollowerCount(followerCount);
+        memberRepository.save(followingMember);
     }
 
     //팔로잉하는 사람과 팔로워가 있는지 파악 후 팔로잉하는 사람과 팔로워가 일치할때, 그때, isFollow가 무엇인지 반환한다.

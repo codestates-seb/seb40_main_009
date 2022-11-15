@@ -30,4 +30,8 @@ public class Follower extends TimeAudit {
         this.followingId = followingId;
         this.member = member;
     }
+
+    public void setFollow(boolean isFollow) {
+        this.isFollow = isFollow;
+    }
 }
