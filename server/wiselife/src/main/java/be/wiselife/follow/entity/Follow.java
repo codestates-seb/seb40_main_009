@@ -1,4 +1,4 @@
-package be.wiselife.follower.entity;
+package be.wiselife.follow.entity;
 
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.member.entity.Member;
@@ -12,27 +12,25 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name="Follower_Table")
-public class Follower extends TimeAudit {
+@Table(name="Follow_Table")
+public class Follow extends TimeAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long followerId;
+    private Long followId;
 
-    private Long followerMemberId;
+    private String followerName;
+    private Long followerId;
 
     @Column(nullable = false)
     private boolean isFollow = false;
 
-    private String followerName;
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member followingMember;
+    private Member following;
 
-    public Follower(Long followerMemberId,Member followingMember) {
-        this.followerMemberId = followerMemberId;
-        this.followingMember = followingMember;
+    public Follow(Long followerId, Member following) {
+        this.followerId = followerId;
+        this.following = following;
 
     }
 

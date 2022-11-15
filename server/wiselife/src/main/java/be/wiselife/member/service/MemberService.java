@@ -2,8 +2,7 @@ package be.wiselife.member.service;
 
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
-import be.wiselife.follower.entity.Follower;
-import be.wiselife.member.dto.MemberDto;
+import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +50,12 @@ public class MemberService {
      */
     public Member findMemberById(Long followId,Long followerId) {
         Member followedMember = verifiedMemberById(followId);
-        Follower follower =memberRepository.findByFollowerMemberIdAndFollowingMember(followerId, followedMember);
-        if (follower == null) {
+        Follow follow =memberRepository.findByFollowerIdAndFollowing(followerId, followedMember);
+        if (follow == null) {
             followedMember.setFollowStatus(Member.FollowStatus.SELF);
             return memberRepository.save(followedMember);
         }
-        if (follower.isFollow()) {
+        if (follow.isFollow()) {
             followedMember.setFollowStatus(Member.FollowStatus.FOLLOW);
         } else {
             followedMember.setFollowStatus(Member.FollowStatus.UNFOLLOW);
@@ -121,7 +120,7 @@ public class MemberService {
     private Member verifiedMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member foundMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        log.info("follower size={}",foundMember.getFollowers().size());
+        log.info("follower size={}",foundMember.getFollows().size());
         return foundMember;
     }
 

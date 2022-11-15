@@ -70,10 +70,10 @@ public class MemberController {
      * 테스트 용도로 작동하는 것으로 memberId(팔로우 하는 사람) 페이지에 접근할때, 팔로우 인지 아닌지를 확인하는 용도
      * 아마 여기에 로그인 기능 추가해서 사용하게 될 듯
      */
-    @GetMapping("/test/{followId}/{followerId}")
-    public ResponseEntity getMemberById(@PathVariable("followId") Long followId,
+    @GetMapping("/test/{followingId}/{followerId}")
+    public ResponseEntity getMemberById(@PathVariable("followingId") Long followingId,
                                         @PathVariable("followerId") Long followerId) {
-        Member member = memberService.findMemberById(followId,followerId);
+        Member member = memberService.findMemberById(followingId,followerId);
 
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(member)),HttpStatus.OK);

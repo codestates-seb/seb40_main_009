@@ -3,7 +3,7 @@ package be.wiselife.member.entity;
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
-import be.wiselife.follower.entity.Follower;
+import be.wiselife.follow.entity.Follow;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -75,14 +75,14 @@ public class Member extends TimeAudit {
     @Enumerated(EnumType.STRING)
     private FollowStatus followStatus=FollowStatus.SELF;
 
-    @OneToMany(mappedBy = "followingMember", cascade = CascadeType.PERSIST)
-    private Set<Follower> followers = new HashSet<>();
+    @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
+    private Set<Follow> follows = new HashSet<>();
 
     @Column(nullable = false)
     private int followerCount = 0;
 
-    public void setFollowers(Set<Follower> followers) {
-        this.followers = followers;
+    public void setFollows(Set<Follow> follows) {
+        this.follows = follows;
     }
 
 
