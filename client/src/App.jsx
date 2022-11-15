@@ -10,16 +10,16 @@ import SearchResult from './pages/SearchResult';
 function App() {
   return (
     <>
-      <Header />
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/challengelist" element={<ChallengeList />} />
           <Route path="/userlist" element={<UserList />} />
           <Route path="/searchresult" element={<SearchResult />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </>
   );
 }
