@@ -1,5 +1,31 @@
 {
-  "posts": [{ "id": 1, "title": "json-server", "author": "typicode" }],
-  "comments": [{ "id": 1, "body": "some comment", "postId": 1 }],
-  "profile": { "name": "typicode" }
+  "posts": [
+    { 
+      "id": 1, 
+      "title": "json-server", 
+      "author": "typicode" 
+    }
+  ],
+
+  "comments": [
+    {
+      "id": 1, 
+      "body": "some comment", 
+      "postId": 1 
+    }
+  ],
+
+  "profile": {
+    "name": "typicode" 
+  },
+
+  "order": [
+    { 
+      "image": "https://cdnimg.melon.co.kr/cm2/artistcrop/images/002/61/143/261143_20210325180240_500.jpg?61e575e8653e5920470a38d1482d7312/melon/resize/416/quality/80/optimize",
+      "name" : "IU 콘서트 가기",
+      "money" : "100,000",
+      "startPeriod" : 20221114,
+      "expirationPeriod" : 20221130
+    }
+  ]
 }
