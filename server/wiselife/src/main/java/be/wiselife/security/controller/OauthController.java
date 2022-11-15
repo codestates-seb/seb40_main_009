@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class OauthController {
     private final OauthService oauthservice;
 
-    //https://localhost:8080/login/oauth/kakao?code=RgxBArRwonw1qxP7pKeo81n9XWHfLvvhmXKNnL86bNalZdvUj5ahX2apy3-tkbCkwNJ-HQopdSkAAAGEevxXXw
+    //https://localhost:8080/oauth/kakao?code=RgxBArRwonw1qxP7pKeo81n9XWHfLvvhmXKNnL86bNalZdvUj5ahX2apy3-tkbCkwNJ-HQopdSkAAAGEevxXXw
     //로그인후 동의하면 위와같이 연락이온다.
-    @GetMapping("/login/oauth/{provider}")
+    @GetMapping("/oauth/{provider}")
     public ResponseEntity login(@PathVariable String provider, @RequestParam String code) throws JsonProcessingException {
         LoginDto loginDto = oauthservice.login(provider, code);
 
