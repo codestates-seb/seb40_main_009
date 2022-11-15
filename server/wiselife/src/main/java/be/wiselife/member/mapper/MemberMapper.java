@@ -37,7 +37,7 @@ public interface MemberMapper {
         memberDetailResponse.setMemberChallengeSuccessCount(member.getMemberChallengeSuccessCount());
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
-        memberDetailResponse.setFollowers(member.getFollowers());
+        memberDetailResponse.setFollowerCount(member.getFollowerCount());
         memberDetailResponse.setMemberImage(member.getMemberImage());
 
         return memberDetailResponse;
@@ -50,7 +50,7 @@ public interface MemberMapper {
         memberListResponse.setMemberId(member.getMemberId());
         memberListResponse.setMemberName(member.getMemberName());
         memberListResponse.setMemberBadge(member.getMemberBadge());
-        memberListResponse.setFollowers(member.getFollowers());
+        memberListResponse.setFollowerCount(member.getFollowerCount());
         memberListResponse.setCreated_at(member.getCreated_at());
 
         return memberListResponse;

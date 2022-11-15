@@ -46,7 +46,7 @@ public class MemberDto {
         private double memberChallengePercentage;
         private double memberMoney;
         private String memberImage;
-        private int followers;
+        private int followerCount;
 
         public void setHasRedCard(boolean hasRedCard) {
             this.hasRedCard = hasRedCard;
@@ -61,7 +61,7 @@ public class MemberDto {
         private Long memberId;
         private String memberName;
         private Member.MemberBadge memberBadge;
-        private int followers;
+        private int followerCount;
         private LocalDateTime created_at;
     }
 }

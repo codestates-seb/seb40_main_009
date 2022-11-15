@@ -59,8 +59,8 @@ public class MemberService {
             case "memberBadge":
                 sort = "memberLevel";
                 break;
-            case "followers":
-                sort = "followers";
+            case "followerCount":
+                sort = "followerCount";
                 break;
             default:
                 sort = "memberId";
@@ -106,7 +106,7 @@ public class MemberService {
     //follower 기준 sort 동작 확인용 추후 삭제 예정
     public void addFollowers(Long memberId) {
         Member member = verifiedMemberById(memberId);
-        member.setFollowers(member.getFollowers()+1);
+        member.setFollowerCount(member.getFollowerCount()+1);
         memberRepository.save(member);
     }
 

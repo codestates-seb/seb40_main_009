@@ -10,15 +10,24 @@ public enum ExceptionCode {
     //Member 부분 예외 ==============시작
     MEMBER_NOT_FOUND(404, "Member not exists"),
     MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists"),
-    NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge");
-    //Member 부분 예외 ==============끝
-    @Getter
-    private int code;
-    UNAUTHORIZED_USER(403, "not authorized user"),
+    NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge"),
+    //아래부분 영운님이 어디서썻는지 파악후 네임 변경 필요
+    UNAUTHORIZED_Member(403, "not authorized user"),
     USER_NOT_FOUND(404, "User not found"),
     USER_EXISTS(409, "User exists"),
+    //Member 부분 예외 ==============끝
+
+    //Challenge 부분 예외 ===========시작
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
-    COMMENT_NOT_FOUND(404, "Comment not found");
+    COMMENT_NOT_FOUND(404, "Comment not found"),
+    //Challenge 부분 예외 ===========끝
+
+    //Follower 부분 예외 ==========시작
+    FOLLOWERS_NOT_FOUND(404, "Followers not found"),
+    OVERLAP_VOTE(400,"You can one time vote for one post");
+
+    @Getter
+    private int code;
 
     @Getter
     private int status;

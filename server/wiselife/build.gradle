@@ -35,8 +35,19 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+
+	//Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+//Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
+clean {
+delete file('src/main/generated')
 }

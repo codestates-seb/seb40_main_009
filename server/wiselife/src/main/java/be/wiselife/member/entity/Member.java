@@ -3,11 +3,14 @@ package be.wiselife.member.entity;
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
+import be.wiselife.follower.entity.Follower;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Entity
@@ -44,7 +47,7 @@ public class Member extends TimeAudit {
     private int memberExp=0;
 
     @Enumerated(EnumType.STRING)
-    private MemberBadge memberBadge = MemberBadge.IRON;
+    private MemberBadge memberBadge = MemberBadge.새내기;
 
 
     private int memberLevel = 1;
@@ -69,8 +72,11 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private String memberImage = "image";
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    Set<Follower> followers = new HashSet<>();
+
     @Column(nullable = false)
-    private int followers = 0;
+    private int followerCount = 0;
 
 
 
@@ -86,13 +92,14 @@ public class Member extends TimeAudit {
 
     public enum MemberBadge {
         // 레벨로 나타내면 몇이 최대인지 몰라서 우선 롤 계급제로 분류
-        IRON(1),
-        SILVER(2),
-        GOLD(3),
-        PLATINUM(4),
-        DIAMOND(5),
-        MASTER(6),
-        CHALLENGE(7);
+        새내기(1),
+        좀치는도전자(2),
+        열정도전자(3),
+        모범도전자(4),
+        우수도전자(5),
+        챌린지장인(6),
+        시간의지배자(7),
+        챌린지신(8);
 
         @Getter
         public int level;
@@ -103,13 +110,14 @@ public class Member extends TimeAudit {
 
         public static MemberBadge badgeOfLevel(int level) {
             switch (level) {
-                case 1:return IRON;
-                case 2:return SILVER;
-                case 3:return GOLD;
-                case 4:return PLATINUM;
-                case 5:return DIAMOND;
-                case 6:return MASTER;
-                case 7:return CHALLENGE;
+                case 1:return 새내기;
+                case 2:return 좀치는도전자;
+                case 3:return 열정도전자;
+                case 4:return 모범도전자;
+                case 5:return 우수도전자;
+                case 6:return 챌린지장인;
+                case 7:return 시간의지배자;
+                case 8:return 챌린지신;
                 default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
             }
         }
