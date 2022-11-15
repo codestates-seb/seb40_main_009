@@ -73,7 +73,7 @@ public class Member extends TimeAudit {
 
     //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
     @Enumerated(EnumType.STRING)
-    private FollowStatus followStatus=FollowStatus.SELF;
+    private FollowStatus followStatus=FollowStatus.UNFOLLOW;
 
     @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
     private Set<Follow> follows = new HashSet<>();

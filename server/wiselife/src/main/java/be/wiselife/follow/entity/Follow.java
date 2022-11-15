@@ -18,8 +18,9 @@ public class Follow extends TimeAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followId;
 
-    private String followerName;
     private Long followerId;
+
+    private String followerName;
 
     @Column(nullable = false)
     private boolean isFollow = false;

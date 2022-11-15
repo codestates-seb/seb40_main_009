@@ -52,7 +52,11 @@ public class MemberService {
         Member followedMember = verifiedMemberById(followId);
         Follow follow =memberRepository.findByFollowerIdAndFollowing(followerId, followedMember);
         if (follow == null) {
-            followedMember.setFollowStatus(Member.FollowStatus.SELF);
+            if (followId == followerId) {
+                followedMember.setFollowStatus(Member.FollowStatus.SELF);
+                return memberRepository.save(followedMember);
+            }
+            followedMember.setFollowStatus(Member.FollowStatus.UNFOLLOW);
             return memberRepository.save(followedMember);
         }
         if (follow.isFollow()) {
