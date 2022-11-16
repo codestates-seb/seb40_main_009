@@ -1,10 +1,7 @@
 package be.wiselife.challenge.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,45 +16,53 @@ public class Challenge {
     private Long challengeId;
 
     @Column(nullable = false)
+    @Setter
     private ChallengeCategory challengeCategory;
 
     @Column(nullable = false)
+    @Setter
     private String challengeTitle;
 
     @Column(nullable = false)
+    @Setter
     private String challengeDescription;
-
+    @Setter
     private int challengeCurrentParty;
-
+    @Setter
     private int challengeMaxParty;
-
+    @Setter
     private int challengeMinParty;
 
     @Column(nullable = false)
+    @Setter
     private LocalDate challengeStartDate;
 
     @Column(nullable = false)
+    @Setter
     private LocalDate challengeEndDate;
 
     @Column(nullable = false)
+    @Setter
     private String challengeAuthDescription;
 
     @Column(nullable = false)
+    @Setter
     private int challengeAuthCycle; //인증 빈도
 
     private String challengeDirectLink;//이건 프런트가 해야하지 않나??
-
+    @Setter
     private int challengeFeePerPerson; //인당 참여금액
-
+    @Setter
     private int challengeTotalReward; // 현재까지의 전체 상금
-
+    @Setter
     private int challengeViewCount;
-
+    @Setter
     private Boolean isClosed;
 
 
     @Builder
-    public Challenge(ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
+    public Challenge(Long challengeId,ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
+        this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
         this.challengeDescription = challengeDescription;
