@@ -1,47 +1,75 @@
-import styled from 'styled-components';
+import * as S from '../style/UserList/UserList.styled';
 import User from '../components/UserList/UserList';
-
-const UserListContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: yellow;
-  gap: 4px;
-`;
-
-const IndexContainer = styled.section`
-  width: 80%;
-  height: 30px;
-  font-weight: bold;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: #aec4fa;
-  > div {
-    width: 25%;
-    text-align: center;
-  }
-`;
+import { useState } from 'react';
 
 function UserList() {
+  const [checkedFilter, setCheckedFilter] = useState(1);
+  const gradeFilter = () => {
+    setCheckedFilter(1);
+  };
+
+  const voteFilter = () => {
+    setCheckedFilter(2);
+  };
+
+  const createdFilter = () => {
+    setCheckedFilter(3);
+  };
+
+  console.log(checkedFilter);
+
   return (
-    <UserListContainer>
-      <div>필터</div>
-      <IndexContainer>
-        <div>이름</div>
-        <div>등급</div>
-        <div>인기도</div>
-        <div>가입일</div>
-      </IndexContainer>
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
-    </UserListContainer>
+    <S.ListContainer>
+      <section>
+        {checkedFilter === 1 ? (
+          <button className="clickedBtn">등급순</button>
+        ) : (
+          <button onClick={gradeFilter}>등급순</button>
+        )}
+        {checkedFilter === 2 ? (
+          <button className="clickedBtn">인기순</button>
+        ) : (
+          <button onClick={voteFilter}>인기순</button>
+        )}
+        {checkedFilter === 3 ? (
+          <button className="clickedBtn">가입순</button>
+        ) : (
+          <button onClick={createdFilter}>가입순</button>
+        )}
+      </section>
+      <S.Container>
+        <S.IndexContainer>
+          <div>이름</div>
+          <div>등급</div>
+          <div>인기도</div>
+          <div>가입일</div>
+        </S.IndexContainer>
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+        <User />
+      </S.Container>
+    </S.ListContainer>
   );
 }
 

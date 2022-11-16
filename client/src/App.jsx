@@ -16,11 +16,11 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/challengelist" element={<ChallengeList />} />
-          <Route path="/userlist" element={<UserList />} />
+          <Route path="/challengelist/*" element={<ChallengeList />} />
+          <Route path="/userlist/*" element={<UserList />} />
+          <Route path="/search/*" element={<SearchResult />} />
           <Route path="/profile" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
-          <Route path="/searchresult" element={<SearchResult />} />
         </Routes>
         <Footer />
       </BrowserRouter>
