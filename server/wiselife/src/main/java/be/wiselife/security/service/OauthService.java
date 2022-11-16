@@ -72,10 +72,10 @@ public class OauthService extends DefaultOAuth2UserService {
         AccessTokenDto accessTokenDto = restTemplate.postForObject(provider.getProviderDetails().getTokenUri(), requestEntity, AccessTokenDto.class);
         return accessTokenDto;
     }
-
+    //dto 수정필요
     private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
-
+        
          //소셜로그인 만에하나 더 추가한다면...
          OAuth2MemberInfo oAuth2MemberInfo = null;
         if (providerName.equals("kakao")) {
