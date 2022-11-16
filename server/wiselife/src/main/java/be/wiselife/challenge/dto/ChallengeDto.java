@@ -13,9 +13,9 @@ public class ChallengeDto {
 
     @Getter
     public static class Post {
-        @NotBlank
-        private String challengeCategory;
-
+        @NotNull
+        @Range(min = 1, max = 3) // 1: 버킷 리스트 2: 공유 챌린지 3: 오프라인 챌린지
+        private int challengeCategoryId;
         @NotBlank
         private String challengeTitle;
         @NotBlank
@@ -25,14 +25,42 @@ public class ChallengeDto {
 
         private int challengeMinParty;
         @NotBlank
-        private LocalDate challengeStartDate;
+        private String challengeStartDate;
         @NotBlank
-        private LocalDate challengeEndDate;
+        private String challengeEndDate;
         @NotBlank
         private String challengeAuthDescription;
-        @NotBlank
+        @NotNull
         private int challengeAuthCycle;
-        @NotBlank
+        @NotNull
+        private int challengeFeePerPerson; //인당 참여금액
+
+    }
+
+    @Getter
+    public static class Patch {
+        @NotNull
+        private Long challengeId;
+
+        @Range(min = 1, max = 3) // 1: 버킷 리스트 2: 공유 챌린지 3: 오프라인 챌린지
+        private int challengeCategoryId;
+
+        private String challengeTitle;
+
+        private String challengeDescription;
+
+        private int challengeMaxParty;
+
+        private int challengeMinParty;
+
+        private String challengeStartDate;
+
+        private String challengeEndDate;
+
+        private String challengeAuthDescription;
+
+        private int challengeAuthCycle;
+
         private int challengeFeePerPerson; //인당 참여금액
 
     }
@@ -40,37 +68,37 @@ public class ChallengeDto {
     @Getter
     @Builder
     public static class Response {
-        @NotBlank
+
         private Long challengeId;
-        @NotBlank
+
         private Challenge.ChallengeCategory challengeCategory;
-        @NotBlank
+
         private String challengeTitle;
-        @NotBlank
+
         private String challengeDescription;
-        @NotBlank
+
         private int challengeCurrentParty;
 
         private int challengeMaxParty;
 
         private int challengeMinParty;
-        @NotBlank
+
         private LocalDate challengeStartDate;
-        @NotBlank
+
         private LocalDate challengeEndDate;
-        @NotBlank
+
         private String challengeAuthDescription;
-        @NotBlank
+
         private int challengeAuthCycle;
 
         private String challengeDirectLink;//이건 프런트가 해야하지 않나??
-        @NotBlank
+
         private int challengeFeePerPerson; //인당 참여금액
-        @NotBlank
+
         private int challengeTotalReward; // 현재까지의 전체 상금
-        @NotBlank
+
         private int challengeViewCount;
-        @NotBlank
+
         private Boolean isClosed;
 
         /*별도로 계산해야 하는 값들*/

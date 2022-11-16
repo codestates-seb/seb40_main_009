@@ -1,5 +1,6 @@
 package be.wiselife.challenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -75,6 +76,9 @@ public class Challenge {
         this.challengeTotalReward = 0;
     }
 
+
+
+
     public enum ChallengeCategory {
         BUCKET_LIST("버킷 리스트"),
         SHARED_CHALLENGE("공유 챌린지"),
@@ -85,6 +89,11 @@ public class Challenge {
 
         ChallengeCategory(String category) {
             this.category = category;
+        }
+
+        @JsonCreator
+        public static ChallengeCategory stringToJson(String s){
+            return ChallengeCategory.valueOf(s);
         }
     }
 }

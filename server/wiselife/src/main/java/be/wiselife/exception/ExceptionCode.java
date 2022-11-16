@@ -15,8 +15,10 @@ public enum ExceptionCode {
 
     //Challenge 부분 예외 ==============시작
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
-    COMMENT_NOT_FOUND(404, "Comment not found");
+    COMMENT_NOT_FOUND(404, "Comment not found"),
+    CHALLENGE_CATEGORY_NOT_FOUND(404, "Category not found");
     //Challenge 부분 예외 ==============끝
+
     @Getter
     private int code;
 

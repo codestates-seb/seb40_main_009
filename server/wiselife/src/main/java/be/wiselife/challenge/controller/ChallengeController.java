@@ -27,8 +27,10 @@ public class ChallengeController {
         this.challengeService = challengeService;
     }
 
+    /*챌린지 생성*/
     @PostMapping()
     public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto){
+
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
         challenge =  challengeService.createChallenge(challenge);
 
@@ -36,4 +38,6 @@ public class ChallengeController {
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeResponseDto(challenge))
                 , HttpStatus.CREATED);
     }
+
+
 }
