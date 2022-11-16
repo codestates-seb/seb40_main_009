@@ -70,6 +70,7 @@ public class OrderDto {
         private double totalAmount;
         private int quantity;
         private int orderTax;
+        private boolean orderSuccess = false;
 
     }
 
