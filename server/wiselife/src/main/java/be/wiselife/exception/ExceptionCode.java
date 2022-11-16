@@ -10,16 +10,19 @@ public enum ExceptionCode {
     //Member 부분 예외 ==============시작
     MEMBER_NOT_FOUND(404, "Member not exists"),
     MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists"),
-    NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge");
+    NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge"),
     //Member 부분 예외 ==============끝
-    @Getter
-    private int code;
     UNAUTHORIZED_USER(403, "not authorized user"),
     USER_NOT_FOUND(404, "User not found"),
     USER_EXISTS(409, "User exists"),
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
-    COMMENT_NOT_FOUND(404, "Comment not found");
+    COMMENT_NOT_FOUND(404, "Comment not found"),
+    SIGNUP_WRONG(404,"somethings get wrong during login" ),
+    TRADE_CODE_WRONG(404,"Not available tid" );
 
+
+    @Getter
+    private int code;
     @Getter
     private int status;
 

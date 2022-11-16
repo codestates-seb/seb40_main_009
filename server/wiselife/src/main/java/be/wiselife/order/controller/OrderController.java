@@ -55,7 +55,7 @@ public class OrderController {
         return new ResponseEntity<>(approveResponse, HttpStatus.CREATED);
     }
 
-    // 결제 취소시 실행 url
+    // 결제 취소시 실행 url (결제 QR코드에서 취소한 경우)
     @GetMapping("/cancel")
     public String payCancel() {
         return "redirect:/";

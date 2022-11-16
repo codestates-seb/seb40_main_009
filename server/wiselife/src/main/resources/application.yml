@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: oauth
   h2:
     console:
       enabled: true
@@ -16,6 +18,7 @@ spring:
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
+
 logging:
   level:
     org:
@@ -26,12 +29,23 @@ logging:
 log4j:
   appender:
     sql:
-#https://kafcamus.tistory.com/23
 
-#postman ???? ??? ??? ?? ???.
 server:
   servlet:
     encoding:
       force-response: true
       charset: utf-8
       force: true
+
+jwt:
+  token:
+    secret-key: qazwsxedcrfvtgbyhnujmiklop!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234
+  access-token:
+    expire-length: 180000
+  refresh-token:
+    expire-length: 120960000
+    
+#추후에 추가예정 관리자명단
+mail:
+  address:
+      admin: mins402kim@kakao.com

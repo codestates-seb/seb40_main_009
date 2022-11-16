@@ -1,5 +1,7 @@
 package be.wiselife.order.service;
 
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import be.wiselife.order.dto.OrderDto;
 import be.wiselife.order.entity.Order;
 import be.wiselife.order.repository.OrderRepository;
@@ -73,7 +75,7 @@ public class OrderService {
 
     public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) { //로그인 메소드 생기면 그떄 수정
         log.info("요청 tid {}", tid);
-        Order order = orderRepository.findByTid(tid).orElseThrow(()->new RuntimeException()); //비지니스 exception 추가시 변경, 로그인 추가시 찾는로직도 변경 필요
+        Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG)); // 로그인 추가시 찾는로직도 변경 필요
         //카카오톡에서 요청하는 기본 양식
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
