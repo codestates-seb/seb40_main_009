@@ -66,6 +66,12 @@ public class ChallengeService {
         return findChallengeById(challengeId);
     }
 
+    public void deleteChallenge(Long challengeId) {
+        //권한 확인 필요??
+        challengeRepository.delete(findChallengeById(challengeId));
+        return;
+    }
+
     /*조회수 증가 함수
     *
     * 추후 cookie를 이용한 중복 조회 기능 추가 예정
@@ -74,6 +80,7 @@ public class ChallengeService {
         challenge.setChallengeViewCount(challenge.getChallengeViewCount() + 1);
         return saveChallenge(challenge);
     }
+
 
 
     private Challenge findChallengeById(Long challengeId){
