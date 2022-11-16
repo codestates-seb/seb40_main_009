@@ -1,5 +1,5 @@
 import React from 'react';
-import * as S from '../../style/Common/MainPageStyle';
+import * as S from '../../style/Main/MainPageStyle';
 import ChallengeList from '../ChallengeList/Challenge';
 import {
   Animator,
@@ -19,36 +19,23 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'react-scroll-motion';
+import SlideBanner from './SlideBanner';
 
 function MainPage() {
   return (
     <S.MainContainer>
+      {/* 스크롤 시작 */}
       <ScrollContainer snap="none">
         {/* 첫번째 페이지 */}
         <ScrollPage page={0}>
           <S.FirstPage>
-            <Animator
-              animation={batch(Sticky(35, 40), Fade(), MoveOut(0, -1000))}
-            >
-              <S.FirstPageText>
-                행복한 삶을 살고 싶다면
-                <br />
-                목표에 의지하라.
-              </S.FirstPageText>
-
-              <S.FirstPageText2>
-                <br />
-                <br />
-                혼자하기 힘든 일도 슬기로운 생활과 함께라면
-              </S.FirstPageText2>
-
-              <S.FirstPageImg src="img/banner.png" alt="시간이미지" />
-            </Animator>
+            {/* 슬라이드 */}
+            <SlideBanner />
           </S.FirstPage>
         </ScrollPage>
 
         {/* 두번째  페이지 */}
-        <ScrollPage page={2}>
+        <ScrollPage page={1}>
           <Animator
             animation={batch(Sticky(50), Fade(), MoveOut(0, -200), ZoomIn())}
           >
@@ -80,8 +67,25 @@ function MainPage() {
           </Animator>
         </ScrollPage>
 
-        {/* 세번째  페이지 */}
         <ScrollPage page={5}>
+          <S.PageFive>
+            <Animator animation={MoveIn(0, -1000)}>
+              <S.FontSize50>지금 바로</S.FontSize50>
+            </Animator>
+            <Animator animation={MoveOut(0, 1600)}>
+              <S.FontSize50>슬기로운 생활과 함께</S.FontSize50>
+            </Animator>
+            <Animator animation={MoveOut(2000, 1300)}>
+              <S.FontSize50>목표를 향해</S.FontSize50>
+            </Animator>
+            <Animator animation={MoveOut(-2000, 1000)}>
+              <S.FontSize50>건강하게 앞서 나아가다</S.FontSize50>
+            </Animator>
+          </S.PageFive>
+        </ScrollPage>
+
+        {/* 세번째  페이지 */}
+        <ScrollPage page={6}>
           <S.Mt4>
             <Animator animation={batch(Fade(), MoveIn(-1000, 0))}>
               <S.Container>
