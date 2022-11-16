@@ -5,11 +5,6 @@ export const MyProfileComponent = styled.div`
     display: flex;
     justify-content: space-between;
   }
-  .profile-image {
-    width: 180px;
-    height: 180px;
-    border-radius: 30px;
-  }
 
   .profile-list {
     display: flex;

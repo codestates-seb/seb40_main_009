@@ -1,4 +1,5 @@
 import ChartBar from './ChartBar';
+import ProfileImage from './ProfileImage';
 import { GiMedallist } from 'react-icons/gi';
 import * as S from '../../style/MyProfilePageStyle/MyProfileStyle';
 
@@ -6,11 +7,7 @@ function MyProfile() {
   return (
     <S.MyProfileComponent>
       <header className="profile-info">
-        <img
-          className="profile-image"
-          src="https://cdnimg.melon.co.kr/cm2/artistcrop/images/002/61/143/261143_20210325180240_500.jpg?61e575e8653e5920470a38d1482d7312/melon/resize/416/quality/80/optimize"
-          alt="profile img"
-        />
+        <ProfileImage />
         <div className="profile-lists">
           <div className="profile-list">
             <p>닉네임</p>
