@@ -2,6 +2,8 @@ package be.wiselife.member.controller;
 
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.mapper.MemberMapper;
@@ -79,6 +81,7 @@ public class MemberController {
     public ResponseEntity patchMember(@PathVariable("memberName") String memberName,
                                       @Validated @RequestBody MemberDto.Patch patchData,
                                       HttpServletRequest request) {
+
         String followerEmail = jwtTokenizer.getEmailWithToken(request);
         Member loginMember = memberService.findMemberByEmail(followerEmail);
 
