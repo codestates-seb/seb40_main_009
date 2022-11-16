@@ -1,9 +1,8 @@
 package be.wiselife.challenge.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import be.wiselife.audit.TimeAudit;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,51 +10,60 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Challenge {
+public class Challenge extends TimeAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeId;
 
     @Column(nullable = false)
+    @Setter
     private ChallengeCategory challengeCategory;
 
     @Column(nullable = false)
+    @Setter
     private String challengeTitle;
 
     @Column(nullable = false)
+    @Setter
     private String challengeDescription;
-
+    @Setter
     private int challengeCurrentParty;
-
+    @Setter
     private int challengeMaxParty;
-
+    @Setter
     private int challengeMinParty;
 
     @Column(nullable = false)
+    @Setter
     private LocalDate challengeStartDate;
 
     @Column(nullable = false)
+    @Setter
     private LocalDate challengeEndDate;
 
     @Column(nullable = false)
+    @Setter
     private String challengeAuthDescription;
 
     @Column(nullable = false)
-    private int challengeAuthCycle;
+    @Setter
+    private int challengeAuthCycle; //인증 빈도
 
     private String challengeDirectLink;//이건 프런트가 해야하지 않나??
-
+    @Setter
     private int challengeFeePerPerson; //인당 참여금액
-
+    @Setter
     private int challengeTotalReward; // 현재까지의 전체 상금
-
+    @Setter
     private int challengeViewCount;
-
+    @Setter
     private Boolean isClosed;
 
+
     @Builder
-    public Challenge(ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
+    public Challenge(Long challengeId,ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
+        this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
         this.challengeDescription = challengeDescription;
@@ -74,6 +82,9 @@ public class Challenge {
         this.challengeTotalReward = 0;
     }
 
+
+
+
     public enum ChallengeCategory {
         BUCKET_LIST("버킷 리스트"),
         SHARED_CHALLENGE("공유 챌린지"),
@@ -84,6 +95,11 @@ public class Challenge {
 
         ChallengeCategory(String category) {
             this.category = category;
+        }
+
+        @JsonCreator
+        public static ChallengeCategory stringToJson(String s){
+            return ChallengeCategory.valueOf(s);
         }
     }
 }
