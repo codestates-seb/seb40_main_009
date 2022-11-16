@@ -111,10 +111,7 @@ public class JwtTokenizer {
 
     public String getEmailWithToken(HttpServletRequest request) {
         //HEADER에 있는 복호화된 값을 가져옴
-        // Authorization 헤더가 비어있으면, 로그인 되지 않은 유저로 판단하여 해당 예외처리
-        if (request.getHeader("Authorization")==null) {
-            throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_LOGIN);
-        }
+
         String authorization = request.getHeader("Authorization");
         String[] split = authorization.split("\\ "); //asdasdasd.adasdasd.asdasdasd 이런식으로 되어있어서 나눈다.
 
