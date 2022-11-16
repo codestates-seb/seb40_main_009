@@ -9,7 +9,6 @@ import Footer from './components/Common/Footer';
 import MainPage from './components/Common/MainPage';
 import SearchResult from './pages/SearchResult';
 
-
 function App() {
   return (
     <>
