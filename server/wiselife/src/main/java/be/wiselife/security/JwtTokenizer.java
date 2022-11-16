@@ -113,11 +113,11 @@ public class JwtTokenizer {
         //HEADER에 있는 복호화된 값을 가져옴
 
         String authorization = request.getHeader("Authorization");
-        String[] split = authorization.split("\\ "); //asdasdasd.adasdasd.asdasdasd 이런식으로 되어있어서 나눈다.
+        String[] split = authorization.split("."); //asdasdasd.adasdasd.asdasdasd 이런식으로 되어있어서 나눈다.
 
         try {
-            Claims body = Jwts.parserBuilder().setSigningKey(getKeyFromBase64EncodedKey(makingSecretKey(secretKey)))
-                    .build().parseClaimsJws(split[1]).getBody(); //값을 넣어서 되돌려받는다.
+            Claims body = Jwts.parserBuilder().setSigningKey(getKeyFromBase64EncodedKey(makingSecretKey(secretKey) ))
+                    .build().parseClaimsJws(split[1]).getBody(); //값을 넣어서 되돌려받는다. (payload값만)
             return  (String) body.get("sub"); //우리가 그토록 원하는 이메일을 돌려받는다.
 
         } catch (Exception e) {

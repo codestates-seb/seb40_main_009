@@ -3,9 +3,10 @@ package be.wiselife.member.entity;
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
-
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.Image;
+import be.wiselife.order.entity.Order;
+
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -134,11 +135,19 @@ public class Member extends TimeAudit {
      * 연관관계 매핑 해야할것
      * image, challenge, challengeReview
      */
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
 
-
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+    /**
+     * 생성자는 필요시 작성예정
+     */
 
     public enum FollowStatus {
-        SELF,FOLLOW,UNFOLLOW;
+        SELF, FOLLOW, UNFOLLOW,
+        ;
     }
 
     public enum MemberBadge {
