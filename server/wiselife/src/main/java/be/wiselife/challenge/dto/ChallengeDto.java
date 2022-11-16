@@ -67,7 +67,44 @@ public class ChallengeDto {
 
     @Getter
     @Builder
-    public static class Response {
+    public static class SimpleResponse {
+
+        private Long challengeId;
+
+        private Challenge.ChallengeCategory challengeCategory;
+
+        private String challengeTitle;
+
+        private String challengeDescription;
+
+        private int challengeCurrentParty;
+
+        private int challengeMaxParty;
+
+        private int challengeMinParty;
+
+        private LocalDate challengeStartDate;
+
+        private LocalDate challengeEndDate;
+
+        private String challengeAuthDescription;
+
+        private int challengeAuthCycle;
+
+        private String challengeDirectLink;//이건 프런트가 해야하지 않나??
+
+        private int challengeFeePerPerson; //인당 참여금액
+
+        private int challengeTotalReward; // 현재까지의 전체 상금
+
+        private int challengeViewCount;
+
+        private Boolean isClosed;
+    }
+
+    @Getter
+    @Builder
+    public static class DetailResponse {
 
         private Long challengeId;
 
@@ -101,9 +138,9 @@ public class ChallengeDto {
 
         private Boolean isClosed;
 
-        /*별도로 계산해야 하는 값들*/
-//    private int 챌린지 평균 성공률
-//    private int 접속하고 있는 유저의 성공률(이 챌린지에 참여중이라면)
-    }
+        /*멤버챌린지 테이블의 정보와 합쳐 별도로 계산이 필요한 값들*/
+        private int averageChallengeSuccessRate;
 
+        private int currentUserSuccessRate;
+    }
 }

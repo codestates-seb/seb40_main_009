@@ -18,7 +18,6 @@ public class ChallengeService {
         this.challengeRepository = challengeRepository;
     }
 
-
     public Challenge createChallenge(Challenge challenge){
 
         return saveChallenge(challenge);
@@ -63,7 +62,21 @@ public class ChallengeService {
         return saveChallenge(existingChallenge);
     }
 
-    public Challenge findChallengeById(Long challengeId){
+    public Challenge getChallenge(Long challengeId) {
+        return findChallengeById(challengeId);
+    }
+
+    /*조회수 증가 함수
+    *
+    * 추후 cookie를 이용한 중복 조회 기능 추가 예정
+    * */
+    public Challenge updateViewCount(Challenge challenge){
+        challenge.setChallengeViewCount(challenge.getChallengeViewCount() + 1);
+        return saveChallenge(challenge);
+    }
+
+
+    private Challenge findChallengeById(Long challengeId){
         return verifyChallengeById(challengeId);
     }
 

@@ -1,8 +1,6 @@
 package be.wiselife.challenge.mapper;
 
 import be.wiselife.challenge.dto.ChallengeDto;
-import be.wiselife.exception.BusinessLogicException;
-import be.wiselife.exception.ExceptionCode;
 import org.mapstruct.Mapper;
 
 import be.wiselife.challenge.entity.Challenge;
@@ -12,8 +10,8 @@ import java.time.LocalDate;
 
 @Mapper(componentModel = "spring")
 public interface ChallengeMapper {
-    ChallengeDto.Response challengeToChallengeResponseDto(Challenge challenge);
-
+    ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge);
+    ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge);
     //챌린지 생성 mapping
     default Challenge challengePostDtoToChallenge(ChallengeDto.Post challengePostDto) {
         if ( challengePostDto == null ) {
