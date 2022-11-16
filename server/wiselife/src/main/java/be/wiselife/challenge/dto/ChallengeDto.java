@@ -3,6 +3,7 @@ package be.wiselife.challenge.dto;
 import be.wiselife.challenge.entity.Challenge;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -68,7 +69,7 @@ public class ChallengeDto {
     }
 
     @Getter
-    @Builder
+    @Setter
     public static class SimpleResponse {
 
         private Long challengeId;

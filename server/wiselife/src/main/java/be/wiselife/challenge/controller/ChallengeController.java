@@ -5,6 +5,7 @@ import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.dto.SingleResponseDto;
+import be.wiselife.security.JwtTokenizer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,10 +20,12 @@ import javax.validation.constraints.Positive;
 public class ChallengeController {
     private final ChallengeMapper challengeMapper;
     private final ChallengeService challengeService;
+    private final JwtTokenizer jwtTokenizer;
 
-    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService) {
+    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService, JwtTokenizer jwtTokenizer) {
         this.challengeMapper = challengeMapper;
         this.challengeService = challengeService;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     /*챌린지 생성*/
@@ -36,6 +39,7 @@ public class ChallengeController {
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
                 , HttpStatus.CREATED);
     }
+
     /*챌린지 수정*/
     @PatchMapping
     public ResponseEntity patchChallenge(@Valid @RequestBody ChallengeDto.Patch challengePatchDto){
@@ -61,8 +65,9 @@ public class ChallengeController {
      * 1) 동일한 사용자의 조회수 중복 증가 방지 기능
      * */
     @GetMapping("/{challenge-id}")
-    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
-                                       @RequestParam(value = "userId", required = false) Long userIdOrNull){
+    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId){
+
+        //jwt 토큰으로 멤버 email 받아오는 기능 추가해야
 
         Challenge challenge = challengeService.getChallenge(challengeId); //챌린지 찾기
         challenge = challengeService.updateViewCount(challenge); //조회수 증가

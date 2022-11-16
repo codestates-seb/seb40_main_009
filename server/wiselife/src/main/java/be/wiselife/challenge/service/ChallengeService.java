@@ -69,7 +69,7 @@ public class ChallengeService {
     public void deleteChallenge(Long challengeId) {
         //권한 확인 필요??
         challengeRepository.delete(findChallengeById(challengeId));
-        return;
+
     }
 
     /*조회수 증가 함수

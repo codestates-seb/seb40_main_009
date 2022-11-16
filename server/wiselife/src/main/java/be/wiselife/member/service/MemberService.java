@@ -13,10 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -116,7 +113,7 @@ public class MemberService {
         Member memberFromRepository = findMemberByMemberName(memberName);
 
         if (!loginMember.getMemberName().equals(memberName)) {
-            throw new BusinessLogicException(ExceptionCode.CAN_NOT_UPDATE_USER_INFORMATION_OTHER_PERSON);
+            throw new BusinessLogicException(ExceptionCode.CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON);
         }
         verifyExistsMemberName(member.getMemberName());
         log.info("patch.name = {}",member.getMemberName());
@@ -167,5 +164,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    /*영운 수정 + 꼭 코드 리뷰 받을 것!!!*/
+    public boolean isVerifiedMember(String savedMemberEmail, String tryingMemberEmail){
+        return Objects.equals(savedMemberEmail, tryingMemberEmail);
+    }
 
+    public Member findMemberById(Long memberId){
+        return verifiedMemberById(memberId);
+    }
 }

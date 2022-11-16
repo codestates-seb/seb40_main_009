@@ -1,11 +1,14 @@
 package be.wiselife.challenge.entity;
 
 import be.wiselife.audit.TimeAudit;
+import be.wiselife.challengetalk.entity.ChallengeTalk;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -60,6 +63,10 @@ public class Challenge extends TimeAudit {
     @Setter
     private Boolean isClosed;
 
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
+
 
     @Builder
     public Challenge(Long challengeId,ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
@@ -82,8 +89,13 @@ public class Challenge extends TimeAudit {
         this.challengeTotalReward = 0;
     }
 
-
-
+    /*챌린지 댓글 추가 */
+    public void addChallengeTalk(ChallengeTalk challengeTalk){
+        this.challengeTalkList.add(challengeTalk);
+        if(challengeTalk.getChallenge() == null){
+            challengeTalk.setChallenge(this);
+        }
+    }
 
     public enum ChallengeCategory {
         BUCKET_LIST("버킷 리스트"),

@@ -11,8 +11,8 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not exists"),
     MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists"),
     NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge"),
-    CAN_NOT_UPDATE_USER_INFORMATION_OTHER_PERSON(404, "Can't Update User Information Other Person"), //이름 맴버로 (유현)
-    USER_EXISTS(409, "User exists"), //이름을 MEMBER로 바꾸기 (유현)
+    CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON(404, "Can't Update User Information Other Person"),
+    MEMBER_EXISTS(409, "User exists"),
 
     //Challenge 부분 예외 ==============시작
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
@@ -24,8 +24,14 @@ public enum ExceptionCode {
    
    //login 부분 예외 ========시작
     SIGNUP_WRONG(404,"somethings get wrong during login" ),
-    TRADE_CODE_WRONG(404,"Not available tid" );
+    TRADE_CODE_WRONG(404,"Not available tid" ),
 
+    //ChallengeTalk 부분 예외 ==============시작
+    CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),
+
+
+    //권한이 없는 자의 예외 =============시작
+    FORBIDDEN(403, "No authorization");
 
     @Getter
     private int code;
