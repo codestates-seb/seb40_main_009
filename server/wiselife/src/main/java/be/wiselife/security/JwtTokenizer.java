@@ -1,5 +1,7 @@
 package be.wiselife.security;
 
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -109,6 +111,7 @@ public class JwtTokenizer {
 
     public String getEmailWithToken(HttpServletRequest request) {
         //HEADER에 있는 복호화된 값을 가져옴
+
         String authorization = request.getHeader("Authorization");
         String[] split = authorization.split("."); //asdasdasd.adasdasd.asdasdasd 이런식으로 되어있어서 나눈다.
 
