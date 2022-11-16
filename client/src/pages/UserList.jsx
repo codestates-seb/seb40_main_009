@@ -6,6 +6,7 @@ const UserListContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: yellow;
   gap: 4px;
 `;
 
@@ -28,6 +29,7 @@ const IndexContainer = styled.section`
 function UserList() {
   return (
     <UserListContainer>
+      <div>필터</div>
       <IndexContainer>
         <div>이름</div>
         <div>등급</div>
