@@ -6,7 +6,7 @@ import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
 import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
-import MainPage from './components/Common/MainPage';
+import MainPage from './components/Main/MainPage';
 import SearchResult from './pages/SearchResult';
 
 function App() {

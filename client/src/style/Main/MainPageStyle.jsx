@@ -18,7 +18,7 @@ export const Background = styled.div`
 `;
 
 export const FirstPage = styled.div`
-  background-color: #8673ff;
+  // background-color: #8673ff;
   height: 70%;
   color: #ffffff;
 `;
@@ -69,4 +69,12 @@ export const AllUser = styled.div`
   width: 395%;
   display: flex;
   justify-content: space-around;
+`;
+
+export const PageFive = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
