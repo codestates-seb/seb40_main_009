@@ -4,15 +4,17 @@ import be.wiselife.challenge.dto.ChallengeDto;
 import org.mapstruct.Mapper;
 
 import be.wiselife.challenge.entity.Challenge;
+import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
     ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge);
     ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge);
-    //챌린지 생성 mapping
+
+    /*챌린지 생성 mapping*/
     default Challenge challengePostDtoToChallenge(ChallengeDto.Post challengePostDto) {
         if ( challengePostDto == null ) {
             return null;
@@ -50,7 +52,7 @@ public interface ChallengeMapper {
         return challenge.build();
     }
 
-    //챌린지 수정 mapping
+    /*챌린지 수정 mapping*/
     default Challenge challengePatchDtoToChallenge(ChallengeDto.Patch challengePatchDto) {
         if ( challengePatchDto == null ) {
             return null;

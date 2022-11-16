@@ -4,10 +4,12 @@ import be.wiselife.challenge.entity.Challenge;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ChallengeDto {
 
@@ -100,6 +102,11 @@ public class ChallengeDto {
         private int challengeViewCount;
 
         private Boolean isClosed;
+
+        private LocalDateTime created_at;
+
+        private LocalDateTime updated_at;
+
     }
 
     @Getter
@@ -142,5 +149,9 @@ public class ChallengeDto {
         private int averageChallengeSuccessRate;
 
         private int currentUserSuccessRate;
+
+        private LocalDateTime created_at;
+
+        private LocalDateTime updated_at;
     }
 }

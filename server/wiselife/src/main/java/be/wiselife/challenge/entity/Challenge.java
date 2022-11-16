@@ -1,5 +1,6 @@
 package be.wiselife.challenge.entity;
 
+import be.wiselife.audit.TimeAudit;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Challenge {
+public class Challenge extends TimeAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

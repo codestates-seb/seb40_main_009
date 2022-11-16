@@ -72,6 +72,7 @@ public class ChallengeController {
                 , HttpStatus.OK);
     }
 
+    /*챌린지 삭제*/
     @DeleteMapping({"/{challenge-id}"})
     public ResponseEntity deleteChallenge(@PathVariable("challenge-id") @Positive Long challengeId){
 
