@@ -23,12 +23,12 @@ import {
 function MainPage() {
   return (
     <S.MainContainer>
-      <ScrollContainer snap="proximity">
+      <ScrollContainer snap="none">
         {/* 첫번째 페이지 */}
         <ScrollPage page={0}>
           <S.FirstPage>
             <Animator
-              animation={batch(Sticky(37, 40), Fade(), MoveOut(0, -1000))}
+              animation={batch(Sticky(35, 40), Fade(), MoveOut(0, -1000))}
             >
               <S.FirstPageText>
                 행복한 삶을 살고 싶다면
@@ -82,44 +82,44 @@ function MainPage() {
 
         {/* 세번째  페이지 */}
         <ScrollPage page={5}>
-          <Animator animation={batch(Fade(), MoveIn(-1000, 0))}>
-            <S.Container>
-              <div>
-                <S.FontSize30>신규챌린지</S.FontSize30>
+          <S.Mt4>
+            <Animator animation={batch(Fade(), MoveIn(-1000, 0))}>
+              <S.Container>
                 <div>
-                  <ChallengeList />
-                </div>
-              </div>
-            </S.Container>
-          </Animator>
-
-          <Animator animation={batch(Fade(), MoveIn(1000, 0))}>
-            <S.Container>
-              <S.Flex>
-                <div>
-                  <S.FontSize30M3>이달의 랭커</S.FontSize30M3>
+                  <S.FontSize30>신규챌린지</S.FontSize30>
                   <div>
-                    <S.MonthlyUser
-                      src="./img/smile.jpg"
-                      alt="이번달 1등 유저사진"
-                    />
+                    <ChallengeList />
                   </div>
                 </div>
-                <S.MarginLeft3>
-                  <S.FontSize30M3>전체 랭킹</S.FontSize30M3>
-                  <S.AllUser>
-                    <div>사진</div>
-                    <div>닉네임</div>
-                    <div>레벨</div>
-                    <div>인기도</div>
-                  </S.AllUser>
-                </S.MarginLeft3>
-              </S.Flex>
-            </S.Container>
-          </Animator>
-        </ScrollPage>
+              </S.Container>
+            </Animator>
 
-        <S.Container></S.Container>
+            <Animator animation={batch(Fade(), MoveIn(1000, 0))}>
+              <S.Container>
+                <S.Flex>
+                  <div>
+                    <S.FontSize30M3>이달의 랭커</S.FontSize30M3>
+                    <div>
+                      <S.MonthlyUser
+                        src="./img/smile.jpg"
+                        alt="이번달 1등 유저사진"
+                      />
+                    </div>
+                  </div>
+                  <S.MarginLeft3>
+                    <S.FontSize30M3>전체 랭킹</S.FontSize30M3>
+                    <S.AllUser>
+                      <div>사진</div>
+                      <div>닉네임</div>
+                      <div>레벨</div>
+                      <div>인기도</div>
+                    </S.AllUser>
+                  </S.MarginLeft3>
+                </S.Flex>
+              </S.Container>
+            </Animator>
+          </S.Mt4>
+        </ScrollPage>
       </ScrollContainer>
     </S.MainContainer>
   );

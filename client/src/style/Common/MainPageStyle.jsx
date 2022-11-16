@@ -34,9 +34,9 @@ export const FirstPageText2 = styled.span`
 
 export const FirstPageImg = styled.img`
   position: absolute;
-  top: 65%;
-  right: -150%;
-  width: 160%;
+  top: 10%;
+  right: -199%;
+  width: 190%;
 `;
 
 export const FontSize50 = styled.div`
@@ -50,6 +50,9 @@ export const FontSize30 = styled.div`
 export const FontSize30M3 = styled.div`
   font-size: 30px;
   margin-bottom: 3%;
+`;
+export const Mt4 = styled.div`
+  margin-top: 5%;
 `;
 
 export const MonthlyUser = styled.img`
