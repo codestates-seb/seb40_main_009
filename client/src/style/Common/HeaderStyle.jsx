@@ -20,6 +20,7 @@ export const Container = styled.div`
 export const Logo = styled.div`
   color: #8673ff;
   cursor: default;
+  font-size: 20px;
 `;
 
 export const ChallengeBtn = styled.button`
@@ -27,6 +28,7 @@ export const ChallengeBtn = styled.button`
   outline: 0;
   background-color: #ffffff;
   color: #787878;
+  font-size: 16px;
 `;
 
 export const Search = styled.div`
