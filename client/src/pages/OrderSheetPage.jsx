@@ -7,6 +7,7 @@ const OrderSheetInfoPageComponent = styled.div`
   width: 1024px;
   font-size: 18px;
   color: #595959;
+  margin: auto;
   .order-sheet {
     border-top: 0.2rem solid #595959;
     border-bottom: 0.12rem solid #595959;
