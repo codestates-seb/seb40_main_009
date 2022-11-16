@@ -5,6 +5,7 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 
 import be.wiselife.follow.entity.Follow;
+import be.wiselife.image.entity.Image;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -78,72 +79,69 @@ public class Member extends TimeAudit {
     @Enumerated(EnumType.STRING)
     private MemberBadge memberBadge;
 
+    @Column(nullable = false)
     private int memberLevel;
 
-    @Column
+    @Column(nullable = false)
     private boolean hasRedCard;
 
     // 아래는 매핑 후에도 ResponseDTO에서 처리 가능한 필드
 
-    @Column
+    @Column(nullable = false)
     private int memberChallengeTotalCount;
 
-    @Column
+    @Column(nullable = false)
     private int memberChallengeSuccessCount;
 
-    @Column
+    @Column(nullable = false)
     private double memberChallengePercentage;
 
-    @Column
+    @Column(nullable = false)
     private double memberMoney;
 
-    @Column
-    private String memberImage;
-
-
     //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
-    @Enumerated(EnumType.STRING)
-    private FollowStatus followStatus=FollowStatus.UNFOLLOW;
 
     @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
     private Set<Follow> follows = new HashSet<>();
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FollowStatus followStatus=FollowStatus.UNFOLLOW;
 
     @Column(nullable = false)
     private int followerCount;
 
-    public void setFollows(Set<Follow> follows) {
-        this.follows = follows;
-    }
-
-    @Column
+    @Column(nullable = false)
     private int followers;
 
-    @Column
+    // 소셜로그인 관련 필드
+    @Column(nullable = false)
+    private String provider; // 플랫폼 이름 저장하기 추후 소셜 로그인을 한다면....?
+    @Column(nullable = false)
+    private String providerId; // 플랫폼 아이디 값 저장하기 소셜 로그인에서 준 ID 번호
+
+    @Column(nullable = false)
+    private String memberImage;
+
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-
-    @Column
-    private String provider; // 플랫폼 이름 저장하기 추후 소셜 로그인을 한다면....?
-    @Column
-    private String providerId; // 플랫폼 아이디 값 저장하기 소셜 로그인에서 준 ID 번호
+    // 소셜 로그인 중 이미지 관련
+    @OneToOne(mappedBy = "member")
+    private Image image;
 
     /**
      * 연관관계 매핑 해야할것
-     * voter, image, challenge, challengeReview
+     * image, challenge, challengeReview
      */
 
 
-    /**
-     * 생성자는 필요시 작성예정
-     */
 
     public enum FollowStatus {
         SELF,FOLLOW,UNFOLLOW;
     }
 
     public enum MemberBadge {
-        // 레벨로 나타내면 몇이 최대인지 몰라서 우선 롤 계급제로 분류
         새내기(1),
         좀치는도전자(2),
         열정도전자(3),
@@ -173,6 +171,12 @@ public class Member extends TimeAudit {
                 default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
             }
         }
+    }
+    /**
+     * 생성자는 필요시 작성예정
+     */
+    public void setFollows(Set<Follow> follows) {
+        this.follows = follows;
     }
 
     // 랜덤 아이디 생성기
