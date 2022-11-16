@@ -5,7 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
-
+/*
+* 인가코드로 엑세스토큰, 리프레쉬 토큰 받아오기
+ */
 @Getter
 @Setter
 @ToString

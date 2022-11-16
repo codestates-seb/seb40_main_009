@@ -38,7 +38,7 @@ public class OauthService extends DefaultOAuth2UserService {
     public LoginDto login(String provider, String code){ //인가code를 카톡Oauth서버에 token요청
         ClientRegistration kakaoProvider = inMemoryRepository.findByRegistrationId(provider); //yaml에 저장된 데이터 뽑아오기
         AccessTokenDto tokenData = getAuthorizationToken(code, kakaoProvider); //서버에 엑세스 토큰과 리프레쉬 토큰을 받아오는 메서드, 이걸로 이제 회원 프로필 이름,이메일을 가져올수있다.
-        Member member = getMemberProfile(provider, tokenData, kakaoProvider); //첫로그인이라면 회원가입 아니면 디비 맴버 반환
+        Member member = getMemberProfile(provider, tokenData, kakaoProvider); //첫 로그인이라면 회원가입 아니면 디비 맴버 반환
         //인증후 토큰 발부
         String accessToken = jwtTokenizer.createAccessToken(String.valueOf(member.getMemberEmail()));
         String refreshToken = jwtTokenizer.createRefreshToken();
@@ -72,6 +72,7 @@ public class OauthService extends DefaultOAuth2UserService {
         AccessTokenDto accessTokenDto = restTemplate.postForObject(provider.getProviderDetails().getTokenUri(), requestEntity, AccessTokenDto.class);
         return accessTokenDto;
     }
+
     private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
 
@@ -82,10 +83,10 @@ public class OauthService extends DefaultOAuth2UserService {
         } else {
             log.info("지원하지않는 로그인 방식");
         }
+
         /* 데이터들 넣는 작업 */
         String provide = oAuth2MemberInfo.getProvider();
         String providerId = oAuth2MemberInfo.getProviderId();
-        String name = oAuth2MemberInfo.getName();
         String email = oAuth2MemberInfo.getEmail();
         String imageURL = oAuth2MemberInfo.getImageURL();
         List<String> rolesForDatabase = new CustomAuthorityUtils().createRolesForDatabase(email);
@@ -93,8 +94,7 @@ public class OauthService extends DefaultOAuth2UserService {
         //DB에 없는 사람이면 저장하고 있는사람이면 반환
         //orElse는 메모리상에 있기만 하면 무조건 호출이라서 orElseGet으로 호출해야한다.
         Member member = memberRepository.findByMemberEmail(email)
-                .orElseGet(()-> memberRepository.save(Member.builder().memberEmail(email).memberImage(imageURL).memberName(name)
-                        .provider(provide).providerId(providerId).roles(rolesForDatabase).build()));
+                .orElseGet(()-> memberRepository.save(new Member(email,imageURL,rolesForDatabase,provide,providerId)));
 
 
         return member;

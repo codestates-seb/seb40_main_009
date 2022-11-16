@@ -7,7 +7,7 @@ import lombok.ToString;
 import javax.management.relation.Role;
 
 /**
- * 데이터 입력시 filter에서 알아볼수 있게 역직렬화 (stream of byte -> object)
+ * 원하는 데이터만 뽑아서 반환
  */
 
 @Getter

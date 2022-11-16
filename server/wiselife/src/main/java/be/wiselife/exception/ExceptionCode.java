@@ -17,7 +17,8 @@ public enum ExceptionCode {
     USER_EXISTS(409, "User exists"),
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
     COMMENT_NOT_FOUND(404, "Comment not found"),
-    SIGNUP_WRONG(404,"somethings get wrong during login" );
+    SIGNUP_WRONG(404,"somethings get wrong during login" ),
+    TRADE_CODE_WRONG(404,"Not available tid" );
 
 
     @Getter

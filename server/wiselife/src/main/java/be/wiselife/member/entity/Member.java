@@ -27,6 +27,28 @@ public class Member extends TimeAudit {
     @Column
     private String memberDescription = "안녕하세요! 슬린이에요^^";
 
+    @Builder
+    public Member(String memberEmail, String memberImage, List<String> roles, String provider, String providerId) {
+
+        this.roles = roles;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.memberEmail = memberEmail;
+        this.memberImage = memberImage;
+
+        this.memberName = "임의값"; //네 구현필요
+        this.memberExp = 0;
+        this.memberBadge = null; //구현필요
+        this.memberLevel = 1;
+        this.hasRedCard = false;
+        this.memberChallengeTotalCount = 0;
+        this.memberChallengeSuccessCount = 0;
+        this.memberChallengePercentage = 0;
+        this.memberMoney = 0;
+        this.followers = 0;
+        this.memberDescription = "안녕하세요! 슬린이에요^^";
+    }
+
     //로그인 기능 추가뒤에 로그인 멤버의 토큰에서 이메일값 가져올 예정
     @Column(nullable = false, unique = true)
     private String memberEmail;
@@ -76,8 +98,8 @@ public class Member extends TimeAudit {
     @Column
     private int followers = 0;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Column
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
     @Column
@@ -94,6 +116,7 @@ public class Member extends TimeAudit {
     /**
      * 생성자는 필요시 작성예정
      */
+
 
     public enum MemberBadge {
         // 레벨로 나타내면 몇이 최대인지 몰라서 우선 롤 계급제로 분류
