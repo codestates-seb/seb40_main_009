@@ -24,9 +24,7 @@ public class FollowService {
      * 팔로워를 누르게 되면, Member 상세페이지에서 followerCount가 증가하며
      * 나를 팔로워한 사람을 setFollower에 넣어둔다.
      */
-    public void updateFollow(Long followingId, Long followerId) {
-        Member following = memberRepository.findById(followingId).orElseThrow();
-        Member follower = memberRepository.findById(followerId).orElseThrow();
+    public void updateFollow(Member follower, Member following) {
 
         if (following.getMemberId() == follower.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_FOLLOW_YOURSELF);

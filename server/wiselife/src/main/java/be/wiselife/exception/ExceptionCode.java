@@ -12,6 +12,8 @@ public enum ExceptionCode {
     MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists"),
     NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge"),
 
+    CAN_NOT_UPDATE_USER_INFORMATION_OTHER_PERSON(404, "Can't Update User Information Other Person"),
+
     //아래부분 영운님이 어디서썻는지 파악후 네임 변경 필요
     UNAUTHORIZED_USER(403, "not authorized user"),
     USER_NOT_FOUND(404, "User not found"),

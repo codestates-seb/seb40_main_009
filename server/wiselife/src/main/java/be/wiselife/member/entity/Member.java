@@ -11,10 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @NoArgsConstructor
@@ -36,9 +33,10 @@ public class Member extends TimeAudit {
         this.memberEmail = memberEmail;
         this.memberImage = memberImage;
 
-        this.memberName = "임의값"; //네 구현필요
+        this.memberName = createRandomId(); //네 구현필요
         this.memberExp = 0;
-        this.memberBadge = null; //구현필요
+        this.memberBadge = MemberBadge.새내기; //구현필요
+        this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
         this.memberChallengeTotalCount = 0;
@@ -47,6 +45,7 @@ public class Member extends TimeAudit {
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
+        this.memberImage = "image";
     }
 
     @Id
@@ -74,12 +73,12 @@ public class Member extends TimeAudit {
      */
 
     @Column
-    private int memberExp = 0;
+    private int memberExp;
 
     @Enumerated(EnumType.STRING)
-    private MemberBadge memberBadge = MemberBadge.새내기;
+    private MemberBadge memberBadge;
 
-    private int memberLevel = 1;
+    private int memberLevel;
 
     @Column
     private boolean hasRedCard;
@@ -87,19 +86,19 @@ public class Member extends TimeAudit {
     // 아래는 매핑 후에도 ResponseDTO에서 처리 가능한 필드
 
     @Column
-    private int memberChallengeTotalCount=0;
+    private int memberChallengeTotalCount;
 
     @Column
-    private int memberChallengeSuccessCount=0;
+    private int memberChallengeSuccessCount;
 
     @Column
-    private double memberChallengePercentage=0;
+    private double memberChallengePercentage;
 
     @Column
-    private double memberMoney=0;
+    private double memberMoney;
 
     @Column
-    private String memberImage = "image";
+    private String memberImage;
 
 
     //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
@@ -110,14 +109,14 @@ public class Member extends TimeAudit {
     private Set<Follow> follows = new HashSet<>();
 
     @Column(nullable = false)
-    private int followerCount = 0;
+    private int followerCount;
 
     public void setFollows(Set<Follow> follows) {
         this.follows = follows;
     }
 
     @Column
-    private int followers = 0;
+    private int followers;
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
@@ -174,6 +173,12 @@ public class Member extends TimeAudit {
                 default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
             }
         }
+    }
+
+    // 랜덤 아이디 생성기
+    public String createRandomId() {
+        String random = UUID.randomUUID().toString().substring(0, 6);
+        return "챌린저" + random;
     }
 
 }
