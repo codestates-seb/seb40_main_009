@@ -12,9 +12,9 @@ function App() {
       <Header />
       <BrowserRouter>
         <Routes>
-          <Route path="/challengelist" element={<ChallengeList />} />
-          <Route path="/userlist" element={<UserList />} />
-          <Route path="/searchresult" element={<SearchResult />} />
+          <Route path="/challengelist/*" element={<ChallengeList />} />
+          <Route path="/userlist/*" element={<UserList />} />
+          <Route path="/search/*" element={<SearchResult />} />
         </Routes>
       </BrowserRouter>
       {/* <Footer /> */}

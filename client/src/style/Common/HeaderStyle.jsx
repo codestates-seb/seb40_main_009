@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 export const HeaderContainer = styled.header`
-  width: 99.8%;
-  padding: 0.7%;
+  width: 100%;
+  padding: 0.7% 0;
   position: fixed;
   background-color: #ffffff;
   border-bottom: 1px solid #e6e6e6;
+  z-index: 2;
 `;
 
 export const Container = styled.div`
