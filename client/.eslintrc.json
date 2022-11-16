@@ -15,6 +15,7 @@
   "rules": {
     "react/react-in-jsx-scope": 0,
     "react/jsx-uses-react": 0,
-    "prettier/prettier": ["error", { "endOfLine": "auto" }]
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "react/jsx-no-useless-fragment": "off"
   }
 }
