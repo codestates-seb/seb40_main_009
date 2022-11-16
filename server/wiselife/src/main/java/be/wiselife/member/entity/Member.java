@@ -3,13 +3,19 @@ package be.wiselife.member.entity;
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
+
+import be.wiselife.follow.entity.Follow;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+
 import javax.management.relation.Role;
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @NoArgsConstructor
 @Builder
@@ -20,12 +26,6 @@ import java.util.List;
 @Table(name="Member_Table")
 //Member는 생성일자만 있으면 되므로 TimeAudit만 상속 받는다.
 public class Member extends TimeAudit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
-
-    @Column
-    private String memberDescription = "안녕하세요! 슬린이에요^^";
 
     @Builder
     public Member(String memberEmail, String memberImage, List<String> roles, String provider, String providerId) {
@@ -49,6 +49,13 @@ public class Member extends TimeAudit {
         this.memberDescription = "안녕하세요! 슬린이에요^^";
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long memberId;
+
+    @Column
+    private String memberDescription = "안녕하세요! 슬린이에요^^";
+
     //로그인 기능 추가뒤에 로그인 멤버의 토큰에서 이메일값 가져올 예정
     @Column(nullable = false, unique = true)
     private String memberEmail;
@@ -70,8 +77,7 @@ public class Member extends TimeAudit {
     private int memberExp = 0;
 
     @Enumerated(EnumType.STRING)
-    private MemberBadge memberBadge = MemberBadge.IRON;
-
+    private MemberBadge memberBadge = MemberBadge.새내기;
 
     private int memberLevel = 1;
 
@@ -95,12 +101,28 @@ public class Member extends TimeAudit {
     @Column
     private String memberImage = "image";
 
+
+    //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
+    @Enumerated(EnumType.STRING)
+    private FollowStatus followStatus=FollowStatus.UNFOLLOW;
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
+    private Set<Follow> follows = new HashSet<>();
+
+    @Column(nullable = false)
+    private int followerCount = 0;
+
+    public void setFollows(Set<Follow> follows) {
+        this.follows = follows;
+    }
+
     @Column
     private int followers = 0;
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
 
     @Column
     private String provider; // 플랫폼 이름 저장하기 추후 소셜 로그인을 한다면....?
@@ -117,16 +139,20 @@ public class Member extends TimeAudit {
      * 생성자는 필요시 작성예정
      */
 
+    public enum FollowStatus {
+        SELF,FOLLOW,UNFOLLOW;
+    }
 
     public enum MemberBadge {
         // 레벨로 나타내면 몇이 최대인지 몰라서 우선 롤 계급제로 분류
-        IRON(1),
-        SILVER(2),
-        GOLD(3),
-        PLATINUM(4),
-        DIAMOND(5),
-        MASTER(6),
-        CHALLENGE(7);
+        새내기(1),
+        좀치는도전자(2),
+        열정도전자(3),
+        모범도전자(4),
+        우수도전자(5),
+        챌린지장인(6),
+        시간의지배자(7),
+        챌린지신(8);
 
         @Getter
         public int level;
@@ -137,13 +163,14 @@ public class Member extends TimeAudit {
 
         public static MemberBadge badgeOfLevel(int level) {
             switch (level) {
-                case 1:return IRON;
-                case 2:return SILVER;
-                case 3:return GOLD;
-                case 4:return PLATINUM;
-                case 5:return DIAMOND;
-                case 6:return MASTER;
-                case 7:return CHALLENGE;
+                case 1:return 새내기;
+                case 2:return 좀치는도전자;
+                case 3:return 열정도전자;
+                case 4:return 모범도전자;
+                case 5:return 우수도전자;
+                case 6:return 챌린지장인;
+                case 7:return 시간의지배자;
+                case 8:return 챌린지신;
                 default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
             }
         }

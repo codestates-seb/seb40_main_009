@@ -11,15 +11,23 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not exists"),
     MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists"),
     NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge"),
-    //Member 부분 예외 ==============끝
+
+    //아래부분 영운님이 어디서썻는지 파악후 네임 변경 필요
     UNAUTHORIZED_USER(403, "not authorized user"),
     USER_NOT_FOUND(404, "User not found"),
     USER_EXISTS(409, "User exists"),
+
+
+    //Challenge 부분 예외 ===========시작
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
     COMMENT_NOT_FOUND(404, "Comment not found"),
+    
+    //Follower 부분 예외 ==========시작
+    CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself"),
+   
+   //login 부분 예외 ========시작
     SIGNUP_WRONG(404,"somethings get wrong during login" ),
     TRADE_CODE_WRONG(404,"Not available tid" );
-
 
     @Getter
     private int code;

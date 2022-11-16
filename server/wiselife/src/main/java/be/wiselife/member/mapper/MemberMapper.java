@@ -1,12 +1,14 @@
 package be.wiselife.member.mapper;
 
+import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMapper {
@@ -37,9 +39,11 @@ public interface MemberMapper {
         memberDetailResponse.setMemberChallengeSuccessCount(member.getMemberChallengeSuccessCount());
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
-        memberDetailResponse.setFollowers(member.getFollowers());
+        memberDetailResponse.setFollowerCount(member.getFollowerCount());
         memberDetailResponse.setMemberImage(member.getMemberImage());
-
+        //멤버에 팔로워 정보뜨게 추가
+        memberDetailResponse.setFollowers(followersToFollowResponseDto(member.getFollows()));
+        memberDetailResponse.setFollowStatus(member.getFollowStatus());
         return memberDetailResponse;
     }
 
@@ -50,9 +54,23 @@ public interface MemberMapper {
         memberListResponse.setMemberId(member.getMemberId());
         memberListResponse.setMemberName(member.getMemberName());
         memberListResponse.setMemberBadge(member.getMemberBadge());
-        memberListResponse.setFollowers(member.getFollowers());
+        memberListResponse.setFollowerCount(member.getFollowerCount());
         memberListResponse.setCreated_at(member.getCreated_at());
 
         return memberListResponse;
+    }
+
+    default List<MemberDto.MemberFollowerResponseDto> followersToFollowResponseDto(Set<Follow> follows) {
+        return follows
+                .stream()
+                .map(follower -> MemberDto.MemberFollowerResponseDto
+                        .builder()
+                        .followId(follower.getFollowId())
+                        .followingId(follower.getFollowing().getMemberId())
+                        .followerId(follower.getFollowerId())
+                        .followerName(follower.getFollowerName())
+                        .followStatus(follower.isFollow())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

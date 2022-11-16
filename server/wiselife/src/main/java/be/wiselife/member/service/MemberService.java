@@ -2,7 +2,7 @@ package be.wiselife.member.service;
 
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
-import be.wiselife.member.dto.MemberDto;
+import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +42,30 @@ public class MemberService {
     public Member findMemberById(Long memberId) {
         return verifiedMemberById(memberId);
     }
+
+    /**
+     * 팔로워가 팔로우하는 사람 페이지에 갔을떄
+     * 테스트 용도로 작동하는 것으로 memberId(팔로우 하는 사람) 페이지에 접근할때, 팔로우 인지 아닌지를 확인하는 용도
+     * 아마 여기에 로그인 기능 추가해서 사용하게 될 듯
+     */
+    public Member findMemberById(Long followId,Long followerId) {
+        Member followedMember = verifiedMemberById(followId);
+        Follow follow =memberRepository.findByFollowerIdAndFollowing(followerId, followedMember);
+        if (follow == null) {
+            if (followId == followerId) {
+                followedMember.setFollowStatus(Member.FollowStatus.SELF);
+                return memberRepository.save(followedMember);
+            }
+            followedMember.setFollowStatus(Member.FollowStatus.UNFOLLOW);
+            return memberRepository.save(followedMember);
+        }
+        if (follow.isFollow()) {
+            followedMember.setFollowStatus(Member.FollowStatus.FOLLOW);
+        } else {
+            followedMember.setFollowStatus(Member.FollowStatus.UNFOLLOW);
+        }
+        return memberRepository.save(followedMember);
+    }
     public Member findMemberByMemberName(String memberName) {
         return verifiedMemberByMemberName(memberName);
     }
@@ -59,8 +83,8 @@ public class MemberService {
             case "memberBadge":
                 sort = "memberLevel";
                 break;
-            case "followers":
-                sort = "followers";
+            case "followerCount":
+                sort = "followerCount";
                 break;
             default:
                 sort = "memberId";
@@ -100,13 +124,14 @@ public class MemberService {
     private Member verifiedMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member foundMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        log.info("follower size={}",foundMember.getFollows().size());
         return foundMember;
     }
 
     //follower 기준 sort 동작 확인용 추후 삭제 예정
     public void addFollowers(Long memberId) {
         Member member = verifiedMemberById(memberId);
-        member.setFollowers(member.getFollowers()+1);
+        member.setFollowerCount(member.getFollowerCount()+1);
         memberRepository.save(member);
     }
 

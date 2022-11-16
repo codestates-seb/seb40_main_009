@@ -65,7 +65,19 @@ public class MemberController {
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(member)),HttpStatus.OK);
     }
+    /**
+     * 팔로워가 팔로우하는 사람 페이지에 갔을떄
+     * 테스트 용도로 작동하는 것으로 memberId(팔로우 하는 사람) 페이지에 접근할때, 팔로우 인지 아닌지를 확인하는 용도
+     * 아마 여기에 로그인 기능 추가해서 사용하게 될 듯
+     */
+    @GetMapping("/test/{followingId}/{followerId}")
+    public ResponseEntity getMemberById(@PathVariable("followingId") Long followingId,
+                                        @PathVariable("followerId") Long followerId) {
+        Member member = memberService.findMemberById(followingId,followerId);
 
+        return new ResponseEntity(
+                new SingleResponseDto<>(mapper.memberToDetailResponse(member)),HttpStatus.OK);
+    }
     /**
      * 회원 단건조회(memberName)
      * 챌린지나, 회원 랭킹, 회원 리스트로 조회시 회원을 클릭하면 회원 상세페이지가 나타날수 있게 하는 메소드
