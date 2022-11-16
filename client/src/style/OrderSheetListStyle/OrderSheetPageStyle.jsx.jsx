@@ -5,6 +5,7 @@ export const OrderSheetInfoPageComponent = styled.div`
   font-size: 18px;
   color: #595959;
   margin: auto;
+  padding-top: 7rem;
   .order-sheet {
     border-top: 0.2rem solid #595959;
     border-bottom: 0.12rem solid #595959;
