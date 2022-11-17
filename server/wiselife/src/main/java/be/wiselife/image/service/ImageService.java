@@ -81,27 +81,31 @@ public class ImageService {
         List<ChallengeExamImage> challengeExamImages
                 = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
         String[] imagePath = challenge.getChallengeExamImagePath().split(",");
-        ArrayList<String> imagePathList = new ArrayList<>();
+        //겹치지않는거 판단하는 용도
+        ArrayList<Boolean> imageCheckList = new ArrayList<>();
+
         for (int i = 0; i < imagePath.length; i++) {
-            imagePathList.add(imagePath[i]);
+            imageCheckList.add(false);
         }
 
         // 데이터베이스의 이미지 경로와 patchDto에 전달된 경로가 같으면 데이터베이스에서 삭제
         for (int i =0;i<challengeExamImages.size();i++) {
-            for (int j = 0; j < imagePathList.size(); j++) {
+            for (int j = 0; j < imagePath.length; j++) {
                 if (challengeExamImages.get(i).getImagePath().equals(imagePath[j])) {
+                    imageCheckList.set(j, true);
                     imageRepository.delete(challengeExamImages.get(i));
-                    imagePathList.remove(j);
-                    break;
                 }
             }
         }
+
         // 같은게 반복문 끝날때까지 없다면 그 경로를 등록
-        for (int i = 0; i < imagePathList.size(); i++) {
+        for (int i = 0; i < imagePath.length; i++) {
             ChallengeExamImage challengeExamImage = new ChallengeExamImage();
-            challengeExamImage.setImagePath(imagePathList.get(i));
-            challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
-            imageRepository.save(challengeExamImage);
+            if (!imageCheckList.get(i)) {
+                challengeExamImage.setImagePath(imagePath[i]);
+                challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
+                imageRepository.save(challengeExamImage);
+            }
         }
         // 바뀐 db의 경로들을 다시 한 문장으로 변경
         List<ChallengeExamImage> changeChallengeExamImages
