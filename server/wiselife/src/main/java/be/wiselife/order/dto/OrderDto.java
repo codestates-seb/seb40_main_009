@@ -1,5 +1,6 @@
 package be.wiselife.order.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -61,6 +62,7 @@ public class OrderDto {
         private int tax;
         private int point;
         private int discount;
+        private int green_deposit;
     }
 
     @Getter
@@ -73,5 +75,14 @@ public class OrderDto {
         private boolean orderSuccess = false;
 
     }
-
+    @Getter
+    @Setter
+    @Builder
+    public static class PersonalOrder {
+        private Long orderId;
+        private String approved_at;
+        private String requestuniquenumber;
+        private String itemName;
+        private int totalAmount;
+    }
 }

@@ -1,6 +1,8 @@
 package be.wiselife.challenge.dto;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challengetalk.dto.ChallengeTalkDto;
+import be.wiselife.challengetalk.entity.ChallengeTalk;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ChallengeDto {
 
@@ -77,7 +80,7 @@ public class ChallengeDto {
     }
 
     @Getter
-    @Builder
+    @Setter
     public static class SimpleResponse {
 
         private Long challengeId;
@@ -165,9 +168,15 @@ public class ChallengeDto {
         private LocalDateTime created_at;
 
         private LocalDateTime updated_at;
+
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
 
         private String challengeExamImagePath;
+
+        /*챌린지 댓글 리스트 */
+        @Setter
+        private List<ChallengeTalkDto.response> challengeTalks;
+
     }
 }
