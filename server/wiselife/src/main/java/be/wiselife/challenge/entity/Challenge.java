@@ -94,7 +94,7 @@ public class Challenge extends TimeAudit {
         this.challengeAuthDescription = challengeAuthDescription;
         this.challengeAuthCycle = challengeAuthCycle;
         this.challengeFeePerPerson = challengeFeePerPerson;
-
+//http://img.segye.com/content/image/2020/01/03/20200103508188.jpg
         /*인자로 받지는 않지만 default값 설정해야 하는 것들*/
         this.isClosed = false;
         this.challengeViewCount = 0;

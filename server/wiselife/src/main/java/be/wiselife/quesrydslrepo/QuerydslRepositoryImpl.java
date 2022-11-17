@@ -49,7 +49,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public ChallengeRepImage findByImageTypeAndChallengeRepId(String imageType, String randomIdForImage) {
+    public ChallengeRepImage findByImageTypeAndChallengeRandomId(String imageType, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeRepImage)
                 .where(challengeRepImage.imageType.eq(imageType)

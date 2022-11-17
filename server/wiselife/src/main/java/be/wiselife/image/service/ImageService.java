@@ -43,7 +43,7 @@ public class ImageService {
     //ChallengeRepImage 부분 코드======================================
     public void patchChallengeRepImage(Challenge challenge) {
         ChallengeRepImage challengeRepImageFromRepository =
-                imageRepository.findByImageTypeAndChallengeRepId("CRI", challenge.getRandomIdForImage());
+                imageRepository.findByImageTypeAndChallengeRandomId("CRI", challenge.getRandomIdForImage());
 
         if (challengeRepImageFromRepository == null) {
             ChallengeRepImage challengeRepImage = new ChallengeRepImage();
