@@ -4,15 +4,11 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
-import be.wiselife.member.service.MemberService;
 import be.wiselife.order.dto.OrderDto;
 import be.wiselife.order.entity.Order;
 import be.wiselife.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -55,7 +51,7 @@ public class OrderService {
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
         parameters.add("partner_order_id", String.valueOf(order.getOrderId())); // 주문번호
-        parameters.add("partner_user_id", "memberId_1"); // 맴버아이디 로그인 추가시 수정필요
+        parameters.add("partner_user_id", String.valueOf(member.getMemberId())); // 맴버아이디
         parameters.add("item_name", order.getItemName()); //상품명
         parameters.add("quantity", String.valueOf(order.getQuantity())); // 상품수량
         parameters.add("total_amount", String.valueOf((int)order.getTotalAmount())); //결재 총액
@@ -65,10 +61,6 @@ public class OrderService {
         parameters.add("cancel_url", cancelUrl);
         parameters.add("fail_url", failUrl);
 
-        log.info("주문한 맴버아이디:" + parameters.get("partner_user_id"));
-        log.info("결제번호 : {}", parameters.get("partner_order_id"));
-
-
         // 보낼 파라미터와 헤더
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
 
@@ -77,9 +69,9 @@ public class OrderService {
 
         // 보낼 외부 url, 요청 메시지(header,parameter), 처리후 값을 받아올 클래스.
         OrderDto.OrderReadyResponse ready = template.postForObject(readyUrl, requestEntity, OrderDto.OrderReadyResponse.class);
-        log.info("결재승인완료 응답객체: " + ready);
+        log.info("결재번호가 담긴 응답객체: " + ready);
 
-        if (ready != null) { //결재승인이후 완료가 되었다면 결제에 받은 데이터를 저장하고 유저쪽에도 저장한다.
+        if (ready != null) { //결재번호를 저장하면서 맴버에도 해당 정보를 저장한다.
             order.setTid(ready.getTid());
             orderRepository.save(order);
             member.addOrder(order);
@@ -89,33 +81,43 @@ public class OrderService {
 
         return ready;
     }
-    // 결제쪽 수정중
-    public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String emailByToken) { //로그인 메소드 생기면 그떄 수정
-
-        Member member = memberRepository.findByMemberEmail(emailByToken).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//        member.getOrders().???
-//        log.info("요청 tid {}", tid);
-//        Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG)); // 로그인 추가시 찾는로직도 변경 필요
-//        //카카오톡에서 요청하는 기본 양식
-//        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-//        parameters.add("cid", cid);
-//        parameters.add("tid", tid);
-//        parameters.add("partner_order_id", String.valueOf(order.getOrderId())); //주문번호 수정예정
-//        parameters.add("partner_user_id", "memberId_1"); //회원 아이디 로그인 구현시 수정예정
-//        parameters.add("pg_token", pgtoken);
-//
-//        log.info("결제승인 요청을 인증하는 토큰: " + pgtoken);
-//        log.info("결재고유 번호: " + tid);
-        //log.info("주문정보: " + order);
-//        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
-//        RestTemplate restTemplate = new RestTemplate();
-//        OrderDto.ApproveResponse approveResponse = restTemplate.postForObject(approveUrl, requestEntity, OrderDto.ApproveResponse.class);
-//
-//        return approveResponse;
 
 
-        //결제정보 저장하는 로직 만들기
-        return null;
+    public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) {
+
+        //오더 tid 번호 일지여부 확인
+        Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG)); // 로그인 추가시 찾는로직도 변경 필요
+
+        //카카오톡에서 요청하는 기본 양식
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("cid", cid);
+        parameters.add("tid", tid);
+        parameters.add("partner_order_id", String.valueOf(order.getOrderId())); //주문번호 수정예정
+        parameters.add("partner_user_id", String.valueOf(order.getMember().getMemberId())); //회원 아이디 로그인 구현시 수정예정
+        parameters.add("pg_token", pgtoken);
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+        RestTemplate restTemplate = new RestTemplate();
+        OrderDto.ApproveResponse approveResponse = restTemplate.postForObject(approveUrl, requestEntity, OrderDto.ApproveResponse.class);
+
+        if (approveResponse != null) { //거래가 잘왔다면...해당내용을 저장한다.
+            log.info("승인 및 결제완료 {}", approveResponse);
+            int beforeTrade = (int) order.getTotalAmount();
+            int afterTrade = approveResponse.getAmount().getTotal();
+
+            if (beforeTrade != afterTrade) { //결제요청전 금액과 결제요청 금액이 다르다면 예외를 반환한다.
+                throw new BusinessLogicException(ExceptionCode.TOTAL_AMOUNT_DIFFERENT);
+            }
+
+            order.setApproved_at(approveResponse.getApproved_at()); //결제인증시간 저장
+            order.setRequestuniquenumber(approveResponse.getAid()); //요청고유번호 저장
+            order.setOrderSuccess(Boolean.TRUE);
+            orderRepository.save(order);
+
+            return approveResponse;
+
+        } else //거래가 이상하다면 approveResponse가 안온걸로 반환.
+            throw new BusinessLogicException(ExceptionCode.NO_ORDER_RESOPNSE);
 
     }
 
@@ -138,9 +140,11 @@ public class OrderService {
         return orderRepository.findById(order.getOrderId()).orElseThrow(() -> new RuntimeException());
     }
 
-    public Page<Order> getOrderList(Long userId) {
+    public List<Order> getOrderList(String email) {
         //userID로 찾는 로직 구현 필요
+        Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        return orderRepository.findAll(PageRequest.of(0, 10, Sort.by("orderId")));
+        List<Order> orders = orderRepository.findByMemberId(member); //쿼리dsl 통해서 얻어낸 order들.
+        return orders;
     }
 }
