@@ -27,13 +27,13 @@ import java.util.*;
 public class Member extends TimeAudit {
 
     @Builder
-    public Member(String memberEmail, String memberImage, List<String> roles, String provider, String providerId) {
+    public Member(String memberEmail, String memberImagePath, List<String> roles, String provider, String providerId) {
 
         this.roles = roles;
         this.provider = provider;
         this.providerId = providerId;
         this.memberEmail = memberEmail;
-        this.memberImage = memberImage;
+        this.memberImagePath = memberImagePath;
 
         this.memberName = createRandomId(); //네 구현필요
         this.memberExp = 0;
@@ -47,7 +47,7 @@ public class Member extends TimeAudit {
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
-        this.memberImage = "image";
+        this.memberImagePath = "image";
     }
 
     @Id
@@ -121,15 +121,11 @@ public class Member extends TimeAudit {
     private String providerId; // 플랫폼 아이디 값 저장하기 소셜 로그인에서 준 ID 번호
 
     @Column(nullable = false)
-    private String memberImage;
+    private String memberImagePath;
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
-
-    // 소셜 로그인 중 이미지 관련
-    @OneToOne(mappedBy = "member")
-    private Image image;
 
     /**
      * 연관관계 매핑 해야할것

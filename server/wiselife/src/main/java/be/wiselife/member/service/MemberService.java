@@ -3,6 +3,8 @@ package be.wiselife.member.service;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.follow.entity.Follow;
+import be.wiselife.image.repository.ImageRepository;
+import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,8 @@ public class MemberService {
      *
      */
     private final MemberRepository memberRepository;
+
+    private final ImageService imageService;
 
     /**
      * 테스트용 계정 생성
@@ -125,8 +129,13 @@ public class MemberService {
                 .ifPresent(new_memberName->memberFromRepository.setMemberName(new_memberName));
         Optional.ofNullable(member.getMemberDescription())
                 .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
-        Optional.ofNullable(member.getMemberImage())
-                .ifPresent(new_memberImage->memberFromRepository.setMemberImage(new_memberImage));
+        log.info("image path is null={}", member.getMemberImagePath());
+        if (!Optional.ofNullable(member.getMemberImagePath()).isEmpty()) {
+            log.info("image active");
+            member.setMemberId(memberFromRepository.getMemberId());
+            imageService.patchMemberImage(member);
+            memberFromRepository.setMemberImagePath(member.getMemberImagePath());
+        }
 
         return memberRepository.save(memberFromRepository);
     }

@@ -19,7 +19,7 @@ public interface MemberMapper {
 
         member.setMemberName(patchMember.getMemberName());
         member.setMemberDescription(patchMember.getMemberDescription());
-        member.setMemberImage(patchMember.getMemberImage());
+        member.setMemberImagePath(patchMember.getMemberImagePath());
 
         return member;
     }
@@ -40,7 +40,7 @@ public interface MemberMapper {
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
         memberDetailResponse.setFollowerCount(member.getFollowerCount());
-        memberDetailResponse.setMemberImage(member.getMemberImage());
+        memberDetailResponse.setMemberImagePath(member.getMemberImagePath());
         //멤버에 팔로워 정보뜨게 추가
         memberDetailResponse.setFollowers(followersToFollowResponseDto(member.getFollows()));
         memberDetailResponse.setFollowStatus(member.getFollowStatus());

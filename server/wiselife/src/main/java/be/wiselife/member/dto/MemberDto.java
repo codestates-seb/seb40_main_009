@@ -20,7 +20,7 @@ public class MemberDto {
 
         private String memberDescription;
 
-        private String memberImage;
+        private String memberImagePath;
 
         //관리자일 경우 수정가능하게
         private boolean hasRedCard;
@@ -43,7 +43,7 @@ public class MemberDto {
         private int memberChallengeSuccessCount;
         private double memberChallengePercentage;
         private double memberMoney;
-        private String memberImage;
+        private String memberImagePath;
         private int followerCount;
         private List<MemberFollowerResponseDto> followers;
         private Member.FollowStatus followStatus;

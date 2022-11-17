@@ -50,7 +50,7 @@ public class Challenge extends TimeAudit {
     @Setter
     private int challengeAuthCycle; //인증 빈도
 
-    private String challengeDirectLink;//이건 프런트가 해야하지 않나??
+    private String challengeDirectLink;//이건 프런트가 해야하지 않나?? ㅇㅈ
     @Setter
     private int challengeFeePerPerson; //인당 참여금액
     @Setter
@@ -60,6 +60,17 @@ public class Challenge extends TimeAudit {
     @Setter
     private Boolean isClosed;
 
+
+    //이미지 중 챌린지 생성자가 추가할 사진 필드
+    @Setter
+    private String challengeRepImagePath="대표사진";
+
+    @Setter
+    private String challengeExamImagePath="예시사진";
+
+    //이미지 중 챌린지 참여자가 추가할 사진 필드
+    @Setter
+    private String challengeCertImagePath="인증사진";
 
     @Builder
     public Challenge(Long challengeId,ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
