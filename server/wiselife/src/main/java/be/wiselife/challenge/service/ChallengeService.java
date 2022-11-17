@@ -34,7 +34,6 @@ public class ChallengeService {
 
     public Challenge updateChallenge(Challenge changedChallenge){
         Challenge existingChallenge = findChallengeById(changedChallenge.getChallengeId());
-
         //권한 확인 로직 추가해야??
 
         /*실제 수정 로직
@@ -67,8 +66,8 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
+        // 이미지 수정시 사용하는 로직
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
-            log.info("image randomId ={}",existingChallenge.getRandomIdForImage());
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             imageService.patchChallengeRepImage(changedChallenge);
             existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());

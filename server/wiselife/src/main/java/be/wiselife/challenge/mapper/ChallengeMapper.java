@@ -93,8 +93,11 @@ public interface ChallengeMapper {
                 challenge.challengeCategory(Challenge.ChallengeCategory.OFFLINE_CHALLENGE);
                 break;
         }
-        challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
         challenge.challengeRepImagePath(challengePatchDto.getChallengeRepImagePath());
+
+        challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
+
+
         return challenge.build();
     }
 
