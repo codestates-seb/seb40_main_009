@@ -76,4 +76,6 @@ public class MemberDto {
         private String followerName;
         private boolean followStatus;
     }
+
+    //맴버리스판스 디티오를 추가 > 리스트로 넘기고 >>
 }

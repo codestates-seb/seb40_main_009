@@ -3,6 +3,7 @@ package be.wiselife.quesrydslrepo;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
+import be.wiselife.order.entity.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +17,8 @@ import static be.wiselife.image.entity.QChallengeRepImage.*;
 import static be.wiselife.image.entity.QChallengeExamImage.*;
 import static be.wiselife.image.entity.QChallengeCertImage.*;
 
+import static be.wiselife.follow.entity.QFollow.follow;
+import static be.wiselife.order.entity.QOrder.order;
 
 @RequiredArgsConstructor
 public class QuerydslRepositoryImpl implements QuerydslRepository{
@@ -72,7 +75,13 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.challengeId.eq(challengeId)))
+    }
+
+    public List<Order> findByMemberId(Member member) { //성공한 결재내역만 보이게 출력
+        return queryFactory
+                .selectFrom(order)
+                .where(order.member.eq(member)
+                        .and(order.orderSuccess.isTrue()))
                 .fetch();
     }
 }
-//

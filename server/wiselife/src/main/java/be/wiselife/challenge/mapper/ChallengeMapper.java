@@ -1,18 +1,23 @@
 package be.wiselife.challenge.mapper;
 
 import be.wiselife.challenge.dto.ChallengeDto;
+import be.wiselife.challengetalk.dto.ChallengeTalkDto;
+import be.wiselife.challengetalk.entity.ChallengeTalk;
+import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
+import be.wiselife.member.service.MemberService;
 import org.mapstruct.Mapper;
 
 import be.wiselife.challenge.entity.Challenge;
 import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
     ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge);
-    ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge);
 
     /*챌린지 생성 mapping*/
     default Challenge challengePostDtoToChallenge(ChallengeDto.Post challengePostDto) {
@@ -54,7 +59,7 @@ public interface ChallengeMapper {
         return challenge.build();
     }
 
-    /*챌린지 수정 mapping*/
+    /* 챌린지patchDto => 챌린지 엔티티 */
     default Challenge challengePatchDtoToChallenge(ChallengeDto.Patch challengePatchDto) {
         if ( challengePatchDto == null ) {
             return null;
@@ -91,5 +96,50 @@ public interface ChallengeMapper {
         challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
         challenge.challengeRepImagePath(challengePatchDto.getChallengeRepImagePath());
         return challenge.build();
+    }
+
+    /*챌린지 => 챌린지 상세 페이지 조회 detail ResponseDto*/
+    default ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge, ChallengeTalkMapper challengeTalkMapper, MemberService memberService) {
+        if ( challenge == null && challengeTalkMapper == null ) {
+            return null;
+        }
+
+        ChallengeDto.DetailResponse.DetailResponseBuilder detailResponse = ChallengeDto.DetailResponse.builder();
+
+        if ( challenge != null ) {
+            detailResponse.challengeId( challenge.getChallengeId() );
+            detailResponse.challengeCategory( challenge.getChallengeCategory() );
+            detailResponse.challengeTitle( challenge.getChallengeTitle() );
+            detailResponse.challengeDescription( challenge.getChallengeDescription() );
+            detailResponse.challengeCurrentParty( challenge.getChallengeCurrentParty() );
+            detailResponse.challengeMaxParty( challenge.getChallengeMaxParty() );
+            detailResponse.challengeMinParty( challenge.getChallengeMinParty() );
+            detailResponse.challengeStartDate( challenge.getChallengeStartDate() );
+            detailResponse.challengeEndDate( challenge.getChallengeEndDate() );
+            detailResponse.challengeAuthDescription( challenge.getChallengeAuthDescription() );
+            detailResponse.challengeAuthCycle( challenge.getChallengeAuthCycle() );
+            detailResponse.challengeDirectLink( challenge.getChallengeDirectLink() );
+            detailResponse.challengeFeePerPerson( challenge.getChallengeFeePerPerson() );
+            detailResponse.challengeTotalReward( challenge.getChallengeTotalReward() );
+            detailResponse.challengeViewCount( challenge.getChallengeViewCount() );
+            detailResponse.isClosed( challenge.getIsClosed() );
+            detailResponse.created_at( challenge.getCreated_at() );
+            detailResponse.updated_at( challenge.getUpdated_at() );
+            /* 챌린지 댓글을 챌린지 ResponseDto로 변환
+            *
+            * 챌린지 자체는 memberId를 저장하기에 이를 실제 화면상 보이는 memberName으로 보여줘야 하기에
+            * ChallengeTalkMapper ,MemberService 까지 사용해야 한다...
+            * */
+            if(!challenge.getChallengeTalkList().isEmpty()){
+                List<ChallengeTalkDto.response> challengeTalkResponseDtoList = new ArrayList<>();
+                for(ChallengeTalk challengeTalk: challenge.getChallengeTalkList()){
+                    challengeTalkResponseDtoList.add(challengeTalkMapper.challengeTalkToChallengeTalkResponseDto(challengeTalk, memberService.findMemberById(challengeTalk.getMemberId()).getMemberName()));
+                }
+                detailResponse.challengeTalks(challengeTalkResponseDtoList);
+            }
+
+        }
+
+        return detailResponse.build();
     }
 }

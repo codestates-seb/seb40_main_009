@@ -19,7 +19,9 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final ImageService imageService;
 
+
     public ChallengeService(ChallengeRepository challengeRepository, ImageService imageService) {
+
         this.challengeRepository = challengeRepository;
         //이미지 관련 추가를 위한 imageService DI
         this.imageService = imageService;
@@ -37,7 +39,7 @@ public class ChallengeService {
 
         /*실제 수정 로직
         * 수정할 값이 null인 경우 수정하지 않는다
-        * 추후 수정가능 범위를 어떻게 제한할 것인지 할지 논의 필요함
+        * 추후 수정가능 범위를 어떻게 제한할 것인지 할지 논의 필요함(시작 전 일정, 돈 수정 불가하게 !!! + 시작 후 아무것도 수정 불가)
         * */
         Optional.ofNullable(changedChallenge.getChallengeCategory())
                 .ifPresent(existingChallenge::setChallengeCategory);
@@ -82,7 +84,7 @@ public class ChallengeService {
     public void deleteChallenge(Long challengeId) {
         //권한 확인 필요??
         challengeRepository.delete(findChallengeById(challengeId));
-        return;
+
     }
 
     /*조회수 증가 함수
