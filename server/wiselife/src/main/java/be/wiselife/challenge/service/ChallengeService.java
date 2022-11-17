@@ -29,6 +29,7 @@ public class ChallengeService {
 
     public Challenge createChallenge(Challenge challenge){
         imageService.patchChallengeRepImage(challenge);
+        imageService.postChallengeExamImage(challenge);
         return saveChallenge(challenge);
     }
 
@@ -94,8 +95,6 @@ public class ChallengeService {
         challenge.setChallengeViewCount(challenge.getChallengeViewCount() + 1);
         return saveChallenge(challenge);
     }
-
-
 
     private Challenge findChallengeById(Long challengeId){
         return verifyChallengeById(challengeId);

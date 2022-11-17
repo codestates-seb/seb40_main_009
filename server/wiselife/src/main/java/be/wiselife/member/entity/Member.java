@@ -47,7 +47,7 @@ public class Member extends TimeAudit {
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
-        this.memberImagePath = "image";
+        this.memberImagePath = memberImagePath;
     }
 
     @Id
@@ -121,7 +121,7 @@ public class Member extends TimeAudit {
     private String providerId; // 플랫폼 아이디 값 저장하기 소셜 로그인에서 준 ID 번호
 
     @Column(nullable = false)
-    private String memberImagePath;
+    private String memberImagePath="이미지";
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)

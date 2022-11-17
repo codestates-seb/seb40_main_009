@@ -17,8 +17,8 @@ public interface QuerydslRepository {
 
     MemberImage findByImageTypeAndMemberId(String imageType, Long memberId);
     ReviewImage findByImageTypeAndReviewId(String imageType, Long reviewId);
-    ChallengeRepImage findByImageTypeAndChallengeRandomId(String imageType, String randomIdForImage);
-    List<ChallengeExamImage> findByImageTypeAndChallengeExamId(String imageType, String randomIdForImage);
+    ChallengeRepImage findByImageTypeAndChallengeRep(String imageType, String randomIdForImage);
+    List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType, String randomIdForImage);
     List<ChallengeCertImage> findByImageTypeAndChallengeCertId(String imageType, Long createAt);
 
     List<Order> findByMemberId(Member member);

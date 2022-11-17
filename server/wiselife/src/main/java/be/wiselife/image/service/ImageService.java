@@ -1,6 +1,7 @@
 package be.wiselife.image.service;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.image.entity.ChallengeExamImage;
 import be.wiselife.image.entity.ChallengeRepImage;
 import be.wiselife.image.entity.Image;
 import be.wiselife.image.entity.MemberImage;
@@ -9,6 +10,9 @@ import be.wiselife.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -43,7 +47,7 @@ public class ImageService {
     //ChallengeRepImage 부분 코드======================================
     public void patchChallengeRepImage(Challenge challenge) {
         ChallengeRepImage challengeRepImageFromRepository =
-                imageRepository.findByImageTypeAndChallengeRandomId("CRI", challenge.getRandomIdForImage());
+                imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
 
         if (challengeRepImageFromRepository == null) {
             ChallengeRepImage challengeRepImage = new ChallengeRepImage();
@@ -57,5 +61,17 @@ public class ImageService {
         challengeRepImage.setImagePath(challenge.getChallengeRepImagePath());
         challengeRepImage.setRandomIdForImage(challenge.getRandomIdForImage());
         imageRepository.save(challengeRepImage);
+    }
+
+    //ChallengeExamImage 부분 코드======================================
+    public void postChallengeExamImage(Challenge challenge) {
+
+        String[] imagePaths = challenge.getChallengeExamImagePath().split(",");
+        for (String imagePath : imagePaths) {
+            ChallengeExamImage challengeExamImage = new ChallengeExamImage();
+            challengeExamImage.setImagePath(imagePath);
+            challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
+            imageRepository.save(challengeExamImage);
+        }
     }
 }

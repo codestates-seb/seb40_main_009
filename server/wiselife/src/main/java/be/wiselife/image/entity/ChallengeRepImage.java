@@ -13,5 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ChallengeRepImage extends Image {
     private String imageType = "CRI";
+    //챌린지 생성시 이미지를 넣을때, 데이터베이스에서 기본키를 구할 수 없으므로, 이 필드로 기본키 역할을 대체한다.
+    //차후 jwtToken에서 받은 멤버의 아이디로 대체 예정
     private String randomIdForImage;
 }
