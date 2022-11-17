@@ -5,8 +5,6 @@ import be.wiselife.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -32,6 +30,12 @@ public class Order extends TimeAudit {
     private String tid; //결제번호(카톡발행)
     @Column
     private Boolean orderSuccess; //거래전 False는 거래후 True;
+    @Column
+    private String approved_at;
+    @Column
+    private String requestuniquenumber; //요청고유번호
+
+
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")

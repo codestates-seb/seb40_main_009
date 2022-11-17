@@ -111,10 +111,7 @@ public class JwtTokenizer {
 
     public String getEmailWithToken(HttpServletRequest request) {
         //HEADER에 있는 복호화된 값을 가져옴
-
         String authorization = request.getHeader("Authorization");
-//        String[] split = authorization.split("."); //asdasdasd.adasdasd.asdasdasd 이런식으로 되어있어서 나눈다.
-
         try {
             Claims body = Jwts.parserBuilder().setSigningKey(getKeyFromBase64EncodedKey(makingSecretKey(secretKey) ))
                     .build().parseClaimsJws(authorization).getBody(); //값을 넣어서 되돌려받는다. (payload값만)

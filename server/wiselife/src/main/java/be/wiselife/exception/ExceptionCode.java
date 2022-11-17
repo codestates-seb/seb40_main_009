@@ -24,7 +24,12 @@ public enum ExceptionCode {
    
    //login 부분 예외 ========시작
     SIGNUP_WRONG(404,"somethings get wrong during login" ),
+
+    //order 부분 예외 ========시작
     TRADE_CODE_WRONG(404,"Not available tid" ),
+    NO_ORDER_RESOPNSE(404,"Order Response was null" ),
+    TOTAL_AMOUNT_DIFFERENT(404,"Total amount is different Please check the approveKakaoPay Method in orderservice" );
+
 
     //ChallengeTalk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),
