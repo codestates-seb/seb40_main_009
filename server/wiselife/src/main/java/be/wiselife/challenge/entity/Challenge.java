@@ -8,8 +8,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @NoArgsConstructor
 @Getter
@@ -54,7 +56,7 @@ public class Challenge extends TimeAudit {
     @Setter
     private int challengeAuthCycle; //인증 빈도
 
-    private String challengeDirectLink;//이건 프런트가 해야하지 않나??
+    private String challengeDirectLink;//이건 프런트가 해야하지 않나?? ㅇㅈ
     @Setter
     private int challengeFeePerPerson; //인당 참여금액
     @Setter
@@ -70,8 +72,27 @@ public class Challenge extends TimeAudit {
     private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
 
 
+    //이미지 중 챌린지 생성자가 추가할 사진 필드
+    @Setter
+    private String challengeRepImagePath;
+
+    @Setter
+    private String challengeExamImagePath="예시사진";
+
+    //이미지 중 챌린지 참여자가 추가할 사진 필드
+    @Setter
+    private String challengeCertImagePath="인증사진";
+
+    //챌린지 생성시 challengeId를 받아 올수 없기때문에 대체용으로 사용
+    @Setter
+    private String randomIdForImage;
+
     @Builder
-    public Challenge(Long challengeId,ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
+    public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
+                     String challengeDescription, int challengeMaxParty, int challengeMinParty,
+                     int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate,
+                     String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath, String randomIdForImage) {
         this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
@@ -89,6 +110,12 @@ public class Challenge extends TimeAudit {
         this.challengeViewCount = 0;
         this.challengeCurrentParty = 0;
         this.challengeTotalReward = 0;
+
+        this.challengeRepImagePath="대표사진";
+        this.challengeExamImagePath = "인증사진";
+        this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
+    }
+
 
     }
 
