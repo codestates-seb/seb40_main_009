@@ -67,12 +67,20 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
-        // 이미지 수정시 사용하는 로직
+        // 대표 이미지 수정시 사용하는 로직
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             imageService.patchChallengeRepImage(changedChallenge);
             existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
         }
+
+        // 예시 이미지 수정시 사용하는 로직
+        if (!Optional.ofNullable(changedChallenge.getChallengeExamImagePath()).isEmpty()) {
+            changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
+            String challengeExamImagePaths=imageService.patchChallengeExamImage(changedChallenge);
+            existingChallenge.setChallengeExamImagePath(challengeExamImagePaths);
+        }
+
 
         return saveChallenge(existingChallenge);
     }

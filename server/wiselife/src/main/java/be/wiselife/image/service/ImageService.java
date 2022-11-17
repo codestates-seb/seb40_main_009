@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,5 +75,43 @@ public class ImageService {
             challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
             imageRepository.save(challengeExamImage);
         }
+    }
+
+    public String patchChallengeExamImage(Challenge challenge) {
+        List<ChallengeExamImage> challengeExamImages
+                = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
+        String[] imagePath = challenge.getChallengeExamImagePath().split(",");
+        ArrayList<String> imagePathList = new ArrayList<>();
+        for (int i = 0; i < imagePath.length; i++) {
+            imagePathList.add(imagePath[i]);
+        }
+
+        // 데이터베이스의 이미지 경로와 patchDto에 전달된 경로가 같으면 데이터베이스에서 삭제
+        for (int i =0;i<challengeExamImages.size();i++) {
+            for (int j = 0; j < imagePathList.size(); j++) {
+                if (challengeExamImages.get(i).getImagePath().equals(imagePath[j])) {
+                    imageRepository.delete(challengeExamImages.get(i));
+                    imagePathList.remove(j);
+                    break;
+                }
+            }
+        }
+        // 같은게 반복문 끝날때까지 없다면 그 경로를 등록
+        for (int i = 0; i < imagePathList.size(); i++) {
+            ChallengeExamImage challengeExamImage = new ChallengeExamImage();
+            challengeExamImage.setImagePath(imagePathList.get(i));
+            challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
+            imageRepository.save(challengeExamImage);
+        }
+        // 바뀐 db의 경로들을 다시 한 문장으로 변경
+        List<ChallengeExamImage> changeChallengeExamImages
+                = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
+
+        String changeImagePath = "";
+
+        for (ChallengeExamImage changeChallengeExamImage : changeChallengeExamImages) {
+            changeImagePath = changeChallengeExamImage.getImagePath() + ",";
+        }
+        return changeImagePath;
     }
 }
