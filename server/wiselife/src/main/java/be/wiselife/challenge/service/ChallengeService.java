@@ -4,6 +4,9 @@ import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.repository.ChallengeRepository;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
+import be.wiselife.image.service.ImageService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -11,15 +14,19 @@ import java.util.Optional;
 
 @Transactional
 @Service
+@Slf4j
 public class ChallengeService {
     private final ChallengeRepository challengeRepository;
+    private final ImageService imageService;
 
-    public ChallengeService(ChallengeRepository challengeRepository) {
+    public ChallengeService(ChallengeRepository challengeRepository, ImageService imageService) {
         this.challengeRepository = challengeRepository;
+        //이미지 관련 추가를 위한 imageService DI
+        this.imageService = imageService;
     }
 
     public Challenge createChallenge(Challenge challenge){
-
+        imageService.patchChallengeRepImage(challenge);
         return saveChallenge(challenge);
     }
 
@@ -58,6 +65,12 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
+        if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
+            log.info("image randomId ={}",existingChallenge.getRandomIdForImage());
+            changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
+            imageService.patchChallengeRepImage(changedChallenge);
+            existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
+        }
 
         return saveChallenge(existingChallenge);
     }

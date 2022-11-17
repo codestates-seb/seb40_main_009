@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -63,7 +64,7 @@ public class Challenge extends TimeAudit {
 
     //이미지 중 챌린지 생성자가 추가할 사진 필드
     @Setter
-    private String challengeRepImagePath="대표사진";
+    private String challengeRepImagePath;
 
     @Setter
     private String challengeExamImagePath="예시사진";
@@ -72,8 +73,16 @@ public class Challenge extends TimeAudit {
     @Setter
     private String challengeCertImagePath="인증사진";
 
+    //챌린지 생성시 challengeId를 받아 올수 없기때문에 대체용으로 사용
+    @Setter
+    private String randomIdForImage;
+
     @Builder
-    public Challenge(Long challengeId,ChallengeCategory challengeCategory, String challengeTitle, String challengeDescription, int challengeMaxParty, int challengeMinParty, int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate, String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson) {
+    public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
+                     String challengeDescription, int challengeMaxParty, int challengeMinParty,
+                     int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate,
+                     String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath, String randomIdForImage) {
         this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
@@ -91,6 +100,9 @@ public class Challenge extends TimeAudit {
         this.challengeViewCount = 0;
         this.challengeCurrentParty = 0;
         this.challengeTotalReward = 0;
+        this.challengeRepImagePath="대표사진";
+        this.challengeExamImagePath = "인증사진";
+        this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
     }
 
 

@@ -48,6 +48,8 @@ public interface ChallengeMapper {
                 challenge.challengeCategory(Challenge.ChallengeCategory.OFFLINE_CHALLENGE);
                 break;
         }
+        challenge.challengeExamImagePath(challengePostDto.getChallengeExamImagePath());
+        challenge.challengeRepImagePath(challengePostDto.getChallengeRepImagePath());
 
         return challenge.build();
     }
@@ -86,7 +88,8 @@ public interface ChallengeMapper {
                 challenge.challengeCategory(Challenge.ChallengeCategory.OFFLINE_CHALLENGE);
                 break;
         }
-
+        challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
+        challenge.challengeRepImagePath(challengePatchDto.getChallengeRepImagePath());
         return challenge.build();
     }
 }

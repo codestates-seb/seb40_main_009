@@ -6,6 +6,7 @@ import be.wiselife.member.entity.Member;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static be.wiselife.follow.entity.QFollow.follow;
@@ -48,20 +49,20 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public ChallengeRepImage findByImageTypeAndChallengeRepId(String imageType, Long challengeId) {
+    public ChallengeRepImage findByImageTypeAndChallengeRepId(String imageType, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeRepImage)
                 .where(challengeRepImage.imageType.eq(imageType)
-                        .and(challengeRepImage.challengeId.eq(challengeId)))
+                        .and(challengeRepImage.randomIdForImage.eq(randomIdForImage)))
                 .fetchOne();
     }
 
     @Override
-    public List<ChallengeExamImage> findByImageTypeAndChallengeExamId(String imageType, Long challengeId) {
+    public List<ChallengeExamImage> findByImageTypeAndChallengeExamId(String imageType, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeExamImage)
                 .where(challengeExamImage.imageType.eq(imageType)
-                        .and(challengeExamImage.challengeId.eq(challengeId)))
+                        .and(challengeExamImage.randomIdForImage.eq(randomIdForImage)))
                 .fetch();
     }
 

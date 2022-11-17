@@ -129,9 +129,7 @@ public class MemberService {
                 .ifPresent(new_memberName->memberFromRepository.setMemberName(new_memberName));
         Optional.ofNullable(member.getMemberDescription())
                 .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
-        log.info("image path is null={}", member.getMemberImagePath());
         if (!Optional.ofNullable(member.getMemberImagePath()).isEmpty()) {
-            log.info("image active");
             member.setMemberId(memberFromRepository.getMemberId());
             imageService.patchMemberImage(member);
             memberFromRepository.setMemberImagePath(member.getMemberImagePath());

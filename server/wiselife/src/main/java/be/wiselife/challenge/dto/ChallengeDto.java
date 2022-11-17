@@ -70,6 +70,10 @@ public class ChallengeDto {
 
         private int challengeFeePerPerson; //인당 참여금액
 
+        //이미지 중 챌린지 생성자가 추가할 사진 필드
+        private String challengeRepImagePath;
+
+        private String challengeExamImagePath;
     }
 
     @Getter
@@ -111,6 +115,9 @@ public class ChallengeDto {
         private LocalDateTime created_at;
 
         private LocalDateTime updated_at;
+
+        //이미지 중 챌린지 생성자가 추가할 사진 필드
+        private String challengeRepImagePath;
 
     }
 
@@ -158,5 +165,9 @@ public class ChallengeDto {
         private LocalDateTime created_at;
 
         private LocalDateTime updated_at;
+        //이미지 중 챌린지 생성자가 추가할 사진 필드
+        private String challengeRepImagePath;
+
+        private String challengeExamImagePath;
     }
 }
