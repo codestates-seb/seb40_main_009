@@ -1,17 +1,11 @@
 import MyProfile from '../components/ProfileList/MyProfile';
-import styled from 'styled-components';
-
-const MyProfilePageComponent = styled.div`
-  width: 1024px;
-  font-size: 18px;
-  margin: auto;
-`;
+import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
 function MyProfilePage() {
   return (
-    <MyProfilePageComponent>
+    <S.MyProfilePageComponent>
       <MyProfile />
-    </MyProfilePageComponent>
+    </S.MyProfilePageComponent>
   );
 }
 
