@@ -3,6 +3,7 @@ package be.wiselife.challenge.entity;
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -65,6 +66,7 @@ public class Challenge extends TimeAudit {
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
     @ToString.Exclude
+    @JsonManagedReference
     private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
 
 
@@ -87,6 +89,7 @@ public class Challenge extends TimeAudit {
         this.challengeViewCount = 0;
         this.challengeCurrentParty = 0;
         this.challengeTotalReward = 0;
+
     }
 
     /*챌린지 댓글 추가 */
@@ -98,6 +101,10 @@ public class Challenge extends TimeAudit {
     }
 
     public enum ChallengeCategory {
+        /*ChallengeCategoryId
+        1 = BUCKET_LIST,
+        2 = SHARE_CHALLENGE,
+        3 = OFFLINE_CHALLENGE */
         BUCKET_LIST("버킷 리스트"),
         SHARED_CHALLENGE("공유 챌린지"),
         OFFLINE_CHALLENGE("오프라인 챌린지");
@@ -107,11 +114,6 @@ public class Challenge extends TimeAudit {
 
         ChallengeCategory(String category) {
             this.category = category;
-        }
-
-        @JsonCreator
-        public static ChallengeCategory stringToJson(String s){
-            return ChallengeCategory.valueOf(s);
         }
     }
 }

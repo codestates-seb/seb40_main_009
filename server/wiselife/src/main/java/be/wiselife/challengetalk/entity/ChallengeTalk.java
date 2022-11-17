@@ -3,6 +3,7 @@ package be.wiselife.challengetalk.entity;
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.entity.QChallenge;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class ChallengeTalk extends TimeAudit {
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     @ToString.Exclude
+    @JsonBackReference
     private Challenge challenge;
 
     @Builder
