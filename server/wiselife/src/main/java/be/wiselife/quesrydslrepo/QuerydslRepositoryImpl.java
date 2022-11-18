@@ -75,6 +75,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.challengeId.eq(challengeId)))
+                .fetch();
     }
 
     public List<Order> findByMemberId(Member member) { //성공한 결재내역만 보이게 출력

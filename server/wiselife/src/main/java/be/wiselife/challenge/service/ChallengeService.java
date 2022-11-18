@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+/**
+ * TODO: 수정, 삭제시 권한 확인하는 함수
+ * */
 @Transactional
 @Service
 @Slf4j
@@ -23,7 +26,6 @@ public class ChallengeService {
     public ChallengeService(ChallengeRepository challengeRepository, ImageService imageService) {
 
         this.challengeRepository = challengeRepository;
-        //이미지 관련 추가를 위한 imageService DI
         this.imageService = imageService;
     }
 
@@ -31,16 +33,16 @@ public class ChallengeService {
         imageService.patchChallengeRepImage(challenge);
         return saveChallenge(challenge);
     }
-
+    /**
+     * 챌린지 수정
+     *
+     * 수정할 값이 null인 경우 수정하지 않는다
+     * 추후 수정가능 범위를 어떻게 제한할 것인지 할지 논의 필요함(시작 전 일정, 돈 수정 불가하게 !!! + 시작 후 아무것도 수정 불가)
+     *
+     * */
     public Challenge updateChallenge(Challenge changedChallenge){
         Challenge existingChallenge = findChallengeById(changedChallenge.getChallengeId());
 
-        //권한 확인 로직 추가해야??
-
-        /*실제 수정 로직
-        * 수정할 값이 null인 경우 수정하지 않는다
-        * 추후 수정가능 범위를 어떻게 제한할 것인지 할지 논의 필요함(시작 전 일정, 돈 수정 불가하게 !!! + 시작 후 아무것도 수정 불가)
-        * */
         Optional.ofNullable(changedChallenge.getChallengeCategory())
                 .ifPresent(existingChallenge::setChallengeCategory);
         Optional.ofNullable(changedChallenge.getChallengeTitle())
@@ -82,14 +84,13 @@ public class ChallengeService {
     }
 
     public void deleteChallenge(Long challengeId) {
-        //권한 확인 필요??
         challengeRepository.delete(findChallengeById(challengeId));
 
     }
 
-    /*조회수 증가 함수
-    *
-    * 추후 cookie를 이용한 중복 조회 기능 추가 예정
+    /**
+    * 조회수 증가 함수
+    * TODO: cookie를 이용한 중복 조회 기능
     * */
     public Challenge updateViewCount(Challenge challenge){
         challenge.setChallengeViewCount(challenge.getChallengeViewCount() + 1);
