@@ -1,6 +1,7 @@
 package be.wiselife.image.entity;
 
 
+import be.wiselife.audit.TimeAudit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name="Image_Table")
-public abstract class Image {
+public abstract class Image extends TimeAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageId;

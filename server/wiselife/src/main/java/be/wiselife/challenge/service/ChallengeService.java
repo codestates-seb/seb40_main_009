@@ -5,6 +5,7 @@ import be.wiselife.challenge.repository.ChallengeRepository;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
+import be.wiselife.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,18 @@ public class ChallengeService {
         return saveChallenge(existingChallenge);
     }
 
+    /**
+     * 인증사진 등록
+     * @param certImageInfo 인증사진이 속한 Challenge 아이디와 인증사진 경로
+     * @param loginMember 로그인한 사람의 이메일 정보를 가져오기위한 인자값
+     * TODO
+     * 챌린지 참여인원인지 판단하는 로직 추가
+     */
+    public Challenge createCertImage(Challenge certImageInfo, Member loginMember) {
+
+        return null;
+    }
+
     public Challenge getChallenge(Long challengeId) {
         return findChallengeById(challengeId);
     }
@@ -118,7 +131,6 @@ public class ChallengeService {
 
         return savedChallenge;
     }
-
 
 
 }

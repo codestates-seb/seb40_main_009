@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -60,6 +61,29 @@ public class ChallengeController {
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
                 , HttpStatus.OK);
     }
+
+    /**
+     * 인증사진 등록
+     * @param certPost 인증사진이 속한 Challenge 아이디와 인증사진 경로
+     * @param request 로그인한 사람의 이메일 정보를 가져오기위한 인자값
+     * TODO
+     * 챌린지 참여인원인지 판단하는 로직 추가
+     * 응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
+     */
+    @PostMapping
+    public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.CertPost certPost,
+                                                  HttpServletRequest request) {
+        String followerEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(followerEmail);
+        Challenge certImageInfo = challengeMapper.certPostDtoToChallenge(certPost);
+
+        Challenge challenge = challengeService.createCertImage(certImageInfo, loginMember);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
+    }
+
+
 
     /*챌린지 상세페이지 조회*/
     /*

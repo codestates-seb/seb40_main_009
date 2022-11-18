@@ -114,6 +114,8 @@ public class Challenge extends TimeAudit {
         this.challengeRepImagePath=challengeRepImagePath;
         this.challengeExamImagePath = challengeExamImagePath;
         this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
+
+        this.challengeCertImagePath = challengeCertImagePath;
     }
 
     /*챌린지 댓글 추가 */

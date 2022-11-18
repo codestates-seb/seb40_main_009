@@ -182,4 +182,16 @@ public class ChallengeDto {
         @Setter
         private List<String> challengeExamImagePath;
     }
+
+    /**
+     * 인증 사진 등록 정보를 받아줄 DTO
+     */
+    @Getter
+    public static class CertPost {
+        @NotNull
+        private Long challengeId;
+
+        @NotNull
+        private String challengeCertImagePath;
+    }
 }
