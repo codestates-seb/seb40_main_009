@@ -7,6 +7,7 @@ import be.wiselife.order.entity.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -78,11 +79,15 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public List<ChallengeCertImage> findByImageTypeAndChallengeCertId(String imageType, Long challengeId) {
+    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertId(String imageType, Long memberId, String randomIdForImage) {
+        LocalDate now = LocalDate.now();
         return queryFactory
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
-                        .and(challengeCertImage.challengeId.eq(challengeId)))
+                        .and(challengeCertImage.memberId.eq(memberId))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
+                        .and(challengeCertImage.createDay.eq(now)))
+                .orderBy(challengeCertImage.created_at.desc())
                 .fetch();
     }
 

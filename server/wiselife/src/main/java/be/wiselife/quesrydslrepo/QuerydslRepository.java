@@ -20,7 +20,7 @@ public interface QuerydslRepository {
     ChallengeRepImage findByImageTypeAndChallengeRep(String imageType, String randomIdForImage);
     List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType, String randomIdForImage);
     ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage);
-    List<ChallengeCertImage> findByImageTypeAndChallengeCertId(String imageType, Long createAt);
+    List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertId(String imageType, Long memberId, String randomIdForImage);
 
     List<Order> findByMemberId(Member member);
 

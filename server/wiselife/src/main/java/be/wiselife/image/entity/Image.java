@@ -5,8 +5,12 @@ import be.wiselife.audit.TimeAudit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -22,6 +26,11 @@ public abstract class Image extends TimeAudit {
 
     @Column(nullable = false)
     private String imagePath;
+
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createDay;
+
 }
 
 

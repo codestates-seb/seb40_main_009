@@ -94,8 +94,12 @@ public class ChallengeService {
      * 챌린지 참여인원인지 판단하는 로직 추가
      */
     public Challenge createCertImage(Challenge certImageInfo, Member loginMember) {
+        Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
+        challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
 
-        return null;
+        String certImagePath= imageService.postChallengeCertImage(challenge, loginMember);
+        challenge.setChallengeCertImagePath(certImagePath);
+        return challengeRepository.save(challenge);
     }
 
     public Challenge getChallenge(Long challengeId) {

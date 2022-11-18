@@ -128,15 +128,33 @@ public interface ChallengeMapper {
         simpleResponse.setCreated_at( challenge.getCreated_at() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
         simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );
-        // 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
-        // 현재는 응답에 안나오는 것에 대해 영운님께 질문드리기
-        // simplereponse에 들어갈 내용
-        String[] imagePaths = challenge.getChallengeExamImagePath().split(",");
-        List<String> challengeExamImagePaths = new ArrayList<>();
-        for (String imagePath : imagePaths) {
-            challengeExamImagePaths.add(imagePath);
+
+        /**
+         * 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
+         */
+        String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
+        List<String> challengeExamImagePathList = new ArrayList<>();
+        for (String imagePath : challengeExamImagePaths) {
+            challengeExamImagePathList.add(imagePath);
         }
-        simpleResponse.setChallengeExamImagePath(challengeExamImagePaths);
+        simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
+
+        /**
+         * 프론트에 응답할때는 challengeCertImagePath를 리스트 형태로 준다.
+         */
+        if (!(challenge.getChallengeCertImagePath() == null)) {
+            String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
+            List<String> challengeCertImagePathList = new ArrayList<>();
+            int certCount = 0;
+            for (String imagePath : challengeCertImagePaths) {
+                challengeCertImagePathList.add(imagePath);
+                certCount++;
+            }
+            simpleResponse.setChallengeCertImagePath(challengeCertImagePathList);
+            simpleResponse.setCertCount(certCount);
+        }
+
+
         return simpleResponse;
     }
 

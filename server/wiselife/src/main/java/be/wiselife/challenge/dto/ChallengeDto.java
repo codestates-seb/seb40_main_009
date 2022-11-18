@@ -124,6 +124,12 @@ public class ChallengeDto {
 
         @Setter
         private List<String> challengeExamImagePath;
+
+        @Setter
+        private List<String> challengeCertImagePath;
+
+        @Setter
+        private int certCount;
     }
 
     @Getter
@@ -181,6 +187,7 @@ public class ChallengeDto {
 
         @Setter
         private List<String> challengeExamImagePath;
+
     }
 
     /**
