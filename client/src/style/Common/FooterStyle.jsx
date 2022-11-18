@@ -11,6 +11,7 @@ export const Flex = styled.div`
 `;
 
 export const FooterContainer = styled.footer`
+  margin-top: 80px;
   background-color: #8673ff;
   width: 100%;
   color: #ffffff;

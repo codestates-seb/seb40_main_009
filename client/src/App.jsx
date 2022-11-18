@@ -9,6 +9,7 @@ import Footer from './components/Common/Footer';
 import MainPage from './pages/MainPage';
 import SearchResult from './pages/SearchResult';
 import DetailPage from './pages/DetailPage';
+import AddChallenge from './pages/AddChallenge';
 import ChallengeDetail from './pages/ChallengeDetail';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/search/*" element={<SearchResult />} />
           <Route path="/profile" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
+          <Route path="/addchallenge" element={<AddChallenge />} />
         </Routes>
         <Footer />
       </BrowserRouter>
