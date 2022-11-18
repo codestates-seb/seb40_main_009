@@ -117,7 +117,7 @@ public class Challenge extends TimeAudit {
     }
 
 
-
+    //TODO: 유현님이 맴버테이블만들면 추후에 OneToMany로 서로간의 맵핑을해야합니다^^
 
     /**
      * 챌린지 댓글 추가
