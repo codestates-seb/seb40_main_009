@@ -75,10 +75,10 @@ function MainPage() {
             <Animator animation={MoveOut(0, 1600)}>
               <S.FontSize50>슬기로운 생활과 함께</S.FontSize50>
             </Animator>
-            <Animator animation={MoveOut(2000, 1300)}>
+            <Animator animation={MoveOut(2000, 1400)}>
               <S.FontSize50>목표를 향해</S.FontSize50>
             </Animator>
-            <Animator animation={MoveOut(-2000, 1000)}>
+            <Animator animation={MoveOut(-2000, 1200)}>
               <S.FontSize50>건강하게 앞서 나아가다</S.FontSize50>
             </Animator>
           </S.PageFive>

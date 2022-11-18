@@ -19,7 +19,7 @@ export const Container = styled.div`
 
 export const Logo = styled.div`
   color: #8673ff;
-  cursor: default;
+  cursor: pointer;
   font-size: 20px;
 `;
 

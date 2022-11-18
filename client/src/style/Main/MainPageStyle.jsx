@@ -52,7 +52,7 @@ export const FontSize30M3 = styled.div`
   margin-bottom: 3%;
 `;
 export const Mt4 = styled.div`
-  margin-top: 5%;
+  margin-top: 8%;
 `;
 
 export const MonthlyUser = styled.img`
