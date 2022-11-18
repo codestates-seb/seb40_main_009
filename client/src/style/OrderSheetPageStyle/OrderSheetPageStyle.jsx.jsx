@@ -24,6 +24,9 @@ export const OrderLists = styled.div`
     height: 200px;
     margin: 2.5rem 2.5rem 2.5rem 0;
   }
+  .count {
+    margin: auto;
+  }
 `;
 
 export const OrderList = styled.div`

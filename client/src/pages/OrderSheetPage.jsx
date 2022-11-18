@@ -3,13 +3,15 @@ import axios from 'axios';
 import OrderSheetInfo from '../components/OrderSheetList/OrderSheetInfo';
 import * as S from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx.jsx';
 
-function OrderSheetPage({ money }) {
+function OrderSheetPage(props) {
   const [orderList, setOrderList] = useState({
     image: '',
     name: '',
     money: '',
     startPeriod: '',
     expirationPeriod: '',
+    quantity: '',
+    tax: '',
   });
 
   useEffect(() => {
@@ -29,6 +31,7 @@ function OrderSheetPage({ money }) {
             <div>시작 날짜 : {orderList.startPeriod}</div>
             <div>종료 날짜 : {orderList.expirationPeriod}</div>
           </S.OrderList>
+          <div className="count">수량: {orderList.quantity}</div>
         </S.OrderLists>
       </S.Header>
       <S.Main>
@@ -43,7 +46,7 @@ function OrderSheetPage({ money }) {
           </S.OrderInfoBottom>
         </S.OrderLeft>
         <S.OrderRight>
-          <OrderSheetInfo money={orderList.money} />
+          <OrderSheetInfo money={orderList.money} tax={orderList.tax} />
         </S.OrderRight>
       </S.Main>
     </S.OrderSheetInfoPageComponent>
