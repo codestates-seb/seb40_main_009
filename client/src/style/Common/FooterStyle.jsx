@@ -38,7 +38,7 @@ export const LinkContainer = styled.div`
   margin-left: 5%;
   & div {
     margin-bottom: 10%;
-    cursor: default;
+    cursor: pointer;
   }
 `;
 

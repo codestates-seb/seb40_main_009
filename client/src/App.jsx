@@ -8,6 +8,7 @@ import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import MainPage from './components/Main/MainPage';
 import SearchResult from './pages/SearchResult';
+import ChallengeDetail from './pages/ChallengeDetail';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/challengelist/*" element={<ChallengeList />} />
+          <Route path="/challengedetail/*" element={<ChallengeDetail />} />
           <Route path="/userlist/*" element={<UserList />} />
           <Route path="/search/*" element={<SearchResult />} />
           <Route path="/profile" element={<MyProfilePage />} />
