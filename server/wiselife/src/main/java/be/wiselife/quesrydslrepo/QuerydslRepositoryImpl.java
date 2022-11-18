@@ -25,8 +25,11 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
+    /**
+     * @return 오더테이블에서 맴버아이디를 기반으로 성공한 결재내역만 보이게 출력
+     */
     @Override
-    public List<Order> findByMemberId(Member member) { //성공한 결재내역만 보이게 출력
+    public List<Order> findByMemberId(Member member) {
         return queryFactory
                 .selectFrom(order)
                 .where(order.member.eq(member)

@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class OauthController {
     private final OauthService oauthservice;
 
-    //https://localhost:8080/oauth/kakao?code=RgxBArRwonw1qxP7pKeo81n9XWHfLvvhmXKNnL86bNalZdvUj5ahX2apy3-tkbCkwNJ-HQopdSkAAAGEevxXXw
-    //로그인후 약관 동의를 하면 위와같이 연락이온다.
+    /**
+     * 로그인후 약관 동의 -> 호출되는 메서드
+     * @param provider 소셜로그인 제공 기관
+     * @param code 카톡측에서 보내주는 인증코드
+     * @return 맴버에 대한 모든 정보를 반환한다.
+     */
     @GetMapping("/oauth/{provider}")
-    public ResponseEntity Oauth2login(@PathVariable String provider, @RequestParam String code) throws JsonProcessingException {
+    public ResponseEntity Oauth2login(@PathVariable String provider, @RequestParam String code){
         LoginDto loginDto = oauthservice.login(provider, code);
 
         return new ResponseEntity<>(loginDto, HttpStatus.ACCEPTED);

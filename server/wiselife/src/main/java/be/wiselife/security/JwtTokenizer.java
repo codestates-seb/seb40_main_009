@@ -33,11 +33,11 @@ public class JwtTokenizer {
 
     @Getter
     @Value("${jwt.access-token.expire-length}")
-    private int accessToken;        // 엑세스 토큰
+    private int accessToken;
 
     @Getter
     @Value("${jwt.refresh-token.expire-length}")
-    private int refreshToken;          // 리프레쉬 토큰
+    private int refreshToken;
 
 
     public String createAccessToken(String payload) {
@@ -109,6 +109,11 @@ public class JwtTokenizer {
         return key;
     }
 
+    /**
+     * 회원 유효성 검증
+     * @param request 헤더값 Authorization 추출
+     * @return 맴버의 이메일
+     */
     public String getEmailWithToken(HttpServletRequest request) {
         //HEADER에 있는 복호화된 값을 가져옴
         String authorization = request.getHeader("Authorization");

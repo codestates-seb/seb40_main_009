@@ -94,9 +94,7 @@ public class SecurityConfiguration{
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-        //모든 출처(Origin)에 대해 스크립트 기반의 HTTP 통신을 허용하고 추가적으로 운영 서버 환경에서 요구사항에 맞게 변경이 가능
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        //파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Origin", "Accept","X-Requested-With","Content-Type","Access-Control-Request-Method",
                 "Access-Control-Request-Headers","Authorization","Refresh","Connection","Content","Host",
@@ -104,12 +102,12 @@ public class SecurityConfiguration{
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");
         configuration.setMaxAge(4600l);
-        //터페이스의 구현 클래스인 UrlBasedCorsConfigurationSource 클래스의 객체를 생성
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        //모든 URL에 해당사항 적용하겠다.
         source.registerCorsConfiguration("/**", configuration);
+        
+        
         return source;
     }
+    //TODO: 권한설정하기
 }
