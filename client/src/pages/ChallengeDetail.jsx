@@ -1,18 +1,17 @@
 import * as S from '../style/ChallengeDetail/ChallengeDetailStyle';
-import SearchResult from './SearchResult';
 
 function ChallengeDetail() {
   return (
     <S.Container>
       <S.Recruitment>
-        <img src="./img/smile.jpg" alt="*" />
+        <img src="./img/smile.jpg" alt="도전 할 항목의 이미지" />
         <div>
           {/* 챌린지 설명 */}
           <S.Description>
-            <div className="challengeName">8시간 이상 자기</div>
+            <div className="challenge-name">8시간 이상 자기</div>
 
             <S.Title>
-              <div className="paddingR">
+              <div className="pd-5">
                 <S.PaddingB>최소 / 최대 인원</S.PaddingB>
                 <S.PaddingB>챌린지 기간</S.PaddingB>
                 <S.PaddingB>챌린지 금액</S.PaddingB>
@@ -39,10 +38,10 @@ function ChallengeDetail() {
       </S.Recruitment>
 
       {/* 챌린지 설명 */}
-      <S.Certifi>
+      <S.Certification>
         <S.Wrapper>
           <div className="title">챌린지 설명</div>
-          <div className="padding-top">
+          <div className="pd-5">
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae
             quas, non pariatur odit quia quos cum molestias enim vero itaque
             mollitia, laboriosam doloribus laborum magnam suscipit labore
@@ -54,7 +53,7 @@ function ChallengeDetail() {
         {/* 인증 설명 */}
         <S.Wrapper>
           <div className="title">인증 방법</div>
-          <div className="padding-top">
+          <div className="pd-5">
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae
             quas, non pariatur odit quia quos cum molestias enim vero itaque
             mollitia, laboriosam doloribus laborum magnam suscipit labore
@@ -68,7 +67,7 @@ function ChallengeDetail() {
           <div className="title">인증 예시</div>
           <img src="./img/smile.jpg" alt="*" />
         </S.Wrapper>
-      </S.Certifi>
+      </S.Certification>
 
       <S.Review>
         <div>후기 사진</div>

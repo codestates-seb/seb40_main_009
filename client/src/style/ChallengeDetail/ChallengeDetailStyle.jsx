@@ -9,7 +9,7 @@ export const Container = styled.header`
 export const Description = styled.div`
   padding: 5%;
   font-size: 17px;
-  & > .challengeName {
+  & > .challenge-name {
     margin-bottom: 6%;
     font-size: 30px;
     display: flex;
@@ -19,7 +19,7 @@ export const Description = styled.div`
 
 export const Title = styled.div`
   display: flex;
-  & > .paddingR {
+  & > .pd-5 {
     padding-right: 5%;
   }
 `;
@@ -32,7 +32,7 @@ export const Text = styled.div`
   display: flex;
 `;
 
-export const Certifi = styled.div`
+export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
   justify-content: space-between;
@@ -49,7 +49,7 @@ export const Wrapper = styled.div`
     justify-content: center;
     font-size: 20px;
   }
-  & > padding-top {
+  & > .pd-5 {
     padding-top: 5%;
   }
   & > img {
@@ -94,8 +94,6 @@ export const BtnWrapper = styled.div`
     height: 40px;
     color: #fff;
     border-radius: 5px;
-    // padding: 20px 25px;
-    // background: transparent;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;

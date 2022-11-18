@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as S from '../../style/Common/HeaderStyle';
 
@@ -8,6 +7,7 @@ function Header() {
   const LinkMainPage = () => {
     navigate('/');
   };
+
   // 챌린지 리스트페이지로 이동
   const LinkChallengePage = () => {
     navigate('/challengelist');

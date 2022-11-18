@@ -1,6 +1,5 @@
-import React from 'react';
-import * as S from '../../style/Main/MainPageStyle';
-import ChallengeList from '../ChallengeList/Challenge';
+import * as S from '../style/Main/MainPageStyle';
+import ChallengeList from '../components/ChallengeList/Challenge';
 import {
   Animator,
   ScrollContainer,
@@ -19,22 +18,21 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'react-scroll-motion';
-import SlideBanner from './SlideBanner';
+import SlideBanner from '../components/Main/SlideBanner';
 
 function MainPage() {
   return (
     <S.MainContainer>
       {/* 스크롤 시작 */}
       <ScrollContainer snap="none">
-        {/* 첫번째 페이지 */}
+        {/* 슬라이드 */}
         <ScrollPage page={0}>
           <S.FirstPage>
-            {/* 슬라이드 */}
             <SlideBanner />
           </S.FirstPage>
         </ScrollPage>
 
-        {/* 두번째  페이지 */}
+        {/* 스크롤 시 글자 모션 */}
         <ScrollPage page={1}>
           <Animator
             animation={batch(Sticky(50), Fade(), MoveOut(0, -200), ZoomIn())}
@@ -84,7 +82,7 @@ function MainPage() {
           </S.PageFive>
         </ScrollPage>
 
-        {/* 세번째  페이지 */}
+        {/* 신규챌린지, 이달의 랭커 */}
         <ScrollPage page={6}>
           <S.Mt4>
             <Animator animation={batch(Fade(), MoveIn(-1000, 0))}>
