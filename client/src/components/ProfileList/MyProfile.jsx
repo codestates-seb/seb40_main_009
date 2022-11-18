@@ -1,18 +1,18 @@
 import ChartBar from './ChartBar';
 import ProfileImage from './ProfileImage';
 import { GiMedallist } from 'react-icons/gi';
-import * as S from '../../style/MyProfilePageStyle/MyProfileStyle';
+import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
 function MyProfile() {
   return (
     <S.MyProfileComponent>
       <header className="profile-info">
         <ProfileImage />
-        <div className="profile-lists">
-          <div className="profile-list">
+        <div>
+          <S.ProfileList>
             <p>닉네임</p>
             <p>인기도0 ❤️</p>
-          </div>
+          </S.ProfileList>
           <div className="profile-list">
             <p>
               <GiMedallist />
@@ -25,10 +25,13 @@ function MyProfile() {
             readOnly
           />
         </div>
-        <div className="profile-bar">
-          <button className="profile-edit-button">edit</button>
+        <S.ProfileBar>
+          <div className="buttonLists">
+            <S.ProfileEditButton>환급받기</S.ProfileEditButton>
+            <S.ProfileEditButton>edit</S.ProfileEditButton>
+          </div>
           <ChartBar />
-        </div>
+        </S.ProfileBar>
       </header>
     </S.MyProfileComponent>
   );

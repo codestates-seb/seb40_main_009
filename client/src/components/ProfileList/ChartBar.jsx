@@ -1,4 +1,4 @@
-import * as S from '../../style/MyProfilePageStyle/ChartBarStyle';
+import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
 function ChartBar() {
   return (

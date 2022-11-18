@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import ProfilePicture from '../../image/ProfilePicture.png';
-import * as S from '../../style/MyProfilePageStyle/ProfileImageStyle';
+import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
 function ProfileImage() {
   const [Image, setImage] = useState(ProfilePicture);
