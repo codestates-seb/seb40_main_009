@@ -9,6 +9,7 @@
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
+
 <!--        파일삭제 규칙-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>./backup/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
