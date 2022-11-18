@@ -8,7 +8,7 @@ import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import MainPage from './components/Common/MainPage';
 import SearchResult from './pages/SearchResult';
-
+import AddChallenge from './pages/AddChallenge';
 
 function App() {
   return (
@@ -22,6 +22,7 @@ function App() {
           <Route path="/search/*" element={<SearchResult />} />
           <Route path="/profile" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
+          <Route path="/addchallenge" element={<AddChallenge />} />
         </Routes>
         <Footer />
       </BrowserRouter>
