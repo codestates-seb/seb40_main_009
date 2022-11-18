@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
@@ -6,16 +7,30 @@ import { createChallenge } from '../../atoms/atoms';
 
 const CreateAsk = styled.section``;
 
+const ImgExample = styled.img`
+  height: 400px;
+`;
+
+const TimeContainer = styled.section`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+`;
+
 function ChallengeAsk3() {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
   const [imageTransform, setImageTransfrom] = useState();
+  const [quantity, setQuantity] = useState();
+  const [checkCount, setCheckCount] = useState();
 
   const { register, handleSubmit } = useForm();
   const onValid = (data) => {
-    console.log(data);
-    // setCreateChallenge();
+    setCreateChallenge({ ...create, ...data });
   };
-  console.log(create);
+
+  const countCheck = (e) => {
+    console.log(e);
+  };
+
   const onChange = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -27,11 +42,19 @@ function ChallengeAsk3() {
     });
   };
 
-  //   console.log(imageTransform.length);
+  const checkQuantityy = () => {
+    setQuantity(false);
+  };
+  const checkQuantity = () => {
+    setQuantity(true);
+  };
+  useEffect(() => console.log(create), [create]);
   return (
     <CreateAsk>
       <div>
-        {imageTransform && <img src={imageTransform} alt="preview.img" />}
+        {/* {imageTransform && (
+          <ImgExample src={imageTransform} alt="preview.img" />
+        )} */}
       </div>
       <form onSubmit={handleSubmit(onValid)}>
         <h3>인증방법</h3>
@@ -42,6 +65,7 @@ function ChallengeAsk3() {
           onChange={(e) => {
             onChange(e.target.files[0]);
           }}
+          multiple
         />
         <h3>인증 방법을 설명해주세요</h3>
         <input
@@ -51,36 +75,66 @@ function ChallengeAsk3() {
           placeholder="인증 방법 설명하기"
         />
         <h3>인증 빈도</h3>
-        <button>하루 한번</button>
-        <button>하루 두번</button>
-        <button>하루 여러번(3번 이상)</button>
-        <input type={'number'} placeholder="그럼 몇번?" />
+        {!quantity ? (
+          <label>
+            <input
+              type={'radio'}
+              {...register('quantity', { required: 'Please Choice Quantity' })}
+              onClick={checkQuantityy}
+              value={'1'}
+            />
+            하루 한번
+          </label>
+        ) : null}
+        {!quantity ? (
+          <label>
+            <input
+              type={'radio'}
+              {...register('quantity', { required: 'Please Choice Quantity' })}
+              onClick={checkQuantityy}
+              value={'2'}
+            ></input>
+            하루 두번
+          </label>
+        ) : null}
+        <label>
+          <input
+            type={'radio'}
+            {...register('quantity', { required: 'Please Choice Quantity' })}
+            onClick={checkQuantity}
+            value={'3'}
+          ></input>
+          세번 이상
+        </label>
+        {quantity ? (
+          <input
+            type={'number'}
+            {...register('quantity', { required: 'Please Choice Quantity' })}
+            placeholder="그럼 몇번?"
+          />
+        ) : null}
         <h3>인증 시간</h3>
-
-        <button>01:00</button>
-        <button>02:00</button>
-        <button>03:00</button>
-        <button>04:00</button>
-        <button>05:00</button>
-        <button>06:00</button>
-        <button>07:00</button>
-        <button>08:00</button>
-        <button>09:00</button>
-        <button>10:00</button>
-        <button>11:00</button>
-        <button>12:00</button>
-        <button>13:00</button>
-        <button>14:00</button>
-        <button>15:00</button>
-        <button>16:00</button>
-        <button>17:00</button>
-        <button>18:00</button>
-        <button>19:00</button>
-        <button>20:00</button>
-        <button>21:00</button>
-        <button>22:00</button>
-        <button>23:00</button>
-        <button>24:00</button>
+        {/* <section>
+          <input
+            type={'time'}
+            {...register('time', { required: 'Please Choice Quantity' })}
+          />
+        </section> */}
+        <TimeContainer>
+          {timeTable.map((el) => (
+            <label>
+              <input
+                onChange={(e) => countCheck(e)}
+                type={'checkbox'}
+                {...register('time', {
+                  required: 'Please Choice Validate Time',
+                })}
+                value={el}
+              />
+              {el}
+            </label>
+          ))}
+        </TimeContainer>
         <button>submit</button>
       </form>
     </CreateAsk>
@@ -88,3 +142,30 @@ function ChallengeAsk3() {
 }
 
 export default ChallengeAsk3;
+
+const timeTable = [
+  '01:00',
+  '02:00',
+  '03:00',
+  '04:00',
+  '05:00',
+  '06:00',
+  '07:00',
+  '08:00',
+  '09:00',
+  '10:00',
+  '11:00',
+  '12:00',
+  '13:00',
+  '14:00',
+  '15:00',
+  '16:00',
+  '17:00',
+  '18:00',
+  '19:00',
+  '20:00',
+  '21:00',
+  '22:00',
+  '23:00',
+  '24:00',
+];
