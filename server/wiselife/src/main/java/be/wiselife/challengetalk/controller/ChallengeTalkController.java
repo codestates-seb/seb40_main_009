@@ -58,8 +58,8 @@ public class ChallengeTalkController {
         String tryingMemberEmail = jwtTokenizer.getEmailWithToken(request); //권한 확인 위한 수정 요청자의 email
 
         challengeTalkPatchDto.setChallengeTalkId(challengeTalkId);
-
         ChallengeTalk challengeTalk = challengeTalkMapper.challengeTalkPatchDtoToChallenge(challengeTalkPatchDto);
+
         challengeTalk = challengeTalkService.updateChallengeTalk(challengeTalk, tryingMemberEmail);
 
         return new ResponseEntity<>(
@@ -70,6 +70,7 @@ public class ChallengeTalkController {
 
     @GetMapping("/{challenge-talk-id}")
     public ResponseEntity getChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId){
+
         ChallengeTalk challengeTalk = challengeTalkService.findChallengeTalkById(challengeTalkId);
 
         return new ResponseEntity<>(

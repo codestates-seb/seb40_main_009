@@ -108,10 +108,8 @@ public class ChallengeService {
     }
 
     private Challenge verifyChallengeById(Long challengeId){
-        Challenge savedChallenge = challengeRepository.findById(challengeId)
+        return challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
-
-        return savedChallenge;
     }
 
 

@@ -3,11 +3,14 @@ package be.wiselife.challengereview.service;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengereview.repository.ChallengeReviewRepository;
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
-import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -33,6 +36,37 @@ public class ChallengeReviewService {
         challengeReview.setMember(memberService.findMemberById(memberId));
         challengeReview.setChallenge(challengeService.getChallenge(challengeId));
         return saveChallengeReview(challengeReview);
+    }
+
+    public ChallengeReview getChallengeReview(Long challengeReviewId) {
+        return findVerifiedChallengeReviewById(challengeReviewId);
+    }
+
+    public ChallengeReview updateChallengeReview(ChallengeReview changedChallengeReview, String tryingMemberEmail) {
+        ChallengeReview savedChallengeReview = getChallengeReview(changedChallengeReview.getChallengeReviewId());
+
+        /*수정하려는 유저의 권한 확인*/
+        if(!memberService.isVerifiedMember(savedChallengeReview.getMember().getMemberEmail(), tryingMemberEmail)){
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
+        }
+
+        Optional.ofNullable(changedChallengeReview.getChallengeReviewTitle())
+                .ifPresent(savedChallengeReview::setChallengeReviewTitle);
+        Optional.ofNullable(changedChallengeReview.getChallengeReviewContent())
+                .ifPresent(savedChallengeReview::setChallengeReviewContent);
+        Optional.of(changedChallengeReview.getChallengeReviewStar())
+                .ifPresent(savedChallengeReview::setChallengeReviewStar);
+        Optional.ofNullable(changedChallengeReview.getChallengeReviewImagePath())
+                .ifPresent(savedChallengeReview::setChallengeReviewImagePath);
+
+        return saveChallengeReview(savedChallengeReview);
+    }
+
+    private ChallengeReview findVerifiedChallengeReviewById(Long challengeReviewId){
+        ChallengeReview challengeReview =
+                challengeReview = challengeReviewRepository.findById(challengeReviewId)
+                        .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND));
+        return challengeReview;
     }
 
     private ChallengeReview saveChallengeReview(ChallengeReview challengeReview){

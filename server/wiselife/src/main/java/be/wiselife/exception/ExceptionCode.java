@@ -31,12 +31,14 @@ public enum ExceptionCode {
     TOTAL_AMOUNT_DIFFERENT(404,"Total amount is different Please check the approveKakaoPay Method in orderservice" ),
 
 
-    //ChallengeTalk 부분 예외 ==============시작
+    //Challenge Talk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),
 
+    //Challenge Review 부붕 예외 ==============시작
+    CHALLENGE_REVIEW_NOT_FOUND(404, "ChallengeReview not found"),
 
     //권한이 없는 자의 예외 =============시작
-    FORBIDDEN(403, "No authorization");
+    FORBIDDEN_MEMBER(403, "The member does not have permission");
 
     @Getter
     private int code;

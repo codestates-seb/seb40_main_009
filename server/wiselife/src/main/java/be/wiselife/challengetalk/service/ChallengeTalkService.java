@@ -38,7 +38,7 @@ public class ChallengeTalkService {
         * 댓글 작성자 email & 수정 요청자 email 비교
         * */
         if(!memberService.isVerifiedMember(findChallengeTalkWriterEmail(savedChallengeTalk.getMemberId()), tryingMemberEmail)){
-            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
         }
 
         /*수정 로직*/

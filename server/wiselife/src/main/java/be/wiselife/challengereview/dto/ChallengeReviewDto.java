@@ -44,4 +44,18 @@ public class ChallengeReviewDto {
 
         private String challengeReviewImagePath;
     }
+
+    @Getter
+    public static class Patch {
+        @Setter
+        private Long challengeReviewId;
+
+        private String challengeReviewTitle;
+
+        private String challengeReviewContent;
+
+        private int challengeReviewStar;
+
+        private String challengeReviewImagePath;
+    }
 }
