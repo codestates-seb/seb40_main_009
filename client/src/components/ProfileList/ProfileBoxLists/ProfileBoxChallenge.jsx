@@ -1,4 +1,4 @@
-import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxChallengeStyle';
+import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
 
 function ProfileBoxList() {
   return (

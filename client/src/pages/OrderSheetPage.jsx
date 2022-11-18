@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import OrderSheetInfo from '../components/OrderSheetList/OrderSheetInfo';
-import * as S from '../style/OrderSheetListStyle/OrderSheetPageStyle.jsx';
+import * as S from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx.jsx';
 
-function OrderSheetPage({ money }) {
+function OrderSheetPage(props) {
   const [orderList, setOrderList] = useState({
     image: '',
     name: '',
     money: '',
     startPeriod: '',
     expirationPeriod: '',
+    quantity: '',
+    tax: '',
   });
 
   useEffect(() => {
@@ -21,31 +23,32 @@ function OrderSheetPage({ money }) {
   return (
     <S.OrderSheetInfoPageComponent>
       <h1 className="order-title">주문서 작성</h1>
-      <header className="order-sheet">
-        <div className="order-lists">
+      <S.Header>
+        <S.OrderLists>
           <img className="image-size" src={orderList.image} alt="product img" />
-          <div className="challenge-date">
-            <p className="challenge-title">{orderList.name}</p>
-            <p>시작 날짜 : {orderList.startPeriod}</p>
-            <p>종료 날짜 : {orderList.expirationPeriod}</p>
-          </div>
-        </div>
-      </header>
-      <main className="order-info">
-        <div className="order-left">
-          <div className="order-info-top">
+          <S.OrderList>
+            <div className="challenge-title">{orderList.name}</div>
+            <div>시작 날짜 : {orderList.startPeriod}</div>
+            <div>종료 날짜 : {orderList.expirationPeriod}</div>
+          </S.OrderList>
+          <div className="count">수량: {orderList.quantity}</div>
+        </S.OrderLists>
+      </S.Header>
+      <S.Main>
+        <S.OrderLeft>
+          <S.OrderInfoTop>
             <h2 className="order-title">주문 정보</h2>
-            <p>참가비 : {orderList.money}원</p>
-          </div>
-          <div className="order-info-bottom">
+            <div>참가비 : {orderList.money}원</div>
+          </S.OrderInfoTop>
+          <S.OrderInfoBottom>
             <h2 className="order-title">결제 수단</h2>
-            <button className="pay-button">카카오페이</button>
-          </div>
-        </div>
-        <div className="order-right">
-          <OrderSheetInfo money={orderList.money} />
-        </div>
-      </main>
+            <S.PayButton>카카오페이</S.PayButton>
+          </S.OrderInfoBottom>
+        </S.OrderLeft>
+        <S.OrderRight>
+          <OrderSheetInfo money={orderList.money} tax={orderList.tax} />
+        </S.OrderRight>
+      </S.Main>
     </S.OrderSheetInfoPageComponent>
   );
 }

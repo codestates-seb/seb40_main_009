@@ -1,23 +1,24 @@
-import * as S from '../../style/OrderSheetListStyle/OrderSheetInfoStyle';
+import * as S from '../../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx.jsx';
 
-function OrderSheetInfo({ money }) {
+function OrderSheetInfo(props) {
   return (
-    <S.OrderSheetInfoComponent>
-      <form className="info-container">
-        <div className="info-container-lists">
+    <>
+      <S.Container>
+        <S.InfoContainerLists>
           <h1 className="order-info-title">결제 정보</h1>
-          <h2>참가비 : {money}원</h2>
+          <h2>참가비 : {props.money}원</h2>
+          <div>세금 : {props.tax}원 포함</div>
           <div>100% 성공 시 : 참가비 + 상금</div>
           <div>80% 성공 시 : 달성률에 따른 원금 + 상금</div>
           <div>50% 성공 시 : 달성률에 따른 원금 + 상금</div>
-          <div className="check-and-pay">
-            <input className="check-input-box" type="checkbox" />
+          <S.CheckPay>
+            <input className="check-input-box" type="checkbox"></input>
             <span>동의합니다</span>
-            <button className="order-button">결제하기</button>
-          </div>
-        </div>
-      </form>
-    </S.OrderSheetInfoComponent>
+            <S.OrderButton>결제하기</S.OrderButton>
+          </S.CheckPay>
+        </S.InfoContainerLists>
+      </S.Container>
+    </>
   );
 }
 

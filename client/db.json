@@ -21,11 +21,23 @@
 
   "order": [
     { 
-      "image": "https://cdnimg.melon.co.kr/cm2/artistcrop/images/002/61/143/261143_20210325180240_500.jpg?61e575e8653e5920470a38d1482d7312/melon/resize/416/quality/80/optimize",
+      "image": "https://cdn.pixabay.com/photo/2017/07/21/23/57/concert-2527495_1280.jpg",
       "name" : "IU 콘서트 가기",
       "money" : "100,000",
       "startPeriod" : 20221114,
-      "expirationPeriod" : 20221130
+      "expirationPeriod" : 20221130,
+      "quantity" : 1, 
+      "tax" : "10,000"
+    }
+  ],
+
+  "userprofile": [
+    {
+      "profileimage" : "https://cdn.pixabay.com/photo/2014/07/10/11/17/grimace-388987_1280.jpg",
+      "name" : "슬기로운 생활",
+      "introduction" : "안녕하세요. J가 되고 싶은 P입니다!",
+      "percentage" : 80,
+      "level" : 2
     }
   ]
 }
