@@ -104,7 +104,7 @@ public class Challenge extends TimeAudit {
         this.challengeAuthDescription = challengeAuthDescription;
         this.challengeAuthCycle = challengeAuthCycle;
         this.challengeFeePerPerson = challengeFeePerPerson;
-//http://img.segye.com/content/image/2020/01/03/20200103508188.jpg
+
         /*인자로 받지는 않지만 default값 설정해야 하는 것들*/
         this.isClosed = false;
         this.challengeViewCount = 0;
@@ -118,7 +118,11 @@ public class Challenge extends TimeAudit {
         this.challengeCertImagePath = challengeCertImagePath;
     }
 
-    /*챌린지 댓글 추가 */
+    //TODO: 유현님이 맴버테이블만들면 추후에 OneToMany로 서로간의 맵핑을해야합니다^^
+
+    /**
+     * 챌린지 댓글 추가
+     */
     public void addChallengeTalk(ChallengeTalk challengeTalk){
         this.challengeTalkList.add(challengeTalk);
         if(challengeTalk.getChallenge() == null){
@@ -127,10 +131,11 @@ public class Challenge extends TimeAudit {
     }
 
     public enum ChallengeCategory {
-        /*ChallengeCategoryId
-        1 = BUCKET_LIST,
-        2 = SHARE_CHALLENGE,
-        3 = OFFLINE_CHALLENGE */
+        /**
+         * ChallengeCategoryId
+         * 1 = BUCKET_LIST,
+         * 2 = SHARE_CHALLENGE,
+         * 3 = OFFLINE_CHALLENGE */
         BUCKET_LIST("버킷 리스트"),
         SHARED_CHALLENGE("공유 챌린지"),
         OFFLINE_CHALLENGE("오프라인 챌린지");

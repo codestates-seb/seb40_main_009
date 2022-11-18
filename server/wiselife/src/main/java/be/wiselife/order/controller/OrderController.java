@@ -1,9 +1,5 @@
 package be.wiselife.order.controller;
 
-import be.wiselife.dto.MultiResponseDto;
-import be.wiselife.dto.SingleResponseDto;
-import be.wiselife.exception.BusinessLogicException;
-import be.wiselife.exception.ExceptionCode;
 import be.wiselife.order.dto.OrderDto;
 import be.wiselife.order.entity.Order;
 import be.wiselife.order.mapper.OrderMapper;
@@ -36,20 +32,30 @@ public class OrderController {
     private final OrderMapper orderMapper;
     private final JwtTokenizer jwtTokenizer;
 
-    //결제준비 , 결제고유번호를 받기 위한 메소드
+    /**
+     * 
+     * @param postinfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
+     * @param request : 
+     * @return
+     * @throws IOException
+     */
     @GetMapping("/ready")
-    public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postinfo, HttpServletRequest request) throws IOException { //나중에 order값 받아올 필요있음
-        String EmailFromToken = jwtTokenizer.getEmailWithToken(request); // 토큰값으로부터 이메일정보를 가져온다.
-
-        Order order = orderMapper.postInfoToOrder(postinfo); //주문 객체 생성
-
-        OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order, EmailFromToken);  //결제요청을 위한 서비스 실행
-
-
+    public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postinfo, HttpServletRequest request){
+        String EmailFromToken = jwtTokenizer.getEmailWithToken(request);
+        
+        Order order = orderMapper.postInfoToOrder(postinfo);
+        
+        OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order, EmailFromToken);
+        
         return new ResponseEntity(readyForPay, HttpStatus.OK);
     }
 
-    //QR코드 이후의 결제 승인이 왔을때 수행되는 로직
+    /**
+     * 
+     * @param pg_token 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값
+     * @param tid 처음 결제요청에서 거래에대한 암호키
+     * @return
+     */
     @GetMapping("/kakaopay/success")
     public ResponseEntity afterQR(@RequestParam("pg_token") String pg_token, @RequestParam("tid") String tid) {
 
@@ -59,20 +65,27 @@ public class OrderController {
         return new ResponseEntity<>(approveResponse, HttpStatus.CREATED);
     }
 
-    // 결제 취소시 실행 url (결제 QR코드에서 취소한 경우)
+    /**
+     * 결제 취소시 실행 url (결제 QR코드에서 취소한 경우)
+     */
     @GetMapping("/cancel")
     public String payCancel() {
         return "cancel order";
     }
 
-    // 결제 실패시 실행 url
+    /**
+     * 결제 실패시 실행 url (결제 QR코드에서 실패한 경우)
+     */
     @GetMapping("/fail")
     public String payFail() {
         return "order failed";
     }
 
 
-    //마이페이지 결제한내역 리스트 조회
+    /*
+     * 마이페이지 결제한내역 리스트 조회
+     * TODO: 결제금액리스트에 추가적으로 맴버의 총액을 넘기기
+     */
     @GetMapping("/list")
     public ResponseEntity getOrderlistByUserId(HttpServletRequest request) {
         String emailWithToken = jwtTokenizer.getEmailWithToken(request);
@@ -82,6 +95,7 @@ public class OrderController {
         return new ResponseEntity(personalOrders, HttpStatus.OK);
     }
 
-    //결제 취소리스트 구현 필요할까? v2
+    //TODO: 결제 취소리스트 구현
+    //TODO: 환급로직 구현
 
 }

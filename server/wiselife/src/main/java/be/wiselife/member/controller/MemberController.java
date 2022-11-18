@@ -34,7 +34,6 @@ public class MemberController {
      * 결제내역 조회
      */
 
-
     //추가 의존성 주입 필요, voter, image, challenge, challengeReview 관련 Service 클래스
     private final MemberService memberService;
 

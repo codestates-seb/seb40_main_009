@@ -33,12 +33,14 @@ public enum ExceptionCode {
     //ChallengeExamImage 부분 예외 ===========시작
     CHALLENGE_EXAM_IMAGE_MUST_ENROLL(404, "Challenge example image must be enroll min one-image"),
 
-    //ChallengeTalk 부분 예외 ==============시작
+    //Challenge Talk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),
 
+    //Challenge Review 부붕 예외 ==============시작
+    CHALLENGE_REVIEW_NOT_FOUND(404, "ChallengeReview not found"),
 
     //권한이 없는 자의 예외 =============시작
-    FORBIDDEN(403, "No authorization");
+    FORBIDDEN_MEMBER(403, "The member does not have permission");
 
     @Getter
     private int code;

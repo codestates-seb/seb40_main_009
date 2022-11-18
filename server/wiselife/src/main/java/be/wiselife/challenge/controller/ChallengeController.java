@@ -52,7 +52,7 @@ public class ChallengeController {
     @PatchMapping
     public ResponseEntity patchChallenge(@Valid @RequestBody ChallengeDto.Patch challengePatchDto){
 
-        // JWT토큰 이용한 권한 인증 추가해야
+        // TODO : JWT토큰 이용한 권한 인증 추가해야
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
         challenge = challengeService.updateChallenge(challenge);
@@ -62,11 +62,12 @@ public class ChallengeController {
                 , HttpStatus.OK);
     }
 
+
     /**
      * 인증사진 등록
      * @param certPost 인증사진이 속한 Challenge 아이디와 인증사진 경로
      * @param request 로그인한 사람의 이메일 정보를 가져오기위한 인자값
-     * TODO
+     * TODO :
      * 챌린지 참여인원인지 판단하는 로직 추가
      * 응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
@@ -85,14 +86,15 @@ public class ChallengeController {
 
 
 
-    /*챌린지 상세페이지 조회*/
-    /*
+
+
+    /**
+     * 챌린지 상세페이지 조회
+     * TODO:
      * MemberChallenge 엔티티 구현 후 추가 해야 하는 기능
      * 1) 만약 유저가 해당 챌린지 참여중이라면 별도로 유저의 해당 챌린지 성공률도 표시함
      * 2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
-     *
-     * 추후 추가할 기능
-     * 1) 동일한 사용자의 조회수 중복 증가 방지 기능
+     * 3) 동일한 사용자의 조회수 중복 증가 방지 기능
      * */
     @GetMapping("/{challenge-id}")
     public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId){
