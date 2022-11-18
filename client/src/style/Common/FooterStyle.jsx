@@ -16,6 +16,7 @@ export const FooterContainer = styled.footer`
   width: 100%;
   color: #ffffff;
   padding: 1.5% 0;
+  margin-top: 80px;
 `;
 
 export const Container = styled.div`
@@ -38,7 +39,7 @@ export const LinkContainer = styled.div`
   margin-left: 5%;
   & div {
     margin-bottom: 10%;
-    cursor: default;
+    cursor: pointer;
   }
 `;
 

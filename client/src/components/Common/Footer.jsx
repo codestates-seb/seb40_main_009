@@ -1,14 +1,13 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as S from '../../style/Common/FooterStyle';
 
 function Footer() {
   const navigate = useNavigate();
-
+  // 챌린지 리스트페이지로 이동
   const LinkChallengePage = () => {
     navigate('/challengelist');
   };
-
+  // 유저 리스트로 이동
   const LinkUserPage = () => {
     navigate('/userlist');
   };
@@ -26,7 +25,7 @@ function Footer() {
 
           <S.LinkContainer>
             <div onClick={LinkChallengePage}>Challenge</div>
-            <div onClick={LinkUserPage}>User</div>
+            <div onClick={LinkUserPage}>Ranking</div>
           </S.LinkContainer>
           <S.LinkContainer>
             <div>About us</div>
