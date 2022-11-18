@@ -1,6 +1,8 @@
 package be.wiselife.image.service;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.entity.ChallengeExamImage;
 import be.wiselife.image.entity.ChallengeRepImage;
 import be.wiselife.image.entity.Image;
@@ -115,6 +117,9 @@ public class ImageService {
         for (ChallengeExamImage changeChallengeExamImage : changeChallengeExamImages) {
             changeImagePath = changeImagePath+changeChallengeExamImage.getImagePath() + ",";
             log.info("imagePath={}",changeChallengeExamImage.getImagePath());
+        }
+        if (changeImagePath.equals("")) {
+            throw new BusinessLogicException(ExceptionCode.CHALLENGE_EXAM_IMAGE_MUST_ENROLL);
         }
         return changeImagePath;
     }
