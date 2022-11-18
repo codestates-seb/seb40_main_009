@@ -8,6 +8,7 @@ import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import MainPage from './pages/MainPage';
 import SearchResult from './pages/SearchResult';
+import DetailPage from './pages/DetailPage';
 import ChallengeDetail from './pages/ChallengeDetail';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/challengelist/*" element={<ChallengeList />} />
+          <Route path="/detail/*" element={<DetailPage />} />
           <Route path="/challengedetail/*" element={<ChallengeDetail />} />
           <Route path="/userlist/*" element={<UserList />} />
           <Route path="/search/*" element={<SearchResult />} />
