@@ -29,4 +29,5 @@ export const MyProfileComponent = styled.div`
   p {
     margin-right: 1rem;
   }
+  margin-bottom: 5rem;
 `;

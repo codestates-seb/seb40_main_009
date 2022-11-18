@@ -27,12 +27,12 @@ function ProfileImage() {
     <S.ImageUploadComponent>
       <img
         className="profilePicture"
-        alt="ProfilePicture"
+        alt="profile img"
         src={Image}
         onClick={() => {
           fileInput.current.click();
         }}
-      ></img>
+      />
       <input
         type="file"
         style={{ display: 'none' }}
