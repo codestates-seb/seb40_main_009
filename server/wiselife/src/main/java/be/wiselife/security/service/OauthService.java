@@ -32,17 +32,24 @@ public class OauthService extends DefaultOAuth2UserService {
     private final JwtTokenizer jwtTokenizer;
 
     /**
-     *  1번쨰 마주하는곳
-     *  사실상 모든 과정이 이 메서드에서 다 이루어진다.
+     *  로그인의 모든 과정이 이 메서드에서 다 이루어진다.
+     *  1. 인가코드를 카톡 Oauth2서버에 토큰을 요청함. (프론트에서 이루어짐)
+     *  2. yaml에 저장된 데이터 뽑아와서 카톡서버로 데이터를 수령해온다.
+     *  3. 수령해온 데이터를 이용하여 AccessToken과 RefreshToken을 만든다 TODO: Refresh Token 로직을 추가해야함.
+     *  4. 첫 로그인이라면 회원가입처리가 되고 아니면 로그인이 된다.
+     * @return 카톡측으로부터 수령한 회원 개인정보를 반환한다.
      */
-    public LoginDto login(String provider, String code){ //인가code를 카톡Oauth서버에 token요청
-        ClientRegistration kakaoProvider = inMemoryRepository.findByRegistrationId(provider); //yaml에 저장된 데이터 뽑아오기
-        AccessTokenDto tokenData = getAuthorizationToken(code, kakaoProvider); //서버에 엑세스 토큰과 리프레쉬 토큰을 받아오는 메서드, 이걸로 이제 회원 프로필 이름,이메일을 가져올수있다.
-        Member member = getMemberProfile(provider, tokenData, kakaoProvider); //첫 로그인이라면 회원가입 아니면 디비 맴버 반환
-        //인증후 토큰 발부
+    public LoginDto login(String provider, String code){
+        //2
+        ClientRegistration kakaoProvider = inMemoryRepository.findByRegistrationId(provider);
+        AccessTokenDto tokenData = getAuthorizationToken(code, kakaoProvider);
+        Member member = getMemberProfile(provider, tokenData, kakaoProvider);
+
+        //3
         String accessToken = jwtTokenizer.createAccessToken(String.valueOf(member.getMemberEmail()));
         String refreshToken = jwtTokenizer.createRefreshToken();
 
+        //4
         LoginDto loginDto = LoginDto.builder().memberId(member.getMemberId()).memberEmail(member.getMemberEmail()).memberName(member.getMemberName())
                 .imageUrl(member.getMemberImagePath()).AccessToken(accessToken).RefreshToken(refreshToken).build();
 
@@ -51,18 +58,19 @@ public class OauthService extends DefaultOAuth2UserService {
 
     /**
      * 서버에 엑세스 토큰과 리프레쉬 토큰을 받아오는 메서드
-     * @param code
-     * @param provider
-     * @return
+     * @param code 카톡에서 발행한 인가코드
+     * @param provider 소셜로그인 제공 기관
+     * @return 카톡에서 제공하는 토큰값들을 받는다.
      */
     private AccessTokenDto getAuthorizationToken(String code, ClientRegistration provider) {
+        //카톡측 요구 파라미터
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("grant_type","authorization_code");
         parameters.add("client_id", provider.getClientId());
         parameters.add("redirect_uri", provider.getRedirectUri());
         parameters.add("client_secret", provider.getClientSecret());
         parameters.add("code",code);
-
+        //카톡측 요구 헤더
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -72,11 +80,18 @@ public class OauthService extends DefaultOAuth2UserService {
         AccessTokenDto accessTokenDto = restTemplate.postForObject(provider.getProviderDetails().getTokenUri(), requestEntity, AccessTokenDto.class);
         return accessTokenDto;
     }
-    //dto 수정필요
+
+    /**
+     * 카톡측으로 맴버의 정보를 받아오는 로직
+     * @param providerName 소셜로그인 제공 기관
+     * @param tokenData
+     * @param provider
+     * @return
+     */
     private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
         
-         //소셜로그인 만에하나 더 추가한다면...
+         //TODO: 추가적인 소셜로그인을 구현한다면 아래에 추가한다.
          OAuth2MemberInfo oAuth2MemberInfo = null;
         if (providerName.equals("kakao")) {
             oAuth2MemberInfo = new KakaoMemberinfo(userAttributes);
@@ -84,18 +99,16 @@ public class OauthService extends DefaultOAuth2UserService {
             log.info("지원하지않는 로그인 방식");
         }
 
-        /* 데이터들 넣는 작업 */
+        /* 카톡에서 받아온 데이터를 넣는 작업 */
         String provide = oAuth2MemberInfo.getProvider();
         String providerId = oAuth2MemberInfo.getProviderId();
         String email = oAuth2MemberInfo.getEmail();
         String imageURL = oAuth2MemberInfo.getImageURL();
         List<String> rolesForDatabase = new CustomAuthorityUtils().createRolesForDatabase(email);
 
-        //DB에 없는 사람이면 저장하고 있는사람이면 반환
-        //orElse는 메모리상에 있기만 하면 무조건 호출이라서 orElseGet으로 호출해야한다.
         Member member = memberRepository.findByMemberEmail(email)
                 .orElseGet(()-> memberRepository.save(new Member(email,imageURL,rolesForDatabase,provide,providerId)));
-
+        //orElse는 메모리상에 있기만 하면 무조건 호출이라서 orElseGet으로 호출해야한다.
 
         return member;
 
@@ -103,16 +116,16 @@ public class OauthService extends DefaultOAuth2UserService {
 
     private Map<String, Object> getMemberAttributes(ClientRegistration provider, AccessTokenDto tokenData) {
 
-        HttpHeaders headers = new HttpHeaders(); //헤더에 들어갈 항목
+        HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+tokenData.getAccess_token());
 
-        HttpEntity<Void> requestEntity = new HttpEntity<>(headers); //해더를 담을 객체생성
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        //restTemplate의 리턴값을 제네릭을 이용해서 설정한 방법 ParameterizedTypeReference사용
+
         Map<String, Object> body = restTemplate.exchange(provider.getProviderDetails().getUserInfoEndpoint().getUri(),
                 HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Map<String, Object>>(){}).getBody();
-
+        //restTemplate의 리턴값을 제네릭을 이용해서 설정한 방법 ParameterizedTypeReference사용
         return body;
     }
 

@@ -45,7 +45,7 @@ jwt:
   refresh-token:
     expire-length: 120960000
     
-#추후에 추가예정 관리자명단
+#TODO: 관리자 추가
 mail:
   address:
       admin: mins402kim@kakao.com
