@@ -77,6 +77,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.challengeId.eq(challengeId)))
+                .fetch();
     }
 
    /**
