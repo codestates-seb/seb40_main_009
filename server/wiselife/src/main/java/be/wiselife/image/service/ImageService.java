@@ -112,9 +112,9 @@ public class ImageService {
                 = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
 
         String changeImagePath = "";
-
         for (ChallengeExamImage changeChallengeExamImage : changeChallengeExamImages) {
-            changeImagePath = changeChallengeExamImage.getImagePath() + ",";
+            changeImagePath = changeImagePath+changeChallengeExamImage.getImagePath() + ",";
+            log.info("imagePath={}",changeChallengeExamImage.getImagePath());
         }
         return changeImagePath;
     }
