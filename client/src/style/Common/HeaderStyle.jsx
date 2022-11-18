@@ -29,6 +29,7 @@ export const ChallengeBtn = styled.button`
   background-color: #ffffff;
   color: #787878;
   font-size: 16px;
+  cursor: pointer;
 `;
 
 export const Search = styled.div`
