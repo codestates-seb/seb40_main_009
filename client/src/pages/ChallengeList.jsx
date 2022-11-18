@@ -9,6 +9,10 @@ function ChallengeList() {
   const navMatch = useMatch('/challengelist');
   const navigate = useNavigate();
 
+  const move = () => {
+    navigate('/addchallenge');
+  };
+
   useEffect(() => {
     if (navMatch) {
       navigate('/challengelist/paid');
@@ -16,7 +20,7 @@ function ChallengeList() {
   }, []);
   return (
     <>
-      <S.AddChallengeBtn>Add Challenge</S.AddChallengeBtn>
+      <S.AddChallengeBtn onClick={move}>Add Challenge</S.AddChallengeBtn>
       <S.ListContainer>
         <section>
           <Link to={'/challengelist/paid'}>
