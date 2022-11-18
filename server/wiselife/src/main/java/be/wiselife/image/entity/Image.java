@@ -1,34 +1,26 @@
 package be.wiselife.image.entity;
 
 
-import be.wiselife.member.entity.Member;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DTYPE")
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name="Image_Table")
-public class Image {
+public abstract class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageId;
 
     @Column(nullable = false)
     private String imagePath;
-
-    @Enumerated(EnumType.STRING)
-    private ImageSource imageSource;
-
-    public enum ImageSource {
-        USER_IMAGE,CHALLENGE_EXAM,CHALLENGE_REP,CERTIFICATION,REVIEW;
-    }
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
 }
+
+
