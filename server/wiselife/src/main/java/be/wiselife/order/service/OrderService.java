@@ -25,7 +25,7 @@ import java.util.List;
 @Transactional
 public class OrderService {
     static final String cid = "TC0ONETIME"; //가맹점 테스트 코드
-    static final String authorization = "KakaoAK 79fd132c770be75df16bbafdcfe48463";
+    static final String authorization = "KakaoAK 79fd132c770be75df16bbafdcfe48463"; //TODO: 배포시 환경설정으로 바꾸기
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";
     String approveUrl = "https://kapi.kakao.com/v1/payment/approve";
     static final String successUrl = "http://localhost:8080/order/success";
@@ -36,14 +36,12 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     /**
-     * 결제번호 수령
-     * @param order
-     * @return
+     * @return 카톡측으로 결제번호, URL 수령
      */
     public OrderDto.OrderReadyResponse startKakaoPay(Order order, String emailFromToken) {
 
         Member member = memberRepository.findByMemberEmail(emailFromToken).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        order.addMember(member); //연관관계를 맺는 메서드
+        order.addMember(member); 
         orderRepository.save(order); //ORDERID 값을 지정받기 위해 값을 저장하고 주문한 맴버를 저장한다.
 
 
@@ -69,7 +67,7 @@ public class OrderService {
 
         // 보낼 외부 url, 요청 메시지(header,parameter), 처리후 값을 받아올 클래스.
         OrderDto.OrderReadyResponse ready = template.postForObject(readyUrl, requestEntity, OrderDto.OrderReadyResponse.class);
-        log.info("결재번호가 담긴 응답객체: " + ready);
+        log.info("결제번호와 결제URL이 담긴 응답객체: " + ready);
 
         if (ready != null) { //결재번호를 저장하면서 맴버에도 해당 정보를 저장한다.
             order.setTid(ready.getTid());
@@ -82,25 +80,28 @@ public class OrderService {
         return ready;
     }
 
+    /**
+     * 결제ID와 pgtoken값을 통해 결제 완료승인을 받는 메서드
+     * @return 승인된 결제결과를 받는다.
+     */
 
     public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) {
 
-        //오더 tid 번호 일지여부 확인
-        Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG)); // 로그인 추가시 찾는로직도 변경 필요
+        Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG));
 
         //카카오톡에서 요청하는 기본 양식
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
         parameters.add("tid", tid);
-        parameters.add("partner_order_id", String.valueOf(order.getOrderId())); //주문번호 수정예정
-        parameters.add("partner_user_id", String.valueOf(order.getMember().getMemberId())); //회원 아이디 로그인 구현시 수정예정
+        parameters.add("partner_order_id", String.valueOf(order.getOrderId()));
+        parameters.add("partner_user_id", String.valueOf(order.getMember().getMemberId()));
         parameters.add("pg_token", pgtoken);
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
         RestTemplate restTemplate = new RestTemplate();
         OrderDto.ApproveResponse approveResponse = restTemplate.postForObject(approveUrl, requestEntity, OrderDto.ApproveResponse.class);
 
-        if (approveResponse != null) { //거래가 잘왔다면...해당내용을 저장한다.
+        if (approveResponse != null) {
             log.info("승인 및 결제완료 {}", approveResponse);
             int beforeTrade = (int) order.getTotalAmount();
             int afterTrade = approveResponse.getAmount().getTotal();
@@ -121,30 +122,25 @@ public class OrderService {
 
     }
 
+    /**
+     * 이메일을 통해서 맴버를 찾고
+     * @return  맴버아이디와 일치되는 오더기록을 리턴한다.
+     */
+    public List<Order> getOrderList(String email) {
+        Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        List<Order> orders = orderRepository.findByMemberId(member); //쿼리dsl 통해서 얻어낸 order들.
+        return orders;
+    }
+
+    /**
+     * @return 카톡측에서 요구하는 헤더값 리턴
+     */
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authorization);
         headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         return headers;
-    }
-
-
-    public void saveTid(Order order, String tid) {
-        Order verifyOrderId = verifyOrderId(order);
-        verifyOrderId.setTid(tid);
-        orderRepository.save(verifyOrderId);
-    }
-
-    private Order verifyOrderId(Order order) {
-        return orderRepository.findById(order.getOrderId()).orElseThrow(() -> new RuntimeException());
-    }
-
-    public List<Order> getOrderList(String email) {
-        //userID로 찾는 로직 구현 필요
-        Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-        List<Order> orders = orderRepository.findByMemberId(member); //쿼리dsl 통해서 얻어낸 order들.
-        return orders;
     }
 }

@@ -171,7 +171,9 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    /*영운 수정 + 꼭 코드 리뷰 받을 것!!!*/
+    /**
+     * email 비교를 통해 권한이 있는 유저인지 확인
+     * */
     public boolean isVerifiedMember(String savedMemberEmail, String tryingMemberEmail){
         return Objects.equals(savedMemberEmail, tryingMemberEmail);
     }

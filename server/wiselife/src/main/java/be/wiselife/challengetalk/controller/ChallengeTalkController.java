@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/challengeTalks")
+@RequestMapping("/challenge-talks")
 @Validated
 public class ChallengeTalkController {
     private final ChallengeTalkService challengeTalkService;
@@ -32,9 +32,12 @@ public class ChallengeTalkController {
         this.challengeTalkMapper = challengeTalkMapper;
     }
 
-    /*챌린지 댓글 생성*/
+    /**
+     * 챌린지 댓글 생성
+     * */
     @PostMapping()
     public ResponseEntity postChallengeTalk(@Valid @RequestBody ChallengeTalkDto.Post challengeTalkPostDto) {
+
         ChallengeTalk challengeTalk = challengeTalkMapper.challengeTalkPostDtoToChallenge(challengeTalkPostDto);
         challengeTalk = challengeTalkService.createChallengeTalk(challengeTalk, challengeTalkPostDto.getChallengeId());
 
@@ -44,7 +47,9 @@ public class ChallengeTalkController {
                 HttpStatus.CREATED);
     }
 
-    /*챌린지 댓글 수정*/
+    /**
+     * 챌린지 댓글 수정
+     * */
     @PatchMapping("/{challenge-talk-id}")
     public ResponseEntity patchChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId,
                                              @Valid @RequestBody ChallengeTalkDto.Patch challengeTalkPatchDto,
@@ -53,8 +58,8 @@ public class ChallengeTalkController {
         String tryingMemberEmail = jwtTokenizer.getEmailWithToken(request); //권한 확인 위한 수정 요청자의 email
 
         challengeTalkPatchDto.setChallengeTalkId(challengeTalkId);
-
         ChallengeTalk challengeTalk = challengeTalkMapper.challengeTalkPatchDtoToChallenge(challengeTalkPatchDto);
+
         challengeTalk = challengeTalkService.updateChallengeTalk(challengeTalk, tryingMemberEmail);
 
         return new ResponseEntity<>(
@@ -65,6 +70,7 @@ public class ChallengeTalkController {
 
     @GetMapping("/{challenge-talk-id}")
     public ResponseEntity getChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId){
+
         ChallengeTalk challengeTalk = challengeTalkService.findChallengeTalkById(challengeTalkId);
 
         return new ResponseEntity<>(

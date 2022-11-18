@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 권한이 없는곳에 입장할때
+ * 권한이 없는곳에 입장할때 UNAUTHORIZED 반환
  */
 public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override

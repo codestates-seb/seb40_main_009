@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+[Layout]
+%d : 날짜
+%n : new line
+%t : thread
+%p : 로깅레벨
+%c : 로깅이 발생한 카테고리
+%C : 로깅이 발생한 클래스명
+%m : 로깅 메세지
+-->
 
 <configuration>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
-              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+              value="%yellow([%d{yyyy-MM-dd HH:mm:ss}:%-4relative]) %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
 <!-- 시간 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
+
+
 <!-- 로깅을 저장하고 싶으면 profile을 prod 상태로 바꾼다. 3개의 공통사항을 지정한 console appender.xml-->
     <springProfile name="!prod">
         <include resource="console-appender.xml"/>
-
-<!--  info 레벨 이상만 출력되게 한다.      -->
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>
