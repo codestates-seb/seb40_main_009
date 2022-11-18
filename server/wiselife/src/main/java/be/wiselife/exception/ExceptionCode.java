@@ -30,6 +30,8 @@ public enum ExceptionCode {
     NO_ORDER_RESOPNSE(404,"Order Response was null" ),
     TOTAL_AMOUNT_DIFFERENT(404,"Total amount is different Please check the approveKakaoPay Method in orderservice" ),
 
+    //ChallengeExamImage 부분 예외 ===========시작
+    CHALLENGE_EXAM_IMAGE_MUST_ENROLL(404, "Challenge example image must be enroll min one-image"),
 
     //Challenge Talk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),

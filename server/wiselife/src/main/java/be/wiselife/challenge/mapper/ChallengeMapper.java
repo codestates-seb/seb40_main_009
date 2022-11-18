@@ -4,6 +4,7 @@ import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
+import be.wiselife.image.entity.ChallengeExamImage;
 import be.wiselife.member.service.MemberService;
 import org.mapstruct.Mapper;
 
@@ -13,10 +14,15 @@ import org.mapstruct.ReportingPolicy;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
+
+    Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
+    
+    /*챌린지 생성 mapping*/
     ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge);
 
     /**
@@ -97,9 +103,51 @@ public interface ChallengeMapper {
                 challenge.challengeCategory(Challenge.ChallengeCategory.OFFLINE_CHALLENGE);
                 break;
         }
-        challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
         challenge.challengeRepImagePath(challengePatchDto.getChallengeRepImagePath());
+
+        challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
+
+
         return challenge.build();
+    }
+
+
+    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge) {
+        if ( challenge == null ) {
+            return null;
+        }
+
+        ChallengeDto.SimpleResponse simpleResponse = new ChallengeDto.SimpleResponse();
+
+        simpleResponse.setChallengeId( challenge.getChallengeId() );
+        simpleResponse.setChallengeCategory( challenge.getChallengeCategory() );
+        simpleResponse.setChallengeTitle( challenge.getChallengeTitle() );
+        simpleResponse.setChallengeDescription( challenge.getChallengeDescription() );
+        simpleResponse.setChallengeCurrentParty( challenge.getChallengeCurrentParty() );
+        simpleResponse.setChallengeMaxParty( challenge.getChallengeMaxParty() );
+        simpleResponse.setChallengeMinParty( challenge.getChallengeMinParty() );
+        simpleResponse.setChallengeStartDate( challenge.getChallengeStartDate() );
+        simpleResponse.setChallengeEndDate( challenge.getChallengeEndDate() );
+        simpleResponse.setChallengeAuthDescription( challenge.getChallengeAuthDescription() );
+        simpleResponse.setChallengeAuthCycle( challenge.getChallengeAuthCycle() );
+        simpleResponse.setChallengeDirectLink( challenge.getChallengeDirectLink() );
+        simpleResponse.setChallengeFeePerPerson( challenge.getChallengeFeePerPerson() );
+        simpleResponse.setChallengeTotalReward( challenge.getChallengeTotalReward() );
+        simpleResponse.setChallengeViewCount( challenge.getChallengeViewCount() );
+        simpleResponse.setIsClosed( challenge.getIsClosed() );
+        simpleResponse.setCreated_at( challenge.getCreated_at() );
+        simpleResponse.setUpdated_at( challenge.getUpdated_at() );
+        simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );
+        // 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
+        // 현재는 응답에 안나오는 것에 대해 영운님께 질문드리기
+        // simplereponse에 들어갈 내용
+        String[] imagePaths = challenge.getChallengeExamImagePath().split(",");
+        List<String> challengeExamImagePaths = new ArrayList<>();
+        for (String imagePath : imagePaths) {
+            challengeExamImagePaths.add(imagePath);
+        }
+        simpleResponse.setChallengeExamImagePath(challengeExamImagePaths);
+        return simpleResponse;
     }
 
     /**
@@ -145,7 +193,6 @@ public interface ChallengeMapper {
             }
 
         }
-
         return detailResponse.build();
     }
 }

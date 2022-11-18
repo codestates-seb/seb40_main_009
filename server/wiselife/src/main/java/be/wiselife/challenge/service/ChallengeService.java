@@ -5,6 +5,7 @@ import be.wiselife.challenge.repository.ChallengeRepository;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
+import be.wiselife.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class ChallengeService {
 
     public Challenge createChallenge(Challenge challenge){
         imageService.patchChallengeRepImage(challenge);
+        imageService.postChallengeExamImage(challenge);
         return saveChallenge(challenge);
     }
     /**
@@ -69,14 +71,34 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
+        // 대표 이미지 수정시 사용하는 로직
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
-            log.info("image randomId ={}",existingChallenge.getRandomIdForImage());
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             imageService.patchChallengeRepImage(changedChallenge);
             existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
         }
 
+        // 예시 이미지 수정시 사용하는 로직
+        if (!Optional.ofNullable(changedChallenge.getChallengeExamImagePath()).isEmpty()) {
+            changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
+            String challengeExamImagePaths=imageService.patchChallengeExamImage(changedChallenge);
+            existingChallenge.setChallengeExamImagePath(challengeExamImagePaths);
+        }
+
+
         return saveChallenge(existingChallenge);
+    }
+
+    /**
+     * 인증사진 등록
+     * @param certImageInfo 인증사진이 속한 Challenge 아이디와 인증사진 경로
+     * @param loginMember 로그인한 사람의 이메일 정보를 가져오기위한 인자값
+     * TODO
+     * 챌린지 참여인원인지 판단하는 로직 추가
+     */
+    public Challenge createCertImage(Challenge certImageInfo, Member loginMember) {
+
+        return null;
     }
 
     public Challenge getChallenge(Long challengeId) {
@@ -97,8 +119,6 @@ public class ChallengeService {
         return saveChallenge(challenge);
     }
 
-
-
     private Challenge findChallengeById(Long challengeId){
         return verifyChallengeById(challengeId);
     }
@@ -111,7 +131,6 @@ public class ChallengeService {
         return challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
-
 
 
 }

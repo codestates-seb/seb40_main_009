@@ -77,11 +77,11 @@ public class Challenge extends TimeAudit {
     private String challengeRepImagePath;
 
     @Setter
-    private String challengeExamImagePath="예시사진";
+    private String challengeExamImagePath;
 
     //이미지 중 챌린지 참여자가 추가할 사진 필드
     @Setter
-    private String challengeCertImagePath="인증사진";
+    private String challengeCertImagePath;
 
     //챌린지 생성시 challengeId를 받아 올수 없기때문에 대체용으로 사용
     @Setter
@@ -111,11 +111,12 @@ public class Challenge extends TimeAudit {
         this.challengeCurrentParty = 0;
         this.challengeTotalReward = 0;
 
-        this.challengeRepImagePath="대표사진";
-        this.challengeExamImagePath = "인증사진";
+        this.challengeRepImagePath=challengeRepImagePath;
+        this.challengeExamImagePath = challengeExamImagePath;
         this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
-    }
 
+        this.challengeCertImagePath = challengeCertImagePath;
+    }
 
     //TODO: 유현님이 맴버테이블만들면 추후에 OneToMany로 서로간의 맵핑을해야합니다^^
 

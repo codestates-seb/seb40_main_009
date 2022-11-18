@@ -54,21 +54,29 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public ChallengeRepImage findByImageTypeAndChallengeRepId(String imageType, String randomIdForImage) {
+    public ChallengeRepImage findByImageTypeAndChallengeRep(String imageType, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeRepImage)
                 .where(challengeRepImage.imageType.eq(imageType)
                         .and(challengeRepImage.randomIdForImage.eq(randomIdForImage)))
                 .fetchOne();
     }
-
     @Override
-    public List<ChallengeExamImage> findByImageTypeAndChallengeExamId(String imageType, String randomIdForImage) {
+    public List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType,String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeExamImage)
                 .where(challengeExamImage.imageType.eq(imageType)
                         .and(challengeExamImage.randomIdForImage.eq(randomIdForImage)))
                 .fetch();
+    }
+    @Override
+    public ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType,String imagePath, String randomIdForImage) {
+        return queryFactory
+                .selectFrom(challengeExamImage)
+                .where(challengeExamImage.imageType.eq(imageType)
+                        .and(challengeExamImage.imagePath.eq(imagePath))
+                        .and(challengeExamImage.randomIdForImage.eq(randomIdForImage)))
+                .fetchOne();
     }
 
     @Override
