@@ -141,4 +141,34 @@ public class ImageService {
 
         return changeImagePath;
     }
+
+    public String patchChallengeCertImage(Challenge challenge, Member loginMember) {
+        ChallengeCertImage challengeCertImage =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        if (challengeCertImage == null) {
+            throw new BusinessLogicException(ExceptionCode.POSSIBLE_CHANGE_CHALLENGE_CERT_IMAGE_NOT_EXIST);
+        }
+        if (challengeCertImage.getImagePath().equals(challenge.getChallengeCertImagePath())) {
+            imageRepository.delete(challengeCertImage);
+        } else {
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            imageRepository.save(challengeCertImage);
+        }
+        List<ChallengeCertImage> challengeCertImages =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertId("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        String changeImagePath = "";
+        for (ChallengeCertImage certImage : challengeCertImages) {
+            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
+            log.info("imagePath={}",changeImagePath);
+        }
+
+        return changeImagePath;
+    }
+
+    //ReviewImage 부분 코드======================================
+
 }

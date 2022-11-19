@@ -20,7 +20,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
 
-    Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
+    Challenge certDtoToChallenge(ChallengeDto.Cert cert);
 
     /**
      * 챌린지 생성 mapping

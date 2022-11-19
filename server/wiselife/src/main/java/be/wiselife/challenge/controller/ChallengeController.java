@@ -72,11 +72,11 @@ public class ChallengeController {
      * 응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
     @PostMapping("/cert")
-    public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.CertPost certPost,
+    public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
                                                   HttpServletRequest request) {
-        String followerEmail = jwtTokenizer.getEmailWithToken(request);
-        Member loginMember = memberService.findMemberByEmail(followerEmail);
-        Challenge certImageInfo = challengeMapper.certPostDtoToChallenge(certPost);
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
+        Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
         Challenge challenge = challengeService.createCertImage(certImageInfo, loginMember);
 
@@ -84,8 +84,18 @@ public class ChallengeController {
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
     }
 
+    @PatchMapping("/cert")
+    public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
+                                                   HttpServletRequest request) {
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
+        Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
+        Challenge challenge = challengeService.updateCertImage(certImageInfo, loginMember);
 
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
+    }
 
 
     /**
@@ -97,8 +107,7 @@ public class ChallengeController {
      * 3) 동일한 사용자의 조회수 중복 증가 방지 기능
      * */
     @GetMapping("/{challenge-id}")
-    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId){
-
+    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
         //jwt 토큰으로 멤버 email 받아오는 기능 추가해야
 
         Challenge challenge = challengeService.getChallenge(challengeId); //챌린지 찾기

@@ -93,7 +93,21 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetch();
     }
 
-   /**
+    @Override
+    public ChallengeCertImage findByImageTypeAndMemberIdAndChallengeCertIdPatch(String imageType, Long memberId, String randomIdForImage) {
+        LocalDate now = LocalDate.now();
+        return queryFactory
+                .selectFrom(challengeCertImage)
+                .where(challengeCertImage.imageType.eq(imageType)
+                        .and(challengeCertImage.memberId.eq(memberId))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
+                        .and(challengeCertImage.createDay.eq(now))
+                        .and(challengeCertImage.created_at.minute().eq(LocalDateTime.now().getMinute())))
+                .orderBy(challengeCertImage.created_at.desc())
+                .fetchOne();
+    }
+
+    /**
      * @return 오더테이블에서 맴버아이디를 기반으로 성공한 결재내역만 보이게 출력
      */
     @Override

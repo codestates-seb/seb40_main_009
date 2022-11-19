@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @DiscriminatorValue("CCI")
@@ -17,4 +19,5 @@ public class ChallengeCertImage extends Image {
     private String randomIdForImage;
 
     private Long memberId;
+
 }

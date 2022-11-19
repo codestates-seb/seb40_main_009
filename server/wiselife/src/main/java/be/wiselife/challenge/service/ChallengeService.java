@@ -105,13 +105,21 @@ public class ChallengeService {
         return challengeRepository.save(challenge);
     }
 
+    public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
+        Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
+        challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
+
+        String certImagePath= imageService.patchChallengeCertImage(challenge, loginMember);
+        challenge.setChallengeCertImagePath(certImagePath);
+        return challengeRepository.save(challenge);
+    }
+
     public Challenge getChallenge(Long challengeId) {
         return findChallengeById(challengeId);
     }
 
     public void deleteChallenge(Long challengeId) {
         challengeRepository.delete(findChallengeById(challengeId));
-
     }
 
     /**
@@ -135,6 +143,7 @@ public class ChallengeService {
         return challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
+
 
 
 }

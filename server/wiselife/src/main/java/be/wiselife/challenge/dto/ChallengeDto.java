@@ -195,7 +195,7 @@ public class ChallengeDto {
      * 인증 사진 등록 정보를 받아줄 DTO
      */
     @Getter
-    public static class CertPost {
+    public static class Cert {
         @NotNull
         private Long challengeId;
 
