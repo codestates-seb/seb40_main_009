@@ -1,6 +1,7 @@
 package be.wiselife.image.service;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.entity.*;
@@ -171,7 +172,7 @@ public class ImageService {
 
     public String getChallengeCertImage(Challenge challenge, Member loginMember) {
         List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdGet("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
         String changeImagePath = "";
@@ -184,5 +185,22 @@ public class ImageService {
     }
 
     //ReviewImage 부분 코드======================================
+    public void patchReviewImage(ChallengeReview review) {
+        ReviewImage reviewImageFromRepository =
+                imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
+        if (reviewImageFromRepository == null) {
+            log.info("imagepath={}",review.getChallengeReviewImagePath());
+            ReviewImage reviewImage = new ReviewImage();
+            saveReviewImage(review, reviewImage);
+        } else {
+            saveReviewImage(review, reviewImageFromRepository);
+        }
+    }
 
+    // MemberImage 중복코드 줄이는 용도
+    private void saveReviewImage(ChallengeReview review, ReviewImage reviewImage) {
+        reviewImage.setImagePath(review.getChallengeReviewImagePath());
+        reviewImage.setRandomIdForImage(review.getReviewRandomId());
+        imageRepository.save(reviewImage);
+    }
 }

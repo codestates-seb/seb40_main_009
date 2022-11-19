@@ -1,5 +1,6 @@
 package be.wiselife.quesrydslrepo;
 
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
@@ -42,15 +43,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .selectFrom(memberImage)
                 .where(memberImage.imageType.eq(imageType)
                         .and(memberImage.memberId.eq(memberId)))
-                .fetchOne();
-    }
-
-    @Override
-    public ReviewImage findByImageTypeAndReviewId(String imageType, Long reviewId) {
-        return queryFactory
-                .selectFrom(reviewImage)
-                .where(reviewImage.imageType.eq(imageType)
-                        .and(reviewImage.reviewId.eq(reviewId)))
                 .fetchOne();
     }
 
@@ -116,6 +108,15 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
                 .orderBy(challengeCertImage.created_at.desc())
                 .fetch();
+    }
+
+    @Override
+    public ReviewImage findByImageTypeAndReviewImageId(String imageType, String randomIdForImage) {
+        return queryFactory
+                .selectFrom(reviewImage)
+                .where(reviewImage.imageType.eq(imageType)
+                        .and(reviewImage.randomIdForImage.eq(randomIdForImage)))
+                .fetchOne();
     }
 
     /**

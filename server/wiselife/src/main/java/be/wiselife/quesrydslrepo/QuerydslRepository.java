@@ -1,6 +1,7 @@
 package be.wiselife.quesrydslrepo;
 
 
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
@@ -14,7 +15,6 @@ import java.util.List;
 public interface QuerydslRepository {
     Follow findByFollowerIdAndFollowing(Long followingId, Member follower);
     MemberImage findByImageTypeAndMemberId(String imageType, Long memberId);
-    ReviewImage findByImageTypeAndReviewId(String imageType, Long reviewId);
     ChallengeRepImage findByImageTypeAndChallengeRep(String imageType, String randomIdForImage);
     List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType, String randomIdForImage);
 
@@ -29,6 +29,9 @@ public interface QuerydslRepository {
 
     // 챌린지 참여자가 챌린지를 봤을때
     List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdGet(String imageType, Long memberId, String randomIdForImage);
+
+    // 리뷰 이미지 등록 및 수정 할때
+    ReviewImage findByImageTypeAndReviewImageId(String imageType, String randomIdForImage);
 
     List<Order> findByMemberId(Member member);
 

@@ -1,5 +1,6 @@
 package be.wiselife.challengereview.service;
 
+import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengereview.repository.ChallengeReviewRepository;
@@ -35,11 +36,16 @@ public class ChallengeReviewService {
 
         challengeReview.setMember(memberService.findMemberById(memberId));
         challengeReview.setChallenge(challengeService.getChallenge(challengeId));
-        return saveChallengeReview(challengeReview);
-    }
+        /**
+         * 작성자 : 유현
+         * 리뷰 이미지 등록시 사용하는 로직
+         */
+        if (!Optional.ofNullable(challengeReview.getChallengeReviewImagePath()).isEmpty()) {
+            imageService.patchReviewImage(challengeReview);
+            challengeReview.setChallengeReviewImagePath(challengeReview.getChallengeReviewImagePath());
+        }
 
-    public ChallengeReview getChallengeReview(Long challengeReviewId) {
-        return findVerifiedChallengeReviewById(challengeReviewId);
+        return saveChallengeReview(challengeReview);
     }
 
     public ChallengeReview updateChallengeReview(ChallengeReview changedChallengeReview, String tryingMemberEmail) {
@@ -58,8 +64,19 @@ public class ChallengeReviewService {
                 .ifPresent(savedChallengeReview::setChallengeReviewStar);
         Optional.ofNullable(changedChallengeReview.getChallengeReviewImagePath())
                 .ifPresent(savedChallengeReview::setChallengeReviewImagePath);
-
+        /**
+         * 작성자 : 유현
+         * 리뷰 이미지 등록시 사용하는 로직
+         */
+        if (!Optional.ofNullable(changedChallengeReview.getChallengeReviewImagePath()).isEmpty()) {
+            savedChallengeReview.setChallengeReviewImagePath(changedChallengeReview.getChallengeReviewImagePath());
+            imageService.patchReviewImage(savedChallengeReview);
+        }
         return saveChallengeReview(savedChallengeReview);
+    }
+
+    public ChallengeReview getChallengeReview(Long challengeReviewId) {
+        return findVerifiedChallengeReviewById(challengeReviewId);
     }
 
     private ChallengeReview findVerifiedChallengeReviewById(Long challengeReviewId){

@@ -92,7 +92,7 @@ public class Challenge extends TimeAudit {
                      String challengeDescription, int challengeMaxParty, int challengeMinParty,
                      int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate,
                      String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
-                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath, String randomIdForImage) {
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath) {
         this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
