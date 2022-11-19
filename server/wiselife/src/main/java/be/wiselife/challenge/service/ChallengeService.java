@@ -71,14 +71,21 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
-        // 대표 이미지 수정시 사용하는 로직
+        /**
+         * 작성자 : 유현
+         * 대표 이미지 수정시 사용하는 로직
+         */
+
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             imageService.patchChallengeRepImage(changedChallenge);
             existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
         }
 
-        // 예시 이미지 수정시 사용하는 로직
+        /**
+         * 작성자 : 유현
+         * 예시 이미지 수정시 사용하는 로직
+         */
         if (!Optional.ofNullable(changedChallenge.getChallengeExamImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             String challengeExamImagePaths=imageService.patchChallengeExamImage(changedChallenge);
@@ -90,6 +97,7 @@ public class ChallengeService {
     }
 
     /**
+     * 작성자 : 유현
      * 인증사진 등록
      * @param certImageInfo 인증사진이 속한 Challenge 아이디와 인증사진 경로
      * @param loginMember 로그인한 사람의 이메일 정보를 가져오기위한 인자값
@@ -105,6 +113,7 @@ public class ChallengeService {
         return challengeRepository.save(challenge);
     }
 
+    // 작성자 : 유현
     public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
         Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
         challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
@@ -114,9 +123,26 @@ public class ChallengeService {
         return challengeRepository.save(challenge);
     }
 
+    /**
+     * 작성자 : 유현
+     * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
+     * 로그인 된 유저가 아닐시 인증사진은 안나오게
+     * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게
+     * TODO: 로그인 된 유저 중에 이 챌린지에 참여중인 멤버가 맞는지 판단 로직 필요
+     */
+    public Challenge getCertification(Challenge certImageInfo,Member loginMember) {
+
+        String certImagePath = imageService.getChallengeCertImage(certImageInfo, loginMember);
+
+        certImageInfo.setChallengeCertImagePath(certImagePath);
+        return certImageInfo;
+    }
+
     public Challenge getChallenge(Long challengeId) {
         return findChallengeById(challengeId);
     }
+
+
 
     public void deleteChallenge(Long challengeId) {
         challengeRepository.delete(findChallengeById(challengeId));
@@ -131,7 +157,7 @@ public class ChallengeService {
         return saveChallenge(challenge);
     }
 
-    private Challenge findChallengeById(Long challengeId){
+    public Challenge findChallengeById(Long challengeId){
         return verifyChallengeById(challengeId);
     }
 

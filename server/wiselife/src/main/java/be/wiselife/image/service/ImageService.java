@@ -130,7 +130,7 @@ public class ImageService {
         imageRepository.save(challengeCertImage);
 
         List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndMemberIdAndChallengeCertId("CCI",
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
         String changeImagePath = "";
@@ -157,7 +157,21 @@ public class ImageService {
             imageRepository.save(challengeCertImage);
         }
         List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndMemberIdAndChallengeCertId("CCI",
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        String changeImagePath = "";
+        for (ChallengeCertImage certImage : challengeCertImages) {
+            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
+            log.info("imagePath={}",changeImagePath);
+        }
+
+        return changeImagePath;
+    }
+
+    public String getChallengeCertImage(Challenge challenge, Member loginMember) {
+        List<ChallengeCertImage> challengeCertImages =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
         String changeImagePath = "";

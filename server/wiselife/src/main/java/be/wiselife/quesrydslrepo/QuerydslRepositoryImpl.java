@@ -81,7 +81,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertId(String imageType, Long memberId, String randomIdForImage) {
+    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdPost(String imageType, Long memberId, String randomIdForImage) {
         LocalDate now = LocalDate.now();
         return queryFactory
                 .selectFrom(challengeCertImage)
@@ -105,6 +105,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                         .and(challengeCertImage.created_at.minute().eq(LocalDateTime.now().getMinute())))
                 .orderBy(challengeCertImage.created_at.desc())
                 .fetchOne();
+    }
+
+    @Override
+    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdGet(String imageType, Long memberId, String randomIdForImage) {
+        return queryFactory
+                .selectFrom(challengeCertImage)
+                .where(challengeCertImage.imageType.eq(imageType)
+                        .and(challengeCertImage.memberId.eq(memberId))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
+                .orderBy(challengeCertImage.created_at.desc())
+                .fetch();
     }
 
     /**

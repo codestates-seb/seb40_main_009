@@ -182,12 +182,19 @@ public class ChallengeDto {
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
 
+        @Setter
+        private List<String> challengeExamImagePath;
+
+        @Setter
+        private List<String> challengeCertImagePath;
+
+        @Setter
+        private int certCount;
+
         /*챌린지 댓글 리스트 */
         @Setter
         private List<ChallengeTalkDto.response> challengeTalks;
 
-        @Setter
-        private List<String> challengeExamImagePath;
 
     }
 

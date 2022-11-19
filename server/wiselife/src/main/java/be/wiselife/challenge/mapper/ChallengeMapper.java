@@ -206,6 +206,30 @@ public interface ChallengeMapper {
                 }
                 detailResponse.challengeTalks(challengeTalkResponseDtoList);
             }
+            /**
+             * 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
+             */
+            String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
+            List<String> challengeExamImagePathList = new ArrayList<>();
+            for (String imagePath : challengeExamImagePaths) {
+                challengeExamImagePathList.add(imagePath);
+            }
+            detailResponse.challengeExamImagePath(challengeExamImagePathList);
+
+            /**
+             * 프론트에 응답할때는 challengeCertImagePath를 리스트 형태로 준다.
+             */
+            if (!(challenge.getChallengeCertImagePath() == null)) {
+                String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
+                List<String> challengeCertImagePathList = new ArrayList<>();
+                int certCount = 0;
+                for (String imagePath : challengeCertImagePaths) {
+                    challengeCertImagePathList.add(imagePath);
+                    certCount++;
+                }
+                detailResponse.challengeCertImagePath(challengeCertImagePathList);
+                detailResponse.certCount(certCount);
+            }
 
         }
         return detailResponse.build();
