@@ -3,7 +3,7 @@ import * as S from '../../style/Main/SlideStyle';
 import Header from '../Common/Header';
 
 const bogliasco = 'https://i.imgur.com/Gu5Cznz.jpg';
-const countyClare = 'https://i.imgur.com/idjXzVQ.jpg';
+// const countyClare = 'https://i.imgur.com/idjXzVQ.jpg';
 const craterRock = 'https://i.imgur.com/8DYumaY.jpg';
 const giauPass = 'https://i.imgur.com/8IuucQZ.jpg';
 
