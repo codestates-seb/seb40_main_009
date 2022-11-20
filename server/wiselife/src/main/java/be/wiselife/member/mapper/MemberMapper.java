@@ -1,8 +1,10 @@
 package be.wiselife.member.mapper;
 
+import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -44,6 +46,9 @@ public interface MemberMapper {
         //멤버에 팔로워 정보뜨게 추가
         memberDetailResponse.setFollowers(followersToFollowResponseDto(member.getFollows()));
         memberDetailResponse.setFollowStatus(member.getFollowStatus());
+
+        //참여중인 챌린지 정보뜨게 추가
+        memberDetailResponse.setParticipatingChallenge(memberChallengeToMemberChallengeResponseDto(member.getMemberChallenges()));
         return memberDetailResponse;
     }
 
@@ -73,4 +78,20 @@ public interface MemberMapper {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    default List<MemberDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+        return memberChallenges
+                .stream()
+                .map(memberChallenge -> MemberDto.MemberChallengeResponseDto
+                        .builder()
+                        .memberChallengeId(memberChallenge.getMemberChallengeId())
+                        .challengeId(memberChallenge.getChallenge().getChallengeId())
+                        .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
+                        .memberSuccessDay((int)memberChallenge.getMemberSuccessDay())
+                        .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
+                        .objectPeriod(memberChallenge.getChallenge().getChallengeEndDate().getDayOfYear()-memberChallenge.getChallenge().getChallengeStartDate().getDayOfYear())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
+

@@ -47,6 +47,7 @@ public class MemberDto {
         private int followerCount;
         private List<MemberFollowerResponseDto> followers;
         private Member.FollowStatus followStatus;
+        private List<MemberChallengeResponseDto> participatingChallenge;
 
         public void setHasRedCard(boolean hasRedCard) {
             this.hasRedCard = hasRedCard;
@@ -76,5 +77,19 @@ public class MemberDto {
         private String followerName;
         private boolean followStatus;
     }
-    //맴버리스판스 디티오를 추가 > 리스트로 넘기고 >>
+    /**
+     * 참여한 챌린지에 대한 정보를 선별해주는 dto
+     */
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberChallengeResponseDto {
+        private Long memberChallengeId;
+        private Long challengeId;
+        private String challengeTitle;
+        private int memberSuccessDay;
+        private int objectPeriod;
+        private double memberChallengeSuccessRate;
+    }
 }
