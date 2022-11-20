@@ -8,5 +8,10 @@ export const createChallenge = atom({
 
 export const createNumber = atom({
   key: 'addNumber',
-  default: 0,
+  default: 1,
+});
+
+export const validBtn = atom({
+  key: 'validBtn',
+  default: false,
 });
