@@ -22,17 +22,26 @@ import SlideBanner from '../components/Main/SlideBanner';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Loading from '../components/Loading/Loading';
 
 function MainPage() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState([]);
 
   // 유저조회
   useEffect(() => {
-    axios.get(`http://localhost:3001/member?page=1&size=7`).then((res) => {
-      setUser(res.data.data);
-      console.log('user>>>', user);
-    });
+    axios
+      .get(`http://localhost:3001/member?page=1&size=7`)
+      .then((res) => {
+        setUser(res.data.data);
+        setLoading(false);
+        console.log('user>>>', user);
+      })
+      .catch((error) => {
+        window.alert(error);
+        console.log('error', error);
+      });
   }, []);
 
   // 챌린지 리스트페이지로 이동
@@ -42,6 +51,7 @@ function MainPage() {
 
   return (
     <S.MainContainer>
+      {loading ? <Loading /> : null}
       {/* 스크롤 시작 */}
       <ScrollContainer snap="none">
         {/* 슬라이드 */}
