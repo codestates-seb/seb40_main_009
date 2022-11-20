@@ -1,9 +1,11 @@
 package be.wiselife.quesrydslrepo;
 
+import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import static be.wiselife.image.entity.QReviewImage.*;
 import static be.wiselife.image.entity.QChallengeRepImage.*;
 import static be.wiselife.image.entity.QChallengeExamImage.*;
 import static be.wiselife.image.entity.QChallengeCertImage.*;
+import static be.wiselife.memberchallenge.entity.QMemberChallenge.*;
 
 import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.order.entity.QOrder.order;
@@ -35,9 +38,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
- 
-    
-     @Override
+    @Override
+    public MemberChallenge findByChallengeIdAndMember(String challengeId, Member member) {
+
+        return queryFactory
+                .selectFrom(memberChallenge)
+                .where(memberChallenge.challenge.randomIdForImage.eq(challengeId)
+                        .and(memberChallenge.member.eq(member)))
+                .fetchOne();
+    }
+
+    @Override
     public MemberImage findByImageTypeAndMemberId(String imageType, Long memberId) {
         return queryFactory
                 .selectFrom(memberImage)

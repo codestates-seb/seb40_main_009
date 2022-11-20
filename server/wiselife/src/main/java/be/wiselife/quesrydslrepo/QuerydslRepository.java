@@ -1,10 +1,12 @@
 package be.wiselife.quesrydslrepo;
 
 
+import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 
 public interface QuerydslRepository {
     Follow findByFollowerIdAndFollowing(Long followingId, Member follower);
+
+    MemberChallenge findByChallengeIdAndMember(String challengeId, Member member);
     MemberImage findByImageTypeAndMemberId(String imageType, Long memberId);
     ChallengeRepImage findByImageTypeAndChallengeRep(String imageType, String randomIdForImage);
     List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType, String randomIdForImage);

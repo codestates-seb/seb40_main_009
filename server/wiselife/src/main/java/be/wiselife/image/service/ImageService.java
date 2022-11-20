@@ -189,7 +189,6 @@ public class ImageService {
         ReviewImage reviewImageFromRepository =
                 imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
         if (reviewImageFromRepository == null) {
-            log.info("imagepath={}",review.getChallengeReviewImagePath());
             ReviewImage reviewImage = new ReviewImage();
             saveReviewImage(review, reviewImage);
         } else {

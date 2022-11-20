@@ -6,6 +6,7 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
+import be.wiselife.memberchallenge.service.MemberChallengeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,23 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final ImageService imageService;
 
+    private final MemberChallengeService memberChallengeService;
 
-    public ChallengeService(ChallengeRepository challengeRepository, ImageService imageService) {
+
+    public ChallengeService(ChallengeRepository challengeRepository,
+                            ImageService imageService,
+                            MemberChallengeService memberChallengeService) {
 
         this.challengeRepository = challengeRepository;
         this.imageService = imageService;
+        this.memberChallengeService = memberChallengeService;
     }
 
-    public Challenge createChallenge(Challenge challenge){
+    public Challenge createChallenge(Challenge challenge,Member loginMember){
+        challenge.setCreate_by_member(loginMember.getMemberName());
         imageService.patchChallengeRepImage(challenge);
         imageService.postChallengeExamImage(challenge);
+        challenge=participateChallenge(challenge, loginMember);
         return saveChallenge(challenge);
     }
     /**
@@ -94,6 +102,17 @@ public class ChallengeService {
 
 
         return saveChallenge(existingChallenge);
+    }
+
+    /**
+     * 챌린지에는 참여인원에 대한 정보를 제공
+     * 멤버에는 참여중, 참여했던 챌린지에 대한 정보를 제공
+     * @param loginMember 현재 로그인한 유저
+     * @param challenge 현재 참여하고자 하는 챌린지
+     * @return challenge 참가했을때 잘 참여됐는지 즉시 확인가능
+     */
+    public Challenge participateChallenge(Challenge challenge,Member loginMember) {
+        return memberChallengeService.postMemberAndChallenge(challenge,loginMember);
     }
 
     /**

@@ -39,7 +39,7 @@ public class MemberDto {
         private int memberExp=0;
         private Member.MemberBadge memberBadge;
         private boolean hasRedCard;
-        private int memberChallengeTotalCount;
+        private int memberChallengeTryCount;
         private int memberChallengeSuccessCount;
         private double memberChallengePercentage;
         private double memberMoney;
@@ -76,6 +76,5 @@ public class MemberDto {
         private String followerName;
         private boolean followStatus;
     }
-
     //맴버리스판스 디티오를 추가 > 리스트로 넘기고 >>
 }

@@ -3,9 +3,7 @@ package be.wiselife.challenge.dto;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -173,6 +171,7 @@ public class ChallengeDto {
         /*멤버챌린지 테이블의 정보와 합쳐 별도로 계산이 필요한 값들*/
         private int averageChallengeSuccessRate;
 
+        //현재 챌린지 성공률
         private int currentUserSuccessRate;
 
         private LocalDateTime created_at;
@@ -181,6 +180,10 @@ public class ChallengeDto {
 
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
+
+        //참여중인 멤버 리스트
+        @Setter
+        private List<MemberChallengeResponseDto> participatingMember;
 
         @Setter
         private List<String> challengeExamImagePath;
@@ -196,8 +199,23 @@ public class ChallengeDto {
         private List<ChallengeTalkDto.response> challengeTalks;
 
 
+
     }
 
+    /**
+     * 챌린지 참가자에 대한 정보를 선별해주는 dto
+     */
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberChallengeResponseDto {
+        private Long memberChallengeId;
+        private Long challengeId;
+        private String participatingMemberName;
+        private int memberSuccessDay;
+        private double memberChallengeSuccessRate;
+    }
     /**
      * 인증 사진 등록 정보를 받아줄 DTO
      */

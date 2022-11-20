@@ -38,10 +38,13 @@ public class ChallengeController {
 
     /*챌린지 생성*/
     @PostMapping
-    public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto){
+    public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto,
+                                        HttpServletRequest request){
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
-        challenge =  challengeService.createChallenge(challenge);
+        challenge =  challengeService.createChallenge(challenge,loginMember);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
@@ -62,6 +65,20 @@ public class ChallengeController {
                 , HttpStatus.OK);
     }
 
+    @PostMapping("/participate/{challengeId}")
+    public ResponseEntity postMemberAndChallenge(@PathVariable("challengeId") @Positive Long challengeId,
+                                                 HttpServletRequest request) {
+
+        Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
+
+        Challenge challenge = challengeService.participateChallenge(challengeFromRepository,loginMember);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeMapper.
+                        challengeToChallengeDetailResponseDto(challenge,challengeTalkMapper,memberService)),
+                HttpStatus.CREATED);
+    }
 
     /**
      * 작성자 : 유현
@@ -135,6 +152,7 @@ public class ChallengeController {
         challenge = challengeService.updateViewCount(challenge);
         if (request.getHeader("Authorization")==null) {
             challenge.setChallengeCertImagePath("");
+            //TODO: simpleResponseDto로 변경 필요
             ChallengeDto.DetailResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
             return new ResponseEntity<>(
