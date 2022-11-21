@@ -1,12 +1,16 @@
 package be.wiselife.quesrydslrepo;
 
+import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +20,7 @@ import static be.wiselife.image.entity.QReviewImage.*;
 import static be.wiselife.image.entity.QChallengeRepImage.*;
 import static be.wiselife.image.entity.QChallengeExamImage.*;
 import static be.wiselife.image.entity.QChallengeCertImage.*;
+import static be.wiselife.memberchallenge.entity.QMemberChallenge.*;
 
 import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.order.entity.QOrder.order;
@@ -33,23 +38,22 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
- 
-    
-     @Override
+    @Override
+    public MemberChallenge findByChallengeIdAndMember(String challengeId, Member member) {
+
+        return queryFactory
+                .selectFrom(memberChallenge)
+                .where(memberChallenge.challenge.randomIdForImage.eq(challengeId)
+                        .and(memberChallenge.member.eq(member)))
+                .fetchOne();
+    }
+
+    @Override
     public MemberImage findByImageTypeAndMemberId(String imageType, Long memberId) {
         return queryFactory
                 .selectFrom(memberImage)
                 .where(memberImage.imageType.eq(imageType)
                         .and(memberImage.memberId.eq(memberId)))
-                .fetchOne();
-    }
-
-    @Override
-    public ReviewImage findByImageTypeAndReviewId(String imageType, Long reviewId) {
-        return queryFactory
-                .selectFrom(reviewImage)
-                .where(reviewImage.imageType.eq(imageType)
-                        .and(reviewImage.reviewId.eq(reviewId)))
                 .fetchOne();
     }
 
@@ -80,15 +84,53 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public List<ChallengeCertImage> findByImageTypeAndChallengeCertId(String imageType, Long challengeId) {
+    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdPost(String imageType, Long memberId, String randomIdForImage) {
+        LocalDate now = LocalDate.now();
         return queryFactory
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
-                        .and(challengeCertImage.challengeId.eq(challengeId)))
+                        .and(challengeCertImage.memberId.eq(memberId))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
+                        .and(challengeCertImage.createDay.eq(now)))
+                .orderBy(challengeCertImage.created_at.desc())
                 .fetch();
     }
 
-   /**
+    @Override
+    public ChallengeCertImage findByImageTypeAndMemberIdAndChallengeCertIdPatch(String imageType, Long memberId, String randomIdForImage) {
+        LocalDate now = LocalDate.now();
+        return queryFactory
+                .selectFrom(challengeCertImage)
+                .where(challengeCertImage.imageType.eq(imageType)
+                        .and(challengeCertImage.memberId.eq(memberId))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
+                        .and(challengeCertImage.createDay.eq(now))
+                        .and(challengeCertImage.created_at.minute().eq(LocalDateTime.now().getMinute())))
+                .orderBy(challengeCertImage.created_at.desc())
+                .fetchOne();
+    }
+
+    @Override
+    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdGet(String imageType, Long memberId, String randomIdForImage) {
+        return queryFactory
+                .selectFrom(challengeCertImage)
+                .where(challengeCertImage.imageType.eq(imageType)
+                        .and(challengeCertImage.memberId.eq(memberId))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
+                .orderBy(challengeCertImage.created_at.desc())
+                .fetch();
+    }
+
+    @Override
+    public ReviewImage findByImageTypeAndReviewImageId(String imageType, String randomIdForImage) {
+        return queryFactory
+                .selectFrom(reviewImage)
+                .where(reviewImage.imageType.eq(imageType)
+                        .and(reviewImage.randomIdForImage.eq(randomIdForImage)))
+                .fetchOne();
+    }
+
+    /**
      * @return 오더테이블에서 맴버아이디를 기반으로 성공한 결재내역만 보이게 출력
      */
     @Override

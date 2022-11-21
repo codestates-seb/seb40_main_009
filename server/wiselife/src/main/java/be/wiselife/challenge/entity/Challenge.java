@@ -1,7 +1,9 @@
 package be.wiselife.challenge.entity;
 
 import be.wiselife.audit.TimeAudit;
+import be.wiselife.audit.WriterAudit;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -16,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Challenge extends TimeAudit {
+public class Challenge extends WriterAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +35,10 @@ public class Challenge extends TimeAudit {
     @Column(nullable = false)
     @Setter
     private String challengeDescription;
+
+    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
     @Setter
-    private int challengeCurrentParty;
+    private double challengeCurrentParty;
     @Setter
     private int challengeMaxParty;
     @Setter
@@ -66,10 +70,14 @@ public class Challenge extends TimeAudit {
     @Setter
     private Boolean isClosed;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
     private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
+
+    //챌린지 진행 현황 관련 필드
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
 
     //이미지 중 챌린지 생성자가 추가할 사진 필드
@@ -87,12 +95,16 @@ public class Challenge extends TimeAudit {
     @Setter
     private String randomIdForImage;
 
+    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
+    @Setter
+    private double challengeSuccessCount=0;
+
     @Builder
     public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
                      String challengeDescription, int challengeMaxParty, int challengeMinParty,
                      int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate,
                      String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
-                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath, String randomIdForImage) {
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath) {
         this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
@@ -117,8 +129,6 @@ public class Challenge extends TimeAudit {
 
         this.challengeCertImagePath = challengeCertImagePath;
     }
-
-    //TODO: 유현님이 맴버테이블만들면 추후에 OneToMany로 서로간의 맵핑을해야합니다^^
 
     /**
      * 챌린지 댓글 추가

@@ -2,7 +2,6 @@ package be.wiselife.challengetalk.entity;
 
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.challenge.entity.Challenge;
-import be.wiselife.challenge.entity.QChallenge;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 

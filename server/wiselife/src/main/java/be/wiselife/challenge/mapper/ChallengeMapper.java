@@ -4,8 +4,11 @@ import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
+import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.ChallengeExamImage;
+import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.service.MemberService;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import org.mapstruct.Mapper;
 
 import be.wiselife.challenge.entity.Challenge;
@@ -14,16 +17,15 @@ import org.mapstruct.ReportingPolicy;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
 
-    Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
-    
-    /*챌린지 생성 mapping*/
-    ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge);
+    Challenge certDtoToChallenge(ChallengeDto.Cert cert);
 
     /**
      * 챌린지 생성 mapping
@@ -123,7 +125,7 @@ public interface ChallengeMapper {
         simpleResponse.setChallengeCategory( challenge.getChallengeCategory() );
         simpleResponse.setChallengeTitle( challenge.getChallengeTitle() );
         simpleResponse.setChallengeDescription( challenge.getChallengeDescription() );
-        simpleResponse.setChallengeCurrentParty( challenge.getChallengeCurrentParty() );
+        simpleResponse.setChallengeCurrentParty((int)Math.round(challenge.getChallengeCurrentParty()));
         simpleResponse.setChallengeMaxParty( challenge.getChallengeMaxParty() );
         simpleResponse.setChallengeMinParty( challenge.getChallengeMinParty() );
         simpleResponse.setChallengeStartDate( challenge.getChallengeStartDate() );
@@ -138,15 +140,31 @@ public interface ChallengeMapper {
         simpleResponse.setCreated_at( challenge.getCreated_at() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
         simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );
-        // 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
-        // 현재는 응답에 안나오는 것에 대해 영운님께 질문드리기
-        // simplereponse에 들어갈 내용
-        String[] imagePaths = challenge.getChallengeExamImagePath().split(",");
-        List<String> challengeExamImagePaths = new ArrayList<>();
-        for (String imagePath : imagePaths) {
-            challengeExamImagePaths.add(imagePath);
+
+        /**
+         * 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
+         */
+        String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
+        List<String> challengeExamImagePathList = new ArrayList<>();
+        for (String imagePath : challengeExamImagePaths) {
+            challengeExamImagePathList.add(imagePath);
         }
-        simpleResponse.setChallengeExamImagePath(challengeExamImagePaths);
+        simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
+
+        /**
+         * 프론트에 응답할때는 challengeCertImagePath를 리스트 형태로 준다.
+         */
+        if (!(challenge.getChallengeCertImagePath() == null)) {
+            String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
+            List<String> challengeCertImagePathList = new ArrayList<>();
+            int certCount = 0;
+            for (String imagePath : challengeCertImagePaths) {
+                challengeCertImagePathList.add(imagePath);
+                certCount++;
+            }
+            simpleResponse.setChallengeCertImagePath(challengeCertImagePathList);
+            simpleResponse.setCertCount(certCount);
+        }
         return simpleResponse;
     }
 
@@ -165,7 +183,7 @@ public interface ChallengeMapper {
             detailResponse.challengeCategory( challenge.getChallengeCategory() );
             detailResponse.challengeTitle( challenge.getChallengeTitle() );
             detailResponse.challengeDescription( challenge.getChallengeDescription() );
-            detailResponse.challengeCurrentParty( challenge.getChallengeCurrentParty() );
+            detailResponse.challengeCurrentParty((int)Math.round(challenge.getChallengeCurrentParty()));
             detailResponse.challengeMaxParty( challenge.getChallengeMaxParty() );
             detailResponse.challengeMinParty( challenge.getChallengeMinParty() );
             detailResponse.challengeStartDate( challenge.getChallengeStartDate() );
@@ -179,6 +197,10 @@ public interface ChallengeMapper {
             detailResponse.isClosed( challenge.getIsClosed() );
             detailResponse.created_at( challenge.getCreated_at() );
             detailResponse.updated_at( challenge.getUpdated_at() );
+
+            // 챌린지 참가자에 대한 정보를 응답할 수 있게 detailResponse 필드에 등록해야함
+            detailResponse.participatingMember(memberChallengeToMemberChallengeResponseDto(challenge.getMemberChallenges()));
+
             /*
             * 챌린지 댓글을 챌린지 ResponseDto로 변환
             * 챌린지 자체는 memberId를 저장하기에 이를 실제 화면상 보이는 memberName으로 보여줘야 하기에
@@ -191,8 +213,45 @@ public interface ChallengeMapper {
                 }
                 detailResponse.challengeTalks(challengeTalkResponseDtoList);
             }
+            /**
+             * 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
+             */
+            String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
+            List<String> challengeExamImagePathList = new ArrayList<>();
+            for (String imagePath : challengeExamImagePaths) {
+                challengeExamImagePathList.add(imagePath);
+            }
+            detailResponse.challengeExamImagePath(challengeExamImagePathList);
 
+            /**
+             * 프론트에 응답할때는 challengeCertImagePath를 리스트 형태로 준다.
+             */
+            if (!(challenge.getChallengeCertImagePath() == null)) {
+                String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
+                List<String> challengeCertImagePathList = new ArrayList<>();
+                int certCount = 0;
+                for (String imagePath : challengeCertImagePaths) {
+                    challengeCertImagePathList.add(imagePath);
+                    certCount++;
+                }
+                detailResponse.challengeCertImagePath(challengeCertImagePathList);
+                detailResponse.certCount(certCount);
+            }
         }
         return detailResponse.build();
+    }
+
+    default List<ChallengeDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+        return memberChallenges
+                .stream()
+                .map(memberChallenge -> ChallengeDto.MemberChallengeResponseDto
+                        .builder()
+                        .memberChallengeId(memberChallenge.getMemberChallengeId())
+                        .challengeId(memberChallenge.getChallenge().getChallengeId())
+                        .participatingMemberName(memberChallenge.getMember().getMemberName())
+                        .memberSuccessDay((int)memberChallenge.getMemberSuccessDay())
+                        .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
