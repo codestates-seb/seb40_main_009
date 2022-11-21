@@ -19,6 +19,11 @@ export const MyProfileComponent = styled.div`
     width: 25rem;
     height: 5rem;
   }
+  .image-size {
+    width: 180px;
+    height: 180px;
+    border-radius: 30px;
+  }
   p {
     margin-right: 1rem;
   }
@@ -58,8 +63,6 @@ export const ImageUploadComponent = styled.div`
     height: 180px;
     border-radius: 30px;
   }
-  display: flex;
-  flex-direction: column;
 `;
 
 // ChartBar.jsx
