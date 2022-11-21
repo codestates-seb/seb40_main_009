@@ -53,8 +53,6 @@ public class SecurityConfiguration{
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //인증에러 발생시
                 .accessDeniedHandler(new MemberAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
-//                .authorizeRequests().requestMatchers(request -> CorsUtils.isPreFlightRequest(request)).permitAll()
-//                .and()
 //                .apply(new CustomFilterConfig())
 //                .and()
                 /*-----추후 어느정도 구성이 완료되고 인가 관련 설정----*/
