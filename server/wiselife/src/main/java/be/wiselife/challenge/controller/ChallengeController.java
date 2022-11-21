@@ -6,6 +6,7 @@ import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.SingleResponseDto;
+import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,9 +94,6 @@ public class ChallengeController {
     @PatchMapping("/cert")
     public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
                                                    HttpServletRequest request) {
-        String loginEmail = jwtTokenizer.getEmailWithToken(request);
-        Member loginMember = memberService.findMemberByEmail(loginEmail);
-
         Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
         Challenge challenge = challengeService.updateCertImage(certImageInfo, memberService.getLoginMember(request));
