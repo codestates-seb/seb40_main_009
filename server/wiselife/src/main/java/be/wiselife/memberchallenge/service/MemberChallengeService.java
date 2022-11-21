@@ -48,8 +48,6 @@ public class MemberChallengeService {
         challenge.getMemberChallenges().add(memberChallenge);
         member.getMemberChallenges().add(memberChallenge);
 
-
-
         memberChallengeRepository.save(memberChallenge);
         memberRepository.save(member);
 

@@ -117,23 +117,16 @@ public class ChallengeService {
 
     /**
      * 작성자 : 유현
-     * 인증사진 등록
+     * 인증사진 등록 / 수정
      * @param certImageInfo 인증사진이 속한 Challenge 아이디와 인증사진 경로
      * @param loginMember 로그인한 사람의 이메일 정보를 가져오기위한 인자값
      * TODO
      * 챌린지 참여인원인지 판단하는 로직 추가
      */
-    public Challenge createCertImage(Challenge certImageInfo, Member loginMember) {
-        Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
-        challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
-
-        String certImagePath= imageService.postChallengeCertImage(challenge, loginMember);
-        challenge.setChallengeCertImagePath(certImagePath);
-        return challengeRepository.save(challenge);
-    }
-
-    // 작성자 : 유현
     public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
+
+
+
         Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
         challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
 
@@ -151,7 +144,7 @@ public class ChallengeService {
      */
     public Challenge getCertification(Challenge certImageInfo,Member loginMember) {
 
-        String certImagePath = imageService.getChallengeCertImage(certImageInfo, loginMember);
+        String certImagePath = imageService.getChallengeCertImage(certImageInfo);
 
         certImageInfo.setChallengeCertImagePath(certImagePath);
         return certImageInfo;

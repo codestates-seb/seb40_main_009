@@ -7,10 +7,13 @@ import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.entity.*;
 import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.member.entity.Member;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
+import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
+    private final MemberChallengeRepository memberChallengeRepository;
 
     //MemberImage 부분 코드======================================
     /**
@@ -122,63 +126,57 @@ public class ImageService {
     }
 
     //ChallengeCertImage 부분 코드======================================
-    public String postChallengeCertImage(Challenge challenge, Member loginMember) {
 
-        ChallengeCertImage challengeCertImage = new ChallengeCertImage();
-        challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-        challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
-        challengeCertImage.setMemberId(loginMember.getMemberId());
-        imageRepository.save(challengeCertImage);
-
-        List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
-                        loginMember.getMemberId(), challenge.getRandomIdForImage());
-
-        String changeImagePath = "";
-        for (ChallengeCertImage certImage : challengeCertImages) {
-            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
-            log.info("imagePath={}",changeImagePath);
+    /**
+     *
+     * @param challenge 를 통해, 인증 사진을 등록하고, 하루 의무인증횟수를 채웠는지 판단한다.
+     * @param loginMember 를 통해, 로그인된 회원이 챌린지 참여중인지 파악하고, 의무 인증횟수를 채우면 성공일자를 증가 시켜준다.
+     * @return
+     */
+    public String patchChallengeCertImage(Challenge challenge, Member loginMember) {
+        MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
+        if ( memberChallengeFromRepository== null) {
+            throw new BusinessLogicException(ExceptionCode.YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST);
         }
 
-        return changeImagePath;
-    }
-
-    public String patchChallengeCertImage(Challenge challenge, Member loginMember) {
         ChallengeCertImage challengeCertImage =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
         if (challengeCertImage == null) {
-            throw new BusinessLogicException(ExceptionCode.POSSIBLE_CHANGE_CHALLENGE_CERT_IMAGE_NOT_EXIST);
-        }
-        if (challengeCertImage.getImagePath().equals(challenge.getChallengeCertImagePath())) {
-            imageRepository.delete(challengeCertImage);
+            challengeCertImage = new ChallengeCertImage();
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
+            challengeCertImage.setMemberId(loginMember.getMemberId());
+            imageRepository.save(challengeCertImage);
         } else {
             challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
             imageRepository.save(challengeCertImage);
         }
+
         List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
+        if (challenge.getChallengeAuthCycle() == challengeCertImages.size()) {
+            memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
+            memberChallengeRepository.save(memberChallengeFromRepository);
+        }
         String changeImagePath = "";
         for (ChallengeCertImage certImage : challengeCertImages) {
             changeImagePath = changeImagePath + certImage.getImagePath() + ",";
-            log.info("imagePath={}",changeImagePath);
         }
 
         return changeImagePath;
     }
 
-    public String getChallengeCertImage(Challenge challenge, Member loginMember) {
+    public String getChallengeCertImage(Challenge challenge) {
         List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdGet("CCI",
-                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+                imageRepository.findByImageTypeAndChallengeCertIdGet("CCI", challenge.getRandomIdForImage());
 
         String changeImagePath = "";
         for (ChallengeCertImage certImage : challengeCertImages) {
             changeImagePath = changeImagePath + certImage.getImagePath() + ",";
-            log.info("imagePath={}",changeImagePath);
         }
 
         return changeImagePath;

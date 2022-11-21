@@ -83,15 +83,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
+    // https://green-joo.tistory.com/51
     @Override
-    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdPost(String imageType, Long memberId, String randomIdForImage) {
+    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdCount(String imageType, Long memberId, String randomIdForImage) {
+
         LocalDate now = LocalDate.now();
         return queryFactory
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.memberId.eq(memberId))
-                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
-                        .and(challengeCertImage.createDay.eq(now)))
+                        .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)) // 필드명 imageSource로 변경
+                        .and(challengeCertImage.createDay.eq(now))) // localDateTime에
                 .orderBy(challengeCertImage.created_at.desc())
                 .fetch();
     }
@@ -111,11 +113,10 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
     }
 
     @Override
-    public List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdGet(String imageType, Long memberId, String randomIdForImage) {
+    public List<ChallengeCertImage> findByImageTypeAndChallengeCertIdGet(String imageType,String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
-                        .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
                 .orderBy(challengeCertImage.created_at.desc())
                 .fetch();
@@ -141,5 +142,14 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .where(order.member.eq(member)
                         .and(order.orderSuccess.isTrue()))
                 .fetch();
+    }
+
+    @Override
+    public MemberChallenge findByChallengeAndMember(Challenge challenge, Member member) {
+        return queryFactory
+                .selectFrom(memberChallenge)
+                .where(memberChallenge.challenge.eq(challenge)
+                        .and(memberChallenge.member.eq(member)))
+                .fetchOne();
     }
 }
