@@ -26,14 +26,12 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final ChallengeTalkMapper challengeTalkMapper;
     private final MemberService memberService;
-    private final JwtTokenizer jwtTokenizer;
 
-    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService, ChallengeTalkMapper challengeTalkMapper, MemberService memberService, JwtTokenizer jwtTokenizer) {
+    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService, ChallengeTalkMapper challengeTalkMapper, MemberService memberService) {
         this.challengeMapper = challengeMapper;
         this.challengeService = challengeService;
         this.challengeTalkMapper = challengeTalkMapper;
         this.memberService = memberService;
-        this.jwtTokenizer = jwtTokenizer;
     }
 
     /**
@@ -44,7 +42,7 @@ public class ChallengeController {
                                         HttpServletRequest request) {
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
-        challenge = challengeService.createChallenge(challenge, getLoginMember(request));
+        challenge = challengeService.createChallenge(challenge, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
@@ -59,7 +57,7 @@ public class ChallengeController {
                                          HttpServletRequest request) {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
-        challenge = challengeService.updateChallenge(challenge, getLoginMember(request));
+        challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
@@ -72,7 +70,7 @@ public class ChallengeController {
 
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
-        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, getLoginMember(request));
+        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, memberService.getLoginMember(request));
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.
                         challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService)),
@@ -95,7 +93,7 @@ public class ChallengeController {
                                                   HttpServletRequest request) {
         Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
-        Challenge challenge = challengeService.createCertImage(certImageInfo, getLoginMember(request));
+        Challenge challenge = challengeService.createCertImage(certImageInfo, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
@@ -108,7 +106,7 @@ public class ChallengeController {
 
         Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
-        Challenge challenge = challengeService.updateCertImage(certImageInfo, getLoginMember(request));
+        Challenge challenge = challengeService.updateCertImage(certImageInfo, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
@@ -154,7 +152,7 @@ public class ChallengeController {
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {
-            challenge = challengeService.getCertification(challenge, getLoginMember(request));
+            challenge = challengeService.getCertification(challenge, memberService.getLoginMember(request));
 
             ChallengeDto.DetailResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
@@ -171,7 +169,7 @@ public class ChallengeController {
     public ResponseEntity deleteChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
                                           HttpServletRequest request) {
 
-        challengeService.deleteChallenge(challengeId, getLoginMember(request));
+        challengeService.deleteChallenge(challengeId, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 "Challenge 삭제 완료", HttpStatus.NO_CONTENT);
@@ -181,8 +179,5 @@ public class ChallengeController {
      * JWT 토큰의 유저 이메일 이용해 login된 멤버 객체 가져오는 함수
      * 시도하려는 유저에게 권한이 있는지 확인하기 위해 사용한다.
      */
-    private Member getLoginMember(HttpServletRequest request) {
-        String loginEmail = jwtTokenizer.getEmailWithToken(request);
-        return memberService.findMemberByEmail(loginEmail);
-    }
+
 }

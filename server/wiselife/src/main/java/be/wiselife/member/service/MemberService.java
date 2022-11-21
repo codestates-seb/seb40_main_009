@@ -7,6 +7,7 @@ import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
+import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -32,6 +34,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     private final ImageService imageService;
+
+    private final JwtTokenizer jwtTokenizer;
 
     /**
      * 테스트용 계정 생성
@@ -185,6 +189,14 @@ public class MemberService {
         return Objects.equals(authorizedMemberId, tryingMemberId);
     }
 
+    /**
+     * JWT 토큰의 유저 이메일 이용해 login된 멤버 객체 가져오는 함수
+     * 시도하려는 유저에게 권한이 있는지 확인하기 위해 사용한다.
+     */
+    public Member getLoginMember(HttpServletRequest request) {
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        return findMemberByEmail(loginEmail);
+    }
 
     public Member findMemberById(Long memberId){
         return verifiedMemberById(memberId);

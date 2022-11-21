@@ -34,33 +34,32 @@ public class ChallengeTalkController {
 
     /**
      * 챌린지 댓글 생성
-     * */
+     */
     @PostMapping()
-    public ResponseEntity postChallengeTalk(@Valid @RequestBody ChallengeTalkDto.Post challengeTalkPostDto) {
+    public ResponseEntity postChallengeTalk(@Valid @RequestBody ChallengeTalkDto.Post challengeTalkPostDto,
+                                            HttpServletRequest request) {
 
         ChallengeTalk challengeTalk = challengeTalkMapper.challengeTalkPostDtoToChallenge(challengeTalkPostDto);
-        challengeTalk = challengeTalkService.createChallengeTalk(challengeTalk, challengeTalkPostDto.getChallengeId());
+        challengeTalk = challengeTalkService.createChallengeTalk(challengeTalk, challengeTalkPostDto.getChallengeId(),
+                                                                memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeTalkMapper.challengeTalkToChallengeTalkResponseDto(challengeTalk,
-                        memberService.findMemberById(challengeTalk.getMemberId()).getMemberName())),
+                new SingleResponseDto<>(challengeTalkMapper.challengeTalkToChallengeTalkResponseDto(challengeTalk, challengeTalk.getCreate_by_member())),
                 HttpStatus.CREATED);
     }
 
     /**
      * 챌린지 댓글 수정
-     * */
+     */
     @PatchMapping("/{challenge-talk-id}")
     public ResponseEntity patchChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId,
                                              @Valid @RequestBody ChallengeTalkDto.Patch challengeTalkPatchDto,
                                              HttpServletRequest request) {
 
-        String tryingMemberEmail = jwtTokenizer.getEmailWithToken(request); //권한 확인 위한 수정 요청자의 email
-
         challengeTalkPatchDto.setChallengeTalkId(challengeTalkId);
         ChallengeTalk challengeTalk = challengeTalkMapper.challengeTalkPatchDtoToChallenge(challengeTalkPatchDto);
 
-        challengeTalk = challengeTalkService.updateChallengeTalk(challengeTalk, tryingMemberEmail);
+        challengeTalk = challengeTalkService.updateChallengeTalk(challengeTalk, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeTalkMapper.challengeTalkToChallengeTalkResponseDto(challengeTalk,
@@ -69,7 +68,7 @@ public class ChallengeTalkController {
     }
 
     @GetMapping("/{challenge-talk-id}")
-    public ResponseEntity getChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId){
+    public ResponseEntity getChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId) {
 
         ChallengeTalk challengeTalk = challengeTalkService.findChallengeTalkById(challengeTalkId);
 
@@ -81,11 +80,9 @@ public class ChallengeTalkController {
 
     @DeleteMapping("/{challenge-talk-id}")
     public ResponseEntity DeleteChallengeTalk(@PathVariable("challenge-talk-id") @Positive Long challengeTalkId,
-                                             HttpServletRequest request) {
+                                              HttpServletRequest request) {
 
-        String tryingMemberEmail = jwtTokenizer.getEmailWithToken(request); //권한 확인 위한 수정 요청자의 email
-
-        challengeTalkService.deleteChallengeTalk(challengeTalkId);
+        challengeTalkService.deleteChallengeTalk(challengeTalkId, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 "성공적으로 삭제되었습니다",

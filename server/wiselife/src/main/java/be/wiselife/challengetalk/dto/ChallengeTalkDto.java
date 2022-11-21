@@ -16,8 +16,6 @@ public class ChallengeTalkDto {
         @NotBlank
         private String challengeTalkBody;
         @NotNull
-        private Long memberId;
-        @NotNull
         private Long challengeId;
     }
 

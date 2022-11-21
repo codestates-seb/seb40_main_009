@@ -1,6 +1,7 @@
 package be.wiselife.challengetalk.entity;
 
 import be.wiselife.audit.TimeAudit;
+import be.wiselife.audit.WriterAudit;
 import be.wiselife.challenge.entity.Challenge;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-public class ChallengeTalk extends TimeAudit {
+public class ChallengeTalk extends WriterAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,8 @@ public class ChallengeTalk extends TimeAudit {
     @Column(nullable = false)
     private String challengeTalkBody;
 
-    @Column(nullable = false, updatable = false)
+    @Setter
+    @Column(updatable = false)
     private Long memberId;
 
     @ManyToOne
