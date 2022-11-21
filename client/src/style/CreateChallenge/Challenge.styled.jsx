@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
 export const CreateAsk = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   > form {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+  }
+  .imgSection {
+    margin-bottom: 20px;
+    border: 1px solid gray;
   }
 
   .inputBox {
@@ -48,4 +57,10 @@ export const CreateAsk = styled.section`
       background-color: #aec4fa;
     }
   }
+`;
+
+//ask2 & 4 이미지 미리보기
+export const ImgExample = styled.img`
+  width: 400px;
+  height: 400px;
 `;

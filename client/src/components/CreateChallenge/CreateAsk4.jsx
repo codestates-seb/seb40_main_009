@@ -5,10 +5,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { createChallenge } from '../../atoms/atoms';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
-
-const ImgExample = styled.img`
-  height: 400px;
-`;
+import exampleImg from '../../image/example.png';
 
 const TimeContainer = styled.section`
   display: grid;
@@ -17,7 +14,7 @@ const TimeContainer = styled.section`
 
 function ChallengeAsk4() {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const [imageTransform, setImageTransfrom] = useState();
+  const [imageTransform, setImageTransfrom] = useState(exampleImg);
   const [quantity, setQuantity] = useState();
   const [checkThree, setCheckThree] = useState(false);
   const [checkCount, setCheckCount] = useState([]);
@@ -63,14 +60,15 @@ function ChallengeAsk4() {
   useEffect(() => console.log(`현재 상태는` + create), [create]);
   return (
     <S.CreateAsk>
-      <div>
+      <section className="imgSection">
         {imageTransform && (
-          <ImgExample src={imageTransform} alt="preview.img" />
+          <S.ImgExample src={imageTransform} alt="preview.img" />
         )}
-      </div>
+      </section>
       <form onSubmit={handleSubmit(onValid)}>
         <div className="question">
           <h3>인증방법</h3>
+          <span>최대 3장까지 설정 가능합니다.</span>
           <input
             type={'file'}
             accept="image/*"

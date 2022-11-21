@@ -26,9 +26,9 @@ function ChallengeAsk3() {
   const onValid = (data) => {
     let now = new Date();
     if (
-      now.getFullYear() === date[0].startDate.getFullYear() &&
-      now.getMonth() === date[0].startDate.getMonth() &&
-      now.getDate() === date[0].startDate.getDate()
+      now.getFullYear() <= date[0].startDate.getFullYear() &&
+      now.getMonth() <= date[0].startDate.getMonth() &&
+      now.getDate() <= date[0].startDate.getDate()
     ) {
       setCreateChallenge({ ...data, ...create });
       setCheckBtn(true);
