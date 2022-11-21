@@ -10,6 +10,7 @@ import SearchResult from './pages/SearchResult';
 import DetailPage from './pages/DetailPage';
 import ChallengeDetail from './pages/ChallengeDetail';
 import CreateChallengePage from './pages/CreateChallenge';
+import EditProfilePage from './pages/EditProfilePage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/profile" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
+          <Route path="/editprofile" element={<EditProfilePage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

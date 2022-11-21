@@ -1,5 +1,5 @@
 import ChartBar from './ChartBar';
-import ProfileImage from './ProfileImage';
+// import ProfileImage from './ProfileImage';
 import { GiMedallist } from 'react-icons/gi';
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
@@ -7,7 +7,11 @@ function MyProfile(props) {
   return (
     <S.MyProfileComponent>
       <header className="profile-info">
-        <ProfileImage />
+        <img
+          src={props.profileimage}
+          className="image-size"
+          alt="profile-img"
+        />
         <div>
           <S.ProfileList>
             <p>{props.name}</p>
@@ -19,13 +23,11 @@ function MyProfile(props) {
             </p>
             <p>챌린지성공률: {props.percentage}%</p>
           </div>
-          <input
+          <textarea
             className="readonly-box"
-            placeholder="자기소개를 입력해 주세요."
+            placeholder={props.introduction}
             readOnly
-          >
-            {/* {props.introduction} */}
-          </input>
+          />
         </div>
         <S.ProfileBar>
           <div className="buttonLists">

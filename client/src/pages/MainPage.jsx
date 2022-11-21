@@ -1,5 +1,3 @@
-import * as S from '../style/Main/MainPageStyle';
-import ChallengeList from '../components/ChallengeList/Challenge';
 import {
   Animator,
   ScrollContainer,
@@ -18,11 +16,42 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'react-scroll-motion';
+import * as S from '../style/Main/MainPageStyle';
+import ChallengeList from '../components/ChallengeList/Challenge';
 import SlideBanner from '../components/Main/SlideBanner';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Loading from '../components/Loading/Loading';
 
 function MainPage() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState([]);
+
+  // 유저조회
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/member?page=1&size=7`)
+      .then((res) => {
+        setUser(res.data.data);
+        setLoading(false);
+        console.log('user>>>', user);
+      })
+      .catch((error) => {
+        window.alert(error);
+        console.log('error', error);
+      });
+  }, []);
+
+  // 챌린지 리스트페이지로 이동
+  const LinkChallengePage = () => {
+    navigate('/challengelist');
+  };
+
   return (
     <S.MainContainer>
+      {loading ? <Loading /> : null}
       {/* 스크롤 시작 */}
       <ScrollContainer snap="none">
         {/* 슬라이드 */}
@@ -109,13 +138,21 @@ function MainPage() {
                     </div>
                   </div>
                   <S.MarginLeft3>
-                    <S.FontSize30M3>전체 랭킹</S.FontSize30M3>
-                    <S.AllUser>
-                      <div>사진</div>
-                      <div>닉네임</div>
-                      <div>레벨</div>
-                      <div>인기도</div>
-                    </S.AllUser>
+                    <S.FontSize30M3>
+                      <div className="wrapper">
+                        <div className="title">전체 랭킹</div>
+                        <div className="view_all" onClick={LinkChallengePage}>
+                          더보기
+                        </div>
+                      </div>
+                    </S.FontSize30M3>
+                    {user.map((user, index) => (
+                      <S.AllUser key={index}>
+                        <div>{user.memberName}</div>
+                        <div>{user.memberBadge}</div>
+                        <div>{user.followerCount}</div>
+                      </S.AllUser>
+                    ))}
                   </S.MarginLeft3>
                 </S.Flex>
               </S.Container>
