@@ -13,6 +13,7 @@ function MyProfilePage(props) {
     level: '',
   });
 
+  // get요청
   useEffect(() => {
     axios.get(`http://localhost:3001/userprofile`).then((res) => {
       console.log(res.data);

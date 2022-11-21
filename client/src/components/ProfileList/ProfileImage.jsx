@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
-import ProfilePicture from '../../image/ProfilePicture.png';
+// import ProfilePicture from '../../image/ProfilePicture.png';
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
-function ProfileImage() {
-  const [Image, setImage] = useState(ProfilePicture);
+function ProfileImage(props) {
+  const [Image, setImage] = useState();
   const fileInput = useRef(null);
 
   const onChange = (e) => {
@@ -11,7 +11,7 @@ function ProfileImage() {
       setImage(e.target.files[0]);
     } else {
       //업로드 취소할 시
-      setImage(ProfilePicture);
+      setImage();
       return;
     }
     //화면에 프로필 사진 표시
@@ -28,14 +28,14 @@ function ProfileImage() {
       <img
         className="profilePicture"
         alt="profile img"
-        src={Image}
+        src={props.profileimage}
         onClick={() => {
           fileInput.current.click();
         }}
       />
       <input
         type="file"
-        style={{ display: 'none' }}
+        // style={{ display: 'none' }}
         accept="image/*"
         name="profile_img"
         onChange={onChange}
