@@ -174,9 +174,17 @@ public class MemberService {
     /**
      * email 비교를 통해 권한이 있는 유저인지 확인
      * */
-    public boolean isVerifiedMember(String savedMemberEmail, String tryingMemberEmail){
-        return Objects.equals(savedMemberEmail, tryingMemberEmail);
+    public boolean isVerifiedMember(String authorizedMemberEmail, String tryingMemberEmail){
+        return Objects.equals(authorizedMemberEmail, tryingMemberEmail);
     }
+
+    /**
+     * member ID 비교를 통해 권한이 있는 유저인지 확인
+     * */
+    public boolean isVerifiedMember(Long authorizedMemberId, Long tryingMemberId){
+        return Objects.equals(authorizedMemberId, tryingMemberId);
+    }
+
 
     public Member findMemberById(Long memberId){
         return verifiedMemberById(memberId);

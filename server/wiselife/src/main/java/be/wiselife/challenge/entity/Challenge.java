@@ -99,6 +99,10 @@ public class Challenge extends WriterAudit {
     @Setter
     private double challengeSuccessCount=0;
 
+    //챌린지 수정, 삭제시 권한 보유한 member의 id
+    @Setter
+    private Long authorizedMemberId;
+
     @Builder
     public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
                      String challengeDescription, int challengeMaxParty, int challengeMinParty,

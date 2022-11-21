@@ -38,8 +38,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .fetchOne();
     }
 
-//<<<<<<< HEAD
-//=======
     @Override
     public MemberChallenge findByChallengeIdAndMember(String challengeId, Member member) {
 
@@ -49,7 +47,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(memberChallenge.member.eq(member)))
                 .fetchOne();
     }
-//>>>>>>> 3278dde013a214ad791cc1195b1b78cdca3de0e0
+
 
     @Override
     public MemberImage findByImageTypeAndMemberId(String imageType, Long memberId) {
@@ -95,12 +93,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         return queryFactory
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
-//<<<<<<< HEAD
-//                        .and(challengeCertImage.imageId.eq(challengeId))) //수정필요한 부분
-//                .fetch();
-//    }
-//
-//=======
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
                         .and(challengeCertImage.createDay.eq(now)))
