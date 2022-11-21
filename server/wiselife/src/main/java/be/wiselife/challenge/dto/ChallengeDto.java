@@ -124,8 +124,6 @@ public class ChallengeDto {
         @Setter
         private List<String> challengeCertImagePath;
 
-        @Setter
-        private int certCount;
     }
 
     @Getter
@@ -188,14 +186,10 @@ public class ChallengeDto {
         @Setter
         private List<String> challengeCertImagePath;
 
-        @Setter
-        private int certCount;
 
         /*챌린지 댓글 리스트 */
         @Setter
         private List<ChallengeTalkDto.response> challengeTalks;
-
-
 
     }
 

@@ -26,17 +26,20 @@ public interface QuerydslRepository {
     ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage);
 
     // 인증사진이 당일에 몇장 등록됐는지 확인용
-    List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdPost(String imageType, Long memberId, String randomIdForImage);
+    List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdCount(String imageType, Long memberId, String randomIdForImage);
 
     // 인증사진 중 현재 인증가능 시간에 수정을 가능하게 하는 메소드
     ChallengeCertImage findByImageTypeAndMemberIdAndChallengeCertIdPatch(String imageType, Long memberId, String randomIdForImage);
 
     // 챌린지 참여자가 챌린지를 봤을때
-    List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdGet(String imageType, Long memberId, String randomIdForImage);
+    List<ChallengeCertImage> findByImageTypeAndChallengeCertIdGet(String imageType,String randomIdForImage);
 
     // 리뷰 이미지 등록 및 수정 할때
     ReviewImage findByImageTypeAndReviewImageId(String imageType, String randomIdForImage);
 
     List<Order> findByMemberId(Member member);
+
+    //회원이 해당 챌린지에 포함된 회원이 맞는지 판단하는 메소드
+    MemberChallenge findByChallengeAndMember(Challenge challenge,Member member);
 
 }

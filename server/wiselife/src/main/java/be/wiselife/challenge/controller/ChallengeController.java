@@ -88,21 +88,13 @@ public class ChallengeController {
      *                응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
 
-    @PostMapping("/cert")
-    public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
-                                                  HttpServletRequest request) {
-        Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
-        Challenge challenge = challengeService.createCertImage(certImageInfo, memberService.getLoginMember(request));
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
-    }
-
-    //작성자 : 유현
+   
     @PatchMapping("/cert")
     public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
                                                    HttpServletRequest request) {
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
 
         Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 

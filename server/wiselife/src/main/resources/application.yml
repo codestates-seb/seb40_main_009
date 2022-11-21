@@ -36,6 +36,7 @@ server:
       force-response: true
       charset: utf-8
       force: true
+  port: 3000
 
 jwt:
   token:
@@ -48,4 +49,4 @@ jwt:
 #TODO: 관리자 추가
 mail:
   address:
-      admin: mins402kim@kakao.com
+      admin: test1@kakao.com

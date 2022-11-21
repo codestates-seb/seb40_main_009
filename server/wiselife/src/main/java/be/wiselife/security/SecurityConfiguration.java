@@ -1,6 +1,7 @@
 package be.wiselife.security;
 
 
+import be.wiselife.security.filter.JwtVerificationFilter;
 import be.wiselife.security.filter.MemberAuthenticationEntryPoint;
 import be.wiselife.security.handler.MemberAccessDeniedHandler;
 import be.wiselife.security.service.OauthService;
@@ -8,8 +9,11 @@ import be.wiselife.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,8 +22,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * 스프링 시큐리티의 가장 첫단추
@@ -38,38 +40,45 @@ public class SecurityConfiguration{
 
 
         http
-                .headers().frameOptions().sameOrigin() //동일 출처로부터 들어오는 request만 페이지 렌더링을 허용
+                .headers().frameOptions().disable()
                 .and()
-                .csrf().disable() //CSRF 공격 방어 안하겠다~ (로컬환경에서 진행할꺼라, 안하면 403에러 발생함)
-                .cors(withDefaults()) // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
+                .csrf().disable() //CSRF 공격 방어 안하겠다~ 쿠키를 사용한 인증을 안할꺼라서
+                .cors().configurationSource(corsConfigurationSource()) // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
                 //cors친구가 다른 스크립트 기반 http통신을 해도 선택적으로 리소스에 접근할 수있는 권한을 부여하도록 브라우저에게 알려줌
-
+                .and()
                 .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 안쓰겠다.
-                .httpBasic().disable() //https 가능하면
+                .httpBasic().disable() //TODO: https 가능하면
 
                 .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
-                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //인증에러 발생시
+                .accessDeniedHandler(new MemberAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
-
+//                .authorizeRequests().requestMatchers(request -> CorsUtils.isPreFlightRequest(request)).permitAll()
+//                .and()
 //                .apply(new CustomFilterConfig())
 //                .and()
                 /*-----추후 어느정도 구성이 완료되고 인가 관련 설정----*/
                 .authorizeHttpRequests(authorize -> authorize
-//                        .antMatchers(HttpMethod.POST, "/*/questions/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.PATCH, "/*/questions/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.DELETE, "/*/questions/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.POST, "/*/user/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.PATCH, "/*/user/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.DELETE, "/*/user/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.POST, "/*/answer/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.PATCH, "/*/answer/**").hasAnyRole("ADMIN","USER")
-//                        .antMatchers(HttpMethod.DELETE, "/*/answer/**").hasAnyRole("ADMIN","USER")
-                                .anyRequest().permitAll() //그외 get 요청은 전부다 가능하도록
+                        .antMatchers(HttpMethod.POST, "/*/order/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/order/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/order/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/member/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/member/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/member/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/follow/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/follow/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/follow/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/challenge-talks/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/challenge-talks/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/challenge-talks/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/challenge-reviews/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/*/challenge-reviews/**").hasAnyRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/*/challenge-reviews/**").hasAnyRole("USER")
+                        .anyRequest().permitAll() //그외 get 요청은 전부다 가능하도록
                 )
                 .oauth2Login()
                 .defaultSuccessUrl("/")
-                .failureUrl("/login") //로그인 실패시 이동해야하는 위치
+                .failureUrl("/") //로그인 실패시 이동해야하는 위치
                 .userInfoEndpoint() //로그인 성공후 사용자정보를 가져오겠다.
                 .userService(oauthservice);
 
@@ -92,13 +101,11 @@ public class SecurityConfiguration{
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000"); //TODO: EC2로 간뒤에 바뀔예정
+        configuration.addAllowedHeader("*");
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
 
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "Accept","X-Requested-With","Content-Type","Access-Control-Request-Method",
-                "Access-Control-Request-Headers","Authorization","Refresh","Connection","Content","Host",
-                "Referer","Access-Control-Allow-Origin"));
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");
         configuration.setMaxAge(4600l);
@@ -109,5 +116,15 @@ public class SecurityConfiguration{
         
         return source;
     }
-    //TODO: 권한설정하기
+    //TODO: 인가권한 수정
+    public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfig, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) {
+            AuthenticationManager manager = builder.getSharedObject(AuthenticationManager.class);
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            builder.addFilter(jwtVerificationFilter);
+
+        }
+    }
 }

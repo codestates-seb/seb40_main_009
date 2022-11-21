@@ -25,6 +25,8 @@ public enum ExceptionCode {
    
    //login 부분 예외 ========시작
     SIGNUP_WRONG(404,"somethings get wrong during login" ),
+    FORBIDDEN_MEMBER(403, "The member does not have permission"),
+    REFRESHTOKEN_EXPIRED(404, "Refresh Token also Expired, please login"),
 
     //order 부분 예외 ========시작
     TRADE_CODE_WRONG(404,"Not available tid" ),
@@ -35,7 +37,7 @@ public enum ExceptionCode {
     CHALLENGE_EXAM_IMAGE_MUST_ENROLL(404, "Challenge example image must be enroll min one-image"),
 
     //ChallengeCertImage 부분 예외 ===========시작
-    POSSIBLE_CHANGE_CHALLENGE_CERT_IMAGE_NOT_EXIST(404, "Possible change Challenge certification is not exist"),
+    YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST(404, "You must participate to challenge first"),
 
     //Challenge Talk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),
@@ -44,8 +46,9 @@ public enum ExceptionCode {
     CHALLENGE_REVIEW_NOT_FOUND(404, "ChallengeReview not found"),
     CHALLENGE_REVIEW_ALREADY_EXISTS(400, "ChallengeReview not found"),
 
+
     //권한이 없는 자의 예외 =============시작
-    FORBIDDEN_MEMBER(403, "The member does not have permission");
+
 
     @Getter
     private int code;
