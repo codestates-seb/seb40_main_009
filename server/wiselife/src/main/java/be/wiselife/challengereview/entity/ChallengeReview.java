@@ -1,6 +1,7 @@
 package be.wiselife.challengereview.entity;
 
 import be.wiselife.audit.TimeAudit;
+import be.wiselife.audit.WriterAudit;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.image.entity.ReviewImage;
 import be.wiselife.member.entity.Member;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Entity
-public class ChallengeReview extends TimeAudit {
+public class ChallengeReview extends WriterAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeReviewId;
@@ -32,7 +33,7 @@ public class ChallengeReview extends TimeAudit {
     @Setter
     private String challengeReviewImagePath;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_id")
     @ToString.Exclude
     @Setter

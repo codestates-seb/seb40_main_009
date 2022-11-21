@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
 
+//<<<<<<< HEAD
+//    Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
+//=======
     Challenge certDtoToChallenge(ChallengeDto.Cert cert);
 
     /**
@@ -78,7 +81,6 @@ public interface ChallengeMapper {
         }
 
         Challenge.ChallengeBuilder challenge = Challenge.builder();
-        challenge.challengeId(challengePatchDto.getChallengeId());
         challenge.challengeTitle( challengePatchDto.getChallengeTitle() );
         challenge.challengeDescription( challengePatchDto.getChallengeDescription() );
         challenge.challengeMaxParty( challengePatchDto.getChallengeMaxParty() );

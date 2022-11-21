@@ -13,8 +13,6 @@ public class ChallengeReviewDto {
     @Getter
     public static class Post{
         @NotNull
-        private Long memberId;
-        @NotNull
         private Long challengeId;
         @NotBlank
         private String challengeReviewTitle;

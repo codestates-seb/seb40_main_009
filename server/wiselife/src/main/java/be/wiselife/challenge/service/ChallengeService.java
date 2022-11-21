@@ -6,8 +6,8 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
+import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,37 +23,40 @@ import java.util.Optional;
 public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final ImageService imageService;
-
+    private final MemberService memberService;
     private final MemberChallengeService memberChallengeService;
 
 
-    public ChallengeService(ChallengeRepository challengeRepository,
-                            ImageService imageService,
-                            MemberChallengeService memberChallengeService) {
-
+    public ChallengeService(ChallengeRepository challengeRepository, ImageService imageService, MemberService memberService, MemberChallengeService memberChallengeService) {
         this.challengeRepository = challengeRepository;
         this.imageService = imageService;
+        this.memberService = memberService;
         this.memberChallengeService = memberChallengeService;
     }
 
-    public Challenge createChallenge(Challenge challenge,Member loginMember){
+    public Challenge createChallenge(Challenge challenge, Member loginMember){
         challenge.setCreate_by_member(loginMember.getMemberName());
+        challenge.setAuthorizedMemberId(loginMember.getMemberId());
+
         imageService.patchChallengeRepImage(challenge);
         imageService.postChallengeExamImage(challenge);
         challenge=participateChallenge(challenge, loginMember);
 
         return saveChallenge(challenge);
     }
-    /**
-     * 챌린지 수정
-     *
-     * 수정할 값이 null인 경우 수정하지 않는다
-     * 추후 수정가능 범위를 어떻게 제한할 것인지 할지 논의 필요함(시작 전 일정, 돈 수정 불가하게 !!! + 시작 후 아무것도 수정 불가)
-     *
-     * */
-    public Challenge updateChallenge(Challenge changedChallenge){
-        Challenge existingChallenge = findChallengeById(changedChallenge.getChallengeId());
 
+    /**
+     * 챌린지 수정 기능
+     * TODO: 1) 시작 전 일정, 돈 수정 불가
+     *       2) 시작 후 아무것도 수정 불가
+     * */
+    public Challenge updateChallenge(Challenge changedChallenge, Member loginMember, Long challengeId){
+        Challenge existingChallenge = findChallengeById(challengeId);
+
+        //유저 권한 확인
+        checkMemberAuthorization(existingChallenge, loginMember);
+
+        //챌린지 수정
         Optional.ofNullable(changedChallenge.getChallengeCategory())
                 .ifPresent(existingChallenge::setChallengeCategory);
         Optional.ofNullable(changedChallenge.getChallengeTitle())
@@ -156,8 +159,13 @@ public class ChallengeService {
 
 
 
-    public void deleteChallenge(Long challengeId) {
-        challengeRepository.delete(findChallengeById(challengeId));
+    public void deleteChallenge(Long challengeId, Member loginMember) {
+
+        Challenge savedChallenge = findChallengeById(challengeId);
+        //유저 권한 확인
+        checkMemberAuthorization(savedChallenge, loginMember);
+        //삭제
+        challengeRepository.delete(savedChallenge);
     }
 
     /**
@@ -182,6 +190,16 @@ public class ChallengeService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
 
+    /**
+     * 챌랜지 관련 유저의 권한 확인
+     * 챌린지 수정, 삭제 시도시 사용한다.
+     * @param Challenge 변경 시도하는 챌린지
+     * @param loginMember 변경을 시도하는 맴버
+     */
+    private void checkMemberAuthorization(Challenge Challenge, Member loginMember){
 
+        if(!memberService.isVerifiedMember(Challenge.getAuthorizedMemberId(), loginMember.getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
 
+    }
 }

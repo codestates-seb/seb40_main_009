@@ -1,11 +1,12 @@
 package be.wiselife.challengereview.controller;
 
+import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengereview.dto.ChallengeReviewDto;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengereview.mapper.ChallengeReviewMapper;
 import be.wiselife.challengereview.service.ChallengeReviewService;
 import be.wiselife.dto.SingleResponseDto;
-import be.wiselife.security.JwtTokenizer;
+import be.wiselife.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,20 +21,23 @@ import javax.validation.constraints.Positive;
 @Validated
 public class ChallengeReviewController {
     private final ChallengeReviewService challengeReviewService;
+    private final MemberService memberService;
+    private final ChallengeService challengeService;
     private final ChallengeReviewMapper challengeReviewMapper;
-    private final JwtTokenizer jwtTokenizer;
 
-    public ChallengeReviewController(ChallengeReviewService challengeReviewService, ChallengeReviewMapper challengeReviewMapper, JwtTokenizer jwtTokenizer) {
+    public ChallengeReviewController(ChallengeReviewService challengeReviewService, MemberService memberService, ChallengeService challengeService, ChallengeReviewMapper challengeReviewMapper) {
         this.challengeReviewService = challengeReviewService;
+        this.memberService = memberService;
+        this.challengeService = challengeService;
         this.challengeReviewMapper = challengeReviewMapper;
-        this.jwtTokenizer = jwtTokenizer;
     }
 
     @PostMapping
-    public ResponseEntity postChallengeReview(@Valid @RequestBody ChallengeReviewDto.Post challengeReviewPostDto) {
+    public ResponseEntity postChallengeReview(@Valid @RequestBody ChallengeReviewDto.Post challengeReviewPostDto,
+                                              HttpServletRequest request) {
 
         ChallengeReview challengeReview = challengeReviewMapper.challengeReviewPostDtoToChallengeReview(challengeReviewPostDto);
-        challengeReview = challengeReviewService.createChallengeReview(challengeReview, challengeReviewPostDto.getMemberId(), challengeReviewPostDto.getChallengeId());
+        challengeReview = challengeReviewService.createChallengeReview(challengeReview, memberService.getLoginMember(request), challengeService.getChallenge(challengeReviewPostDto.getChallengeId()) );
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview)),
@@ -41,17 +45,26 @@ public class ChallengeReviewController {
     }
 
     @PatchMapping("/{challenge-review-id}")
-    public ResponseEntity patchChallengeTalk(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
-                                             @Valid @RequestBody ChallengeReviewDto.Patch challengeReviewPatchDto,
-                                             HttpServletRequest request) {
+    public ResponseEntity patchChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
+                                               @Valid @RequestBody ChallengeReviewDto.Patch challengeReviewPatchDto,
+                                               HttpServletRequest request) {
 
-        String tryingMemberEmail = jwtTokenizer.getEmailWithToken(request);
         challengeReviewPatchDto.setChallengeReviewId(challengeReviewId);
+        ChallengeReview changedChallengeReview = challengeReviewMapper.challengeReviewPatchDtoToChallengeReview(challengeReviewPatchDto);
 
-        ChallengeReview challengeReview = challengeReviewService.updateChallengeReview(challengeReviewMapper.challengeReviewPatchDtoToChallengeReview(challengeReviewPatchDto), tryingMemberEmail);
+        ChallengeReview challengeReview = challengeReviewService.updateChallengeReview(changedChallengeReview, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview)),
                 HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{challenge-review-id}")
+    public ResponseEntity deleteChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
+                                          HttpServletRequest request) {
+
+        challengeService.deleteChallenge(challengeReviewId, memberService.getLoginMember(request));
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

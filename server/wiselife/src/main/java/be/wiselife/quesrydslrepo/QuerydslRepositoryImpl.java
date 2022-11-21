@@ -26,7 +26,7 @@ import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.order.entity.QOrder.order;
 
 @RequiredArgsConstructor
-public class QuerydslRepositoryImpl implements QuerydslRepository{
+public class QuerydslRepositoryImpl implements QuerydslRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -48,6 +48,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
+
     @Override
     public MemberImage findByImageTypeAndMemberId(String imageType, Long memberId) {
         return queryFactory
@@ -65,16 +66,18 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                         .and(challengeRepImage.randomIdForImage.eq(randomIdForImage)))
                 .fetchOne();
     }
+
     @Override
-    public List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType,String randomIdForImage) {
+    public List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeExamImage)
                 .where(challengeExamImage.imageType.eq(imageType)
                         .and(challengeExamImage.randomIdForImage.eq(randomIdForImage)))
                 .fetch();
     }
+
     @Override
-    public ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType,String imagePath, String randomIdForImage) {
+    public ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeExamImage)
                 .where(challengeExamImage.imageType.eq(imageType)
@@ -130,6 +133,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                         .and(reviewImage.randomIdForImage.eq(randomIdForImage)))
                 .fetchOne();
     }
+
 
     /**
      * @return 오더테이블에서 맴버아이디를 기반으로 성공한 결재내역만 보이게 출력
