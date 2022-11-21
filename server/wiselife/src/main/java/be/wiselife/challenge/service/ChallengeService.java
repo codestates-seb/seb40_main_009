@@ -38,9 +38,13 @@ public class ChallengeService {
 
     public Challenge createChallenge(Challenge challenge,Member loginMember){
         challenge.setCreate_by_member(loginMember.getMemberName());
+        log.info("party1={}",challenge.getChallengeCurrentParty());
         imageService.patchChallengeRepImage(challenge);
+        log.info("party2={}",challenge.getChallengeCurrentParty());
         imageService.postChallengeExamImage(challenge);
+        log.info("party3={}",challenge.getChallengeCurrentParty());
         challenge=participateChallenge(challenge, loginMember);
+        log.info("party4={}",challenge.getChallengeCurrentParty());
         return saveChallenge(challenge);
     }
     /**
@@ -71,8 +75,6 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeMaxParty);
         Optional.ofNullable(changedChallenge.getChallengeMinParty())
                 .ifPresent(existingChallenge::setChallengeMinParty);
-        Optional.ofNullable(changedChallenge.getChallengeCurrentParty())
-                .ifPresent(existingChallenge::setChallengeCurrentParty);
         Optional.ofNullable(changedChallenge.getChallengeViewCount())
                 .ifPresent(existingChallenge::setChallengeViewCount);
         Optional.ofNullable(changedChallenge.getChallengeTotalReward())
@@ -112,6 +114,9 @@ public class ChallengeService {
      * @return challenge 참가했을때 잘 참여됐는지 즉시 확인가능
      */
     public Challenge participateChallenge(Challenge challenge,Member loginMember) {
+        log.info("party5={}",challenge.getChallengeCurrentParty());
+        challenge.setChallengeCurrentParty(challenge.getChallengeCurrentParty()+1);
+        log.info("party6={}",challenge.getChallengeCurrentParty());
         return memberChallengeService.postMemberAndChallenge(challenge,loginMember);
     }
 

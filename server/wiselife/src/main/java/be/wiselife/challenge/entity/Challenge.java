@@ -102,7 +102,7 @@ public class Challenge extends WriterAudit {
     @Builder
     public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
                      String challengeDescription, int challengeMaxParty, int challengeMinParty,
-                     int challengeCurrentParty, LocalDate challengeStartDate, LocalDate challengeEndDate,
+                     LocalDate challengeStartDate, LocalDate challengeEndDate,
                      String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
                      String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath) {
         this.challengeId = challengeId;

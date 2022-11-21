@@ -34,7 +34,7 @@ public class MemberChallengeService {
             throw new BusinessLogicException(ExceptionCode.YOU_ALREADY_PARTICIPATE);
         }
 
-        double challengeCurrentParty = challenge.getChallengeCurrentParty()+1;
+        double challengeCurrentParty = challenge.getChallengeCurrentParty();
         double memberChallengeTryCount = member.getMemberChallengeTryCount()+1;
 
         challenge.setChallengeCurrentParty(challengeCurrentParty);
