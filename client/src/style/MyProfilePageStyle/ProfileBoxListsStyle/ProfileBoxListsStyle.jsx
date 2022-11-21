@@ -74,4 +74,58 @@ export const ProfileBoxChallengeListComponent = styled.div`
 // ProfileBoxOrderList
 export const ProfileBoxOrderListComponent = styled.div`
   margin: 2.5rem;
+  .title {
+    margin-bottom: 2rem;
+  }
+`;
+
+export const ProfileBoxOrderList = styled.div`
+  /* border: 1px solid blue; */
+  background-color: #b5b4f9;
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  text-align: center;
+
+  .orderId-size {
+    width: 10%;
+  }
+  .requestuniquenumber-size {
+    width: 20%;
+  }
+  .itemName-size {
+    width: 30%;
+  }
+  .approved_at-size {
+    width: 20%;
+  }
+  .totalAmount-size {
+    width: 20%;
+  }
+`;
+
+// BorderOrderList.jsx
+export const BoxOrderList = styled.div`
+  /* font-size: 16px; */
+  border: 1px solid #b5b4f9;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  .orderId-size {
+    width: 10%;
+  }
+  .requestuniquenumber-size {
+    font-size: 13px;
+    width: 20%;
+  }
+  .itemName-size {
+    width: 30%;
+  }
+  .approved_at-size {
+    width: 20%;
+  }
+  .totalAmount-size {
+    width: 20%;
+  }
 `;

@@ -5,7 +5,7 @@ import ProfileBoxChallengeList from './ProfileBoxChallengeList';
 import ProfileBoxOrderList from './ProfileBoxOrderList';
 
 function ProfileBoxLists() {
-  let [clickedTab, setClickedTab] = useState(0);
+  const [clickedTab, setClickedTab] = useState(0);
   console.log(clickedTab);
 
   return (
@@ -40,9 +40,16 @@ function ProfileBoxLists() {
         </S.Tab>
       </header>
       <section>
-        {clickedTab === 0 ? <ProfileBoxChallenge /> : null}
+        {/* {clickedTab === 0 ? <ProfileBoxChallenge /> : null}
         {clickedTab === 1 ? <ProfileBoxChallengeList /> : null}
-        {clickedTab === 2 ? <ProfileBoxOrderList /> : null}
+        {clickedTab === 2 ? <ProfileBoxOrderList /> : null} */}
+        {clickedTab === 0 ? (
+          <ProfileBoxChallenge />
+        ) : clickedTab === 1 ? (
+          <ProfileBoxChallengeList />
+        ) : clickedTab === 2 ? (
+          <ProfileBoxOrderList />
+        ) : null}
       </section>
     </S.ProfileBoxComponent>
   );
