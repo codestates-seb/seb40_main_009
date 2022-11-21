@@ -62,6 +62,7 @@ export const ImageUploadComponent = styled.div`
   flex-direction: column;
 `;
 
+// ChartBar.jsx
 export const move = keyframes`
 	0%{
     	width: 0;
@@ -71,11 +72,10 @@ export const move = keyframes`
       color: rgba(255, 255, 255, 1);
     }
     100%{
-    	/* width: ${(props) => props.percentage}%; */
+    	width: ${(props) => props.percentage}%;
     }
 `;
 
-// ChartBar.jsx
 export const ChartBarComponent = styled.div`
   .level-bar {
     width: 350px;
@@ -89,8 +89,8 @@ export const ChartBarComponent = styled.div`
   }
 
   .progress-bar .progress {
-    /* width: ${(props) =>
-      props.percentage}%; // 나타내고자 하는 퍼센트 값을 넣으면 됩니다. */
+    width: ${(props) =>
+      props.percentage}%; // 나타내고자 하는 퍼센트 값을 넣으면 됩니다.
     height: 20px;
     padding: 0;
     text-align: center;

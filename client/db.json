@@ -39,5 +39,21 @@
       "percentage" : 80,
       "level" : 2
     }
+  ],
+  "orderlists": [
+    {
+      "orderId": 3,
+      "approved_at": "2022-11-17T17:37:34",
+      "requestuniquenumber": "A375f2a47c755d997d40",
+      "itemName": "7시에 일어나기",
+      "totalAmount": 200000
+    },
+    {
+      "orderId": 4,
+      "approved_at": "2022-11-17T17:38:49",
+      "requestuniquenumber": "A375f305204d1c579350",
+      "itemName": "첼린지이름",
+      "totalAmount": 200000
+    }
   ]
 }

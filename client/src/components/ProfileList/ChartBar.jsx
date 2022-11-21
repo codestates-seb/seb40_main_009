@@ -3,7 +3,7 @@ import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
 function ChartBar(props) {
   return (
-    <S.ChartBarComponent>
+    <S.ChartBarComponent percentage={props.percentage}>
       <div className="level-bar">
         Lv-1
         <div className="progress-bar">
