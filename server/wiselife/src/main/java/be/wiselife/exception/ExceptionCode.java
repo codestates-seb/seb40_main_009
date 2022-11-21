@@ -37,7 +37,7 @@ public enum ExceptionCode {
     CHALLENGE_EXAM_IMAGE_MUST_ENROLL(404, "Challenge example image must be enroll min one-image"),
 
     //ChallengeCertImage 부분 예외 ===========시작
-    POSSIBLE_CHANGE_CHALLENGE_CERT_IMAGE_NOT_EXIST(404, "Possible change Challenge certification is not exist"),
+    YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST(404, "You must participate to challenge first"),
 
     //Challenge Talk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),

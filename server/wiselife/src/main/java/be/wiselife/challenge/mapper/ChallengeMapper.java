@@ -160,10 +160,8 @@ public interface ChallengeMapper {
             int certCount = 0;
             for (String imagePath : challengeCertImagePaths) {
                 challengeCertImagePathList.add(imagePath);
-                certCount++;
             }
             simpleResponse.setChallengeCertImagePath(challengeCertImagePathList);
-            simpleResponse.setCertCount(certCount);
         }
         return simpleResponse;
     }
@@ -229,13 +227,10 @@ public interface ChallengeMapper {
             if (!(challenge.getChallengeCertImagePath() == null)) {
                 String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
                 List<String> challengeCertImagePathList = new ArrayList<>();
-                int certCount = 0;
                 for (String imagePath : challengeCertImagePaths) {
                     challengeCertImagePathList.add(imagePath);
-                    certCount++;
                 }
                 detailResponse.challengeCertImagePath(challengeCertImagePathList);
-                detailResponse.certCount(certCount);
             }
         }
         return detailResponse.build();
