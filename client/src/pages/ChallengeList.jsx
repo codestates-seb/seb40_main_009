@@ -10,7 +10,7 @@ function ChallengeList() {
   const navigate = useNavigate();
 
   const move = () => {
-    navigate('/addchallenge');
+    navigate('/createchallenge/1');
   };
 
   useEffect(() => {
@@ -46,11 +46,6 @@ function ChallengeList() {
             <Challenge />
           </S.Container>
         )}
-
-        <Routes>
-          <Route path="paid" />
-          <Route path="free" />
-        </Routes>
       </S.ListContainer>
     </>
   );
