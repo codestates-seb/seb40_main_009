@@ -1,12 +1,10 @@
 package be.wiselife.image.service;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
-import be.wiselife.image.entity.ChallengeExamImage;
-import be.wiselife.image.entity.ChallengeRepImage;
-import be.wiselife.image.entity.Image;
-import be.wiselife.image.entity.MemberImage;
+import be.wiselife.image.entity.*;
 import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.member.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -116,11 +114,92 @@ public class ImageService {
         String changeImagePath = "";
         for (ChallengeExamImage changeChallengeExamImage : changeChallengeExamImages) {
             changeImagePath = changeImagePath+changeChallengeExamImage.getImagePath() + ",";
-            log.info("imagePath={}",changeChallengeExamImage.getImagePath());
         }
         if (changeImagePath.equals("")) {
             throw new BusinessLogicException(ExceptionCode.CHALLENGE_EXAM_IMAGE_MUST_ENROLL);
         }
         return changeImagePath;
+    }
+
+    //ChallengeCertImage 부분 코드======================================
+    public String postChallengeCertImage(Challenge challenge, Member loginMember) {
+
+        ChallengeCertImage challengeCertImage = new ChallengeCertImage();
+        challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+        challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
+        challengeCertImage.setMemberId(loginMember.getMemberId());
+        imageRepository.save(challengeCertImage);
+
+        List<ChallengeCertImage> challengeCertImages =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        String changeImagePath = "";
+        for (ChallengeCertImage certImage : challengeCertImages) {
+            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
+            log.info("imagePath={}",changeImagePath);
+        }
+
+        return changeImagePath;
+    }
+
+    public String patchChallengeCertImage(Challenge challenge, Member loginMember) {
+        ChallengeCertImage challengeCertImage =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        if (challengeCertImage == null) {
+            throw new BusinessLogicException(ExceptionCode.POSSIBLE_CHANGE_CHALLENGE_CERT_IMAGE_NOT_EXIST);
+        }
+        if (challengeCertImage.getImagePath().equals(challenge.getChallengeCertImagePath())) {
+            imageRepository.delete(challengeCertImage);
+        } else {
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            imageRepository.save(challengeCertImage);
+        }
+        List<ChallengeCertImage> challengeCertImages =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPost("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        String changeImagePath = "";
+        for (ChallengeCertImage certImage : challengeCertImages) {
+            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
+            log.info("imagePath={}",changeImagePath);
+        }
+
+        return changeImagePath;
+    }
+
+    public String getChallengeCertImage(Challenge challenge, Member loginMember) {
+        List<ChallengeCertImage> challengeCertImages =
+                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdGet("CCI",
+                        loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        String changeImagePath = "";
+        for (ChallengeCertImage certImage : challengeCertImages) {
+            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
+            log.info("imagePath={}",changeImagePath);
+        }
+
+        return changeImagePath;
+    }
+
+    //ReviewImage 부분 코드======================================
+    public void patchReviewImage(ChallengeReview review) {
+        ReviewImage reviewImageFromRepository =
+                imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
+        if (reviewImageFromRepository == null) {
+            ReviewImage reviewImage = new ReviewImage();
+            saveReviewImage(review, reviewImage);
+        } else {
+            saveReviewImage(review, reviewImageFromRepository);
+        }
+    }
+
+    // MemberImage 중복코드 줄이는 용도
+    private void saveReviewImage(ChallengeReview review, ReviewImage reviewImage) {
+        reviewImage.setImagePath(review.getChallengeReviewImagePath());
+        reviewImage.setRandomIdForImage(review.getReviewRandomId());
+        imageRepository.save(reviewImage);
     }
 }

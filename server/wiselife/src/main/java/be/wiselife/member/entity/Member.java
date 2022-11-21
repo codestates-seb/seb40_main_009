@@ -5,6 +5,7 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.Image;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 
 import lombok.*;
@@ -41,9 +42,9 @@ public class Member extends TimeAudit {
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
-        this.memberChallengeTotalCount = 0;
+        this.memberChallengeTryCount = 0;
         this.memberChallengeSuccessCount = 0;
-        this.memberChallengePercentage = 0;
+        this.memberChallengePercentage = memberChallengeSuccessCount/memberChallengeTryCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
@@ -86,17 +87,6 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private boolean hasRedCard;
 
-    // 아래는 매핑 후에도 ResponseDTO에서 처리 가능한 필드
-
-    @Column(nullable = false)
-    private int memberChallengeTotalCount;
-
-    @Column(nullable = false)
-    private int memberChallengeSuccessCount;
-
-    @Column(nullable = false)
-    private double memberChallengePercentage;
-
     @Column(nullable = false)
     private double memberMoney;
 
@@ -127,19 +117,31 @@ public class Member extends TimeAudit {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    /**
-     * 연관관계 매핑 해야할것
-     * image, challenge, challengeReview
-     */
-    @OneToMany(mappedBy = "member")
+    // 주문내역 관련 필드
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     public void addOrder(Order order) {
         orders.add(order);
     }
-    /**
-     * 생성자는 필요시 작성예정
-     */
+
+
+
+    // 참여중, 참여했던 챌린지에 대한 필드
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<MemberChallenge> memberChallenges = new ArrayList<>();
+
+    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
+    @Column(nullable = false)
+    private double memberChallengeTryCount;
+
+    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
+    @Column(nullable = false)
+    private double memberChallengeSuccessCount;
+
+    // TODO: 필드를 두지 않고 DTO로 응답하게 수정하자
+    @Column(nullable = false)
+    private double memberChallengePercentage;
 
     public enum FollowStatus {
         SELF, FOLLOW, UNFOLLOW,
@@ -147,20 +149,23 @@ public class Member extends TimeAudit {
     }
 
     public enum MemberBadge {
-        새내기(1),
-        좀치는도전자(2),
-        열정도전자(3),
-        모범도전자(4),
-        우수도전자(5),
-        챌린지장인(6),
-        시간의지배자(7),
-        챌린지신(8);
+        새내기(1,0),
+        좀치는도전자(2,Math.pow(2,1)),
+        열정도전자(3,Math.pow(2,2)),
+        모범도전자(4,Math.pow(2,3)),
+        우수도전자(5,Math.pow(2,4)),
+        챌린지장인(6,Math.pow(2,5)),
+        시간의지배자(7,Math.pow(2,6)),
+        챌린지신(8,Math.pow(2,7));
 
         @Getter
         public int level;
+        @Getter
+        public double objExperience;
 
-        MemberBadge(int level) {
+        MemberBadge(int level,double objExperience) {
             this.level = level;
+            this.objExperience = objExperience;
         }
 
         public static MemberBadge badgeOfLevel(int level) {

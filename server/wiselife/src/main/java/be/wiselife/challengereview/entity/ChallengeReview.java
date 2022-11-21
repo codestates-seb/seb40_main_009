@@ -7,6 +7,7 @@ import be.wiselife.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -15,6 +16,10 @@ public class ChallengeReview extends TimeAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeReviewId;
+
+    @Setter
+    private String reviewRandomId;
+
     @Setter
     @Column(nullable = false)
     private String challengeReviewTitle;
@@ -46,6 +51,7 @@ public class ChallengeReview extends TimeAudit {
         this.challengeReviewContent = challengeReviewContent;
         this.challengeReviewStar = challengeReviewStar;
         this.challengeReviewImagePath = challengeReviewImagePath;
+        this.reviewRandomId = UUID.randomUUID().toString().substring(0, 6);
     }
 
 

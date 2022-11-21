@@ -38,10 +38,13 @@ public class ChallengeController {
 
     /*챌린지 생성*/
     @PostMapping
-    public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto){
+    public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto,
+                                        HttpServletRequest request){
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
-        challenge =  challengeService.createChallenge(challenge);
+        challenge =  challengeService.createChallenge(challenge,loginMember);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
@@ -62,21 +65,37 @@ public class ChallengeController {
                 , HttpStatus.OK);
     }
 
+    @PostMapping("/participate/{challengeId}")
+    public ResponseEntity postMemberAndChallenge(@PathVariable("challengeId") @Positive Long challengeId,
+                                                 HttpServletRequest request) {
+
+        Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
+
+        Challenge challenge = challengeService.participateChallenge(challengeFromRepository,loginMember);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeMapper.
+                        challengeToChallengeDetailResponseDto(challenge,challengeTalkMapper,memberService)),
+                HttpStatus.CREATED);
+    }
 
     /**
+     * 작성자 : 유현
      * 인증사진 등록
-     * @param certPost 인증사진이 속한 Challenge 아이디와 인증사진 경로
+     * @param cert 인증사진이 속한 Challenge 아이디와 인증사진 경로
      * @param request 로그인한 사람의 이메일 정보를 가져오기위한 인자값
      * TODO :
      * 챌린지 참여인원인지 판단하는 로직 추가
      * 응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
-    @PostMapping("/this must be set different!!!!!!!!!")
-    public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.CertPost certPost,
+
+    @PostMapping("/cert")
+    public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
                                                   HttpServletRequest request) {
-        String followerEmail = jwtTokenizer.getEmailWithToken(request);
-        Member loginMember = memberService.findMemberByEmail(followerEmail);
-        Challenge certImageInfo = challengeMapper.certPostDtoToChallenge(certPost);
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
+        Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
         Challenge challenge = challengeService.createCertImage(certImageInfo, loginMember);
 
@@ -84,8 +103,19 @@ public class ChallengeController {
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
     }
 
+     //작성자 : 유현
+    @PatchMapping("/cert")
+    public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
+                                                   HttpServletRequest request) {
+        String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        Member loginMember = memberService.findMemberByEmail(loginEmail);
+        Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
 
+        Challenge challenge = challengeService.updateCertImage(certImageInfo, loginMember);
 
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
+    }
 
 
     /**
@@ -97,8 +127,7 @@ public class ChallengeController {
      * 3) 동일한 사용자의 조회수 중복 증가 방지 기능
      * */
     @GetMapping("/{challenge-id}")
-    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId){
-
+    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
         //jwt 토큰으로 멤버 email 받아오는 기능 추가해야
 
         Challenge challenge = challengeService.getChallenge(challengeId); //챌린지 찾기
@@ -109,6 +138,37 @@ public class ChallengeController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeResponseDto)
                 , HttpStatus.OK);
+    }
+
+    /**
+     * 작성자 : 유현
+     * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
+     * 로그인 된 유저가 아닐시 인증사진은 안나오게 simpleResponse로 응답을 준다.
+     * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게 detailResponse를 응답해 준다.
+     */
+    @GetMapping("/test/{challenge-id}")
+    public ResponseEntity getChallengeV1(@PathVariable("challenge-id") @Positive Long challengeId,
+                                         HttpServletRequest request) {
+        Challenge challenge = challengeService.findChallengeById(challengeId);
+        challenge = challengeService.updateViewCount(challenge);
+        if (request.getHeader("Authorization")==null) {
+            challenge.setChallengeCertImagePath("");
+            //TODO: simpleResponseDto로 변경 필요
+            ChallengeDto.DetailResponse challengeResponseDto
+                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
+            return new ResponseEntity<>(
+                    new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
+        } else {
+            String loginEmail = jwtTokenizer.getEmailWithToken(request);
+            Member loginMember = memberService.findMemberByEmail(loginEmail);
+
+            challenge = challengeService.getCertification(challenge, loginMember);
+
+            ChallengeDto.DetailResponse challengeResponseDto
+                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
+            return new ResponseEntity<>(
+                    new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
+        }
     }
 
     /*챌린지 삭제*/

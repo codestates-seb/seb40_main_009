@@ -18,6 +18,7 @@ public enum ExceptionCode {
     CHALLENGE_NOT_FOUND(404, "Challenge not found"),
     COMMENT_NOT_FOUND(404, "Comment not found"),
     CHALLENGE_CATEGORY_NOT_FOUND(404, "Category not found"),
+    YOU_ALREADY_PARTICIPATE(404, "You already participate"),
     
     //Follower 부분 예외 ==========시작
     CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself"),
@@ -32,6 +33,9 @@ public enum ExceptionCode {
 
     //ChallengeExamImage 부분 예외 ===========시작
     CHALLENGE_EXAM_IMAGE_MUST_ENROLL(404, "Challenge example image must be enroll min one-image"),
+
+    //ChallengeCertImage 부분 예외 ===========시작
+    POSSIBLE_CHANGE_CHALLENGE_CERT_IMAGE_NOT_EXIST(404, "Possible change Challenge certification is not exist"),
 
     //Challenge Talk 부분 예외 ==============시작
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),

@@ -29,7 +29,7 @@ public class ChallengeReviewController {
         this.jwtTokenizer = jwtTokenizer;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity postChallengeReview(@Valid @RequestBody ChallengeReviewDto.Post challengeReviewPostDto) {
 
         ChallengeReview challengeReview = challengeReviewMapper.challengeReviewPostDtoToChallengeReview(challengeReviewPostDto);
