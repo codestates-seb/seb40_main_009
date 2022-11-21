@@ -84,8 +84,6 @@ public class ChallengeTalkController {
 
         challengeTalkService.deleteChallengeTalk(challengeTalkId, memberService.getLoginMember(request));
 
-        return new ResponseEntity<>(
-                "성공적으로 삭제되었습니다",
-                HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

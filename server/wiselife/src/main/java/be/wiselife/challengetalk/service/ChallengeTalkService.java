@@ -26,18 +26,21 @@ public class ChallengeTalkService {
     }
 
     public ChallengeTalk createChallengeTalk(ChallengeTalk challengeTalk, Long challengeId, Member loginMember){
-        challengeTalk.setChallenge(challengeService.getChallenge(challengeId));
+        Challenge challenge = challengeService.getChallenge(challengeId);
+
+        challengeTalk.setChallenge(challenge);
         challengeTalk.setMemberId(loginMember.getMemberId());
         challengeTalk.setCreate_by_member(loginMember.getMemberName());
+
+        challenge.addChallengeTalk(challengeTalk);
 
         return saveChallengeTalk(challengeTalk);
     }
 
     public ChallengeTalk updateChallengeTalk(ChallengeTalk changedChallengeTalk, Member loginMember) {
-
-        checkUserAuthorization(changedChallengeTalk, loginMember);
-
+        //사용자 권한 확인
         ChallengeTalk savedChallengeTalk = findChallengeTalkById(changedChallengeTalk.getChallengeTalkId());
+        checkUserAuthorization(savedChallengeTalk, loginMember);
 
         /*수정 로직*/
         Optional.ofNullable(changedChallengeTalk.getChallengeTalkBody())
@@ -74,11 +77,11 @@ public class ChallengeTalkService {
     /**
      * 챌랜지 댓글 관련 유저의 권한 확인
      * 챌린지 댓글 수정, 삭제 시도시 사용한다.
-     * @param changedChallengeTalk 변경을 시도하는 챌린지 댓글
+     * @param challengeTalk 변경을 시도하는 챌린지 댓글
      * @param loginMember 챌랜지 댓글 변경을 시도하는 맴버
      */
-    private void checkUserAuthorization(ChallengeTalk changedChallengeTalk, Member loginMember){
-        if(!memberService.isVerifiedMember(changedChallengeTalk.getMemberId(), loginMember.getMemberId())){
+    private void checkUserAuthorization(ChallengeTalk challengeTalk, Member loginMember){
+        if(!memberService.isVerifiedMember(challengeTalk.getMemberId(), loginMember.getMemberId())){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
         }
     }

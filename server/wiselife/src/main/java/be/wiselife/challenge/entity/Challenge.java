@@ -2,6 +2,7 @@ package be.wiselife.challenge.entity;
 
 import be.wiselife.audit.TimeAudit;
 import be.wiselife.audit.WriterAudit;
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -79,6 +80,8 @@ public class Challenge extends WriterAudit {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
+    private List<ChallengeReview> challengeReviewList = new ArrayList<>();
 
     //이미지 중 챌린지 생성자가 추가할 사진 필드
     @Setter
@@ -101,6 +104,7 @@ public class Challenge extends WriterAudit {
 
     //챌린지 수정, 삭제시 권한 보유한 member의 id
     @Setter
+    @Getter
     private Long authorizedMemberId;
 
     @Builder
@@ -141,6 +145,16 @@ public class Challenge extends WriterAudit {
         this.challengeTalkList.add(challengeTalk);
         if(challengeTalk.getChallenge() == null){
             challengeTalk.setChallenge(this);
+        }
+    }
+
+    /**
+     * 챌린지 리뷰 추가
+     */
+    public void addChallengeReview(ChallengeReview challengeReview){
+        this.challengeReviewList.add(challengeReview);
+        if(challengeReview.getChallenge() == null){
+            challengeReview.setChallenge(this);
         }
     }
 

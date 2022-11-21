@@ -8,7 +8,6 @@ import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +51,12 @@ public class ChallengeService {
      *       2) 시작 후 아무것도 수정 불가
      * */
     public Challenge updateChallenge(Challenge changedChallenge, Member loginMember){
-        //유저 권한 확인
-        checkUserAuthorization(changedChallenge, loginMember);
-
-        //챌린지 수정
         Challenge existingChallenge = findChallengeById(changedChallenge.getChallengeId());
 
+        //유저 권한 확인
+        checkMemberAuthorization(existingChallenge, loginMember);
+
+        //챌린지 수정
         Optional.ofNullable(changedChallenge.getChallengeCategory())
                 .ifPresent(existingChallenge::setChallengeCategory);
         Optional.ofNullable(changedChallenge.getChallengeTitle())
@@ -172,7 +171,7 @@ public class ChallengeService {
 
         Challenge savedChallenge = findChallengeById(challengeId);
         //유저 권한 확인
-        checkUserAuthorization(savedChallenge, loginMember);
+        checkMemberAuthorization(savedChallenge, loginMember);
         //삭제
         challengeRepository.delete(savedChallenge);
     }
@@ -202,15 +201,13 @@ public class ChallengeService {
     /**
      * 챌랜지 관련 유저의 권한 확인
      * 챌린지 수정, 삭제 시도시 사용한다.
-     * @param changedChallenge 변경을 시도하는 챌린지
-     * @param loginMember 챌랜지 변경을 시도하는 맴버
+     * @param Challenge 변경 시도하는 챌린지
+     * @param loginMember 변경을 시도하는 맴버
      */
-    private void checkUserAuthorization(Challenge changedChallenge, Member loginMember){
+    private void checkMemberAuthorization(Challenge Challenge, Member loginMember){
 
-        if(!memberService.isVerifiedMember(changedChallenge.getAuthorizedMemberId(), loginMember.getMemberId())){
+        if(!memberService.isVerifiedMember(Challenge.getAuthorizedMemberId(), loginMember.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
-        }
+
     }
-
-
 }

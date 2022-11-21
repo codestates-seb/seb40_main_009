@@ -6,9 +6,7 @@ import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.SingleResponseDto;
-import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
-import be.wiselife.security.JwtTokenizer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -57,6 +55,7 @@ public class ChallengeController {
                                          HttpServletRequest request) {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
+
         challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
@@ -171,13 +170,7 @@ public class ChallengeController {
 
         challengeService.deleteChallenge(challengeId, memberService.getLoginMember(request));
 
-        return new ResponseEntity<>(
-                "Challenge 삭제 완료", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    /**
-     * JWT 토큰의 유저 이메일 이용해 login된 멤버 객체 가져오는 함수
-     * 시도하려는 유저에게 권한이 있는지 확인하기 위해 사용한다.
-     */
 
 }
