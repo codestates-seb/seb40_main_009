@@ -15,6 +15,13 @@ public class ChallengeReviewDto {
         @NotNull
         private Long memberId;
         @NotNull
+
+
+
+
+
+
+        
         private Long challengeId;
         @NotBlank
         private String challengeReviewTitle;

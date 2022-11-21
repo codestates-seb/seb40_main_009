@@ -21,9 +21,6 @@ import java.util.UUID;
 public interface ChallengeMapper {
 
     Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
-    
-    /*챌린지 생성 mapping*/
-    ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge);
 
     /**
      * 챌린지 생성 mapping

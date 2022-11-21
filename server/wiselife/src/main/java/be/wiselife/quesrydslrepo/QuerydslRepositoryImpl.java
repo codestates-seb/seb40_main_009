@@ -21,7 +21,7 @@ import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.order.entity.QOrder.order;
 
 @RequiredArgsConstructor
-public class QuerydslRepositoryImpl implements QuerydslRepository{
+public class QuerydslRepositoryImpl implements QuerydslRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -33,9 +33,8 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
- 
-    
-     @Override
+
+    @Override
     public MemberImage findByImageTypeAndMemberId(String imageType, Long memberId) {
         return queryFactory
                 .selectFrom(memberImage)
@@ -61,16 +60,18 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                         .and(challengeRepImage.randomIdForImage.eq(randomIdForImage)))
                 .fetchOne();
     }
+
     @Override
-    public List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType,String randomIdForImage) {
+    public List<ChallengeExamImage> findByImageTypeAndChallengeExam(String imageType, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeExamImage)
                 .where(challengeExamImage.imageType.eq(imageType)
                         .and(challengeExamImage.randomIdForImage.eq(randomIdForImage)))
                 .fetch();
     }
+
     @Override
-    public ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType,String imagePath, String randomIdForImage) {
+    public ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage) {
         return queryFactory
                 .selectFrom(challengeExamImage)
                 .where(challengeExamImage.imageType.eq(imageType)
@@ -79,16 +80,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository{
                 .fetchOne();
     }
 
+    /* challengeCertImage.challengeId 이런 필드값 없다고 해서 에러 발생해서 일단 imageId로 임의로 수정 , 영운 */
     @Override
     public List<ChallengeCertImage> findByImageTypeAndChallengeCertId(String imageType, Long challengeId) {
         return queryFactory
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
-                        .and(challengeCertImage.challengeId.eq(challengeId)))
+                        .and(challengeCertImage.imageId.eq(challengeId))) //수정필요한 부분
                 .fetch();
     }
 
-   /**
+    /**
      * @return 오더테이블에서 맴버아이디를 기반으로 성공한 결재내역만 보이게 출력
      */
     @Override

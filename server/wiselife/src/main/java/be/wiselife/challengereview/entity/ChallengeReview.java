@@ -27,7 +27,7 @@ public class ChallengeReview extends TimeAudit {
     @Setter
     private String challengeReviewImagePath;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_id")
     @ToString.Exclude
     @Setter

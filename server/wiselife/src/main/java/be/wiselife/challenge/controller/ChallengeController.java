@@ -71,7 +71,7 @@ public class ChallengeController {
      * 챌린지 참여인원인지 판단하는 로직 추가
      * 응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
-    @PostMapping
+    @PostMapping("/this must be set different!!!!!!!!!")
     public ResponseEntity postMemberCertification(@Valid @RequestBody ChallengeDto.CertPost certPost,
                                                   HttpServletRequest request) {
         String followerEmail = jwtTokenizer.getEmailWithToken(request);
