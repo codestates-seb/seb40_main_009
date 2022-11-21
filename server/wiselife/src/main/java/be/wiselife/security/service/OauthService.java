@@ -31,6 +31,8 @@ public class OauthService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
     private final JwtTokenizer jwtTokenizer;
 
+    private final CustomAuthorityUtils authorityUtils;
+
     /**
      *  로그인의 모든 과정이 이 메서드에서 다 이루어진다.
      *  1. 인가코드를 카톡 Oauth2서버에 토큰을 요청함. (프론트에서 이루어짐)
@@ -104,7 +106,7 @@ public class OauthService extends DefaultOAuth2UserService {
         String providerId = oAuth2MemberInfo.getProviderId();
         String email = oAuth2MemberInfo.getEmail();
         String imageURL = oAuth2MemberInfo.getImageURL();
-        List<String> rolesForDatabase = new CustomAuthorityUtils().createRolesForDatabase(email);
+        List<String> rolesForDatabase = authorityUtils.createRolesForDatabase(email);
 
         Member member = memberRepository.findByMemberEmail(email)
                 .orElseGet(()-> memberRepository.save(new Member(email,imageURL,rolesForDatabase,provide,providerId)));

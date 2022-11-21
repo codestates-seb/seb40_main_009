@@ -25,6 +25,8 @@ public enum ExceptionCode {
    
    //login 부분 예외 ========시작
     SIGNUP_WRONG(404,"somethings get wrong during login" ),
+    FORBIDDEN_MEMBER(403, "The member does not have permission"),
+    REFRESHTOKEN_EXPIRED(404, "Refresh Token also Expired, please login"),
 
     //order 부분 예외 ========시작
     TRADE_CODE_WRONG(404,"Not available tid" ),
@@ -41,10 +43,10 @@ public enum ExceptionCode {
     CHALLENGE_TALK_NOT_FOUND(404, "ChallengeTalk not found"),
 
     //Challenge Review 부붕 예외 ==============시작
-    CHALLENGE_REVIEW_NOT_FOUND(404, "ChallengeReview not found"),
+    CHALLENGE_REVIEW_NOT_FOUND(404, "ChallengeReview not found");
 
     //권한이 없는 자의 예외 =============시작
-    FORBIDDEN_MEMBER(403, "The member does not have permission");
+
 
     @Getter
     private int code;

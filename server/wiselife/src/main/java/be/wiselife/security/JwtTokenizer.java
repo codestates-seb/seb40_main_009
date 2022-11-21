@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /*
  * jwt 토큰을 사용하기 위한 메서드
@@ -140,5 +137,22 @@ public class JwtTokenizer {
                 .build()
                 .parseClaimsJws(jws);
         return claims;
+    }
+
+    //TODO: 리프레쉬토큰 사용시 수정예정
+    public Jws<Claims> verifySignature(String jwtToken) {
+        return null;
+    }
+
+    public Date getTokenExpiration(int refreshToken) {
+        return null;
+    }
+
+    public String generateRefreshToken(String subject, Date expiration, String secretKey) {
+        return null;
+    }
+
+    public String generateAccessToken(HashMap<String, Object> claims, String subject, Date expiration, String secretKey) {
+        return null;
     }
 }
