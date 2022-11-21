@@ -42,6 +42,7 @@ public enum ExceptionCode {
 
     //Challenge Review 부붕 예외 ==============시작
     CHALLENGE_REVIEW_NOT_FOUND(404, "ChallengeReview not found"),
+    CHALLENGE_REVIEW_ALREADY_EXISTS(400, "ChallengeReview not found"),
 
     //권한이 없는 자의 예외 =============시작
     FORBIDDEN_MEMBER(403, "The member does not have permission");

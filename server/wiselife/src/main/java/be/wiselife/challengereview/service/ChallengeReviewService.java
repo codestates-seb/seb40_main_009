@@ -34,6 +34,11 @@ public class ChallengeReviewService {
      * TODO: MemberChallnge 테이블 만들어 지면 후기 작성하려는 사용자가 실제 참가했는지 확인하는 로직
      */
     public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge) {
+        challengeReviewRepository.findChallengeReviewByMemberMemberIdAndChallengeChallengeId(loginMember.getMemberId(), challenge.getChallengeId())
+                .ifPresent(a -> {
+                    throw new BusinessLogicException(ExceptionCode.CHALLENGE_REVIEW_ALREADY_EXISTS);
+                });
+
         challengeReview.setChallenge(challenge);
         challengeReview.setMember(loginMember);
         challengeReview.setCreate_by_member(loginMember.getMemberName());
