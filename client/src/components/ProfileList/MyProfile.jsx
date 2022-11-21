@@ -8,7 +8,7 @@ function MyProfile(props) {
     <S.MyProfileComponent>
       <header className="profile-info">
         <img
-          src={props.profileimage}
+          src={props.profileimage} //요청
           className="image-size"
           alt="profile-img"
         />
