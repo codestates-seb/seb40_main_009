@@ -158,8 +158,12 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        if (challenge.getChallengeAuthCycle() == challengeCertImages.size()) {
+        if (challengeCertImages.size()%challenge.getChallengeAuthCycle()==0) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
+            double successRate = (memberChallengeFromRepository.getMemberSuccessDay()) /
+                    (memberChallengeFromRepository.getChallenge().getChallengeEndDate().getDayOfYear() - memberChallengeFromRepository.getChallenge().getChallengeStartDate().getDayOfYear());
+            memberChallengeFromRepository.setMemberChallengeSuccessRate(successRate*100);
+
             memberChallengeRepository.save(memberChallengeFromRepository);
         }
         String changeImagePath = "";

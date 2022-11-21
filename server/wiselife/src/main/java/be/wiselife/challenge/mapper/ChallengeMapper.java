@@ -160,10 +160,8 @@ public interface ChallengeMapper {
             int certCount = 0;
             for (String imagePath : challengeCertImagePaths) {
                 challengeCertImagePathList.add(imagePath);
-                certCount++;
             }
             simpleResponse.setChallengeCertImagePath(challengeCertImagePathList);
-            simpleResponse.setCertCount(certCount);
         }
         return simpleResponse;
     }
