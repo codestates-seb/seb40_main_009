@@ -50,8 +50,8 @@ public class ChallengeService {
      * TODO: 1) 시작 전 일정, 돈 수정 불가
      *       2) 시작 후 아무것도 수정 불가
      * */
-    public Challenge updateChallenge(Challenge changedChallenge, Member loginMember){
-        Challenge existingChallenge = findChallengeById(changedChallenge.getChallengeId());
+    public Challenge updateChallenge(Challenge changedChallenge, Member loginMember, Long challengeId){
+        Challenge existingChallenge = findChallengeById(challengeId);
 
         //유저 권한 확인
         checkMemberAuthorization(existingChallenge, loginMember);

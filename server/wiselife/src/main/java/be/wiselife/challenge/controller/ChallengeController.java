@@ -50,13 +50,14 @@ public class ChallengeController {
     /**
      * 챌린지 수정
      */
-    @PatchMapping
-    public ResponseEntity patchChallenge(@Valid @RequestBody ChallengeDto.Patch challengePatchDto,
+    @PatchMapping("/{challenge-id}")
+    public ResponseEntity patchChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
+                                         @Valid @RequestBody ChallengeDto.Patch challengePatchDto,
                                          HttpServletRequest request) {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
 
-        challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request));
+        challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request), challengeId);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))

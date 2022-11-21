@@ -48,9 +48,6 @@ public class ChallengeDto {
 
     @Getter
     public static class Patch {
-        @NotNull
-        private Long challengeId;
-
         @Range(min = 1, max = 3) // 1: 버킷 리스트 2: 공유 챌린지 3: 오프라인 챌린지
         private int challengeCategoryId;
 

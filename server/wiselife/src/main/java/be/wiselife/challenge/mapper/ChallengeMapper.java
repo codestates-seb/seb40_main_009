@@ -81,7 +81,6 @@ public interface ChallengeMapper {
         }
 
         Challenge.ChallengeBuilder challenge = Challenge.builder();
-        challenge.challengeId(challengePatchDto.getChallengeId());
         challenge.challengeTitle( challengePatchDto.getChallengeTitle() );
         challenge.challengeDescription( challengePatchDto.getChallengeDescription() );
         challenge.challengeMaxParty( challengePatchDto.getChallengeMaxParty() );
