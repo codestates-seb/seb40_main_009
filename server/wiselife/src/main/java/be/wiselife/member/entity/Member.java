@@ -50,7 +50,8 @@ public class Member extends TimeAudit {
     }
     //더미 데이터용 생성자
     @Builder
-    public Member(String memberEmail, String memberImagePath, List<String> roles, String provider, String providerId,int followerCount,MemberBadge memberBadge) {
+    public Member(String memberEmail, String memberImagePath, List<String> roles, String provider,
+                  String providerId,int followerCount,MemberBadge memberBadge,String memberName) {
 
         this.roles = roles;
         this.provider = provider;
@@ -73,6 +74,7 @@ public class Member extends TimeAudit {
         this.memberDescription = "안녕하세요! 슬린이에요^^";
         this.memberImagePath = memberImagePath;
         this.refreshToken = "리프레쉬토큰";
+        this.memberName = memberName;
     }
 
     @Id

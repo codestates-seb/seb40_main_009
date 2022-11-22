@@ -37,7 +37,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public List<MemberChallenge> findByMember(Member member) {
+    public List<MemberChallenge> findMemberChallengeByMember(Member member) {
         return queryFactory
                 .selectFrom(memberChallenge)
                 .where(memberChallenge.member.eq(member))
@@ -121,7 +121,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
                         .and(challengeCertImage.createDay.eq(now))
-                        .and(challengeCertImage.createdAt.minute().eq(LocalDateTime.now().getMinute())))
+                        .and(challengeCertImage.createdAt.second().eq(LocalDateTime.now().getSecond())))
                 .orderBy(challengeCertImage.createdAt.desc())
                 .fetchOne();
     }
@@ -132,6 +132,16 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
+                .orderBy(challengeCertImage.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<ChallengeCertImage> findCertImageByImageTypeAndMemberId(String imageType, Long memberId) {
+        return queryFactory
+                .selectFrom(challengeCertImage)
+                .where(challengeCertImage.imageType.eq(imageType)
+                        .and(challengeCertImage.memberId.eq(memberId)))
                 .orderBy(challengeCertImage.createdAt.desc())
                 .fetch();
     }

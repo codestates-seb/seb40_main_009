@@ -7,6 +7,7 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -79,6 +80,7 @@ public interface MemberMapper {
     }
 
     default List<MemberDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+
         return memberChallenges
                 .stream()
                 .map(memberChallenge -> MemberDto.MemberChallengeResponseDto
