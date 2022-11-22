@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { createChallenge, validBtn } from '../../atoms/atoms';
+import { createChallenge, validButton } from '../../atoms/atoms';
 import { ko } from 'date-fns/locale';
 import { DateRange } from 'react-date-range';
 import { useForm } from 'react-hook-form';
@@ -9,7 +9,7 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 function ChallengeAsk3() {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const [checkBtn, setCheckBtn] = useRecoilState(validBtn);
+  const [checkBtn, setCheckBtn] = useRecoilState(validButton);
 
   const [date, setDate] = useState([
     {
@@ -18,6 +18,7 @@ function ChallengeAsk3() {
       key: 'selection',
     },
   ]);
+  const [dateInfomation] = date;
   let startDate = `${date[0].startDate.getFullYear()}-${date[0].startDate.getMonth()}-${date[0].startDate.getDate()}`;
   let lastDate = date[0].endDate;
   let lastDatee = `${lastDate.getFullYear()}-${lastDate.getMonth()}-${lastDate.getDate()}`;

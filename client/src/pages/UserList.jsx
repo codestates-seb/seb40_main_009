@@ -1,41 +1,44 @@
-import * as S from '../style/UserList/UserList.styled';
-import User from '../components/UserList/UserList';
 import { useState } from 'react';
 
-function UserList() {
+import * as S from '../style/UserList/UserList.styled';
+
+import User from '../components/UserList/UserList';
+
+export default function UserList() {
   const [checkedFilter, setCheckedFilter] = useState(1);
-  const gradeFilter = () => {
-    setCheckedFilter(1);
+  const handleClick = (event) => {
+    const { value } = event.currentTarget;
+    setCheckedFilter(value);
   };
 
-  const voteFilter = () => {
-    setCheckedFilter(2);
-  };
-
-  const createdFilter = () => {
-    setCheckedFilter(3);
-  };
-
-  console.log(checkedFilter);
+  const tabs = [
+    {
+      id: 1,
+      title: '등급순',
+    },
+    {
+      id: 2,
+      title: '인기순',
+    },
+    {
+      id: 3,
+      title: '가입순',
+    },
+  ];
 
   return (
     <S.ListContainer>
       <section>
-        {checkedFilter === 1 ? (
-          <button className="clickedBtn">등급순</button>
-        ) : (
-          <button onClick={gradeFilter}>등급순</button>
-        )}
-        {checkedFilter === 2 ? (
-          <button className="clickedBtn">인기순</button>
-        ) : (
-          <button onClick={voteFilter}>인기순</button>
-        )}
-        {checkedFilter === 3 ? (
-          <button className="clickedBtn">가입순</button>
-        ) : (
-          <button onClick={createdFilter}>가입순</button>
-        )}
+        {tabs.map(({ id, title }) => (
+          <button
+            key={id}
+            value={id}
+            onClick={handleClick}
+            className={checkedFilter === id ? 'clickedBtn' : null}
+          >
+            {title}
+          </button>
+        ))}
       </section>
       <S.Container>
         <S.IndexContainer>
@@ -72,5 +75,3 @@ function UserList() {
     </S.ListContainer>
   );
 }
-
-export default UserList;

@@ -11,7 +11,7 @@ export const createNumber = atom({
   default: 1,
 });
 
-export const validBtn = atom({
-  key: 'validBtn',
+export const validButton = atom({
+  key: 'validButton',
   default: false,
 });

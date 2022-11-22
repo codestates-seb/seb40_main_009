@@ -1,6 +1,12 @@
 import * as S from '../../style/ChallengeList/Challenge.styled';
-
+import { useNavigate } from 'react-router-dom';
 function Challenge() {
+  const navigate = useNavigate();
+
+  const clickDetail = () => {
+    navigate(`/detail/2`);
+  };
+
   return (
     <>
       <S.Card>
@@ -16,7 +22,7 @@ function Challenge() {
         <S.Face className="face2">
           <S.ContentB>
             <p>About Challenge, abcdefghijklmnopqrstuvwxyz</p>
-            <a href="none">Read More</a>
+            <span onClick={clickDetail}>Read More</span>
           </S.ContentB>
         </S.Face>
       </S.Card>
