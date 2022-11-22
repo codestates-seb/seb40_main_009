@@ -101,6 +101,10 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .fetch();
     }
 
+    /**
+     * 현재는 테스트를 위해서 최초 생성시간하고 정확히 같게 설정해둠
+     * TODO:실운영에는 일자가 같은게 검색되게 변경 필요
+     */
     @Override
     public ChallengeCertImage findByImageTypeAndMemberIdAndChallengeCertIdPatch(String imageType, Long memberId, String randomIdForImage) {
         LocalDate now = LocalDate.now();
@@ -110,7 +114,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
                         .and(challengeCertImage.createDay.eq(now))
-                        .and(challengeCertImage.created_at.minute().eq(LocalDateTime.now().getMinute())))
+                        .and(challengeCertImage.created_at.second().eq(LocalDateTime.now().getSecond())))
                 .orderBy(challengeCertImage.created_at.desc())
                 .fetchOne();
     }

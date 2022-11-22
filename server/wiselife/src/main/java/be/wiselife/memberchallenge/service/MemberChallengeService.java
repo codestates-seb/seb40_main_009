@@ -11,6 +11,7 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -51,9 +52,6 @@ public class MemberChallengeService {
 
         } else {
             MemberChallenge memberChallenge = new MemberChallenge();
-
-//            double challengeCurrentParty = challenge.getChallengeCurrentParty();
-//            double memberChallengeTryCount = member.getMemberChallengeTryCount()+1;
 
             challenge.setChallengeCurrentParty(challengeCurrentParty+1);
             challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
