@@ -4,6 +4,8 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.quesrydslrepo.QuerydslRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberChallengeRepository extends JpaRepository<MemberChallenge,Long>, QuerydslRepository {
+import java.util.Optional;
 
+public interface MemberChallengeRepository extends JpaRepository<MemberChallenge,Long>, QuerydslRepository {
+    Optional<MemberChallenge> findMemberChallengeByChallengeChallengeIdAndMemberMemberId(Long challengeId, Long memberId);
 }

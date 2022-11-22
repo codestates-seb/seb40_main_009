@@ -19,6 +19,7 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404, "Comment not found"),
     CHALLENGE_CATEGORY_NOT_FOUND(404, "Category not found"),
     YOU_ALREADY_PARTICIPATE(404, "You already participate"),
+    USER_NOT_PARTICIPATING_THIS_CHALLENGE(404, "Only users who have participated in the challenge can write reviews"),
     
     //Follower 부분 예외 ==========시작
     CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself"),
