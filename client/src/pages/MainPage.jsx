@@ -44,7 +44,7 @@ export default function MainPage() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://4394-203-130-71-252.jp.ngrok.io/member?page=1&size=9&sort=memberBadge`,
+        `/member?page=1&size=9&sort=memberBadge`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
