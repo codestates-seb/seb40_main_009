@@ -1,7 +1,6 @@
 package be.wiselife.security;
 
 
-import be.wiselife.security.filter.JwtVerificationFilter;
 import be.wiselife.security.filter.MemberAuthenticationEntryPoint;
 import be.wiselife.security.handler.MemberAccessDeniedHandler;
 import be.wiselife.security.service.OauthService;
@@ -10,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -53,8 +50,6 @@ public class SecurityConfiguration{
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //인증에러 발생시
                 .accessDeniedHandler(new MemberAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
-//                .apply(new CustomFilterConfig())
-//                .and()
                 /*-----추후 어느정도 구성이 완료되고 인가 관련 설정----*/
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/*/order/**").hasAnyRole("USER")
@@ -114,15 +109,5 @@ public class SecurityConfiguration{
         
         return source;
     }
-    //TODO: 인가권한 수정
-    public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfig, HttpSecurity> {
-        @Override
-        public void configure(HttpSecurity builder) {
-            AuthenticationManager manager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
-            builder.addFilter(jwtVerificationFilter);
-
-        }
-    }
 }

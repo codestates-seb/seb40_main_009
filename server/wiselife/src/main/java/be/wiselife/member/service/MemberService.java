@@ -46,16 +46,16 @@ public class MemberService {
     public void createMockMember() {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
-        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId");
+        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
+        Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
         memberRepository.save(test1);memberRepository.save(test2);memberRepository.save(test3);memberRepository.save(test4);
         memberRepository.save(test5);memberRepository.save(test6);memberRepository.save(test7);memberRepository.save(test8);
         memberRepository.save(test9);memberRepository.save(test10);
@@ -200,5 +200,10 @@ public class MemberService {
 
     public Member findMemberById(Long memberId){
         return verifiedMemberById(memberId);
+    }
+
+    public Member findByRefreshToken(String refreshToken) {
+        Optional<Member> token = memberRepository.findByRefreshToken(refreshToken);
+        return token.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_VALIDED));
     }
 }

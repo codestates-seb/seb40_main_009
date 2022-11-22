@@ -13,4 +13,5 @@ public interface MemberRepository extends JpaRepository<Member,Long>, QuerydslRe
     //회원이 개인정보 수정시 Authorization에서 본인인지 확인 하기 위해 db에 같은 이메일로 등록된 회원을 조회하는 용도
     Optional<Member> findByMemberEmail(String memberEmail);
 
+    Optional<Member> findByRefreshToken(String refreshToken);
 }

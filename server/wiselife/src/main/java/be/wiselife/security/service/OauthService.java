@@ -45,11 +45,12 @@ public class OauthService extends DefaultOAuth2UserService {
         //2
         ClientRegistration kakaoProvider = inMemoryRepository.findByRegistrationId(provider);
         AccessTokenDto tokenData = getAuthorizationToken(code, kakaoProvider);
-        Member member = getMemberProfile(provider, tokenData, kakaoProvider);
+        String refreshToken = jwtTokenizer.createRefreshToken();
+        Member member = getMemberProfile(provider, tokenData, kakaoProvider, refreshToken);
 
         //3
         String accessToken = jwtTokenizer.createAccessToken(String.valueOf(member.getMemberEmail()));
-        String refreshToken = jwtTokenizer.createRefreshToken();
+
 
         //4
         LoginDto loginDto = LoginDto.builder().memberId(member.getMemberId()).memberEmail(member.getMemberEmail()).memberName(member.getMemberName())
@@ -85,12 +86,14 @@ public class OauthService extends DefaultOAuth2UserService {
 
     /**
      * 카톡측으로 맴버의 정보를 받아오는 로직
+     *
      * @param providerName 소셜로그인 제공 기관
      * @param tokenData
      * @param provider
+     * @param refreshToken
      * @return
      */
-    private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider) {
+    private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider, String refreshToken) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
         
          //TODO: 추가적인 소셜로그인을 구현한다면 아래에 추가한다.
@@ -109,9 +112,11 @@ public class OauthService extends DefaultOAuth2UserService {
         List<String> rolesForDatabase = authorityUtils.createRolesForDatabase(email);
 
         Member member = memberRepository.findByMemberEmail(email)
-                .orElseGet(()-> memberRepository.save(new Member(email,imageURL,rolesForDatabase,provide,providerId)));
+                .orElseGet(()-> memberRepository.save(new Member(email,imageURL,rolesForDatabase,provide,providerId,refreshToken)));
         //orElse는 메모리상에 있기만 하면 무조건 호출이라서 orElseGet으로 호출해야한다.
-
+        // 이미 저장된 맴버면 로그인시 refreshToken을 새로 발부후 저장한다.
+        member.setRefreshToken(refreshToken);
+        memberRepository.save(member);
         return member;
 
     }
