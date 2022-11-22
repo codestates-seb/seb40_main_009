@@ -8,6 +8,7 @@ import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
+import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,16 +22,24 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/challenges")
 @Validated
 public class ChallengeController {
-    private final ChallengeMapper challengeMapper;
+    private final MemberService memberService;
     private final ChallengeService challengeService;
     private final ChallengeTalkMapper challengeTalkMapper;
-    private final MemberService memberService;
+    private final ChallengeMapper challengeMapper;
 
-    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService, ChallengeTalkMapper challengeTalkMapper, MemberService memberService) {
+    private final MemberChallengeRepository memberChallengeRepository;
+
+
+
+
+    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService,
+                               ChallengeTalkMapper challengeTalkMapper, MemberService memberService,
+                               MemberChallengeRepository memberChallengeRepository ) {
         this.challengeMapper = challengeMapper;
         this.challengeService = challengeService;
         this.challengeTalkMapper = challengeTalkMapper;
         this.memberService = memberService;
+        this.memberChallengeRepository = memberChallengeRepository;
     }
 
     /**
@@ -134,11 +143,12 @@ public class ChallengeController {
                                          HttpServletRequest request) {
         Challenge challenge = challengeService.findChallengeById(challengeId);
         challenge = challengeService.updateViewCount(challenge);
-        if (request.getHeader("Authorization") == null) {
+        if (request.getHeader("Authorization") == null||
+                memberChallengeRepository.findByChallengeAndMember(challenge,memberService.getLoginMember(request))==null) {
             challenge.setChallengeCertImagePath("");
             //TODO: simpleResponseDto로 변경 필요
-            ChallengeDto.DetailResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
+            ChallengeDto.SimpleResponse challengeResponseDto
+                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge);
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {
@@ -163,5 +173,4 @@ public class ChallengeController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
