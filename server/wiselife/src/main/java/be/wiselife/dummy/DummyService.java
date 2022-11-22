@@ -52,15 +52,15 @@ public class DummyService {
     public void createMockMember() {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
-        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId");
-        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId");
+        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
+        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
         Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId",2, Member.MemberBadge.새내기);
         Member test11 = new Member("test11@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.새내기);
         Member test12 = new Member("test12@kakao.com", "이미지",roles, "kakao", "providerId",11, Member.MemberBadge.새내기);

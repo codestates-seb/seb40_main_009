@@ -50,7 +50,7 @@ public class TokenController {
 
         return ResponseEntity.accepted()
                 .header("Authorization", newAccessToken)
-                .body("new token");
+                .body("새로운 토큰을 발급했습니다 헤더를 확인하슈");
 
     }
 
