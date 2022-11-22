@@ -114,8 +114,7 @@ public class ChallengeService {
      * @return challenge 참가했을때 잘 참여됐는지 즉시 확인가능
      */
     public Challenge participateChallenge(Challenge challenge,Member loginMember) {
-        challenge.setChallengeCurrentParty(challenge.getChallengeCurrentParty()+1);
-        return memberChallengeService.postMemberAndChallenge(challenge,loginMember);
+        return memberChallengeService.patchMemberAndChallenge(challenge,loginMember);
     }
 
     /**

@@ -91,5 +91,7 @@ public class MemberDto {
         private int memberSuccessDay;
         private int objectPeriod;
         private double memberChallengeSuccessRate;
+        private double memberReward;
+        private boolean isClosed;
     }
 }

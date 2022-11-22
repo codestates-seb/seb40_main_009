@@ -7,6 +7,7 @@ import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,37 +39,15 @@ public class MemberService {
     private final JwtTokenizer jwtTokenizer;
 
     /**
-     * 테스트용 계정 생성
-     *
-     *
-     */
-    @PostConstruct
-    public void createMockMember() {
-        List<String> roles = new ArrayList<>();
-        roles.add("USER");
-        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰값");
-        memberRepository.save(test1);memberRepository.save(test2);memberRepository.save(test3);memberRepository.save(test4);
-        memberRepository.save(test5);memberRepository.save(test6);memberRepository.save(test7);memberRepository.save(test8);
-        memberRepository.save(test9);memberRepository.save(test10);
-    }
-
-
-    /**
      * 회원 단건조회(memberName)
      * 챌린지나, 회원 랭킹, 회원 리스트로 조회시 회원을 클릭하면 회원 상세페이지가 나타날수 있게 하는 메소드
      * 자신이 접근하게 되면 followStatus self, 타인이 접근하면 follow 유무에 따라 follow/unfollow로 나타난다.
+     * 참여한 챌린지의 인증일자를 70% 초과하면 성공으로 간주 한다.
      */
     public Member findMember(Member follower,Member following) {
         Follow follow = memberRepository.findByFollowerIdAndFollowing(follower.getMemberId(), following);
+
+        //팔로우인지 아닌지 판단하는 부분
         if (follow == null) {
             if (follower.getMemberId() == following.getMemberId()) {
                 following.setFollowStatus(Member.FollowStatus.SELF);
@@ -82,8 +61,11 @@ public class MemberService {
         } else {
             following.setFollowStatus(Member.FollowStatus.UNFOLLOW);
         }
+
         return memberRepository.save(following);
     }
+
+
 
     //follower 검색용
     public Member findMemberByEmail(String memberEmail) {
@@ -206,4 +188,5 @@ public class MemberService {
         Optional<Member> token = memberRepository.findByRefreshToken(refreshToken);
         return token.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_VALIDED));
     }
+
 }

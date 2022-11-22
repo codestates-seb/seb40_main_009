@@ -48,6 +48,31 @@ public class Member extends TimeAudit {
         this.memberImagePath = memberImagePath;
         this.refreshToken = RefreshToken;
     }
+    //더미 데이터용 생성자
+    @Builder
+    public Member(String memberEmail, String memberImagePath, List<String> roles, String provider, String providerId,int followerCount,MemberBadge memberBadge) {
+
+        this.roles = roles;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.memberEmail = memberEmail;
+        this.memberImagePath = memberImagePath;
+
+        this.memberName = createRandomId(); //네 구현필요
+        this.memberExp = 0;
+        this.memberBadge = memberBadge; //구현필요
+        this.followStatus=FollowStatus.UNFOLLOW;
+        this.memberLevel = 1;
+        this.hasRedCard = false;
+        this.memberChallengeTryCount = 0;
+        this.memberChallengeSuccessCount = 0;
+        this.memberChallengePercentage = memberChallengeSuccessCount/memberChallengeTryCount;
+        this.memberMoney = 0;
+        this.followers = 0;
+        this.followerCount = followerCount;
+        this.memberDescription = "안녕하세요! 슬린이에요^^";
+        this.memberImagePath = memberImagePath;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
