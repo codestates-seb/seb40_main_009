@@ -72,6 +72,7 @@ public class Member extends TimeAudit {
         this.followerCount = followerCount;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
         this.memberImagePath = memberImagePath;
+        this.refreshToken = "리프레쉬토큰";
     }
 
     @Id
