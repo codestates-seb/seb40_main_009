@@ -36,3 +36,4 @@ function MyProfilePage(props) {
 }
 
 export default MyProfilePage;
+//axios.get => async await로 바꿔오기 숙제

@@ -1,9 +1,12 @@
 import styled from 'styled-components';
+
 import { FaSearch } from 'react-icons/fa';
+
 export const HeaderContainer = styled.header`
   width: 100%;
   padding: 0.7% 0;
   position: fixed;
+  /* margin-bottom: 120px; */
   background-color: #ffffff;
   border-bottom: 1px solid #e6e6e6;
   z-index: 2;
@@ -23,7 +26,7 @@ export const Logo = styled.div`
   font-size: 20px;
 `;
 
-export const ChallengeBtn = styled.button`
+export const ChallengeButton = styled.button`
   border: 0;
   outline: 0;
   background-color: #ffffff;

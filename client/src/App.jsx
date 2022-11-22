@@ -20,8 +20,8 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/challengelist/*" element={<ChallengeList />} />
-          <Route path="/detail/*" element={<DetailPage />} />
-          <Route path="/challengedetail/*" element={<ChallengeDetail />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
+          <Route path="/challengedetail/:id" element={<ChallengeDetail />} />
           <Route path="/userlist/*" element={<UserList />} />
           <Route path="/search/*" element={<SearchResult />} />
           <Route path="/profile" element={<MyProfilePage />} />
