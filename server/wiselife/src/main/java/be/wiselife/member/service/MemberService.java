@@ -7,6 +7,7 @@ import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,12 @@ public class MemberService {
      * 회원 단건조회(memberName)
      * 챌린지나, 회원 랭킹, 회원 리스트로 조회시 회원을 클릭하면 회원 상세페이지가 나타날수 있게 하는 메소드
      * 자신이 접근하게 되면 followStatus self, 타인이 접근하면 follow 유무에 따라 follow/unfollow로 나타난다.
+     * 참여한 챌린지의 인증일자를 70% 초과하면 성공으로 간주 한다.
      */
     public Member findMember(Member follower,Member following) {
         Follow follow = memberRepository.findByFollowerIdAndFollowing(follower.getMemberId(), following);
+
+        //팔로우인지 아닌지 판단하는 부분
         if (follow == null) {
             if (follower.getMemberId() == following.getMemberId()) {
                 following.setFollowStatus(Member.FollowStatus.SELF);
@@ -57,8 +61,11 @@ public class MemberService {
         } else {
             following.setFollowStatus(Member.FollowStatus.UNFOLLOW);
         }
+
         return memberRepository.save(following);
     }
+
+
 
     //follower 검색용
     public Member findMemberByEmail(String memberEmail) {
@@ -176,4 +183,18 @@ public class MemberService {
     public Member findMemberById(Long memberId){
         return verifiedMemberById(memberId);
     }
+
+//    private void checkSuccess(Member following) {
+//        //멤버 성공률 판단 부분
+//        List<MemberChallenge> memberChallengeList = memberRepository.findByMember(following);
+//        log.info("check1");
+//        for (MemberChallenge memberChallenge : memberChallengeList) {
+//            log.info("check2");
+//            if (memberChallenge.getMemberChallengeSuccessRate()==100.0) {
+//                following.setMemberChallengeSuccessCount(following.getMemberChallengeSuccessCount()+1);
+//                log.info("member successCount ={}", following.getMemberChallengeSuccessCount());
+//                following.setMemberChallengePercentage(following.getMemberChallengeSuccessCount()/ following.getMemberChallengeTryCount());
+//            }
+//        }
+//    }
 }

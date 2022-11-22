@@ -7,6 +7,7 @@ import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.entity.*;
 import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.member.entity.Member;
+import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,8 @@ import java.util.UUID;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberChallengeRepository memberChallengeRepository;
+
+    private final MemberRepository memberRepository;
 
     //MemberImage 부분 코드======================================
     /**
@@ -165,6 +168,15 @@ public class ImageService {
             memberChallengeFromRepository.setMemberChallengeSuccessRate(successRate*100);
 
             memberChallengeRepository.save(memberChallengeFromRepository);
+        }
+        //멤버 성공률 판단 부분
+        List<MemberChallenge> memberChallengeList = memberRepository.findByMember(loginMember);
+        for (MemberChallenge memberChallenge : memberChallengeList) {
+            if (memberChallenge.getMemberChallengeSuccessRate()==100.0) {
+                loginMember.setMemberChallengeSuccessCount(loginMember.getMemberChallengeSuccessCount()+1);
+
+                loginMember.setMemberChallengePercentage((loginMember.getMemberChallengeSuccessCount()/ loginMember.getMemberChallengeTryCount())*100);
+            }
         }
         String changeImagePath = "";
         for (ChallengeCertImage certImage : challengeCertImages) {

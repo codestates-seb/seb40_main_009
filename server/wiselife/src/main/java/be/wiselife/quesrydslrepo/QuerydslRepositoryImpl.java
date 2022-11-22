@@ -39,6 +39,15 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
+    public List<MemberChallenge> findByMember(Member member) {
+        return queryFactory
+                .selectFrom(memberChallenge)
+                .where(memberChallenge.member.eq(member))
+                .orderBy(memberChallenge.challenge.isClosed.asc(), memberChallenge.memberChallengeId.desc())
+                .fetch();
+    }
+
+    @Override
     public MemberChallenge findByChallengeIdAndMember(String challengeId, Member member) {
 
         return queryFactory
