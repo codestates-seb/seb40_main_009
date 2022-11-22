@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
-import { createChallenge, validBtn } from '../../atoms/atoms';
+import { createChallenge, validButton } from '../../atoms/atoms';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 import exampleImg from '../../image/example.png';
 
 function ChallengeAsk2() {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const [checkBtn, setCheckBtn] = useRecoilState(validBtn);
+  const [checkBtn, setCheckBtn] = useRecoilState(validButton);
   const [imageTransform, setImageTransfrom] = useState(exampleImg);
 
   const { register, handleSubmit } = useForm();

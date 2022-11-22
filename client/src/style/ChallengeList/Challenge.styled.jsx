@@ -21,7 +21,7 @@ export const ContentA = styled.div`
 export const ContentB = styled.div`
   padding-top: 100px;
   text-align: center;
-  > a {
+  > span {
     margin-top: 10px;
     display: inline-block;
     text-decoration: none;

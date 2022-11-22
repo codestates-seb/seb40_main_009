@@ -1,11 +1,13 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { createNumber, validButton } from '../atoms/atoms';
+
 import styled from 'styled-components';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+
 import CreateChallenge from '../components/CreateChallenge/CreateChallenge';
-import { createNumber, validBtn } from '../atoms/atoms';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const AddContainer = styled.section`
   padding-top: 80px;
@@ -28,46 +30,48 @@ const Container = styled.section`
   align-items: center;
 `;
 
-const NextBtn = styled.button`
+const NextButton = styled.button`
   width: 30px;
   height: 30px;
 `;
 
-function CreateChallengePage() {
-  const [number, setNumber] = useRecoilState(createNumber);
-  const checkBtn = useRecoilValue(validBtn);
+export default function CreateChallengePage() {
+  const [number, setNumber] = useRecoilState(createNumber); // 이름바꾸기 페이지 넘어가는것을 알수있게
+  const checkButton = useRecoilValue(validButton);
   const navigate = useNavigate();
 
   useEffect(() => {
     //현재 상태에 맞춰 url 변화
     navigate(`/createchallenge/${number}`);
   }, [number]);
+
   return (
     <AddContainer>
       <Container>
-        {number < 2 ? (
-          <NextBtn style={{ visibility: 'hidden' }} />
+        {
+          <NextButton
+            style={number < 2 && { visibility: 'hidden' }}
+            onClick={() => setNumber(number - 1)}
+          >
+            {'<'}
+          </NextButton>
+        }
+        {/* {number < 2 ? (
+          <NextButton style={{ visibility: 'hidden' }} />
         ) : (
-          <NextBtn onClick={() => setNumber(number - 1)}>{'<'}</NextBtn>
-        )}
+          <NextButton onClick={() => setNumber(number - 1)}>{'<'}</NextButton>
+        )} */}
+
         <CreateChallenge />
+
         {number > 3 ? (
-          <NextBtn style={{ visibility: 'hidden' }} />
-        ) : checkBtn === false ? (
-          <NextBtn style={{ visibility: 'hidden' }} />
+          <NextButton style={{ visibility: 'hidden' }} />
+        ) : checkButton === false ? (
+          <NextButton style={{ visibility: 'hidden' }} />
         ) : (
-          <NextBtn onClick={() => setNumber(number + 1)}>{'>'}</NextBtn>
+          <NextButton onClick={() => setNumber(number + 1)}>{'>'}</NextButton>
         )}
       </Container>
     </AddContainer>
   );
 }
-
-export default CreateChallengePage;
-
-// selection3: {
-//     startDate: addDays(Date.now(), 0),
-//     endDate: null,
-//     key: 'selection3',
-//     autoFocus: false,
-//   },

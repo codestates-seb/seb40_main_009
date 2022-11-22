@@ -1,20 +1,23 @@
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { createChallenge, validBtn } from '../../atoms/atoms';
+import { createChallenge, validButton } from '../../atoms/atoms';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 function ChallengeAsk1() {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const checkBtn = useSetRecoilState(validBtn);
+  const checkBtn = useSetRecoilState(validButton);
 
   const onClick = (e) => {
     setCreateChallenge({ ...create, category: e.target.value });
   };
+
   const { register, handleSubmit } = useForm();
+
   const onValid = (data) => {
     setCreateChallenge({ ...create, ...data });
     checkBtn(true);
   };
+
   return (
     <S.CreateAsk>
       <form onSubmit={handleSubmit(onValid)}>
@@ -59,7 +62,9 @@ function ChallengeAsk1() {
             type={'number'}
           />
         </div>
-        <button className="submitBtn">저장</button>
+        <button type="submit" className="submitBtn">
+          저장
+        </button>
       </form>
     </S.CreateAsk>
   );
