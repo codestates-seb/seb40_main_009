@@ -9,11 +9,9 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.image.entity.QMemberImage.*;
 import static be.wiselife.image.entity.QReviewImage.*;
@@ -106,7 +104,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)) // 필드명 imageSource로 변경
                         .and(challengeCertImage.createDay.eq(now))) // localDateTime에
-                .orderBy(challengeCertImage.created_at.desc())
+                .orderBy(challengeCertImage.createdAt.desc())
                 .fetch();
     }
 
@@ -123,8 +121,8 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
                         .and(challengeCertImage.createDay.eq(now))
-                        .and(challengeCertImage.created_at.second().eq(LocalDateTime.now().getSecond())))
-                .orderBy(challengeCertImage.created_at.desc())
+                        .and(challengeCertImage.createdAt.minute().eq(LocalDateTime.now().getMinute())))
+                .orderBy(challengeCertImage.createdAt.desc())
                 .fetchOne();
     }
 
@@ -134,7 +132,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
-                .orderBy(challengeCertImage.created_at.desc())
+                .orderBy(challengeCertImage.createdAt.desc())
                 .fetch();
     }
 

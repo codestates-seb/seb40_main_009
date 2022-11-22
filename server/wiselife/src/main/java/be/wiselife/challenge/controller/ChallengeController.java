@@ -6,8 +6,8 @@ import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.SingleResponseDto;
-import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
+import org.hibernate.validator.constraints.Range;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("/challenges")
@@ -97,9 +98,6 @@ public class ChallengeController {
      *                챌린지 참여인원인지 판단하는 로직 추가
      *                응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
-
-
-   
     @PatchMapping("/cert")
     public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
                                                    HttpServletRequest request) {
@@ -163,7 +161,10 @@ public class ChallengeController {
 
     /**
      * 챌린지 삭제
-     * TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능
+     * @param challengeId
+     * @param request
+     * @return
+     * TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능하게
      */
     @DeleteMapping({"/{challenge-id}"})
     public ResponseEntity deleteChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
@@ -173,4 +174,38 @@ public class ChallengeController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    /**
+     * 최신순 카테고리별 전체 챌린지 조회
+     * @param categoryId 카테고리에 해당하는 카테고리 id
+     * @return
+     */
+    @GetMapping("/all/sort-by-newest/{category-id}")
+    public ResponseEntity getAllChallengesInCategoryOrderByNewest(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId){
+
+        List<Challenge> challengeList = challengeService.getAllChallengesInCategoryOrderByNewest(categoryId);
+        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(challengeList);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeResponseDtoList)
+                , HttpStatus.OK);
+    }
+
+    /**
+     * 인기순 카테고리별 전체 챌린지 조회
+     * @param categoryId 카테고리에 해당하는 카테고리 id
+     * @return 카테고리에 해당하는 챌린지들 list
+     */
+    @GetMapping("/all/sort-by-popularity/{category-id}")
+    public ResponseEntity getAllChallengesInCategoryOrderByPopularity(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId){
+
+        List<Challenge> challengeList = challengeService.getAllChallengesInCategoryOrderByPopularity(categoryId);
+        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(challengeList);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeResponseDtoList)
+                , HttpStatus.OK);
+    }
+
 }

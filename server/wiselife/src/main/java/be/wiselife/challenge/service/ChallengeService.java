@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -201,4 +202,53 @@ public class ChallengeService {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
 
     }
+
+    /**
+     * 인기순 카테고리별 전체 첼린지 조회
+     * @param categoryId 1~3 사이의 카테고리 id
+     * @return 해당 카테고리의 챌린지 list
+     */
+    public List<Challenge> getAllChallengesInCategoryOrderByPopularity(Long categoryId) {
+        Challenge.ChallengeCategory challengeCategory = categoryIdToChallengeCategory(categoryId);
+
+        List<Challenge> challengeList = challengeRepository.findChallengesByChallengeCategoryOrderByChallengeViewCountDesc(challengeCategory)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+        return challengeList;
+    }
+
+    /**
+     * 최신순 카테고리별 전체 챌린지 조회
+     * @param categoryId 1~3 사이의 카테고리 id
+     * @return 해당 카테고리의 챌린지 list
+     */
+    public List<Challenge> getAllChallengesInCategoryOrderByNewest(Long categoryId) {
+        Challenge.ChallengeCategory challengeCategory = categoryIdToChallengeCategory(categoryId);
+
+        List<Challenge> challengeList = challengeRepository.findChallengesByChallengeCategoryOrderByCreatedAtDesc(challengeCategory)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+        return challengeList;
+    }
+
+    /**
+     * 카테고리 id => 카테고리 enum으로 변환
+     * @param categoryId
+     * @return
+     */
+    private Challenge.ChallengeCategory categoryIdToChallengeCategory(Long categoryId){
+        Challenge.ChallengeCategory challengeCategory = null;
+
+        if (categoryId == 1) {
+            challengeCategory = Challenge.ChallengeCategory.BUCKET_LIST;
+        } else if (categoryId == 2) {
+            challengeCategory = Challenge.ChallengeCategory.SHARED_CHALLENGE;
+        } else if (categoryId == 3){
+            challengeCategory = Challenge.ChallengeCategory.OFFLINE_CHALLENGE;
+        }
+
+        return challengeCategory;
+    }
+
+
 }

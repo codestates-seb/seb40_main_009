@@ -9,6 +9,9 @@ import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
+import be.wiselife.memberchallenge.entity.QMemberChallenge;
+import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +24,14 @@ public class ChallengeReviewService {
     private final ImageService imageService;
     private final MemberService memberService;
     private final ChallengeService challengeService;
+    MemberChallengeRepository memberChallengeRepository;
 
-    public ChallengeReviewService(ChallengeReviewRepository challengeReviewRepository, ImageService imageService, MemberService memberService, ChallengeService challengeService) {
+    public ChallengeReviewService(ChallengeReviewRepository challengeReviewRepository, ImageService imageService, MemberService memberService, ChallengeService challengeService, MemberChallengeRepository memberChallengeRepository) {
         this.challengeReviewRepository = challengeReviewRepository;
         this.imageService = imageService;
         this.memberService = memberService;
         this.challengeService = challengeService;
+        this.memberChallengeRepository = memberChallengeRepository;
     }
 
     /**
@@ -34,6 +39,13 @@ public class ChallengeReviewService {
      * TODO: MemberChallnge 테이블 만들어 지면 후기 작성하려는 사용자가 실제 참가했는지 확인하는 로직
      */
     public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge) {
+        //해당 챌린지에 참여한 유저인지 검증
+//        memberChallengeRepository.findMemberChallengeByChallengeChallengeIdAndMemberMemberId(challenge.getChallengeId(), loginMember.getMemberId())
+//                .ifPresent(a -> {
+//                    throw new BusinessLogicException(ExceptionCode.USER_NOT_PARTICIPATING_THIS_CHALLENGE);
+//                });
+
+        //이미 리뷰 작성한 유저인지 검증
         challengeReviewRepository.findChallengeReviewByMemberMemberIdAndChallengeChallengeId(loginMember.getMemberId(), challenge.getChallengeId())
                 .ifPresent(a -> {
                     throw new BusinessLogicException(ExceptionCode.CHALLENGE_REVIEW_ALREADY_EXISTS);

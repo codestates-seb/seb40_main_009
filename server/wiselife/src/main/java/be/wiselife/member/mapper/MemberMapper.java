@@ -1,6 +1,5 @@
 package be.wiselife.member.mapper;
 
-import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
@@ -60,7 +59,7 @@ public interface MemberMapper {
         memberListResponse.setMemberName(member.getMemberName());
         memberListResponse.setMemberBadge(member.getMemberBadge());
         memberListResponse.setFollowerCount(member.getFollowerCount());
-        memberListResponse.setCreated_at(member.getCreated_at());
+        memberListResponse.setCreated_at(member.getCreatedAt());
 
         return memberListResponse;
     }
