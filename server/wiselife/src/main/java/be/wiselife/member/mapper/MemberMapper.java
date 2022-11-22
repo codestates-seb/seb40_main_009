@@ -86,9 +86,11 @@ public interface MemberMapper {
                         .memberChallengeId(memberChallenge.getMemberChallengeId())
                         .challengeId(memberChallenge.getChallenge().getChallengeId())
                         .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
-                        .memberSuccessDay((int)memberChallenge.getMemberSuccessDay())
+                        .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
-                        .objectPeriod(memberChallenge.getChallenge().getChallengeEndDate().getDayOfYear()-memberChallenge.getChallenge().getChallengeStartDate().getDayOfYear())
+                        .objectPeriod(memberChallenge.getChallenge().getChallengeEndDate().getDayOfYear() - memberChallenge.getChallenge().getChallengeStartDate().getDayOfYear())
+                        .memberReward(memberChallenge.getMemberReward())
+                        .isClosed(memberChallenge.getChallenge().getIsClosed())
                         .build())
                 .collect(Collectors.toList());
     }

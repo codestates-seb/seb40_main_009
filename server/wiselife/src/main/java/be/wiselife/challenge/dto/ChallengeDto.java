@@ -203,6 +203,7 @@ public class ChallengeDto {
     public static class MemberChallengeResponseDto {
         private Long memberChallengeId;
         private Long challengeId;
+        private Long memberId;
         private String participatingMemberName;
         private int memberSuccessDay;
         private double memberChallengeSuccessRate;

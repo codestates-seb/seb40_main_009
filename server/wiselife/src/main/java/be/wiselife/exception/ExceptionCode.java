@@ -28,6 +28,7 @@ public enum ExceptionCode {
     SIGNUP_WRONG(404,"somethings get wrong during login" ),
     FORBIDDEN_MEMBER(403, "The member does not have permission"),
     REFRESHTOKEN_EXPIRED(404, "Refresh Token also Expired, please login"),
+    TOKEN_IS_NOT_VALIDED(404,"Token is not valided"),
 
     //order 부분 예외 ========시작
     TRADE_CODE_WRONG(404,"Not available tid" ),

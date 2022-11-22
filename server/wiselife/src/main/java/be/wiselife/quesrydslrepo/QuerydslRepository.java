@@ -17,6 +17,9 @@ import java.util.List;
 public interface QuerydslRepository {
     Follow findByFollowerIdAndFollowing(Long followingId, Member follower);
 
+    // 멤버가 참여한 챌린지 중 성공여부 확인 및 멤버 페이지 내에서 챌린지 종료와 생성일자에 따른 sort 용
+    List<MemberChallenge> findByMember(Member member);
+
     MemberChallenge findByChallengeIdAndMember(String challengeId, Member member);
     MemberImage findByImageTypeAndMemberId(String imageType, Long memberId);
     ChallengeRepImage findByImageTypeAndChallengeRep(String imageType, String randomIdForImage);

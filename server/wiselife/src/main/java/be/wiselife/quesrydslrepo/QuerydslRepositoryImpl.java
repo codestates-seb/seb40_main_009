@@ -9,11 +9,9 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.image.entity.QMemberImage.*;
 import static be.wiselife.image.entity.QReviewImage.*;
@@ -36,6 +34,15 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .where(follow.followerId.eq(followerId)
                         .and(follow.following.eq(following)))
                 .fetchOne();
+    }
+
+    @Override
+    public List<MemberChallenge> findByMember(Member member) {
+        return queryFactory
+                .selectFrom(memberChallenge)
+                .where(memberChallenge.member.eq(member))
+                .orderBy(memberChallenge.challenge.isClosed.asc(), memberChallenge.memberChallengeId.desc())
+                .fetch();
     }
 
     @Override
@@ -101,6 +108,10 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .fetch();
     }
 
+    /**
+     * 현재는 테스트를 위해서 최초 생성시간하고 정확히 같게 설정해둠
+     * TODO:실운영에는 일자가 같은게 검색되게 변경 필요
+     */
     @Override
     public ChallengeCertImage findByImageTypeAndMemberIdAndChallengeCertIdPatch(String imageType, Long memberId, String randomIdForImage) {
         LocalDate now = LocalDate.now();
