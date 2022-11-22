@@ -42,11 +42,11 @@ jwt:
   token:
     secret-key: qazwsxedcrfvtgbyhnujmiklop!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234
   access-token:
-    expire-length: 180000
+    expire-length: 900000
   refresh-token:
-    expire-length: 120960000
+    expire-length: 12096000
     
-#TODO: 관리자 추가
+#TODO: 관리자 추가란
 mail:
   address:
-      admin: test1@kakao.com
+      admin: mins402kim@kakao.com

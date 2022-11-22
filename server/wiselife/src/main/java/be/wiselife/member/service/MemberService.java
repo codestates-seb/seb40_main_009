@@ -184,17 +184,9 @@ public class MemberService {
         return verifiedMemberById(memberId);
     }
 
-//    private void checkSuccess(Member following) {
-//        //멤버 성공률 판단 부분
-//        List<MemberChallenge> memberChallengeList = memberRepository.findByMember(following);
-//        log.info("check1");
-//        for (MemberChallenge memberChallenge : memberChallengeList) {
-//            log.info("check2");
-//            if (memberChallenge.getMemberChallengeSuccessRate()==100.0) {
-//                following.setMemberChallengeSuccessCount(following.getMemberChallengeSuccessCount()+1);
-//                log.info("member successCount ={}", following.getMemberChallengeSuccessCount());
-//                following.setMemberChallengePercentage(following.getMemberChallengeSuccessCount()/ following.getMemberChallengeTryCount());
-//            }
-//        }
-//    }
+    public Member findByRefreshToken(String refreshToken) {
+        Optional<Member> token = memberRepository.findByRefreshToken(refreshToken);
+        return token.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_VALIDED));
+    }
+
 }

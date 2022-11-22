@@ -42,10 +42,15 @@ public class JwtTokenizer {
     }
 
     public String createRefreshToken() {
-        byte[] array = new byte[7];
-        new Random().nextBytes(array);
-        String generatedString = new String(array, StandardCharsets.UTF_8);
-        return createToken(generatedString, refreshToken);
+        Claims claims = Jwts.claims().setSubject("WiseLifeRefreshToken");
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + refreshToken);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(getKeyFromBase64EncodedKey(makingSecretKey(secretKey)))
+                .compact();
     }
 
     public String createToken(String payload, long expireLength) {
@@ -60,42 +65,17 @@ public class JwtTokenizer {
                 .compact();
     }
 
-    public String getPayload(String token){
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromBase64EncodedKey(makingSecretKey(secretKey)))
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims().getSubject();
-        } catch (JwtException e){
-            throw new RuntimeException("유효하지 않은 토큰 입니다");
-        }
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromBase64EncodedKey(makingSecretKey(secretKey)))
-                    .build()
-                    .parseClaimsJws(token);
-            return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException exception) {
-            return false;
-        }
-    }
-
    /*
-     * 보안키 비번을 암호화
-     */
+    * 1번
+    * 보안키 비번을 암호화
+    */
 
     public String makingSecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     /*
+     * 2번
      * 비밀번호 제작 메서드
      */
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
@@ -124,10 +104,8 @@ public class JwtTokenizer {
         }
     }
 
-
-
     /**
-     * 내용 검증을 할때  key값과 인증완료된 토큰값을 넘김
+     * jwt token 안에 있는 exp를 구하기 위한 메서드.
      */
     public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -139,20 +117,22 @@ public class JwtTokenizer {
         return claims;
     }
 
-    //TODO: 리프레쉬토큰 사용시 수정예정
-    public Jws<Claims> verifySignature(String jwtToken) {
-        return null;
-    }
 
-    public Date getTokenExpiration(int refreshToken) {
-        return null;
-    }
-
-    public String generateRefreshToken(String subject, Date expiration, String secretKey) {
-        return null;
-    }
-
-    public String generateAccessToken(HashMap<String, Object> claims, String subject, Date expiration, String secretKey) {
-        return null;
+    /**
+     * 토큰 검증용
+     * TODO: 불필요시 삭제예정
+     * @param token
+     * @return
+     */
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(getKeyFromBase64EncodedKey(makingSecretKey(secretKey)))
+                    .build()
+                    .parseClaimsJws(token);
+            return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (JwtException | IllegalArgumentException exception) {
+            return false;
+        }
     }
 }
