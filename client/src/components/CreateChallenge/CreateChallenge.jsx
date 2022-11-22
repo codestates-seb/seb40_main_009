@@ -11,17 +11,15 @@ const CreateContainer = styled.section`
   flex-direction: column;
 `;
 
-function CreateChallenge() {
-  const number = useRecoilValue(createNumber);
+export default function CreateChallenge() {
+  const questionNumber = useRecoilValue(createNumber);
 
   return (
     <CreateContainer>
-      {number === 1 ? <ChallengeAsk1 /> : null}
-      {number === 2 ? <ChallengeAsk2 /> : null}
-      {number === 3 ? <ChallengeAsk3 /> : null}
-      {number === 4 ? <ChallengeAsk4 /> : null}
+      {questionNumber === 1 ? <ChallengeAsk1 /> : null}
+      {questionNumber === 2 ? <ChallengeAsk2 /> : null}
+      {questionNumber === 3 ? <ChallengeAsk3 /> : null}
+      {questionNumber === 4 ? <ChallengeAsk4 /> : null}
     </CreateContainer>
   );
 }
-
-export default CreateChallenge;

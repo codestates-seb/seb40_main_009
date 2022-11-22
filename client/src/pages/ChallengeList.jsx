@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
-import { Link, Route, Routes, useMatch, useNavigate } from 'react-router-dom';
-import Challenge from '../components/ChallengeList/Challenge';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
+
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
-function ChallengeList() {
+import Challenge from '../components/ChallengeList/Challenge';
+
+export default function ChallengeList() {
   const paidChallenge = useMatch('/challengelist/paid');
   const freeChallenge = useMatch('/challengelist/free');
   const navMatch = useMatch('/challengelist');
   const navigate = useNavigate();
 
-  const move = () => {
+  const moveToCreateChallenge = () => {
     navigate('/createchallenge/1');
   };
 
@@ -18,9 +20,12 @@ function ChallengeList() {
       navigate('/challengelist/paid');
     }
   }, []);
+
   return (
     <>
-      <S.AddChallengeBtn onClick={move}>Add Challenge</S.AddChallengeBtn>
+      <S.AddChallengeBtn onClick={moveToCreateChallenge}>
+        챌린지 추가
+      </S.AddChallengeBtn>
       <S.ListContainer>
         <section>
           <Link to={'/challengelist/paid'}>
@@ -50,5 +55,3 @@ function ChallengeList() {
     </>
   );
 }
-
-export default ChallengeList;

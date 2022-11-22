@@ -15,24 +15,26 @@ const TimeContainer = styled.section`
 function ChallengeAsk4() {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
   const [imageTransform, setImageTransfrom] = useState(exampleImg);
-  const [quantity, setQuantity] = useState();
-  const [checkThree, setCheckThree] = useState(false);
-  const [checkCount, setCheckCount] = useState([]);
+  const [quantity, setQuantity] = useState('-1');
+  const [isThree, setIsThree] = useState(false);
+  const [checkCounts, setCheckCounts] = useState([]);
 
   const { register, handleSubmit } = useForm();
   const onValid = (data) => {
     setCreateChallenge({ ...create, ...data });
-    if (data.quantity * 1 !== data.time.length) {
+    const quantity = Number(data.quantity);
+    if (quantity !== data.time.length) {
+      // 네이밍 바꾸기 if가 alert와 같은 의미를 갖도록
       alert('선택한 인증 횟수와 인증 시간이 맞지 않습니다.');
     }
   };
 
   const addTime = (e) => {
     if (e.target.checked) {
-      setCheckCount([...checkCount, e.target.value]);
+      setCheckCounts([...checkCounts, e.target.value]);
     }
     if (!e.target.checked) {
-      setCheckCount(checkCount.filter((el) => el !== e.target.value));
+      setCheckCounts(checkCounts.filter((el) => el !== e.target.value));
     }
   };
 
@@ -48,16 +50,18 @@ function ChallengeAsk4() {
     });
   };
 
-  const checkThreeBtn = (e) => {
+  const isThreeBtn = (e) => {
     setQuantity(e.target.value);
     if (e.target.value === '3') {
-      setCheckThree(true);
+      setIsThree(true);
     }
   };
   const checkQuantity = (e) => {
     setQuantity(e.target.value);
   };
+
   useEffect(() => console.log(`현재 상태는` + create), [create]);
+
   return (
     <S.CreateAsk>
       <section className="imgSection">
@@ -90,7 +94,7 @@ function ChallengeAsk4() {
         </div>
         <div className="question">
           <h3>인증 빈도</h3>
-          {!checkThree ? (
+          {!isThree ? (
             <>
               <label>
                 <input
@@ -98,7 +102,7 @@ function ChallengeAsk4() {
                   {...register('quantity', {
                     required: 'Please Choice Quantity',
                   })}
-                  onClick={checkThreeBtn}
+                  onClick={isThreeBtn}
                   value={'1'}
                 />
                 하루 한번
@@ -109,7 +113,7 @@ function ChallengeAsk4() {
                   {...register('quantity', {
                     required: 'Please Choice Quantity',
                   })}
-                  onClick={checkThreeBtn}
+                  onClick={isThreeBtn}
                   value={'2'}
                 ></input>
                 하루 두번
@@ -120,7 +124,7 @@ function ChallengeAsk4() {
                   {...register('quantity', {
                     required: 'Please Choice Quantity',
                   })}
-                  onClick={checkThreeBtn}
+                  onClick={isThreeBtn}
                   value={'3'}
                 ></input>
                 세번 이상
@@ -128,7 +132,7 @@ function ChallengeAsk4() {
             </>
           ) : null}
 
-          {checkThree ? (
+          {isThree ? (
             <>
               <span>원하는 횟수를 입력하세요</span>
               <input

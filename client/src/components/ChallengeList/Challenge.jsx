@@ -6,6 +6,7 @@ function Challenge() {
   const clickDetail = () => {
     navigate(`/detail/2`);
   };
+
   return (
     <>
       <S.Card>
