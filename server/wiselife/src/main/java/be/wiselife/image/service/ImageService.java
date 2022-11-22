@@ -163,21 +163,27 @@ public class ImageService {
 
         if (challengeCertImages.size()%challenge.getChallengeAuthCycle()==0) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
-            double successRate = (memberChallengeFromRepository.getMemberSuccessDay()) /
-                    (memberChallengeFromRepository.getChallenge().getChallengeEndDate().getDayOfYear() - memberChallengeFromRepository.getChallenge().getChallengeStartDate().getDayOfYear());
-            memberChallengeFromRepository.setMemberChallengeSuccessRate(successRate*100);
+            double successDay =memberChallengeFromRepository.getMemberSuccessDay();
+            double objectDay =memberChallengeFromRepository.getChallenge().getChallengeEndDate().getDayOfYear()
+                    - memberChallengeFromRepository.getChallenge().getChallengeStartDate().getDayOfYear();
+            double successRate = (successDay/objectDay)*100;
+            memberChallengeFromRepository.setMemberChallengeSuccessRate(successRate);
 
             memberChallengeRepository.save(memberChallengeFromRepository);
         }
+
+        // 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
+        loginMember.setMemberChallengeSuccessCount(loginMember.getMemberChallengeSuccessCount()+1);
+
         //멤버 성공률 판단 부분
         List<MemberChallenge> memberChallengeList = memberRepository.findByMember(loginMember);
+        double oneChallengeSuccessRateForMember = 0;
         for (MemberChallenge memberChallenge : memberChallengeList) {
-            if (memberChallenge.getMemberChallengeSuccessRate()==100.0) {
-                loginMember.setMemberChallengeSuccessCount(loginMember.getMemberChallengeSuccessCount()+1);
-
-                loginMember.setMemberChallengePercentage((loginMember.getMemberChallengeSuccessCount()/ loginMember.getMemberChallengeTryCount())*100);
-            }
+                oneChallengeSuccessRateForMember=oneChallengeSuccessRateForMember+memberChallenge.getMemberChallengeSuccessRate();
         }
+        loginMember.setMemberChallengePercentage(oneChallengeSuccessRateForMember/loginMember.getMemberChallengeTryCount());
+        memberRepository.save(loginMember);
+
         String changeImagePath = "";
         for (ChallengeCertImage certImage : challengeCertImages) {
             changeImagePath = changeImagePath + certImage.getImagePath() + ",";
