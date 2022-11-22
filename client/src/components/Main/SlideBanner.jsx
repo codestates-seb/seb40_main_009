@@ -1,9 +1,10 @@
 import HeroSlider, { Overlay, Slide, MenuNav } from 'hero-slider';
-import * as S from '../../style/Main/SlideStyle';
+
+import { Wrapper, Subtitle, Title } from '../../style/Main/SlideStyle';
+
 import Header from '../Common/Header';
 
 const bogliasco = 'https://i.imgur.com/Gu5Cznz.jpg';
-// const countyClare = 'https://i.imgur.com/idjXzVQ.jpg';
 const craterRock = 'https://i.imgur.com/8DYumaY.jpg';
 const giauPass = 'https://i.imgur.com/8IuucQZ.jpg';
 
@@ -30,14 +31,14 @@ function SlideBanner() {
     >
       <Overlay>
         <Header />
-        <S.Wrapper>
-          <S.Title>
+        <Wrapper>
+          <Title>
             행복한 삶을 살고 싶다면
             <br />
             목표에 의지하라.
-          </S.Title>
-          <S.Subtitle>혼자하기 힘든 일도 슬기로운 생활과 함께라면</S.Subtitle>
-        </S.Wrapper>
+          </Title>
+          <Subtitle>혼자하기 힘든 일도 슬기로운 생활과 함께라면</Subtitle>
+        </Wrapper>
       </Overlay>
 
       <Slide
