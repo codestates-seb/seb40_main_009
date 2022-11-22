@@ -1,7 +1,10 @@
 import { useState, useEffect, useId } from 'react';
 import axios from 'axios';
-import OrderSheetInfo from '../components/OrderSheetList/OrderSheetInfo';
+
 import * as S from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx';
+
+import OrderSheetInfo from '../components/OrderSheetList/OrderSheetInfo';
+
 // props보다는 구조분해해서 사용하기({image,name....})
 function OrderSheetPage(props) {
   const id = useId();
