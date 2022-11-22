@@ -1,5 +1,6 @@
 package be.wiselife.order.controller;
 
+import be.wiselife.dto.AmountResponseDto;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.order.dto.OrderDto;
@@ -88,7 +89,6 @@ public class OrderController {
 
     /*
      * 마이페이지 결제한내역 리스트 조회
-     * TODO: 결제금액리스트에 추가적으로 맴버의 총액을 넘기기
      */
     @GetMapping("/list")
     public ResponseEntity getOrderlistByUserId(HttpServletRequest request) {
@@ -102,7 +102,7 @@ public class OrderController {
         }
 
         return new ResponseEntity(
-                new MultiResponseDto<>(personalOrders, (int)totalAmount), HttpStatus.OK);
+                new AmountResponseDto<>(personalOrders, (int)totalAmount), HttpStatus.OK);
     }
 
     //TODO: 결제 취소리스트 구현
