@@ -4,9 +4,6 @@ import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
-import be.wiselife.follow.entity.Follow;
-import be.wiselife.image.entity.ChallengeExamImage;
-import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import org.mapstruct.Mapper;
@@ -17,8 +14,6 @@ import org.mapstruct.ReportingPolicy;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +24,7 @@ public interface ChallengeMapper {
 //    Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
 //=======
     Challenge certDtoToChallenge(ChallengeDto.Cert cert);
+    List<ChallengeDto.SimpleResponse> challengeListToSimpleResponseList(List<Challenge> challengeList);
 
     /**
      * 챌린지 생성 mapping
@@ -139,7 +135,7 @@ public interface ChallengeMapper {
         simpleResponse.setChallengeTotalReward( challenge.getChallengeTotalReward() );
         simpleResponse.setChallengeViewCount( challenge.getChallengeViewCount() );
         simpleResponse.setIsClosed( challenge.getIsClosed() );
-        simpleResponse.setCreated_at( challenge.getCreated_at() );
+        simpleResponse.setCreated_at( challenge.getCreatedAt() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
         simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );
 
@@ -195,7 +191,7 @@ public interface ChallengeMapper {
             detailResponse.challengeTotalReward( challenge.getChallengeTotalReward() );
             detailResponse.challengeViewCount( challenge.getChallengeViewCount() );
             detailResponse.isClosed( challenge.getIsClosed() );
-            detailResponse.created_at( challenge.getCreated_at() );
+            detailResponse.created_at( challenge.getCreatedAt() );
             detailResponse.updated_at( challenge.getUpdated_at() );
 
             // 챌린지 참가자에 대한 정보를 응답할 수 있게 detailResponse 필드에 등록해야함

@@ -97,7 +97,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)) // 필드명 imageSource로 변경
                         .and(challengeCertImage.createDay.eq(now))) // localDateTime에
-                .orderBy(challengeCertImage.created_at.desc())
+                .orderBy(challengeCertImage.createdAt.desc())
                 .fetch();
     }
 
@@ -110,8 +110,8 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
                         .and(challengeCertImage.createDay.eq(now))
-                        .and(challengeCertImage.created_at.minute().eq(LocalDateTime.now().getMinute())))
-                .orderBy(challengeCertImage.created_at.desc())
+                        .and(challengeCertImage.createdAt.minute().eq(LocalDateTime.now().getMinute())))
+                .orderBy(challengeCertImage.createdAt.desc())
                 .fetchOne();
     }
 
@@ -121,7 +121,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .selectFrom(challengeCertImage)
                 .where(challengeCertImage.imageType.eq(imageType)
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)))
-                .orderBy(challengeCertImage.created_at.desc())
+                .orderBy(challengeCertImage.createdAt.desc())
                 .fetch();
     }
 

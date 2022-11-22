@@ -218,4 +218,5 @@ public class ChallengeDto {
         @NotNull
         private String challengeCertImagePath;
     }
+
 }
