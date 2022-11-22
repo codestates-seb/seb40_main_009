@@ -2,33 +2,45 @@ import * as S from '../style/DetailPage/DetailPageStyle';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Loading from '../components/Loading/Loading';
+import { useParams } from 'react-router-dom';
+import smile from '../image/smile.jpg';
 
-function ChallengeDetail() {
+export default function ChallengeDetail() {
+  const parmas = useParams();
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState([]);
-
+  //url 파라미터값 받아오기
+  const id = Number(parmas.id);
+  console.log('iddddddd', id);
   // 챌린지조회
   useEffect(() => {
     setLoading(true);
     axios
-      // .get(`http://localhost:3001/challenge?challengeCategoryId=2`)
-      .get(`http://localhost:3001/challenge`)
+      .get(`https://4394-203-130-71-252.jp.ngrok.io/challenges/1`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+        },
+      })
       .then((res) => {
-        setChallenge(res.data);
+        //변수에 담아서
+        setChallenge(res);
+        console.log('res>>>', res);
         setLoading(false);
-        console.log('challenge>>>', challenge);
       })
       .catch((error) => {
-        window.alert(error);
+        //useeffevt 안에서 window. 쓸필요x
+        // alert(error);
         console.log('error', error);
       });
   }, []);
 
+  //early return pattern
+  if (loading) return <Loading />;
+
   return (
     <S.Container>
-      {loading ? <Loading /> : null}
       <S.Recruitment>
-        <img src="./img/smile.jpg" alt="도전 할 항목의 이미지" />
+        <img src={smile} alt="도전 할 항목의 이미지" />
         <div>
           {/* 챌린지 설명 */}
           <S.Description>
@@ -65,7 +77,7 @@ function ChallengeDetail() {
           <div className="title">챌린지 설명</div>
           <div className="pd-5">{challenge.challengeDescription}</div>
         </S.Wrapper>
-        {/* 인증 설명 */}
+        {/* 인증 방법 */}
         <S.Wrapper>
           <div className="title">인증 방법</div>
           <div className="pd-5">{challenge.challengeAuthDescription}</div>
@@ -86,5 +98,3 @@ function ChallengeDetail() {
     </S.Container>
   );
 }
-
-export default ChallengeDetail;

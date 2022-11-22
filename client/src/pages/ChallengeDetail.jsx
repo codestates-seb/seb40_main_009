@@ -31,9 +31,11 @@ function ChallengeDetail() {
       });
   }, []);
 
+  //early return pattern
+  if (loading) return <Loading />;
+
   return (
     <S.Container>
-      {loading ? <Loading /> : null}
       <S.Recruitment>
         <img src="./img/smile.jpg" alt="도전 할 항목의 이미지" />
         <div>
