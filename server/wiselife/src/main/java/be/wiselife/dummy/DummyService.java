@@ -14,9 +14,12 @@ import be.wiselife.memberchallenge.service.MemberChallengeService;
 import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,12 +46,19 @@ public class DummyService {
 
     private final JwtTokenizer jwtTokenizer;
 
+    @EventListener(ApplicationReadyEvent.class)
+    @Transactional
+    public void initData(){
+        createMockMember();
+        createMockChallenge();
+        participateMockMember();
+    }
     /**
      * 테스트용 계정 생성
      *
      *
      */
-    @PostConstruct
+
     public void createMockMember() {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
@@ -79,7 +89,7 @@ public class DummyService {
         memberRepository.save(test17);memberRepository.save(test18);memberRepository.save(test19);memberRepository.save(test20);
     }
 
-    @PostConstruct
+
     public void createMockChallenge() {
         Challenge challenge1 = new Challenge((long)1, Challenge.ChallengeCategory.SHARED_CHALLENGE,
                 "타이틀1","타이틀1 챌린지입니다.",10,3,
@@ -103,7 +113,6 @@ public class DummyService {
         challengeRepository.save(challenge2);
     }
 
-    @PostConstruct
     public void participateMockMember() {
         Challenge challenge1 = challengeService.findChallengeById(1L);
         Challenge challenge2 = challengeService.findChallengeById(2L);
@@ -137,4 +146,5 @@ public class DummyService {
         memberChallengeRepository.save(memberChallenge5);
         memberChallengeRepository.save(memberChallenge6);
     }
+
 }

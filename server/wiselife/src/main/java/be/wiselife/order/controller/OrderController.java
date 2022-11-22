@@ -1,5 +1,7 @@
 package be.wiselife.order.controller;
 
+import be.wiselife.dto.MultiResponseDto;
+import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.order.dto.OrderDto;
 import be.wiselife.order.entity.Order;
 import be.wiselife.order.mapper.OrderMapper;
@@ -34,20 +36,21 @@ public class OrderController {
 
     /**
      * 
-     * @param postinfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
+     * @param postInfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
      * @param request : 
      * @return
      * @throws IOException
      */
     @GetMapping("/ready")
-    public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postinfo, HttpServletRequest request){
+    public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postInfo, HttpServletRequest request){
         String EmailFromToken = jwtTokenizer.getEmailWithToken(request);
         
-        Order order = orderMapper.postInfoToOrder(postinfo);
+        Order order = orderMapper.postInfoToOrder(postInfo);
         
         OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order, EmailFromToken);
         
-        return new ResponseEntity(readyForPay, HttpStatus.OK);
+        return new ResponseEntity(
+                new SingleResponseDto<>(readyForPay), HttpStatus.OK);
     }
 
     /**
@@ -62,7 +65,8 @@ public class OrderController {
         OrderDto.ApproveResponse approveResponse = orderService.approveKakaoPay(pg_token, tid);
         log.info("결제 승인 응답결과 = {}", approveResponse);
 
-        return new ResponseEntity<>(approveResponse, HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(approveResponse), HttpStatus.CREATED);
     }
 
     /**
@@ -88,11 +92,17 @@ public class OrderController {
      */
     @GetMapping("/list")
     public ResponseEntity getOrderlistByUserId(HttpServletRequest request) {
+        double totalAmount = 0;
         String emailWithToken = jwtTokenizer.getEmailWithToken(request);
         List<Order> orderList = orderService.getOrderList(emailWithToken);
         List<OrderDto.PersonalOrder> personalOrders = orderMapper.getOrderList(orderList);
 
-        return new ResponseEntity(personalOrders, HttpStatus.OK);
+        for (int i = 0; i < orderList.size(); i++) {
+            totalAmount += orderList.get(i).getTotalAmount();
+        }
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(personalOrders, (int)totalAmount), HttpStatus.OK);
     }
 
     //TODO: 결제 취소리스트 구현
