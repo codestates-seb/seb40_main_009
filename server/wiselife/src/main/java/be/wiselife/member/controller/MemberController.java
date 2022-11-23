@@ -110,6 +110,13 @@ public class MemberController {
         memberService.changeBadge(memberId);
     }
 
+    /**
+     * 맴버이름 검색 컨트롤러
+     * @param name 검색하고자 하는 이름
+     * @param page page 수
+     * @param size page당 불러오고자 하는 사이즈
+     * @return
+     */
     @GetMapping("/search/member")
     public ResponseEntity getSearchMembers(@RequestParam("name")String name,
                                            @Positive @RequestParam int page,
