@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +30,9 @@ public class MemberChallenge {
     @Column(nullable = false)
     private double memberChallengeSuccessRate=0;
 
+    @Column(nullable = false)
+    private double challengeObjDay=0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @JsonBackReference
@@ -39,5 +43,13 @@ public class MemberChallenge {
     @JsonBackReference
     private Challenge challenge;
 
-
+    //더미 생성용 생성자
+    public MemberChallenge(Long memberChallengeId, double memberReward, double memberSuccessDay, double memberChallengeSuccessRate, Member member, Challenge challenge) {
+        this.memberChallengeId = memberChallengeId;
+        this.memberReward = memberReward;
+        this.memberSuccessDay = memberSuccessDay;
+        this.memberChallengeSuccessRate = memberChallengeSuccessRate;
+        this.member = member;
+        this.challenge = challenge;
+    }
 }

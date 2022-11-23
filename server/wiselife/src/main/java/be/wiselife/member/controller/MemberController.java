@@ -65,7 +65,7 @@ public class MemberController {
     @GetMapping
     public ResponseEntity getMembers(@Positive @RequestParam int page,
                                      @Positive @RequestParam int size,
-                                     @RequestParam(defaultValue = "questionId") String sort) {
+                                     @RequestParam(defaultValue = "memberId") String sort) {
         Page<Member> pageInformation = memberService.findAllMember(page - 1, size,sort);
         List<Member> allMembers = pageInformation.getContent();
 

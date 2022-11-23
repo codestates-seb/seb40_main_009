@@ -17,11 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,30 +60,29 @@ public class DummyService {
      *
      *
      */
-
     public void createMockMember() {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
-        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId","리프레쉬토큰");
-        Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId",2, Member.MemberBadge.새내기);
-        Member test11 = new Member("test11@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.새내기);
-        Member test12 = new Member("test12@kakao.com", "이미지",roles, "kakao", "providerId",11, Member.MemberBadge.새내기);
-        Member test13 = new Member("test13@kakao.com", "이미지",roles, "kakao", "providerId",3, Member.MemberBadge.새내기);
-        Member test14 = new Member("test14@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.좀치는도전자);
-        Member test15 = new Member("test15@kakao.com", "이미지",roles, "kakao", "providerId",6, Member.MemberBadge.열정도전자);
-        Member test16 = new Member("test16@kakao.com", "이미지",roles, "kakao", "providerId",7, Member.MemberBadge.모범도전자);
-        Member test17 = new Member("test17@kakao.com", "이미지",roles, "kakao", "providerId",10, Member.MemberBadge.우수도전자);
-        Member test18 = new Member("test18@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.챌린지장인);
-        Member test19 = new Member("test19@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.시간의지배자);
-        Member test20 = new Member("test20@kakao.com", "이미지",roles, "kakao", "providerId",3, Member.MemberBadge.챌린지신);
+        Member test1 = new Member("test1@kakao.com", "이미지",roles, "kakao", "providerId",2, Member.MemberBadge.새내기,1,"test1",0);
+        Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId",11, Member.MemberBadge.새내기,1,"test2",0);
+        Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId",3, Member.MemberBadge.새내기,1,"test3",0);
+        Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.좀치는도전자,2,"test4",1);
+        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId",6, Member.MemberBadge.열정도전자,3,"test5",4);
+        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId",7, Member.MemberBadge.모범도전자,4,"test6",7);
+        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId",10, Member.MemberBadge.우수도전자,5,"test7",15);
+        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.챌린지장인,6,"test8",63);
+        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.시간의지배자,7,"test9",12);
+        Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId",2, Member.MemberBadge.새내기,1,"test10",0);
+        Member test11 = new Member("test11@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.새내기,1,"test11",0);
+        Member test12 = new Member("test12@kakao.com", "이미지",roles, "kakao", "providerId",11, Member.MemberBadge.새내기,1,"test12",0);
+        Member test13 = new Member("test13@kakao.com", "이미지",roles, "kakao", "providerId",3, Member.MemberBadge.새내기,1,"test13",0);
+        Member test14 = new Member("test14@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.좀치는도전자,2,"test14",1);
+        Member test15 = new Member("test15@kakao.com", "이미지",roles, "kakao", "providerId",6, Member.MemberBadge.열정도전자,3,"test15",2);
+        Member test16 = new Member("test16@kakao.com", "이미지",roles, "kakao", "providerId",7, Member.MemberBadge.모범도전자,4,"test16",4);
+        Member test17 = new Member("test17@kakao.com", "이미지",roles, "kakao", "providerId",10, Member.MemberBadge.우수도전자,5,"test17",8);
+        Member test18 = new Member("test18@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.챌린지장인,6,"test18",16);
+        Member test19 = new Member("test19@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.시간의지배자,7,"test19",32);
+        Member test20 = new Member("test20@kakao.com", "이미지",roles, "kakao", "providerId",3, Member.MemberBadge.챌린지신,8,"test20",64);
         memberRepository.save(test1);memberRepository.save(test2);memberRepository.save(test3);memberRepository.save(test4);
         memberRepository.save(test5);memberRepository.save(test6);memberRepository.save(test7);memberRepository.save(test8);
         memberRepository.save(test9);memberRepository.save(test10);memberRepository.save(test11);memberRepository.save(test12);
@@ -91,55 +92,116 @@ public class DummyService {
 
 
     public void createMockChallenge() {
-        Challenge challenge1 = new Challenge((long)1, Challenge.ChallengeCategory.SHARED_CHALLENGE,
+        Challenge challenge1 = new Challenge(1L, Challenge.ChallengeCategory.SHARED_CHALLENGE,
                 "타이틀1","타이틀1 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,1),
                 LocalDate.of(2022,11,5),
                 "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","");
-        Challenge challenge2 = new Challenge((long)2, Challenge.ChallengeCategory.SHARED_CHALLENGE,
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+        Challenge challenge2 = new Challenge(2L, Challenge.ChallengeCategory.SHARED_CHALLENGE,
                 "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,1),
                 LocalDate.of(2023,11,21),
                 "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","");
-        Challenge challenge3 = new Challenge((long)3, Challenge.ChallengeCategory.SHARED_CHALLENGE,
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+        Challenge challenge3 = new Challenge(3L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE,
                 "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,1),
                 LocalDate.of(2023,10,31),
                 "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","");
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+        Challenge challenge4 = new Challenge(4L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE,
+                "타이틀2","타이틀2 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,1),
+                LocalDate.of(2022,11,4),
+                "인증은 하루 3번",3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+
+               
         challenge1.setAuthorizedMemberId(1L);
         challenge2.setAuthorizedMemberId(1L);
+
         challengeRepository.save(challenge1);
         challengeRepository.save(challenge2);
+        challengeRepository.save(challenge3);
+        challengeRepository.save(challenge4);
+
     }
 
     public void participateMockMember() {
         Challenge challenge1 = challengeService.findChallengeById(1L);
         Challenge challenge2 = challengeService.findChallengeById(2L);
+        Challenge challenge3 = challengeService.findChallengeById(3L);
+        Challenge challenge4 = challengeService.findChallengeById(4L);
         Member member1 = memberService.findMemberByEmail("test1@kakao.com");
         Member member2 = memberService.findMemberByEmail("test2@kakao.com");
         Member member3 = memberService.findMemberByEmail("test3@kakao.com");
 
         MemberChallenge memberChallenge1 = new MemberChallenge(1L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member1, challenge1);
+        memberChallenge1.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge1.getChallenge().getChallengeStartDate(),
+                memberChallenge1.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge2 = new MemberChallenge(2L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member1, challenge2);
-        member1.setMemberChallengeTryCount(member1.getMemberChallengeTryCount() + 2);
+        memberChallenge2.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge2.getChallenge().getChallengeStartDate(),
+                memberChallenge2.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge3 = new MemberChallenge(3L, challenge3.getChallengeFeePerPerson(),
+                0, 0, member1, challenge3);
+        memberChallenge3.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge3.getChallenge().getChallengeStartDate(),
+                memberChallenge3.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge4 = new MemberChallenge(4L, challenge4.getChallengeFeePerPerson(),
+                0, 0, member1, challenge4);
+        memberChallenge4.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge4.getChallenge().getChallengeStartDate(),
+                memberChallenge4.getChallenge().getChallengeEndDate()));
+
+        member1.setMemberChallengeTotalObjCount(member1.getMemberChallengeTotalObjCount() +memberChallenge1.getChallengeObjDay()+memberChallenge2.getChallengeObjDay()
+                +memberChallenge3.getChallengeObjDay()+memberChallenge4.getChallengeObjDay());
         memberRepository.save(member1);
-        MemberChallenge memberChallenge3 = new MemberChallenge(3L, challenge1.getChallengeFeePerPerson(),
-                0, 0, member2, challenge1);
-        MemberChallenge memberChallenge4 = new MemberChallenge(4L, challenge2.getChallengeFeePerPerson(),
-                0, 0, member2, challenge2);
-        member2.setMemberChallengeTryCount(member2.getMemberChallengeTryCount() + 2);
-        memberRepository.save(member2);
+
+
         MemberChallenge memberChallenge5 = new MemberChallenge(5L, challenge1.getChallengeFeePerPerson(),
-                0, 0, member3, challenge1);
+                0, 0, member2, challenge1);
+        memberChallenge5.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge5.getChallenge().getChallengeStartDate(),
+                memberChallenge5.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge6 = new MemberChallenge(6L, challenge2.getChallengeFeePerPerson(),
+                0, 0, member2, challenge2);
+        memberChallenge6.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge6.getChallenge().getChallengeStartDate(),
+                memberChallenge6.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge7 = new MemberChallenge(7L, challenge3.getChallengeFeePerPerson(),
+                0, 0, member2, challenge3);
+        memberChallenge7.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge7.getChallenge().getChallengeStartDate(),
+                memberChallenge7.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge8 = new MemberChallenge(8L, challenge4.getChallengeFeePerPerson(),
+                0, 0, member2, challenge4);
+        memberChallenge8.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge8.getChallenge().getChallengeStartDate(),
+                memberChallenge8.getChallenge().getChallengeEndDate()));
+
+        member2.setMemberChallengeTotalObjCount(member2.getMemberChallengeTotalObjCount() +memberChallenge5.getChallengeObjDay()+memberChallenge6.getChallengeObjDay()
+                +memberChallenge7.getChallengeObjDay()+memberChallenge8.getChallengeObjDay());
+        memberRepository.save(member2);
+
+
+        MemberChallenge memberChallenge9 = new MemberChallenge(9L, challenge1.getChallengeFeePerPerson(),
+                0, 0, member3, challenge1);
+        memberChallenge9.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge9.getChallenge().getChallengeStartDate(),
+                memberChallenge9.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge10 = new MemberChallenge(10L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member3, challenge2);
-        member3.setMemberChallengeTryCount(member3.getMemberChallengeTryCount() + 2);
+        memberChallenge10.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge10.getChallenge().getChallengeStartDate(),
+                memberChallenge10.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge11 = new MemberChallenge(11L, challenge3.getChallengeFeePerPerson(),
+                0, 0, member3, challenge3);
+        memberChallenge11.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge11.getChallenge().getChallengeStartDate(),
+                memberChallenge11.getChallenge().getChallengeEndDate()));
+        MemberChallenge memberChallenge12 = new MemberChallenge(12L, challenge4.getChallengeFeePerPerson(),
+                0, 0, member3, challenge4);
+        memberChallenge12.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge12.getChallenge().getChallengeStartDate(),
+                memberChallenge12.getChallenge().getChallengeEndDate()));
+
+        member3.setMemberChallengeTotalObjCount(member3.getMemberChallengeTotalObjCount() +memberChallenge9.getChallengeObjDay()+memberChallenge10.getChallengeObjDay()
+                +memberChallenge11.getChallengeObjDay()+memberChallenge12.getChallengeObjDay());
         memberRepository.save(member3);
+
+
 
         memberChallengeRepository.save(memberChallenge1);
         memberChallengeRepository.save(memberChallenge2);
@@ -147,6 +209,11 @@ public class DummyService {
         memberChallengeRepository.save(memberChallenge4);
         memberChallengeRepository.save(memberChallenge5);
         memberChallengeRepository.save(memberChallenge6);
+        memberChallengeRepository.save(memberChallenge7);
+        memberChallengeRepository.save(memberChallenge8);
+        memberChallengeRepository.save(memberChallenge9);
+        memberChallengeRepository.save(memberChallenge10);
+        memberChallengeRepository.save(memberChallenge11);
+        memberChallengeRepository.save(memberChallenge12);
     }
-
 }

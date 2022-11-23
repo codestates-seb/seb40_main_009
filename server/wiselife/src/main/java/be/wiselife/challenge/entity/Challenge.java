@@ -4,6 +4,7 @@ import be.wiselife.audit.TimeAudit;
 import be.wiselife.audit.WriterAudit;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
+import be.wiselife.image.entity.ChallengeCertImage;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -94,6 +95,8 @@ public class Challenge extends WriterAudit {
     private String challengeExamImagePath;
 
     //이미지 중 챌린지 참여자가 추가할 사진 필드
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<ChallengeCertImage> challengeCertImages = new ArrayList<>();
     @Setter
     private String challengeCertImagePath;
 
@@ -132,6 +135,37 @@ public class Challenge extends WriterAudit {
         this.isClosed = false;
         this.challengeViewCount = 0;
         this.challengeCurrentParty = 0;
+        this.challengeTotalReward = 0;
+
+        this.challengeRepImagePath=challengeRepImagePath;
+        this.challengeExamImagePath = challengeExamImagePath;
+        this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
+
+        this.challengeCertImagePath = challengeCertImagePath;
+    }
+    //더미용 생성자
+    @Builder
+    public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
+                     String challengeDescription, int challengeMaxParty, int challengeMinParty,
+                     LocalDate challengeStartDate, LocalDate challengeEndDate,
+                     String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath,int challengeCurrentParty) {
+        this.challengeId = challengeId;
+        this.challengeCategory = challengeCategory;
+        this.challengeTitle = challengeTitle;
+        this.challengeDescription = challengeDescription;
+        this.challengeMaxParty = challengeMaxParty;
+        this.challengeMinParty = challengeMinParty;
+        this.challengeStartDate = challengeStartDate;
+        this.challengeEndDate = challengeEndDate;
+        this.challengeAuthDescription = challengeAuthDescription;
+        this.challengeAuthCycle = challengeAuthCycle;
+        this.challengeFeePerPerson = challengeFeePerPerson;
+
+        /*인자로 받지는 않지만 default값 설정해야 하는 것들*/
+        this.isClosed = false;
+        this.challengeViewCount = 0;
+        this.challengeCurrentParty = challengeCurrentParty;
         this.challengeTotalReward = 0;
 
         this.challengeRepImagePath=challengeRepImagePath;

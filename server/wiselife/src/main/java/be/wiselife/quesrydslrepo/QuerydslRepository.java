@@ -18,7 +18,7 @@ public interface QuerydslRepository {
     Follow findByFollowerIdAndFollowing(Long followingId, Member follower);
 
     // 멤버가 참여한 챌린지 중 성공여부 확인 및 멤버 페이지 내에서 챌린지 종료와 생성일자에 따른 sort 용
-    List<MemberChallenge> findByMember(Member member);
+    List<MemberChallenge> findMemberChallengeByMember(Member member);
 
     MemberChallenge findByChallengeIdAndMember(String challengeId, Member member);
     MemberImage findByImageTypeAndMemberId(String imageType, Long memberId);
@@ -28,11 +28,13 @@ public interface QuerydslRepository {
     // 한 이미지를 상세로 보려고 할때 필요할지 프론트에 질문 필요
     ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage);
 
-    // 인증사진이 당일에 몇장 등록됐는지 확인용
+    // 인증사진이 당일에 몇장 등록됐는지 확인해서 목표 인증횟수를 채웠는지 확인하는 용도
     List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdCount(String imageType, Long memberId, String randomIdForImage);
 
     // 인증사진 중 현재 인증가능 시간에 수정을 가능하게 하는 메소드
     ChallengeCertImage findByImageTypeAndMemberIdAndChallengeCertIdPatch(String imageType, Long memberId, String randomIdForImage);
+
+    List<ChallengeCertImage> findCertImageByImageTypeAndMemberId(String imageType, Long memberId);
 
     // 챌린지 참여자가 챌린지를 봤을때
     List<ChallengeCertImage> findByImageTypeAndChallengeCertIdGet(String imageType,String randomIdForImage);

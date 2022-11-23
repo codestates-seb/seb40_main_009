@@ -7,6 +7,7 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,11 +34,10 @@ public interface MemberMapper {
         memberDetailResponse.setMemberDescription(member.getMemberDescription());
         memberDetailResponse.setMemberEmail(member.getMemberEmail());
         memberDetailResponse.setMemberName(member.getMemberName());
-        memberDetailResponse.setMemberExp(member.getMemberExp());
         memberDetailResponse.setMemberBadge(member.getMemberBadge());
         memberDetailResponse.setHasRedCard(member.isHasRedCard());
-        memberDetailResponse.setMemberChallengeTryCount((int)member.getMemberChallengeTryCount());
-        memberDetailResponse.setMemberChallengeSuccessCount((int)member.getMemberChallengeSuccessCount());
+        memberDetailResponse.setMemberChallengeTotalObjCount((int)member.getMemberChallengeTotalObjCount());
+        memberDetailResponse.setMemberChallengeSuccessCount((int)member.getMemberExp());
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
         memberDetailResponse.setFollowerCount(member.getFollowerCount());
@@ -79,6 +79,7 @@ public interface MemberMapper {
     }
 
     default List<MemberDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+
         return memberChallenges
                 .stream()
                 .map(memberChallenge -> MemberDto.MemberChallengeResponseDto
