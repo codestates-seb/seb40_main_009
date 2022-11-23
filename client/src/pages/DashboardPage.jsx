@@ -26,10 +26,10 @@ import {
   MemberOfTheMonth,
   MarginLeft,
   Members,
-} from '../style/Main/MainPageStyle';
+} from '../style/Dashboard/DashboardPageStyle';
 
 import ChallengeList from '../components/ChallengeList/Challenge';
-import SlideBanner from '../components/Main/SlideBanner';
+import SlideBanner from '../components/Dashboard/SlideBanner';
 import Loading from '../components/Loading/Loading';
 
 import smile from '../image/smile.jpg';
@@ -51,9 +51,9 @@ export default function MainPage() {
           },
         }
       );
-      const members = response.data.data;
-      console.log(members);
-      setMembers(members);
+      const memberList = response.data.data;
+      console.log(memberList);
+      setMembers(memberList);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
@@ -169,13 +169,13 @@ export default function MainPage() {
                         </div>
                       </div>
                     </TitleWrapper>
-                    {members.map((user) => (
+                    {/* {members.map((user) => (
                       <Members key={user.memberId}>
                         <div>{user.memberName}</div>
                         <div>{user.memberBadge}</div>
                         <div>{user.followerCount}</div>
                       </Members>
-                    ))}
+                    ))} */}
                   </MarginLeft>
                 </Flex>
               </Container>
