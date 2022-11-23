@@ -45,4 +45,6 @@ public interface QuerydslRepository {
     //회원이 해당 챌린지에 포함된 회원이 맞는지 판단하는 메소드
     MemberChallenge findByChallengeAndMember(Challenge challenge,Member member);
 
+    List<Member> searchMemberName(String memberName);
+
 }

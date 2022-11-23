@@ -109,4 +109,15 @@ public class MemberController {
     public void patchBadge(@PathVariable("memberId") Long memberId) {
         memberService.changeBadge(memberId);
     }
+
+    @GetMapping("/search/member")
+    public ResponseEntity getSearchMembers(@RequestParam("name")String name,
+                                           @Positive @RequestParam int page,
+                                           @Positive @RequestParam int size) {
+        Page<Member> pageInfo = memberService.searchMember(name, page - 1, size);
+        List<Member> memberList = pageInfo.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.memberListResponses(memberList), pageInfo), HttpStatus.OK);
+    }
 }

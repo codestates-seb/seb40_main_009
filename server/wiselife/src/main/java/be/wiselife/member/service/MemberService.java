@@ -10,6 +10,7 @@ import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -198,5 +199,17 @@ public class MemberService {
         }
 
         return result;
+    }
+
+    /**
+     * 검색기능
+     * @param name 검색된 데이터
+     */
+
+    public Page<Member> searchMember(String name, int page, int size) {
+
+        List<Member> memberList = memberRepository.searchMemberName(name);
+
+        return new PageImpl<>(memberList);
     }
 }
