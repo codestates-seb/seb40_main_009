@@ -14,8 +14,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -97,7 +99,7 @@ public class MemberService {
         return memberRepository.findAll(PageRequest.of(page, size, Sort.by(sort).descending()));
     }
 
-    public Member updateMemberInfo(String memberName, Member member,Member loginMember) {
+    public Member updateMemberInfo(String memberName, Member member, Member loginMember, MultipartFile multipartFiles) throws IOException {
         Member memberFromRepository = findMemberByMemberName(memberName);
 
         if (!loginMember.getMemberName().equals(memberName)) {
@@ -112,7 +114,7 @@ public class MemberService {
                 .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
         if (!Optional.ofNullable(member.getMemberImagePath()).isEmpty()) {
             member.setMemberId(memberFromRepository.getMemberId());
-            imageService.patchMemberImage(member);
+            imageService.patchMemberImage(member,multipartFiles);
             memberFromRepository.setMemberImagePath(member.getMemberImagePath());
         }
 

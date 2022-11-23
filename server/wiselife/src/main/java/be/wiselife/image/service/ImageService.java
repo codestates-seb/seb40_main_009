@@ -13,13 +13,11 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -36,20 +34,23 @@ public class ImageService {
      * 카카오톡 이미지 외에 등록한적이 없다면, 새로 memberImage를 생성해서 저장
      * 카카오톡 이미지 외에 등록한적이 있다면, 기존것을 db에서 찾아서 수정
      */
-    public void patchMemberImage(Member member) {
+    public void patchMemberImage(Member member, MultipartFile multipartFiles) throws IOException {
         MemberImage memberImageFromRepository =
                 imageRepository.findByImageTypeAndMemberId("MI", member.getMemberId());
+        
+        String ImageUrl = s3UploadService.uploadJustOne(multipartFiles); //이미지 URL받아오기
+       
         if (memberImageFromRepository == null) {
             MemberImage memberImage = new MemberImage();
-            saveMemberImage(member, memberImage);
+            saveMemberImage(member, memberImage, ImageUrl);
         } else {
-            saveMemberImage(member, memberImageFromRepository);
+            saveMemberImage(member, memberImageFromRepository, ImageUrl);
         }
     }
 
     // MemberImage 중복코드 줄이는 용도
-    private void saveMemberImage(Member member, MemberImage memberImage) {
-        memberImage.setImagePath(member.getMemberImagePath());
+    private void saveMemberImage(Member member, MemberImage memberImage, String imageUrl) {
+        memberImage.setImagePath(imageUrl);
         memberImage.setMemberId(member.getMemberId());
         imageRepository.save(memberImage);
     }
