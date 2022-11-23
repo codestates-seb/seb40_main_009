@@ -29,7 +29,6 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final ChallengeTalkMapper challengeTalkMapper;
     private final ChallengeMapper challengeMapper;
-
     private final MemberChallengeRepository memberChallengeRepository;
 
 

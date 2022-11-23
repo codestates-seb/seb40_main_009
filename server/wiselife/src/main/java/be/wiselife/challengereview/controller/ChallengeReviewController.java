@@ -48,6 +48,7 @@ public class ChallengeReviewController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview)),
                 HttpStatus.CREATED);
+
     }
 
     /**
@@ -82,7 +83,7 @@ public class ChallengeReviewController {
     public ResponseEntity deleteChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
                                           HttpServletRequest request) {
 
-        challengeService.deleteChallenge(challengeReviewId, memberService.getLoginMember(request));
+        challengeReviewService.deleteChallengeReview(challengeReviewId, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

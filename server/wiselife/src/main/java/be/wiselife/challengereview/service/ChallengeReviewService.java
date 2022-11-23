@@ -40,10 +40,8 @@ public class ChallengeReviewService {
      */
     public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge) {
         //해당 챌린지에 참여한 유저인지 검증
-//        memberChallengeRepository.findMemberChallengeByChallengeChallengeIdAndMemberMemberId(challenge.getChallengeId(), loginMember.getMemberId())
-//                .ifPresent(a -> {
-//                    throw new BusinessLogicException(ExceptionCode.USER_NOT_PARTICIPATING_THIS_CHALLENGE);
-//                });
+        memberChallengeRepository.findMemberChallengeByChallengeChallengeIdAndMemberMemberId(challenge.getChallengeId(), loginMember.getMemberId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_PARTICIPATING_THIS_CHALLENGE));
 
         //이미 리뷰 작성한 유저인지 검증
         challengeReviewRepository.findChallengeReviewByMemberMemberIdAndChallengeChallengeId(loginMember.getMemberId(), challenge.getChallengeId())
