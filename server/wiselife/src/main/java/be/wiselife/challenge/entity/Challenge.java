@@ -79,9 +79,12 @@ public class Challenge extends WriterAudit {
 
     //챌린지 진행 현황 관련 필드
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonManagedReference
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<ChallengeReview> challengeReviewList = new ArrayList<>();
 
     //이미지 중 챌린지 생성자가 추가할 사진 필드

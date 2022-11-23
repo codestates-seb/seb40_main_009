@@ -20,12 +20,9 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
 
-//<<<<<<< HEAD
-//    Challenge certPostDtoToChallenge(ChallengeDto.CertPost certPost);
-//=======
     Challenge certDtoToChallenge(ChallengeDto.Cert cert);
     List<ChallengeDto.SimpleResponse> challengeListToSimpleResponseList(List<Challenge> challengeList);
-
+    List<ChallengeDto.ChallengeTitleResponse> challengeListToChallengeTitleResponseList(List<Challenge> challengeList);
     /**
      * 챌린지 생성 mapping
      */

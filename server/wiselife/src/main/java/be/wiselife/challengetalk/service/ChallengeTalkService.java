@@ -10,7 +10,6 @@ import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -26,7 +25,7 @@ public class ChallengeTalkService {
     }
 
     public ChallengeTalk createChallengeTalk(ChallengeTalk challengeTalk, Long challengeId, Member loginMember){
-        Challenge challenge = challengeService.getChallenge(challengeId);
+        Challenge challenge = challengeService.getChallengeById(challengeId);
 
         challengeTalk.setChallenge(challenge);
         challengeTalk.setMemberId(loginMember.getMemberId());

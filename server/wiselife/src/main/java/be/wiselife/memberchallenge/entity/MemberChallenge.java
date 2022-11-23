@@ -2,6 +2,7 @@ package be.wiselife.memberchallenge.entity;
 
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,10 +35,12 @@ public class MemberChallenge {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @JsonBackReference
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="challenge_id")
+    @JsonBackReference
     private Challenge challenge;
 
     //더미 생성용 생성자

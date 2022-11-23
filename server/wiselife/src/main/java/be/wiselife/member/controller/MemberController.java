@@ -72,6 +72,19 @@ public class MemberController {
         return new ResponseEntity(
                 new MultiResponseDto<>(mapper.memberListResponses(allMembers),pageInformation),HttpStatus.OK);
     }
+
+    /**
+     * 해더에 보내질 모든 맴버의 이름
+     * @return
+     */
+    @GetMapping("/names")
+    public ResponseEntity getMembersName() {
+        List<String> membersName = memberService.getAllMembersName();
+
+        return new ResponseEntity(
+                new SingleResponseDto<>(membersName), HttpStatus.OK);
+    }
+
     /**
      * 회원 정보수정
      * 회원이 본인의 정보를 수정할때,
@@ -95,5 +108,23 @@ public class MemberController {
     @GetMapping("/testbadge/{memberId}")
     public void patchBadge(@PathVariable("memberId") Long memberId) {
         memberService.changeBadge(memberId);
+    }
+
+    /**
+     * 맴버이름 검색 컨트롤러
+     * @param name 검색하고자 하는 이름
+     * @param page page 수
+     * @param size page당 불러오고자 하는 사이즈
+     * @return
+     */
+    @GetMapping("/search/member")
+    public ResponseEntity getSearchMembers(@RequestParam("name")String name,
+                                           @Positive @RequestParam int page,
+                                           @Positive @RequestParam int size) {
+        Page<Member> pageInfo = memberService.searchMember(name, page - 1, size);
+        List<Member> memberList = pageInfo.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.memberListResponses(memberList), pageInfo), HttpStatus.OK);
     }
 }
