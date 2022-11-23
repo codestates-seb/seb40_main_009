@@ -2,17 +2,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Kakao from 'kakaojs';
 
 import ChallengeList from './pages/ChallengeList';
-import UserList from './pages/UserList';
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
 import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
-import MainPage from './pages/MainPage';
+import DashboardPage from './pages/DashboardPage';
 import SearchResult from './pages/SearchResult';
-import DetailPage from './pages/DetailPage';
-import ChallengeDetail from './pages/ChallengeDetail';
+import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail';
+import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetailProgress';
 import CreateChallengePage from './pages/CreateChallenge';
 import EditProfilePage from './pages/EditProfilePage';
+import MemberList from './pages/MemberList';
 
 function App() {
   return (
@@ -20,11 +20,14 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<DashboardPage />} />
           <Route path="/challengelist/*" element={<ChallengeList />} />
-          <Route path="/detail/:id" element={<DetailPage />} />
-          <Route path="/challengedetail/:id" element={<ChallengeDetail />} />
-          <Route path="/userlist/*" element={<UserList />} />
+          <Route path="/memberlist" element={<MemberList />} />
+          <Route path="/detail/:id" element={<ChallengeDetail />} />
+          <Route
+            path="/challengedetail/:id"
+            element={<ChallengeDetailProgress />}
+          />
           <Route path="/search/*" element={<SearchResult />} />
           <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />

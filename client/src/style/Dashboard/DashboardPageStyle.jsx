@@ -22,58 +22,58 @@ export const FifthPage = styled.div`
 `;
 
 export const MarginTop = styled.div`
-  margin-top: 8%;
+  margin-top: 5%;
 `;
 
 export const Container = styled.div`
   width: 1024px;
   margin: 0 auto;
+  display: flex;
 `;
 
 export const FontSize30 = styled.div`
   font-size: 30px;
 `;
 
-export const Flex = styled.div`
-  display: flex;
-`;
-
 export const TitleWrapper = styled.div`
-  font-size: 30px;
-  margin-bottom: 5%;
-  & > .wrapper {
-    display: flex;
-    align-items: center;
-    width: 375%;
-  }
-  & > .wrapper .title {
+  margin-bottom: 1%;
+  display: flex;
+  align-items: center;
+  & > .title {
     margin-right: auto;
+    font-size: 30px;
   }
-  & > .wrapper .view_all {
+  & > .view_all {
     font-size: 15px;
     cursor: pointer;
   }
 `;
 
-export const MemberOfTheMonth = styled.img`
-  width: 350px;
+export const PopularChallengeWrapper = styled.div`
+  width: 35%;
+  margin-right: auto;
+`;
+
+export const PopularChallenge = styled.img`
+  width: 100%;
   height: 350px;
 `;
 
-export const MarginLeft = styled.div`
-  margin-left: 3%;
+export const UserRankingWrapper = styled.div`
+  width: 63%;
+`;
+
+export const UserRanking = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 1% 5%;
+  border-bottom: 1px solid #f2f4fe;
 `;
 
 export const Members = styled.div`
   background-color: #f2f4fe;
-  border-radius: 10px;
-  width: 375%;
+  border-radius: 10px 10px 0 0;
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 8.5%;
-  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
-
-  & > div {
-    margin: 1%;
-  }
+  justify-content: space-between;
+  padding: 1% 5%;
 `;

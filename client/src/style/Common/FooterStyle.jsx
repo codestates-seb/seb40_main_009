@@ -1,14 +1,11 @@
 import styled from 'styled-components';
+
 import {
   AiFillGithub,
   AiFillTwitterCircle,
   AiFillLinkedin,
   AiFillInstagram,
 } from 'react-icons/ai';
-
-export const Flex = styled.div`
-  display: flex;
-`;
 
 export const FooterContainer = styled.footer`
   margin-top: 80px;
@@ -22,6 +19,10 @@ export const FooterContainer = styled.footer`
 export const Container = styled.div`
   width: 1024px;
   margin: 0 auto;
+`;
+
+export const Flex = styled.div`
+  display: flex;
 `;
 
 export const Logo = styled.div`
