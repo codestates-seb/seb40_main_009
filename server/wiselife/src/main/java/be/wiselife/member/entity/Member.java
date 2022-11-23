@@ -7,6 +7,7 @@ import be.wiselife.follow.entity.Follow;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 
@@ -153,6 +154,7 @@ public class Member extends TimeAudit {
 
     // 참여중, 참여했던 챌린지에 대한 필드
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
     // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
