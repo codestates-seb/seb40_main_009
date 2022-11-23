@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -211,5 +212,4 @@ public class DummyService {
         memberChallengeRepository.save(memberChallenge11);
         memberChallengeRepository.save(memberChallenge12);
     }
-
 }
