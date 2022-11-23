@@ -38,9 +38,9 @@ public class Member extends TimeAudit {
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
-        this.memberChallengeTryCount = 0;
+        this.memberChallengeTotalObjCount = 0;
         this.memberExp = 0;
-        this.memberChallengePercentage = memberExp/memberChallengeTryCount;
+        this.memberChallengePercentage = memberExp/memberChallengeTotalObjCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
@@ -63,9 +63,9 @@ public class Member extends TimeAudit {
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
-        this.memberChallengeTryCount = 0;
+        this.memberChallengeTotalObjCount = 0;
         this.memberExp = 0;
-        this.memberChallengePercentage = memberExp/memberChallengeTryCount;
+        this.memberChallengePercentage = memberExp/memberChallengeTotalObjCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.followerCount = followerCount;
@@ -135,7 +135,7 @@ public class Member extends TimeAudit {
     /**
      * 참여중, 참여했던 챌린지에 대한 필드에 대한 값
      * memberChallenges : 참여중인 챌린지에 대한 정보를 가져온다.
-     * memberChallengeTryCount : 멤버가 참여중, 참여했던 챌린지 갯수
+     * memberChallengeTotalObjCount : 멤버가 참여중, 참여했던 챌린지의 총 목표참가일수
      * memberExp : 멤버가 인증한 횟수를 의미하며, 뱃지와 레벨 변화에 기준이 된다. -> 하루에 3번 인증하면 3이 증가한다.
      * memberBadge : 경험치에 따라 변화될 값
      * memberLevel : 경험치에 따라 변화될 값
@@ -145,7 +145,7 @@ public class Member extends TimeAudit {
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
     @Column(nullable = false)
-    private double memberChallengeTryCount;
+    private double memberChallengeTotalObjCount;
 
     @Column(nullable = false)
     private double memberExp;

@@ -162,16 +162,9 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        // 멤버가 참여한 챌린지에 대한 성공률을 계산하는 로직
+        // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
         if (challengeCertImages.size()%challenge.getChallengeAuthCycle()==0) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
-            double successDay =memberChallengeFromRepository.getMemberSuccessDay();
-//            double objectDay = ChronoUnit.DAYS.between(memberChallengeFromRepository.getChallenge().getChallengeStartDate(),
-//                    memberChallengeFromRepository.getChallenge().getChallengeEndDate());
-
-            double successRate = (successDay/memberChallengeFromRepository.getChallengeObjDay())*100;
-            memberChallengeFromRepository.setMemberChallengeSuccessRate(successRate);
-
             memberChallengeRepository.save(memberChallengeFromRepository);
         }
 
@@ -203,11 +196,11 @@ public class ImageService {
 
     private void calculateMemberChallengePercentage(Member loginMember) {
         List<MemberChallenge> memberChallengeList = memberRepository.findMemberChallengeByMember(loginMember);
-        double oneChallengeSuccessRateForMember = 0;
+        double oneChallengeSuccessDay = 0;
         for (MemberChallenge memberChallenge : memberChallengeList) {
-                oneChallengeSuccessRateForMember=oneChallengeSuccessRateForMember+memberChallenge.getMemberChallengeSuccessRate();
+                oneChallengeSuccessDay=oneChallengeSuccessDay+memberChallenge.getMemberSuccessDay();
         }
-        loginMember.setMemberChallengePercentage(oneChallengeSuccessRateForMember/ loginMember.getMemberChallengeTryCount());
+        loginMember.setMemberChallengePercentage(oneChallengeSuccessDay/ loginMember.getMemberChallengeTotalObjCount());
         memberRepository.save(loginMember);
     }
 

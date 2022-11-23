@@ -130,8 +130,9 @@ public class DummyService {
                 0, 0, member1, challenge2);
         memberChallenge2.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge2.getChallenge().getChallengeStartDate(),
                 memberChallenge2.getChallenge().getChallengeEndDate()));
-        member1.setMemberChallengeTryCount(member1.getMemberChallengeTryCount() + 2);
+        member1.setMemberChallengeTotalObjCount(member1.getMemberChallengeTotalObjCount() +memberChallenge1.getChallengeObjDay()+memberChallenge2.getChallengeObjDay());
         memberRepository.save(member1);
+
         MemberChallenge memberChallenge3 = new MemberChallenge(3L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member2, challenge1);
         memberChallenge3.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge3.getChallenge().getChallengeStartDate(),
@@ -140,8 +141,9 @@ public class DummyService {
                 0, 0, member2, challenge2);
         memberChallenge4.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge4.getChallenge().getChallengeStartDate(),
                 memberChallenge4.getChallenge().getChallengeEndDate()));
-        member2.setMemberChallengeTryCount(member2.getMemberChallengeTryCount() + 2);
+        member2.setMemberChallengeTotalObjCount(member2.getMemberChallengeTotalObjCount() +memberChallenge3.getChallengeObjDay()+memberChallenge4.getChallengeObjDay());
         memberRepository.save(member2);
+
         MemberChallenge memberChallenge5 = new MemberChallenge(5L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member3, challenge1);
         memberChallenge5.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge5.getChallenge().getChallengeStartDate(),
@@ -150,7 +152,7 @@ public class DummyService {
                 0, 0, member3, challenge2);
         memberChallenge6.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge6.getChallenge().getChallengeStartDate(),
                 memberChallenge6.getChallenge().getChallengeEndDate()));
-        member3.setMemberChallengeTryCount(member3.getMemberChallengeTryCount() + 2);
+        member3.setMemberChallengeTotalObjCount(member3.getMemberChallengeTotalObjCount() +memberChallenge5.getChallengeObjDay()+memberChallenge6.getChallengeObjDay());
         memberRepository.save(member3);
 
         memberChallengeRepository.save(memberChallenge1);

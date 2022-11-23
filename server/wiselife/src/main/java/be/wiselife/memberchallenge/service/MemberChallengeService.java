@@ -35,16 +35,16 @@ public class MemberChallengeService {
     public Challenge patchMemberAndChallenge(Challenge challenge, Member member) {
 
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
-        double memberChallengeTryCount = member.getMemberChallengeTryCount();
-
+        double memberChallengeTotalObjCount = member.getMemberChallengeTotalObjCount();
         if (memberChallengeRepository.findByChallengeIdAndMember(challenge.getRandomIdForImage(), member) != null) {
             MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 
             challenge.setChallengeCurrentParty(challengeCurrentParty-1);
             challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
-            member.setMemberChallengeTryCount(memberChallengeTryCount-1);
 
             challenge.getMemberChallenges().remove(memberChallengeFromRepository);
+            member.setMemberChallengeTotalObjCount(member.getMemberChallengeTotalObjCount()-memberChallengeFromRepository.getChallengeObjDay());
+            memberRepository.save(member);
             member.getMemberChallenges().remove(memberChallengeFromRepository);
 
             memberChallengeRepository.delete(memberChallengeFromRepository);
@@ -57,7 +57,6 @@ public class MemberChallengeService {
 
             challenge.setChallengeCurrentParty(challengeCurrentParty+1);
             challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
-            member.setMemberChallengeTryCount(memberChallengeTryCount+1);
 
             memberChallenge.setMemberReward(challenge.getChallengeFeePerPerson());
             memberChallenge.setMember(member);
@@ -66,9 +65,9 @@ public class MemberChallengeService {
                     memberChallenge.getChallenge().getChallengeEndDate());
             memberChallenge.setChallengeObjDay(objectDay);
 
-
             challenge.getMemberChallenges().add(memberChallenge);
             member.getMemberChallenges().add(memberChallenge);
+            memberChallengeTotalObjCount = member.getMemberChallengeTotalObjCount()+objectDay;
 
             memberChallengeRepository.save(memberChallenge);
             memberRepository.save(member);

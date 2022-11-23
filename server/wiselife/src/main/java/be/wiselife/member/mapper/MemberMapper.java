@@ -36,7 +36,7 @@ public interface MemberMapper {
         memberDetailResponse.setMemberName(member.getMemberName());
         memberDetailResponse.setMemberBadge(member.getMemberBadge());
         memberDetailResponse.setHasRedCard(member.isHasRedCard());
-        memberDetailResponse.setMemberChallengeTryCount((int)member.getMemberChallengeTryCount());
+        memberDetailResponse.setMemberChallengeTotalObjCount((int)member.getMemberChallengeTotalObjCount());
         memberDetailResponse.setMemberChallengeSuccessCount((int)member.getMemberExp());
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
