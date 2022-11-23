@@ -27,8 +27,8 @@ import java.util.UUID;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberChallengeRepository memberChallengeRepository;
-
     private final MemberRepository memberRepository;
+    private final S3UploadService s3UploadService;
 
     //MemberImage 부분 코드======================================
     /**

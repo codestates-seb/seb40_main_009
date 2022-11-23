@@ -57,14 +57,14 @@ mail:
       admin: mins402kim@kakao.com
 
 cloud:
-  aws:
-    credentials:
-      access-key: #${AWS_ACCESS_KEY_ID} # 디코에있는거
-      secret-key: #${AWS_SECRET_ACCESS_KEY} # 디코에있는거
-    s3:
+   aws:
+     credentials:
+       access-key: ${AWS_ACCESS_KEY_ID} # 디코에있는거
+       secret-key: ${AWS_SECRET_ACCESS_KEY} # 디코에있는거
+     s3:
       bucket: wiselife-image
       #dir: 안해도될듯?
-    region:
-      static: ap-northeast-2
-    stack:
+     stack:
       auto: false
+     region:
+      static: ap-northeast-2
