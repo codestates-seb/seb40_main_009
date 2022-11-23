@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,20 +124,32 @@ public class DummyService {
 
         MemberChallenge memberChallenge1 = new MemberChallenge(1L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member1, challenge1);
+        memberChallenge1.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge1.getChallenge().getChallengeStartDate(),
+                memberChallenge1.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge2 = new MemberChallenge(2L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member1, challenge2);
+        memberChallenge2.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge2.getChallenge().getChallengeStartDate(),
+                memberChallenge2.getChallenge().getChallengeEndDate()));
         member1.setMemberChallengeTryCount(member1.getMemberChallengeTryCount() + 2);
         memberRepository.save(member1);
         MemberChallenge memberChallenge3 = new MemberChallenge(3L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member2, challenge1);
+        memberChallenge3.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge3.getChallenge().getChallengeStartDate(),
+                memberChallenge3.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge4 = new MemberChallenge(4L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member2, challenge2);
+        memberChallenge4.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge4.getChallenge().getChallengeStartDate(),
+                memberChallenge4.getChallenge().getChallengeEndDate()));
         member2.setMemberChallengeTryCount(member2.getMemberChallengeTryCount() + 2);
         memberRepository.save(member2);
         MemberChallenge memberChallenge5 = new MemberChallenge(5L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member3, challenge1);
+        memberChallenge5.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge5.getChallenge().getChallengeStartDate(),
+                memberChallenge5.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge6 = new MemberChallenge(6L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member3, challenge2);
+        memberChallenge6.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge6.getChallenge().getChallengeStartDate(),
+                memberChallenge6.getChallenge().getChallengeEndDate()));
         member3.setMemberChallengeTryCount(member3.getMemberChallengeTryCount() + 2);
         memberRepository.save(member3);
 

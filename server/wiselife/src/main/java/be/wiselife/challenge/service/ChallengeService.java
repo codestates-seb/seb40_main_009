@@ -128,8 +128,6 @@ public class ChallengeService {
      */
     public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
 
-
-
         Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
         challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
 

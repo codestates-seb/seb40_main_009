@@ -34,14 +34,13 @@ public class Member extends TimeAudit {
         this.memberImagePath = memberImagePath;
 
         this.memberName = createRandomId(); //네 구현필요
-        this.memberExp = 0;
         this.memberBadge = MemberBadge.새내기; //구현필요
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
         this.memberChallengeTryCount = 0;
-        this.memberChallengeSuccessCount = 0;
-        this.memberChallengePercentage = memberChallengeSuccessCount/memberChallengeTryCount;
+        this.memberExp = 0;
+        this.memberChallengePercentage = memberExp/memberChallengeTryCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
@@ -59,15 +58,14 @@ public class Member extends TimeAudit {
         this.memberEmail = memberEmail;
         this.memberImagePath = memberImagePath;
 
-        this.memberName = createRandomId(); //네 구현필요
-        this.memberExp = 0;
+        this.memberName = memberName; //네 구현필요
         this.memberBadge = memberBadge; //구현필요
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
         this.memberChallengeTryCount = 0;
-        this.memberChallengeSuccessCount = 0;
-        this.memberChallengePercentage = memberChallengeSuccessCount/memberChallengeTryCount;
+        this.memberExp = 0;
+        this.memberChallengePercentage = memberExp/memberChallengeTryCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.followerCount = followerCount;
@@ -96,28 +94,10 @@ public class Member extends TimeAudit {
     @Column(nullable = false, unique = true)
     private String memberName;
 
-    /**
-     * 연관관계 매핑이 필요한 필드
-     * 참여중인 챌린지가 없으므로 생성시 기본값 0건, 0원, 이미지는 image
-     */
-
-    @Column
-    private int memberExp;
-
-    @Enumerated(EnumType.STRING)
-    private MemberBadge memberBadge;
-
-    @Column(nullable = false)
-    private int memberLevel;
-
     @Column(nullable = false)
     private boolean hasRedCard;
 
-    @Column(nullable = false)
-    private double memberMoney;
-
     //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
-
     @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
     private Set<Follow> follows = new HashSet<>();
     @Column(nullable = false)
@@ -146,26 +126,36 @@ public class Member extends TimeAudit {
     // 주문내역 관련 필드
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
-
+    @Column(nullable = false)
+    private double memberMoney;
     public void addOrder(Order order) {
         orders.add(order);
     }
 
-
-
-    // 참여중, 참여했던 챌린지에 대한 필드
+    /**
+     * 참여중, 참여했던 챌린지에 대한 필드에 대한 값
+     * memberChallenges : 참여중인 챌린지에 대한 정보를 가져온다.
+     * memberChallengeTryCount : 멤버가 참여중, 참여했던 챌린지 갯수
+     * memberExp : 멤버가 인증한 횟수를 의미하며, 뱃지와 레벨 변화에 기준이 된다. -> 하루에 3번 인증하면 3이 증가한다.
+     * memberBadge : 경험치에 따라 변화될 값
+     * memberLevel : 경험치에 따라 변화될 값
+     * memberChallengePercentage : 멤버가 인증한 총 횟수 / 총 참여한 챌린지가 요구하는 목표 일수
+     */
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
-    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
     @Column(nullable = false)
     private double memberChallengeTryCount;
 
-    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
     @Column(nullable = false)
-    private double memberChallengeSuccessCount;
+    private double memberExp;
 
-    // TODO: 필드를 두지 않고 DTO로 응답하게 수정하자
+    @Enumerated(EnumType.STRING)
+    private MemberBadge memberBadge;
+
+    @Column(nullable = false)
+    private int memberLevel;
+
     @Column(nullable = false)
     private double memberChallengePercentage;
 
@@ -179,13 +169,13 @@ public class Member extends TimeAudit {
 
     public enum MemberBadge {
         새내기(1,0),
-        좀치는도전자(2,Math.pow(2,1)),
-        열정도전자(3,Math.pow(2,2)),
-        모범도전자(4,Math.pow(2,3)),
-        우수도전자(5,Math.pow(2,4)),
-        챌린지장인(6,Math.pow(2,5)),
-        시간의지배자(7,Math.pow(2,6)),
-        챌린지신(8,Math.pow(2,7));
+        좀치는도전자(2,Math.pow(2,1)),//2-0 =2
+        열정도전자(3,Math.pow(2,2)),//4-2 = 2
+        모범도전자(4,Math.pow(2,3)),//8-4 = 4
+        우수도전자(5,Math.pow(2,4)),//16-8 =8
+        챌린지장인(6,Math.pow(2,5)),//32-16 =16
+        시간의지배자(7,Math.pow(2,6)),//64-32
+        챌린지신(8,Math.pow(2,7));//128-64
 
         @Getter
         public int level;

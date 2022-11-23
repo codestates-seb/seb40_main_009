@@ -162,13 +162,14 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
+        // 멤버가 참여한 챌린지에 대한 성공률을 계산하는 로직
         if (challengeCertImages.size()%challenge.getChallengeAuthCycle()==0) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
             double successDay =memberChallengeFromRepository.getMemberSuccessDay();
-            double objectDay = ChronoUnit.DAYS.between(memberChallengeFromRepository.getChallenge().getChallengeStartDate(),
-                    memberChallengeFromRepository.getChallenge().getChallengeEndDate());
+//            double objectDay = ChronoUnit.DAYS.between(memberChallengeFromRepository.getChallenge().getChallengeStartDate(),
+//                    memberChallengeFromRepository.getChallenge().getChallengeEndDate());
 
-            double successRate = (successDay/objectDay)*100;
+            double successRate = (successDay/memberChallengeFromRepository.getChallengeObjDay())*100;
             memberChallengeFromRepository.setMemberChallengeSuccessRate(successRate);
 
             memberChallengeRepository.save(memberChallengeFromRepository);
@@ -197,7 +198,6 @@ public class ImageService {
 
     private void plusSuccessCount(Challenge challenge, Member loginMember) {
         int successCount =imageRepository.findCertImageByImageTypeAndMemberId("CCI", loginMember.getMemberId()).size();
-        loginMember.setMemberChallengeSuccessCount(successCount);
         loginMember.setMemberExp(successCount);
     }
 

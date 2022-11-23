@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.temporal.ChronoUnit;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -60,6 +62,10 @@ public class MemberChallengeService {
             memberChallenge.setMemberReward(challenge.getChallengeFeePerPerson());
             memberChallenge.setMember(member);
             memberChallenge.setChallenge(challenge);
+            double objectDay = ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(),
+                    memberChallenge.getChallenge().getChallengeEndDate());
+            memberChallenge.setChallengeObjDay(objectDay);
+
 
             challenge.getMemberChallenges().add(memberChallenge);
             member.getMemberChallenges().add(memberChallenge);

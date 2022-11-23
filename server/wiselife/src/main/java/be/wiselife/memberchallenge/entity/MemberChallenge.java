@@ -5,6 +5,7 @@ import be.wiselife.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +29,9 @@ public class MemberChallenge {
     @Column(nullable = false)
     private double memberChallengeSuccessRate=0;
 
+    @Column(nullable = false)
+    private double challengeObjDay=0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -36,5 +40,13 @@ public class MemberChallenge {
     @JoinColumn(name="challenge_id")
     private Challenge challenge;
 
-
+    //더미 생성용 생성자
+    public MemberChallenge(Long memberChallengeId, double memberReward, double memberSuccessDay, double memberChallengeSuccessRate, Member member, Challenge challenge) {
+        this.memberChallengeId = memberChallengeId;
+        this.memberReward = memberReward;
+        this.memberSuccessDay = memberSuccessDay;
+        this.memberChallengeSuccessRate = memberChallengeSuccessRate;
+        this.member = member;
+        this.challenge = challenge;
+    }
 }

@@ -34,11 +34,10 @@ public interface MemberMapper {
         memberDetailResponse.setMemberDescription(member.getMemberDescription());
         memberDetailResponse.setMemberEmail(member.getMemberEmail());
         memberDetailResponse.setMemberName(member.getMemberName());
-        memberDetailResponse.setMemberExp(member.getMemberExp());
         memberDetailResponse.setMemberBadge(member.getMemberBadge());
         memberDetailResponse.setHasRedCard(member.isHasRedCard());
         memberDetailResponse.setMemberChallengeTryCount((int)member.getMemberChallengeTryCount());
-        memberDetailResponse.setMemberChallengeSuccessCount((int)member.getMemberChallengeSuccessCount());
+        memberDetailResponse.setMemberChallengeSuccessCount((int)member.getMemberExp());
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
         memberDetailResponse.setMemberMoney(member.getMemberMoney());
         memberDetailResponse.setFollowerCount(member.getFollowerCount());
