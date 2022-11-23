@@ -32,18 +32,32 @@ public class ChallengeReviewController {
         this.challengeReviewMapper = challengeReviewMapper;
     }
 
+    /**
+     * 리뷰 생성
+     * @param challengeReviewPostDto
+     * @param request
+     * @return
+     */
     @PostMapping
     public ResponseEntity postChallengeReview(@Valid @RequestBody ChallengeReviewDto.Post challengeReviewPostDto,
                                               HttpServletRequest request) {
 
         ChallengeReview challengeReview = challengeReviewMapper.challengeReviewPostDtoToChallengeReview(challengeReviewPostDto);
-        challengeReview = challengeReviewService.createChallengeReview(challengeReview, memberService.getLoginMember(request), challengeService.getChallenge(challengeReviewPostDto.getChallengeId()) );
+        challengeReview = challengeReviewService.createChallengeReview(challengeReview, memberService.getLoginMember(request), challengeService.getChallengeById(challengeReviewPostDto.getChallengeId()) );
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview)),
                 HttpStatus.CREATED);
+
     }
 
+    /**
+     * 리뷰 수정
+     * @param challengeReviewId
+     * @param challengeReviewPatchDto
+     * @param request
+     * @return
+     */
     @PatchMapping("/{challenge-review-id}")
     public ResponseEntity patchChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
                                                @Valid @RequestBody ChallengeReviewDto.Patch challengeReviewPatchDto,
@@ -59,11 +73,17 @@ public class ChallengeReviewController {
                 HttpStatus.OK);
     }
 
+    /**
+     * 리뷰 삭제
+     * @param challengeReviewId
+     * @param request
+     * @return
+     */
     @DeleteMapping("/{challenge-review-id}")
     public ResponseEntity deleteChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
                                           HttpServletRequest request) {
 
-        challengeService.deleteChallenge(challengeReviewId, memberService.getLoginMember(request));
+        challengeReviewService.deleteChallengeReview(challengeReviewId, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

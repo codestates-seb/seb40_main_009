@@ -7,6 +7,7 @@ import be.wiselife.follow.entity.Follow;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 
@@ -142,6 +143,7 @@ public class Member extends TimeAudit {
      * memberChallengePercentage : 멤버가 인증한 총 횟수 / 총 참여한 챌린지가 요구하는 목표 일수
      */
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
     @Column(nullable = false)

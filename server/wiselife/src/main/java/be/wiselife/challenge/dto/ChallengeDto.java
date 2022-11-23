@@ -220,4 +220,10 @@ public class ChallengeDto {
         private String challengeCertImagePath;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class ChallengeTitleResponse{
+        private String challengeTitle;
+    }
+
 }

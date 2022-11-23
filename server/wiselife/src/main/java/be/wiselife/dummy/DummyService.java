@@ -114,8 +114,12 @@ public class DummyService {
                 "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,1),
                 LocalDate.of(2022,11,4),
-                "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+                "인증은 하루 3번",3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+
+               
+        challenge1.setAuthorizedMemberId(1L);
+        challenge2.setAuthorizedMemberId(1L);
+
         challengeRepository.save(challenge1);
         challengeRepository.save(challenge2);
         challengeRepository.save(challenge3);
