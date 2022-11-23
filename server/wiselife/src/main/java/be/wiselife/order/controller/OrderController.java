@@ -101,8 +101,8 @@ public class OrderController {
             totalAmount += orderList.get(i).getTotalAmount();
         }
 
-        return new ResponseEntity(
-                new AmountResponseDto<>(personalOrders, (int)totalAmount), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new AmountResponseDto<>(personalOrders, totalAmount), HttpStatus.OK);
     }
 
     //TODO: 결제 취소리스트 구현
