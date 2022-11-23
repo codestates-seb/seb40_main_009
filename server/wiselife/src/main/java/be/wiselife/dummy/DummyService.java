@@ -109,6 +109,8 @@ public class DummyService {
                 LocalDate.of(2023,10,31),
                 "인증은 하루 3번",
                 3,10000,"대표사진","인증예시1,인증예시2,인증예시3","");
+        challenge1.setAuthorizedMemberId(1L);
+        challenge2.setAuthorizedMemberId(1L);
         challengeRepository.save(challenge1);
         challengeRepository.save(challenge2);
     }

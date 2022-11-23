@@ -5,10 +5,12 @@ import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
+import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.member.service.MemberService;
 import org.hibernate.validator.constraints.Range;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,11 +33,9 @@ public class ChallengeController {
     private final MemberChallengeRepository memberChallengeRepository;
 
 
-
-
     public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService,
                                ChallengeTalkMapper challengeTalkMapper, MemberService memberService,
-                               MemberChallengeRepository memberChallengeRepository ) {
+                               MemberChallengeRepository memberChallengeRepository) {
         this.challengeMapper = challengeMapper;
         this.challengeService = challengeService;
         this.challengeTalkMapper = challengeTalkMapper;
@@ -84,8 +84,8 @@ public class ChallengeController {
         Challenge challenge = challengeService.participateChallenge(challengeFromRepository, memberService.getLoginMember(request));
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.
-                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService)),
-                HttpStatus.CREATED);
+                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService))
+                , HttpStatus.CREATED);
     }
 
     /**
@@ -94,9 +94,9 @@ public class ChallengeController {
      *
      * @param cert    인증사진이 속한 Challenge 아이디와 인증사진 경로
      * @param request 로그인한 사람의 이메일 정보를 가져오기위한 인자값
-     *                TODO :
-     *                챌린지 참여인원인지 판단하는 로직 추가
-     *                응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
+     *                               TODO :
+     *                                챌린지 참여인원인지 판단하는 로직 추가
+     *                                응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
     @PatchMapping("/cert")
     public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
@@ -106,22 +106,23 @@ public class ChallengeController {
         Challenge challenge = challengeService.updateCertImage(certImageInfo, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge)), HttpStatus.CREATED);
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
+                , HttpStatus.CREATED);
     }
 
 
     /**
      * 챌린지 상세페이지 조회
      * TODO:
-     *      1) 만약 유저가 해당 챌린지 참여중이라면 별도로 유저의 해당 챌린지 성공률도 표시함
-     *      2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
-     *      3) 동일한 사용자의 조회수 중복 증가 방지 기능
+     *  1) 만약 유저가 해당 챌린지 참여중이라면 별도로 유저의 해당 챌린지 성공률도 표시함
+     *  2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
+     *  3) 동일한 사용자의 조회수 중복 증가 방지 기능
      */
     @GetMapping("/{challenge-id}")
     public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
 
         Challenge challenge = challengeService.getChallenge(challengeId); //챌린지 찾기
-        challenge = challengeService.updateViewCount(challenge); //조회수 증가
+        challenge = challengeService.updateViewCount(challenge); //조회수 증가 로직 포함
 
         ChallengeDto.DetailResponse challengeResponseDto = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
 
@@ -141,8 +142,8 @@ public class ChallengeController {
                                          HttpServletRequest request) {
         Challenge challenge = challengeService.findChallengeById(challengeId);
         challenge = challengeService.updateViewCount(challenge);
-        if (request.getHeader("Authorization") == null||
-                memberChallengeRepository.findByChallengeAndMember(challenge,memberService.getLoginMember(request))==null) {
+        if (request.getHeader("Authorization") == null ||
+                memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request)) == null) {
             challenge.setChallengeCertImagePath("");
             //TODO: simpleResponseDto로 변경 필요
             ChallengeDto.SimpleResponse challengeResponseDto
@@ -161,10 +162,10 @@ public class ChallengeController {
 
     /**
      * 챌린지 삭제
+     *
      * @param challengeId
      * @param request
-     * @return
-     * TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능하게
+     * @return TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능하게
      */
     @DeleteMapping({"/{challenge-id}"})
     public ResponseEntity deleteChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
@@ -178,11 +179,12 @@ public class ChallengeController {
 
     /**
      * 최신순 카테고리별 전체 챌린지 조회
+     *
      * @param categoryId 카테고리에 해당하는 카테고리 id
      * @return
      */
     @GetMapping("/all/sort-by-newest/{category-id}")
-    public ResponseEntity getAllChallengesInCategoryOrderByNewest(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId){
+    public ResponseEntity getAllChallengesInCategoryOrderByNewest(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId) {
 
         List<Challenge> challengeList = challengeService.getAllChallengesInCategoryOrderByNewest(categoryId);
         List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(challengeList);
@@ -194,18 +196,63 @@ public class ChallengeController {
 
     /**
      * 인기순 카테고리별 전체 챌린지 조회
+     *
      * @param categoryId 카테고리에 해당하는 카테고리 id
+     * @param sortBy     paging 기준 1.newest(=최신순) 2.popularity(=인기순)
+     * @param page       조회하고 싶은 페이지 숫자
+     * @param size       한 페이지에 들어갈 챌린지 개수
      * @return 카테고리에 해당하는 챌린지들 list
      */
-    @GetMapping("/all/sort-by-popularity/{category-id}")
-    public ResponseEntity getAllChallengesInCategoryOrderByPopularity(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId){
+    @GetMapping("/all/{category-id}")
+    public ResponseEntity getAllChallengesInCategory(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId,
+                                                     @RequestParam(value = "sort-by", defaultValue = "popularity") String sortBy,
+                                                     @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                                     @Positive @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        List<Challenge> challengeList = challengeService.getAllChallengesInCategoryOrderByPopularity(categoryId);
-        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(challengeList);
+        Page<Challenge> pageInfo = challengeService.getAllChallengesInCategoryOrderByPopularity(categoryId, page - 1, size, sortBy);
+        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(pageInfo.getContent());
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeResponseDtoList)
+                new MultiResponseDto<>(challengeResponseDtoList, pageInfo),
+                HttpStatus.OK);
+    }
+
+    /**
+     * 검색 자동완성용 전체 챌린지 제목 조회
+     *
+     * @return 챌린지 제목 List
+     */
+    @GetMapping("/titles")
+    public ResponseEntity getAllChallengeTitles() {
+
+        List<Challenge> challengeList = challengeService.getAllChallenges();
+        List<ChallengeDto.ChallengeTitleResponse> challengeTitleResponseList = challengeMapper.challengeListToChallengeTitleResponseList(challengeList);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeTitleResponseList)
                 , HttpStatus.OK);
+    }
+
+    /**
+     * 챌린지 제목을 통한 검색
+     *
+     * @param searchTitle 검색어
+     * @param sortBy      paging 기준 1.newest(=최신순) 2.popularity(=인기순)
+     * @param page        조회하고 싶은 페이지 숫자
+     * @param size        한 페이지에 들어갈 챌린지 개수
+     * @return
+     */
+    @GetMapping(value = "/search")
+    public ResponseEntity searchChallengesByChallengeTitle(@RequestParam("searchTitle") String searchTitle,
+                                                           @RequestParam(value = "sort-by", defaultValue = "popularity") String sortBy,
+                                                           @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                                           @Positive @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        Page<Challenge> pageInfo = challengeService.searchChallengesByChallengeTitle(searchTitle, page - 1, size, sortBy);
+        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(pageInfo.getContent());
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(challengeResponseDtoList, pageInfo), HttpStatus.OK);
     }
 
 }

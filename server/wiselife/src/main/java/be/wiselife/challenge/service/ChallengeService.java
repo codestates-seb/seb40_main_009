@@ -9,6 +9,9 @@ import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -181,40 +184,19 @@ public class ChallengeService {
         return verifyChallengeById(challengeId);
     }
 
-    private Challenge saveChallenge(Challenge challenge){
-        return challengeRepository.save(challenge);
-    }
 
-    private Challenge verifyChallengeById(Long challengeId){
-        return challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
-    }
 
-    /**
-     * 챌랜지 관련 유저의 권한 확인
-     * 챌린지 수정, 삭제 시도시 사용한다.
-     * @param Challenge 변경 시도하는 챌린지
-     * @param loginMember 변경을 시도하는 맴버
-     */
-    private void checkMemberAuthorization(Challenge Challenge, Member loginMember){
-
-        if(!memberService.isVerifiedMember(Challenge.getAuthorizedMemberId(), loginMember.getMemberId()))
-            throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
-
-    }
 
     /**
      * 인기순 카테고리별 전체 첼린지 조회
      * @param categoryId 1~3 사이의 카테고리 id
      * @return 해당 카테고리의 챌린지 list
      */
-    public List<Challenge> getAllChallengesInCategoryOrderByPopularity(Long categoryId) {
+    public Page<Challenge> getAllChallengesInCategoryOrderByPopularity(Long categoryId, int page, int size, String sortBy) {
         Challenge.ChallengeCategory challengeCategory = categoryIdToChallengeCategory(categoryId);
 
-        List<Challenge> challengeList = challengeRepository.findChallengesByChallengeCategoryOrderByChallengeViewCountDesc(challengeCategory)
+        return challengeRepository.findChallengesByChallengeCategory(challengeCategory, getPageRequest(page, size, sortBy))
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
-
-        return challengeList;
     }
 
     /**
@@ -229,6 +211,25 @@ public class ChallengeService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
         return challengeList;
+    }
+
+    public List<Challenge> getAllChallenges() {
+        List<Challenge> challengeList = challengeRepository.findAll();
+
+        return challengeList;
+    }
+
+    /**
+     * 챌랜지 관련 유저의 권한 확인
+     * 챌린지 수정, 삭제 시도시 사용한다.
+     * @param Challenge 변경 시도하는 챌린지
+     * @param loginMember 변경을 시도하는 맴버
+     */
+    private void checkMemberAuthorization(Challenge Challenge, Member loginMember){
+
+        if(!memberService.isVerifiedMember(Challenge.getAuthorizedMemberId(), loginMember.getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN_MEMBER);
+
     }
 
     /**
@@ -250,5 +251,40 @@ public class ChallengeService {
         return challengeCategory;
     }
 
+    private Challenge saveChallenge(Challenge challenge){
+        return challengeRepository.save(challenge);
+    }
 
+    private Challenge verifyChallengeById(Long challengeId){
+        return challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+    }
+
+    /**
+     * 챌린지 검색 by 제목
+     * @param searchTitle 챌린지 제목 검색어
+     * @return
+     */
+    public Page<Challenge> searchChallengesByChallengeTitle(String searchTitle, int page, int size, String sortBy) {
+
+        return challengeRepository.findChallengesByChallengeTitleContaining(searchTitle, getPageRequest(page, size, sortBy))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+    }
+
+    /**
+     * paging 위한 pageRequest 설정
+     * @param page
+     * @param size
+     * @param sortBy
+     * @return
+     */
+    private PageRequest getPageRequest(int page, int size, String sortBy){
+        if(sortBy.equals("newest"))
+            sortBy = "createdAt";
+        else
+            sortBy = "challengeViewCount";
+
+        return PageRequest.of(page, size, Sort.by(sortBy).descending());
+    }
 }
