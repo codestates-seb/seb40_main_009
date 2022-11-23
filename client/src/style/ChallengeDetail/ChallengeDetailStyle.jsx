@@ -24,7 +24,7 @@ export const Recruitment = styled.div`
   }
 `;
 
-export const Description = styled.div`
+export const ChallengeDescriptionWrapper = styled.div`
   padding: 5%;
   font-size: 17px;
   & > .challenge-name {
@@ -35,19 +35,17 @@ export const Description = styled.div`
   }
 `;
 
-export const Title = styled.div`
+export const ChallengeDescription = styled.div`
+  padding-bottom: 2%;
   display: flex;
-  & > .pd-5 {
-    padding-right: 5%;
+  width: 100%;
+  font-size: 20px;
+  & .title {
+    margin-right: 10%;
   }
-`;
-
-export const PaddingB = styled.div`
-  padding-bottom: 10%;
-`;
-
-export const Text = styled.div`
-  display: flex;
+  & .title2 {
+    margin-right: 16.2%;
+  }
 `;
 
 export const Certification = styled.div`
@@ -57,7 +55,7 @@ export const Certification = styled.div`
   height: 300px;
 `;
 
-export const Wrapper = styled.div`
+export const CertificationWrapper = styled.div`
   border: 2px solid #eff1fe;
   width: 25%;
   padding: 3%;
@@ -83,10 +81,9 @@ export const Review = styled.div`
   font-size: 20px;
 `;
 
-export const BtnWrapper = styled.div`
+export const ButtonWrapper = styled.div`
   display: flex;
   margin-top: 5%;
-  //   border: 1px solid orange;
   justify-content: center;
   & > .custom-btn {
     font-size: 20px;
