@@ -22,8 +22,8 @@ function Header() {
   };
 
   // 유저 리스트페이지로 이동
-  const NavigateUserPage = () => {
-    navigate('/userlist/*');
+  const NavigateMemberPage = () => {
+    navigate('/memberlist');
   };
 
   return (
@@ -33,7 +33,7 @@ function Header() {
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
-        <ChallengeButton onClick={NavigateUserPage}>User</ChallengeButton>
+        <ChallengeButton onClick={NavigateMemberPage}>Ranking</ChallengeButton>
         <Search>
           <input
             type="text"

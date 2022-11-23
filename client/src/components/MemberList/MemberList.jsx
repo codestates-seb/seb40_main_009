@@ -1,9 +1,9 @@
-import * as S from '../../style/UserList/UserList.styled';
+import * as S from '../../style/MemberList/MemberList.styled';
 import { format } from 'date-fns';
 import { parseISO } from 'date-fns/esm';
 import { Link } from 'react-router-dom';
 
-function User({
+export default function Member({
   memberId,
   memberName,
   memberBadge,
@@ -14,7 +14,7 @@ function User({
 
   return (
     <S.UserContainer>
-      <Link to={`/profile/${memberId}`}>
+      <Link to={`/profile/${memberName}`}>
         <div>
           <img
             alt="사진"
@@ -29,5 +29,3 @@ function User({
     </S.UserContainer>
   );
 }
-
-export default User;

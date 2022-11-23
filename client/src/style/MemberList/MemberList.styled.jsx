@@ -38,9 +38,12 @@ export const IndexContainer = styled.section`
   align-items: center;
   justify-content: space-around;
   background-color: #aec4fa;
-  > div {
+  > button {
     width: 25%;
     text-align: center;
+    border: none;
+    background-color: #aec4fa;
+    cursor: pointer;
   }
 `;
 
