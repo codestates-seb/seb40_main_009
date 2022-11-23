@@ -165,6 +165,8 @@ public class ImageService {
         // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
         if (challengeCertImages.size()%challenge.getChallengeAuthCycle()==0) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
+            memberChallengeFromRepository.setMemberChallengeSuccessRate(
+                    (memberChallengeFromRepository.getMemberSuccessDay()/memberChallengeFromRepository.getChallengeObjDay())*100);
             memberChallengeRepository.save(memberChallengeFromRepository);
         }
 
@@ -200,7 +202,7 @@ public class ImageService {
         for (MemberChallenge memberChallenge : memberChallengeList) {
                 oneChallengeSuccessDay=oneChallengeSuccessDay+memberChallenge.getMemberSuccessDay();
         }
-        loginMember.setMemberChallengePercentage(oneChallengeSuccessDay/ loginMember.getMemberChallengeTotalObjCount());
+        loginMember.setMemberChallengePercentage((oneChallengeSuccessDay/ loginMember.getMemberChallengeTotalObjCount())*100);
         memberRepository.save(loginMember);
     }
 
