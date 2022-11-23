@@ -66,11 +66,11 @@ public class DummyService {
         Member test2 = new Member("test2@kakao.com", "이미지",roles, "kakao", "providerId",11, Member.MemberBadge.새내기,1,"test2",0);
         Member test3 = new Member("test3@kakao.com", "이미지",roles, "kakao", "providerId",3, Member.MemberBadge.새내기,1,"test3",0);
         Member test4 = new Member("test4@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.좀치는도전자,2,"test4",1);
-        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId",6, Member.MemberBadge.열정도전자,3,"test5",2);
-        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId",7, Member.MemberBadge.모범도전자,4,"test6",4);
-        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId",10, Member.MemberBadge.우수도전자,5,"test7",8);
-        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.챌린지장인,6,"test8",16);
-        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.시간의지배자,7,"test9",32);
+        Member test5 = new Member("test5@kakao.com", "이미지",roles, "kakao", "providerId",6, Member.MemberBadge.열정도전자,3,"test5",4);
+        Member test6 = new Member("test6@kakao.com", "이미지",roles, "kakao", "providerId",7, Member.MemberBadge.모범도전자,4,"test6",7);
+        Member test7 = new Member("test7@kakao.com", "이미지",roles, "kakao", "providerId",10, Member.MemberBadge.우수도전자,5,"test7",15);
+        Member test8 = new Member("test8@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.챌린지장인,6,"test8",63);
+        Member test9 = new Member("test9@kakao.com", "이미지",roles, "kakao", "providerId",4, Member.MemberBadge.시간의지배자,7,"test9",12);
         Member test10 = new Member("test10@kakao.com", "이미지",roles, "kakao", "providerId",2, Member.MemberBadge.새내기,1,"test10",0);
         Member test11 = new Member("test11@kakao.com", "이미지",roles, "kakao", "providerId",1, Member.MemberBadge.새내기,1,"test11",0);
         Member test12 = new Member("test12@kakao.com", "이미지",roles, "kakao", "providerId",11, Member.MemberBadge.새내기,1,"test12",0);

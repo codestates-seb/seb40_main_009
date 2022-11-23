@@ -1,10 +1,11 @@
 package be.wiselife.image.entity;
 
+import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -20,4 +21,7 @@ public class ChallengeCertImage extends Image {
 
     private Long memberId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challenge_id")
+    private Challenge challenge;
 }

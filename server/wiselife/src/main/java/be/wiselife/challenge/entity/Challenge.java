@@ -4,6 +4,7 @@ import be.wiselife.audit.TimeAudit;
 import be.wiselife.audit.WriterAudit;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
+import be.wiselife.image.entity.ChallengeCertImage;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -91,6 +92,8 @@ public class Challenge extends WriterAudit {
     private String challengeExamImagePath;
 
     //이미지 중 챌린지 참여자가 추가할 사진 필드
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<ChallengeCertImage> challengeCertImages = new ArrayList<>();
     @Setter
     private String challengeCertImagePath;
 
