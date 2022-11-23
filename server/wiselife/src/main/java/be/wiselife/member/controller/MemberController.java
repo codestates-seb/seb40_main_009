@@ -72,6 +72,19 @@ public class MemberController {
         return new ResponseEntity(
                 new MultiResponseDto<>(mapper.memberListResponses(allMembers),pageInformation),HttpStatus.OK);
     }
+
+    /**
+     * 해더에 보내질 모든 맴버의 이름
+     * @return
+     */
+    @GetMapping("/names")
+    public ResponseEntity getMembersName() {
+        List<String> membersName = memberService.getAllMembersName();
+
+        return new ResponseEntity(
+                new SingleResponseDto<>(membersName), HttpStatus.OK);
+    }
+
     /**
      * 회원 정보수정
      * 회원이 본인의 정보를 수정할때,
