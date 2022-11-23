@@ -46,6 +46,22 @@ export const Search = styled.div`
     font-size: 14px;
     box-shadow: 3px 7px 12px 0 #c2c2c2;
   }
+  & ul {
+    width: 94%;
+    padding: 20px 12px 10px 12px;
+    color: #787878;
+    left: 18px;
+    border-radius: 0 0 10px 10px;
+    background-color: #ffff;
+    font-size: 15px;
+    position: absolute;
+  }
+`;
+
+export const UserSearchResult = styled.div`
+  :hover {
+    background-color: #f2f4fe;
+  }
 `;
 
 export const Icon = styled(FaSearch)`

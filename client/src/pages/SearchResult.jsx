@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { Link, Route, Routes, useMatch, useNavigate } from 'react-router-dom';
-import ChallengeResult from '../components/SearchResult/ChallengeResult';
-import UserResult from '../components/SearchResult/UserResult';
+
 import * as S from '../style/SearchResult/SearchResult.styled';
 
-function SearchResult() {
+import ChallengeResult from '../components/SearchResult/ChallengeResult';
+import MemberResult from '../components/SearchResult/MemberResult';
+
+export default function SearchResult() {
   const challengeMatch = useMatch('/search/challenge');
-  const userMatch = useMatch('/search/user');
+  const memberMatch = useMatch('/search/member');
   const navMatch = useMatch('/search');
   const navigate = useNavigate();
 
@@ -22,17 +24,15 @@ function SearchResult() {
         <Link to={'/search/challenge'}>
           <S.Tab isActive={challengeMatch !== null}>챌린지</S.Tab>
         </Link>
-        <Link to={'/search/user'}>
-          <S.Tab isActive={userMatch !== null}>유저</S.Tab>
+        <Link to={'/search/member'}>
+          <S.Tab isActive={memberMatch !== null}>멤버</S.Tab>
         </Link>
       </section>
 
       <Routes>
         <Route path="challenge" element={<ChallengeResult />} />
-        <Route path="user" element={<UserResult />} />
+        <Route path="member" element={<MemberResult />} />
       </Routes>
     </S.ListContainer>
   );
 }
-
-export default SearchResult;

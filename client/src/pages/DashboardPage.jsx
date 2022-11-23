@@ -21,15 +21,16 @@ import {
   MarginTop,
   Container,
   FontSize30,
-  Flex,
   TitleWrapper,
-  MemberOfTheMonth,
-  MarginLeft,
+  PopularChallengeWrapper,
+  PopularChallenge,
+  UserRankingWrapper,
+  UserRanking,
   Members,
-} from '../style/Main/MainPageStyle';
+} from '../style/Dashboard/DashboardPageStyle';
 
 import ChallengeList from '../components/ChallengeList/Challenge';
-import SlideBanner from '../components/Main/SlideBanner';
+import SlideBanner from '../components/Dashboard/SlideBanner';
 import Loading from '../components/Loading/Loading';
 
 import smile from '../image/smile.jpg';
@@ -44,16 +45,16 @@ export default function MainPage() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `/member?page=1&size=9&sort=memberBadge`,
+        `/member?page=1&size=10&sort=memberBadge`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
           },
         }
       );
-      const members = response.data.data;
-      console.log(members);
-      setMembers(members);
+      const memberList = response.data.data;
+      // console.log(memberList);
+      setMembers(memberList);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
@@ -150,14 +151,45 @@ export default function MainPage() {
 
             <Animator animation={batch(Fade(), MoveIn(1000, 0))}>
               <Container>
-                <Flex>
+                {/* 인기 챌린지 */}
+                {/* 3개 순환하는거 만들기 */}
+                <PopularChallengeWrapper>
+                  <FontSize30>인기 챌린지</FontSize30>
                   <div>
+                    <PopularChallenge src={smile} alt="인기 챌린지" />
+                  </div>
+                </PopularChallengeWrapper>
+                {/* 유저 랭킹 */}
+                <UserRankingWrapper>
+                  <TitleWrapper>
+                    <div className="title">유저 랭킹</div>
+                    <div className="view_all" onClick={navigateChallengePage}>
+                      더보기
+                    </div>
+                  </TitleWrapper>
+                  <Members>
+                    <div>유저이름</div>
+                    <div>레벨</div>
+                    <div>팔로워수</div>
+                  </Members>
+                  {members.map((user) => (
+                    <UserRanking key={user.memberId}>
+                      <div>{user.memberName}</div>
+                      <div>{user.memberBadge}</div>
+                      <div>{user.followerCount}</div>
+                    </UserRanking>
+                  ))}
+                </UserRankingWrapper>
+
+                {/* <Flex>
+                  <div style={{ marginLight: 'auto', border: '1px solid red' }}>
                     <TitleWrapper>이달의 랭커</TitleWrapper>
                     <div>
                       <MemberOfTheMonth src={smile} alt="이번달 1등 유저사진" />
                     </div>
                   </div>
-                  <MarginLeft>
+
+                  <div style={{ border: '1px solid orange' }}>
                     <TitleWrapper>
                       <div className="wrapper">
                         <div className="title">전체 랭킹</div>
@@ -169,6 +201,11 @@ export default function MainPage() {
                         </div>
                       </div>
                     </TitleWrapper>
+                    <div style={{ display: 'flex', border: '' }}>
+                      <div>유저이름</div>
+                      <div>레벨</div>
+                      <div>팔로워수</div>
+                    </div>
                     {members.map((user) => (
                       <Members key={user.memberId}>
                         <div>{user.memberName}</div>
@@ -176,8 +213,8 @@ export default function MainPage() {
                         <div>{user.followerCount}</div>
                       </Members>
                     ))}
-                  </MarginLeft>
-                </Flex>
+                  </div>
+                </Flex> */}
               </Container>
             </Animator>
           </MarginTop>

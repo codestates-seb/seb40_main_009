@@ -3,10 +3,9 @@ import styled from 'styled-components';
 export const ListContainer = styled.section`
   width: 1024px;
   margin: 0 auto;
-  padding-top: 80px;
+  padding-top: 100px;
 
   > :nth-child(1) {
-    margin-top: 20px;
     > button {
       width: 100px;
       height: 40px;
@@ -39,9 +38,12 @@ export const IndexContainer = styled.section`
   align-items: center;
   justify-content: space-around;
   background-color: #aec4fa;
-  > div {
+  > button {
     width: 25%;
     text-align: center;
+    border: none;
+    background-color: #aec4fa;
+    cursor: pointer;
   }
 `;
 
@@ -63,26 +65,36 @@ export const UserContainer = styled.div`
   margin-top: 5px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   cursor: pointer;
-  > div {
-    width: 25%;
-    text-align: center;
+
+  > a {
+    margin-top: 3px;
+    text-decoration: none;
+    color: black;
     display: flex;
-    justify-content: center;
     align-items: center;
-    > img {
-      width: 30px;
-      border-radius: 100px;
+    justify-content: space-around;
+
+    > div {
+      width: 25%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      > img {
+        width: 30px;
+        border-radius: 100px;
+      }
+      > span {
+        padding-left: 10px;
+      }
     }
-    > span {
-      padding-left: 10px;
+    :hover {
+      color: #8673ff;
     }
   }
   :hover {
     border: 2px solid #8673ff;
-    font-weight: bold;
   }
 `;
