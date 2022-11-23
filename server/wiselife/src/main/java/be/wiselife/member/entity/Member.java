@@ -50,7 +50,7 @@ public class Member extends TimeAudit {
     //더미 데이터용 생성자
     @Builder
     public Member(String memberEmail, String memberImagePath, List<String> roles, String provider,
-                  String providerId,int followerCount,MemberBadge memberBadge,int memberLevel,String memberName) {
+                  String providerId,int followerCount,MemberBadge memberBadge,int memberLevel,String memberName,double memberExp) {
 
         this.roles = roles;
         this.provider = provider;
@@ -64,7 +64,7 @@ public class Member extends TimeAudit {
         this.memberLevel = memberLevel;
         this.hasRedCard = false;
         this.memberChallengeTotalObjCount = 0;
-        this.memberExp = 0;
+        this.memberExp = memberExp;
         this.memberChallengePercentage = memberExp/memberChallengeTotalObjCount;
         this.memberMoney = 0;
         this.followers = 0;
@@ -168,14 +168,14 @@ public class Member extends TimeAudit {
     }
 
     public enum MemberBadge {
-        새내기(1,Math.pow(2,0)), // 1 -> 좀치는도전자
-        좀치는도전자(2,Math.pow(2,1)),//2->열정도전자
-        열정도전자(3,Math.pow(2,2)),//4->모범도전자
-        모범도전자(4,Math.pow(2,3)),//8->우수도전자
-        우수도전자(5,Math.pow(2,4)),//16->챌린지 장인
-        챌린지장인(6,Math.pow(2,5)),//32->시간의 지배자
-        시간의지배자(7,Math.pow(2,6)),//64->챌린지 신
-        챌린지신(8); // 만렙
+        새내기(1,1), // 1 -> 좀치는도전자
+        좀치는도전자(2,3),//2-> 열정도전자
+        열정도전자(3,7),//4-> 모범도전자
+        모범도전자(4,15),//8-> 우수도전자
+        우수도전자(5,31),//16-> 챌린지 장인
+        챌린지장인(6,63),//32-> 시간의 지배자
+        시간의지배자(7,127),//64-> 챌린지 신
+        챌린지신(8); //128 -> 만렙
 
         @Getter
         public int level;

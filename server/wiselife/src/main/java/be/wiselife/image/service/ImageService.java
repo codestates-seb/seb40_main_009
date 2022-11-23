@@ -214,9 +214,18 @@ public class ImageService {
         return changeImagePath;
     }
 
-    // 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
+    /**
+     * 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
+     * 여기서 레벨업 로직 구현
+      */
+
     private void plusSuccessCount(Challenge challenge, Member loginMember) {
         int successCount =imageRepository.findCertImageByImageTypeAndMemberId("CCI", loginMember.getMemberId()).size();
+        if (loginMember.getMemberExp() >= loginMember.getMemberBadge().getObjExperience()) {
+            int memberLevel = loginMember.getMemberBadge().getLevel()+1;
+            loginMember.setMemberLevel(memberLevel);
+            loginMember.setMemberBadge(Member.MemberBadge.badgeOfLevel(memberLevel));
+        }
         loginMember.setMemberExp(successCount);
     }
 
