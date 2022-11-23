@@ -211,5 +211,4 @@ public class DummyService {
         memberChallengeRepository.save(memberChallenge11);
         memberChallengeRepository.save(memberChallenge12);
     }
-
 }
