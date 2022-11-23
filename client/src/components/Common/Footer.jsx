@@ -1,5 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import * as S from '../../style/Common/FooterStyle';
+
+import {
+  FooterContainer,
+  Container,
+  Flex,
+  Logo,
+  LinkContainer,
+  DescriptionContainer,
+  GithubIcon,
+  TwitterIcon,
+  LinkedinIcon,
+  InstagramIcon,
+} from '../../style/Common/FooterStyle';
 
 function Footer() {
   const navigate = useNavigate();
@@ -13,42 +25,42 @@ function Footer() {
   };
 
   return (
-    <S.FooterContainer>
-      <S.Container>
-        <S.Flex>
-          <S.Logo>
+    <FooterContainer>
+      <Container>
+        <Flex>
+          <Logo>
             <div className="name">슬기로운 생활</div>
             <div className="text">
               행복한 삶을 살고 싶다면, 목표에 의지하라.
             </div>
-          </S.Logo>
+          </Logo>
 
-          <S.LinkContainer>
+          <LinkContainer>
             <div onClick={LinkChallengePage}>Challenge</div>
             <div onClick={LinkUserPage}>Ranking</div>
-          </S.LinkContainer>
-          <S.LinkContainer>
+          </LinkContainer>
+          <LinkContainer>
             <div>About us</div>
             <div>Contact us</div>
             <div>Join us</div>
-          </S.LinkContainer>
-        </S.Flex>
+          </LinkContainer>
+        </Flex>
 
-        <S.DescriptionContainer>
+        <DescriptionContainer>
           <div className="name">슬기로운 생활</div>
           <div className="icon">
-            <S.GithubIcon />
-            <S.InstagramIcon />
-            <S.TwitterIcon />
-            <S.LinkedinIcon />
+            <GithubIcon />
+            <InstagramIcon />
+            <TwitterIcon />
+            <LinkedinIcon />
           </div>
-        </S.DescriptionContainer>
+        </DescriptionContainer>
         <div className="text">
           &#40;주&#41; 슬기로운 생활 | 대표: 김민섭 김유현 오영운 한병주 김은비
           심이서
         </div>
-      </S.Container>
-    </S.FooterContainer>
+      </Container>
+    </FooterContainer>
   );
 }
 
