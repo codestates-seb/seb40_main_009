@@ -28,7 +28,7 @@ public interface QuerydslRepository {
     // 한 이미지를 상세로 보려고 할때 필요할지 프론트에 질문 필요
     ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage);
 
-    // 인증사진이 당일에 몇장 등록됐는지 확인용
+    // 인증사진이 당일에 몇장 등록됐는지 확인해서 목표 인증횟수를 채웠는지 확인하는 용도
     List<ChallengeCertImage> findByImageTypeAndMemberIdAndChallengeCertIdCount(String imageType, Long memberId, String randomIdForImage);
 
     // 인증사진 중 현재 인증가능 시간에 수정을 가능하게 하는 메소드

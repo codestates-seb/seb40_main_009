@@ -129,8 +129,26 @@ public class ImageService {
         return changeImagePath;
     }
 
-    //ChallengeCertImage 부분 코드======================================
+    //ReviewImage 부분 코드======================================
+    public void patchReviewImage(ChallengeReview review) {
+        ReviewImage reviewImageFromRepository =
+                imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
+        if (reviewImageFromRepository == null) {
+            ReviewImage reviewImage = new ReviewImage();
+            saveReviewImage(review, reviewImage);
+        } else {
+            saveReviewImage(review, reviewImageFromRepository);
+        }
+    }
 
+    // MemberImage 중복코드 줄이는 용도
+    private void saveReviewImage(ChallengeReview review, ReviewImage reviewImage) {
+        reviewImage.setImagePath(review.getChallengeReviewImagePath());
+        reviewImage.setRandomIdForImage(review.getReviewRandomId());
+        imageRepository.save(reviewImage);
+    }
+
+    //ChallengeCertImage 부분 코드======================================
     /**
      *
      * @param challenge 를 통해, 인증 사진을 등록하고, 하루 의무인증횟수를 채웠는지 판단한다.
@@ -147,39 +165,44 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        if (challengeCertImage == null) {
-            challengeCertImage = new ChallengeCertImage();
-            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-            challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
-            challengeCertImage.setMemberId(loginMember.getMemberId());
-            imageRepository.save(challengeCertImage);
-        } else {
-            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-            imageRepository.save(challengeCertImage);
-        }
+        patchCertificationImage(challenge, loginMember, challengeCertImage);
 
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
-        if (challengeCertImages.size()%challenge.getChallengeAuthCycle()==0) {
-            memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
-            memberChallengeFromRepository.setMemberChallengeSuccessRate(
-                    (memberChallengeFromRepository.getMemberSuccessDay()/memberChallengeFromRepository.getChallengeObjDay())*100);
-            memberChallengeRepository.save(memberChallengeFromRepository);
-        }
+        isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
-        // 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
         plusSuccessCount(challenge, loginMember);
 
-        //멤버 성공률 판단 부분
         calculateMemberChallengePercentage(loginMember);
-
 
         String changeImagePath = makeCertImagePath(challengeCertImages);
 
         return changeImagePath;
+    }
+
+    // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
+    private void isSuccessDay(Challenge challenge, MemberChallenge memberChallengeFromRepository, List<ChallengeCertImage> challengeCertImages) {
+        if (challengeCertImages.size()% challenge.getChallengeAuthCycle()==0) {
+            memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
+            memberChallengeFromRepository.setMemberChallengeSuccessRate(
+                    (memberChallengeFromRepository.getMemberSuccessDay()/ memberChallengeFromRepository.getChallengeObjDay())*100);
+            memberChallengeRepository.save(memberChallengeFromRepository);
+        }
+    }
+
+    // 인증사진 등록 및 수정 메소드
+    private void patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage) {
+        if (challengeCertImage == null) {
+            challengeCertImage = new ChallengeCertImage();
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
+            challengeCertImage.setMemberId(loginMember.getMemberId());
+        } else {
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+        }
+        imageRepository.save(challengeCertImage);
     }
 
     //응답용 경로 생성 메서드
@@ -191,11 +214,13 @@ public class ImageService {
         return changeImagePath;
     }
 
+    // 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
     private void plusSuccessCount(Challenge challenge, Member loginMember) {
         int successCount =imageRepository.findCertImageByImageTypeAndMemberId("CCI", loginMember.getMemberId()).size();
         loginMember.setMemberExp(successCount);
     }
 
+    //멤버 성공률 판단 부분
     private void calculateMemberChallengePercentage(Member loginMember) {
         List<MemberChallenge> memberChallengeList = memberRepository.findMemberChallengeByMember(loginMember);
         double oneChallengeSuccessDay = 0;
@@ -215,22 +240,5 @@ public class ImageService {
         return changeImagePath;
     }
 
-    //ReviewImage 부분 코드======================================
-    public void patchReviewImage(ChallengeReview review) {
-        ReviewImage reviewImageFromRepository =
-                imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
-        if (reviewImageFromRepository == null) {
-            ReviewImage reviewImage = new ReviewImage();
-            saveReviewImage(review, reviewImage);
-        } else {
-            saveReviewImage(review, reviewImageFromRepository);
-        }
-    }
 
-    // MemberImage 중복코드 줄이는 용도
-    private void saveReviewImage(ChallengeReview review, ReviewImage reviewImage) {
-        reviewImage.setImagePath(review.getChallengeReviewImagePath());
-        reviewImage.setRandomIdForImage(review.getReviewRandomId());
-        imageRepository.save(reviewImage);
-    }
 }
