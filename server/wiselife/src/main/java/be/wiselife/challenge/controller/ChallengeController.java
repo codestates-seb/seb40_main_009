@@ -119,7 +119,7 @@ public class ChallengeController {
         Challenge challenge = challengeService.updateCertImage(certImageInfo, memberService.getLoginMember(request));
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge,challengeTalkMapper,memberService))
                 , HttpStatus.CREATED);
     }
 
@@ -157,14 +157,12 @@ public class ChallengeController {
         challenge = challengeService.updateViewCount(challenge);
         if (request.getHeader("Authorization") == null ||
                 memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request)) == null) {
-            challenge.setChallengeCertImagePath("");
-            //TODO: simpleResponseDto로 변경 필요
+
             ChallengeDto.SimpleResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeSimpleResponseDto(challenge);
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {
-            challenge = challengeService.getCertification(challenge, memberService.getLoginMember(request));
 
             ChallengeDto.DetailResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
