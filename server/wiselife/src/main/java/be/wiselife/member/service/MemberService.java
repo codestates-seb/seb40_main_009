@@ -3,20 +3,18 @@ package be.wiselife.member.service;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.follow.entity.Follow;
-import be.wiselife.image.repository.ImageRepository;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
-import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -189,4 +187,29 @@ public class MemberService {
         return token.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_VALIDED));
     }
 
+    /**
+     * 모든 맴버의 이름만을 반환한다.
+     */
+    public List<String> getAllMembersName() {
+        List<Member> members = memberRepository.findAll();
+        List<String> result = new ArrayList<>();
+
+        for(Member name : members){
+            result.add(name.getMemberName());
+        }
+
+        return result;
+    }
+
+    /**
+     * 검색기능
+     * @param name 검색된 데이터
+     */
+
+    public Page<Member> searchMember(String name, int page, int size) {
+
+        List<Member> memberList = memberRepository.searchMemberName(name);
+
+        return new PageImpl<>(memberList);
+    }
 }

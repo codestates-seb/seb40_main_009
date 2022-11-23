@@ -23,3 +23,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token #토큰을 요청하는 url
             user-info-uri: https://kapi.kakao.com/v2/user/me #회원 정보를 가져오는 url
             user-name-attribute: id
+
+
+
+

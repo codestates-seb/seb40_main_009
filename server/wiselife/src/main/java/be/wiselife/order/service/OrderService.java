@@ -28,9 +28,9 @@ public class OrderService {
     static final String authorization = "KakaoAK 79fd132c770be75df16bbafdcfe48463"; //TODO: 배포시 환경설정으로 바꾸기
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";
     String approveUrl = "https://kapi.kakao.com/v1/payment/approve";
-    static final String successUrl = "http://localhost:8080/order/success";
-    static final String cancelUrl = "http://localhost:8080/order/cancel";
-    static final String failUrl = "http://localhost:8080/order/fail";
+    static final String successUrl = "http://localhost:3000/order/success";
+    static final String cancelUrl = "http://localhost:3000/order/cancel";
+    static final String failUrl = "http://localhost:3000/order/fail";
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;

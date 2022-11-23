@@ -22,6 +22,7 @@ import static be.wiselife.memberchallenge.entity.QMemberChallenge.*;
 
 import static be.wiselife.follow.entity.QFollow.follow;
 import static be.wiselife.order.entity.QOrder.order;
+import static be.wiselife.member.entity.QMember.member;
 
 @RequiredArgsConstructor
 public class QuerydslRepositoryImpl implements QuerydslRepository {
@@ -176,5 +177,14 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .where(memberChallenge.challenge.eq(challenge)
                         .and(memberChallenge.member.eq(member)))
                 .fetchOne();
+    }
+
+    @Override
+    public List<Member> searchMemberName(String memberName) {
+        return queryFactory
+                .selectFrom(member)
+                .where(member.memberName.contains(memberName))
+                .orderBy(member.createdAt.desc())
+                .fetch();
     }
 }

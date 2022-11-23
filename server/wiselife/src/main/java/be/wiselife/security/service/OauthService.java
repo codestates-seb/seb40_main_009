@@ -37,7 +37,7 @@ public class OauthService extends DefaultOAuth2UserService {
      *  로그인의 모든 과정이 이 메서드에서 다 이루어진다.
      *  1. 인가코드를 카톡 Oauth2서버에 토큰을 요청함. (프론트에서 이루어짐)
      *  2. yaml에 저장된 데이터 뽑아와서 카톡서버로 데이터를 수령해온다.
-     *  3. 수령해온 데이터를 이용하여 AccessToken과 RefreshToken을 만든다 TODO: Refresh Token 로직을 추가해야함.
+     *  3. 수령해온 데이터를 이용하여 AccessToken과 RefreshToken을 만든다
      *  4. 첫 로그인이라면 회원가입처리가 되고 아니면 로그인이 된다.
      * @return 카톡측으로부터 수령한 회원 개인정보를 반환한다.
      */
