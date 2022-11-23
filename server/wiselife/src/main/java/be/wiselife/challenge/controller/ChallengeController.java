@@ -45,6 +45,9 @@ public class ChallengeController {
 
     /**
      * 챌린지 생성
+     * @param challengePostDto 생성할 챌린지 관련 정보
+     * @param request 챌린지 생성하려는 멤버의 token 값 받기 위해 필요
+     * @return
      */
     @PostMapping
     public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto,
@@ -60,6 +63,10 @@ public class ChallengeController {
 
     /**
      * 챌린지 수정
+     * @param challengeId CHALLENGE 테이블 PK
+     * @param challengePatchDto 수정할 챌린지 관련 정보
+     * @param request 챌린지 수정하려는 멤버의 token 값 받기 위해 필요
+     * @return
      */
     @PatchMapping("/{challenge-id}")
     public ResponseEntity patchChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
@@ -75,6 +82,13 @@ public class ChallengeController {
                 , HttpStatus.OK);
     }
 
+    /**
+     * MemberChallenge 생성
+     * 멤버가 챌린지 참가하면 만들어지는 MEMBER와 CHALLENGE의 중간테이블
+     * @param challengeId CHALLENGE 테이블 PK
+     * @param request
+     * @return
+     */
     @PostMapping("/participate/{challengeId}")
     public ResponseEntity postMemberAndChallenge(@PathVariable("challengeId") @Positive Long challengeId,
                                                  HttpServletRequest request) {
@@ -121,7 +135,7 @@ public class ChallengeController {
     @GetMapping("/{challenge-id}")
     public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
 
-        Challenge challenge = challengeService.getChallenge(challengeId); //챌린지 찾기
+        Challenge challenge = challengeService.getChallengeById(challengeId); //챌린지 찾기
         challenge = challengeService.updateViewCount(challenge); //조회수 증가 로직 포함
 
         ChallengeDto.DetailResponse challengeResponseDto = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
@@ -162,7 +176,6 @@ public class ChallengeController {
 
     /**
      * 챌린지 삭제
-     *
      * @param challengeId
      * @param request
      * @return TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능하게
@@ -176,27 +189,8 @@ public class ChallengeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
     /**
-     * 최신순 카테고리별 전체 챌린지 조회
-     *
-     * @param categoryId 카테고리에 해당하는 카테고리 id
-     * @return
-     */
-    @GetMapping("/all/sort-by-newest/{category-id}")
-    public ResponseEntity getAllChallengesInCategoryOrderByNewest(@PathVariable("category-id") @Range(min = 0L, max = 3L) Long categoryId) {
-
-        List<Challenge> challengeList = challengeService.getAllChallengesInCategoryOrderByNewest(categoryId);
-        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(challengeList);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeResponseDtoList)
-                , HttpStatus.OK);
-    }
-
-    /**
-     * 인기순 카테고리별 전체 챌린지 조회
-     *
+     * 카테고리별 전체 챌린지 조회
      * @param categoryId 카테고리에 해당하는 카테고리 id
      * @param sortBy     paging 기준 1.newest(=최신순) 2.popularity(=인기순)
      * @param page       조회하고 싶은 페이지 숫자
@@ -209,7 +203,7 @@ public class ChallengeController {
                                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                                      @Positive @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        Page<Challenge> pageInfo = challengeService.getAllChallengesInCategoryOrderByPopularity(categoryId, page - 1, size, sortBy);
+        Page<Challenge> pageInfo = challengeService.getAllChallengesInCategory(categoryId, page - 1, size, sortBy);
         List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(pageInfo.getContent());
 
         return new ResponseEntity<>(
@@ -219,7 +213,6 @@ public class ChallengeController {
 
     /**
      * 검색 자동완성용 전체 챌린지 제목 조회
-     *
      * @return 챌린지 제목 List
      */
     @GetMapping("/titles")
@@ -235,7 +228,6 @@ public class ChallengeController {
 
     /**
      * 챌린지 제목을 통한 검색
-     *
      * @param searchTitle 검색어
      * @param sortBy      paging 기준 1.newest(=최신순) 2.popularity(=인기순)
      * @param page        조회하고 싶은 페이지 숫자

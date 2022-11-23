@@ -38,6 +38,12 @@ public class ChallengeService {
         this.memberChallengeService = memberChallengeService;
     }
 
+    /**
+     * 챌린지 객체 생성 및 저장
+     * @param challenge 생성 및 저장하고자 하는 챌린지 객체
+     * @param loginMember 생성 시도하는 멤버 정보(추후 챌린지 수정, 삭제할 때 해당 정보를 확인한다)
+     * @return
+     */
     public Challenge createChallenge(Challenge challenge, Member loginMember){
         challenge.setCreate_by_member(loginMember.getMemberName());
         challenge.setAuthorizedMemberId(loginMember.getMemberId());
@@ -130,9 +136,6 @@ public class ChallengeService {
      * 챌린지 참여인원인지 판단하는 로직 추가
      */
     public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
-
-
-
         Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
         challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
 
@@ -156,12 +159,21 @@ public class ChallengeService {
         return certImageInfo;
     }
 
-    public Challenge getChallenge(Long challengeId) {
+    /**
+     * 챌린지 id를 통한 챌린지 조회
+     * @param challengeId CHALLENGE 테이블의 PK
+     * @return
+     */
+    public Challenge getChallengeById(Long challengeId) {
         return findChallengeById(challengeId);
     }
 
 
-
+    /**
+     * 챌린지 삭제
+     * @param challengeId CHALLENGE 테이블의 PK
+     * @param loginMember 삭제 시도하는 멤버
+     */
     public void deleteChallenge(Long challengeId, Member loginMember) {
 
         Challenge savedChallenge = findChallengeById(challengeId);
@@ -184,39 +196,70 @@ public class ChallengeService {
         return verifyChallengeById(challengeId);
     }
 
-
-
-
     /**
-     * 인기순 카테고리별 전체 첼린지 조회
+     * 카테고리별 전체 첼린지 조회
      * @param categoryId 1~3 사이의 카테고리 id
      * @return 해당 카테고리의 챌린지 list
      */
-    public Page<Challenge> getAllChallengesInCategoryOrderByPopularity(Long categoryId, int page, int size, String sortBy) {
+    public Page<Challenge> getAllChallengesInCategory(Long categoryId, int page, int size, String sortBy) {
         Challenge.ChallengeCategory challengeCategory = categoryIdToChallengeCategory(categoryId);
 
         return challengeRepository.findChallengesByChallengeCategory(challengeCategory, getPageRequest(page, size, sortBy))
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
 
-    /**
-     * 최신순 카테고리별 전체 챌린지 조회
-     * @param categoryId 1~3 사이의 카테고리 id
-     * @return 해당 카테고리의 챌린지 list
-     */
-    public List<Challenge> getAllChallengesInCategoryOrderByNewest(Long categoryId) {
-        Challenge.ChallengeCategory challengeCategory = categoryIdToChallengeCategory(categoryId);
-
-        List<Challenge> challengeList = challengeRepository.findChallengesByChallengeCategoryOrderByCreatedAtDesc(challengeCategory)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
-
-        return challengeList;
-    }
-
     public List<Challenge> getAllChallenges() {
         List<Challenge> challengeList = challengeRepository.findAll();
 
         return challengeList;
+    }
+
+    /**
+     * 챌린지 검색 by 제목
+     * @param searchTitle 챌린지 제목 검색어
+     * @return
+     */
+    public Page<Challenge> searchChallengesByChallengeTitle(String searchTitle, int page, int size, String sortBy) {
+
+        return challengeRepository.findChallengesByChallengeTitleContaining(searchTitle, getPageRequest(page, size, sortBy))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+    }
+
+    /**
+     * paging 위한 pageRequest 설정
+     * @param sortBy      paging 기준 1.newest(=최신순) 2.popularity(=인기순)
+     * @param page        조회하고 싶은 페이지 숫자
+     * @param size        한 페이지에 들어갈 챌린지 개수
+     * @return
+     */
+    private PageRequest getPageRequest(int page, int size, String sortBy){
+        if(sortBy.equals("newest"))
+            sortBy = "createdAt";
+        else
+            sortBy = "challengeViewCount";
+
+        return PageRequest.of(page, size, Sort.by(sortBy).descending());
+    }
+
+    /**
+     * 챌린지 저장
+     * @param challenge 저장하고자 하는 챌린지
+     * @return
+     */
+    private Challenge saveChallenge(Challenge challenge){
+        return challengeRepository.save(challenge);
+    }
+
+    /**
+     * 챌린지 id 유효성 검사
+     * @param challengeId
+     * @return 1) 챌린지 존재하면 챌린지 객체 반환
+     *         2) 챌린지 존재하지 않으면 예외 발생
+     */
+    private Challenge verifyChallengeById(Long challengeId){
+        return challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
 
     /**
@@ -249,42 +292,5 @@ public class ChallengeService {
         }
 
         return challengeCategory;
-    }
-
-    private Challenge saveChallenge(Challenge challenge){
-        return challengeRepository.save(challenge);
-    }
-
-    private Challenge verifyChallengeById(Long challengeId){
-        return challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
-    }
-
-    /**
-     * 챌린지 검색 by 제목
-     * @param searchTitle 챌린지 제목 검색어
-     * @return
-     */
-    public Page<Challenge> searchChallengesByChallengeTitle(String searchTitle, int page, int size, String sortBy) {
-
-        return challengeRepository.findChallengesByChallengeTitleContaining(searchTitle, getPageRequest(page, size, sortBy))
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
-
-    }
-
-    /**
-     * paging 위한 pageRequest 설정
-     * @param page
-     * @param size
-     * @param sortBy
-     * @return
-     */
-    private PageRequest getPageRequest(int page, int size, String sortBy){
-        if(sortBy.equals("newest"))
-            sortBy = "createdAt";
-        else
-            sortBy = "challengeViewCount";
-
-        return PageRequest.of(page, size, Sort.by(sortBy).descending());
     }
 }
