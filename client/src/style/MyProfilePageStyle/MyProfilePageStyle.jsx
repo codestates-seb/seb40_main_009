@@ -75,7 +75,7 @@ export const move = keyframes`
       color: rgba(255, 255, 255, 1);
     }
     100%{
-    	width: ${(props) => props.percentage}%;
+    	width: ${({ percentage }) => percentage}%;
     }
 `;
 

@@ -1,40 +1,59 @@
-import ChartBar from './ChartBar';
-// import ProfileImage from './ProfileImage';
-import { GiMedallist } from 'react-icons/gi';
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
+import ChartBar from './ChartBar';
 
-function MyProfile(props) {
+import { Link, useLocation } from 'react-router-dom';
+
+import { GiMedallist } from 'react-icons/gi';
+
+function MyProfile({
+  memberImagePath,
+  memberName,
+  memberDescription,
+  percentage,
+  level,
+}) {
+  const location = useLocation();
+  const data = location.statep;
+  console.log('aaaa', data);
+  const profileData = { memberImagePath, memberName, memberDescription };
   return (
     <S.MyProfileComponent>
       <header className="profile-info">
         <img
-          src={props.profileimage} //요청
+          src={memberImagePath} //요청
           className="image-size"
           alt="profile-img"
         />
         <div>
           <S.ProfileList>
-            <p>{props.name}</p>
+            <p>{memberName}</p>
             <p>인기도0 ❤️</p>
           </S.ProfileList>
           <div className="profile-list">
             <p>
               <GiMedallist />
             </p>
-            <p>챌린지성공률: {props.percentage}%</p>
+            <p>챌린지성공률: {percentage}%</p>
           </div>
           <textarea
             className="readonly-box"
-            placeholder={props.introduction}
+            placeholder={memberDescription}
             readOnly
           />
         </div>
         <S.ProfileBar>
           <div className="buttonLists">
             <S.ProfileEditButton>환급받기</S.ProfileEditButton>
-            <S.ProfileEditButton>edit</S.ProfileEditButton>
+            <Link
+              to="/profile/edit"
+              state={{
+                data: profileData,
+              }}
+            >
+              <S.ProfileEditButton>edit</S.ProfileEditButton>
+            </Link>
           </div>
-          <ChartBar percentage={props.percentage} />
+          <ChartBar percentage={percentage} />
         </S.ProfileBar>
       </header>
     </S.MyProfileComponent>
