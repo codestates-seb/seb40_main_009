@@ -32,8 +32,8 @@ function Header() {
   };
 
   // 유저 리스트페이지로 이동
-  const NavigateUserPage = () => {
-    navigate('/userlist/*');
+  const NavigateMemberPage = () => {
+    navigate('/memberlist');
   };
 
   //검색필터 데이터
@@ -85,7 +85,7 @@ function Header() {
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
-        <ChallengeButton onClick={NavigateUserPage}>Ranking</ChallengeButton>
+        <ChallengeButton onClick={NavigateMemberPage}>Ranking</ChallengeButton>
         <div
           style={{ color: 'black' }}
           onChange={(event) => setSearchFilterValue(event.target.value)}
