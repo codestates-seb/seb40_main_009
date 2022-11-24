@@ -33,9 +33,7 @@ export default function MemberList() {
         }
       );
       const members = response.data.data;
-      console.log('멤바', members);
       setMemberList(members);
-      console.log('멤바리스트', memberList);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
@@ -100,7 +98,6 @@ export default function MemberList() {
             <React.Fragment key={index}>
               {memberList.length - 1 === index ? (
                 <Member
-                  key={memberId}
                   memberId={memberId}
                   memberName={memberName}
                   memberBadge={memberBadge}
@@ -110,7 +107,6 @@ export default function MemberList() {
                 />
               ) : (
                 <Member
-                  key={memberId}
                   memberId={memberId}
                   memberName={memberName}
                   memberBadge={memberBadge}
