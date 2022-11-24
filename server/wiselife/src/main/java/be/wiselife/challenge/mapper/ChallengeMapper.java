@@ -47,6 +47,16 @@ public interface ChallengeMapper {
         }
         challenge.challengeAuthDescription( challengePostDto.getChallengeAuthDescription() );
         challenge.challengeAuthCycle( challengePostDto.getChallengeAuthCycle() );
+
+        /*챌린지 인증 시간 추가*/
+        String[] authAvailableTimeList = challengePostDto.getChallengeAuthAvailableTime().split(" ");
+        List<String> challengeAuthAvailableTime = new ArrayList<>();
+        for(String authAvailableTime: authAvailableTimeList){
+            challengeAuthAvailableTime.add(authAvailableTime.replaceAll(",", ""));
+        }
+        challenge.challengeAuthAvailableTime(challengeAuthAvailableTime);
+
+
         challenge.challengeFeePerPerson( challengePostDto.getChallengeFeePerPerson() );
 
         /*챌린지 카테고리를 숫자로 받아 enum으로 변환하여 entity에 저장*/
@@ -90,6 +100,14 @@ public interface ChallengeMapper {
         challenge.challengeAuthCycle( challengePatchDto.getChallengeAuthCycle() );
         challenge.challengeFeePerPerson( challengePatchDto.getChallengeFeePerPerson() );
 
+        /*챌린지 인증 시간 추가*/
+        String[] authAvailableTimeList = challengePatchDto.getChallengeAuthAvailableTime().split(" ");
+        List<String> challengeAuthAvailableTime = new ArrayList<>();
+        for(String authAvailableTime: authAvailableTimeList){
+            challengeAuthAvailableTime.add(authAvailableTime.replaceAll(",", ""));
+        }
+        challenge.challengeAuthAvailableTime(challengeAuthAvailableTime);
+
         /*챌린지 카테고리를 숫자로 받아 enum으로 변환하여 entity에 저장*/
         switch (challengePatchDto.getChallengeCategoryId()){
             case 1:
@@ -129,11 +147,13 @@ public interface ChallengeMapper {
         simpleResponse.setChallengeEndDate( challenge.getChallengeEndDate() );
         simpleResponse.setChallengeAuthDescription( challenge.getChallengeAuthDescription() );
         simpleResponse.setChallengeAuthCycle( challenge.getChallengeAuthCycle() );
+        simpleResponse.setChallengeAuthAvailableTime(challenge.getChallengeAuthAvailableTime());
         simpleResponse.setChallengeDirectLink( challenge.getChallengeDirectLink() );
         simpleResponse.setChallengeFeePerPerson( challenge.getChallengeFeePerPerson() );
         simpleResponse.setChallengeTotalReward( challenge.getChallengeTotalReward() );
         simpleResponse.setChallengeViewCount( challenge.getChallengeViewCount() );
         simpleResponse.setIsClosed( challenge.getIsClosed() );
+        /*localDatetime => 초단위 제외한 String값*/
         simpleResponse.setCreated_at( challenge.getCreatedAt() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
         simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );
@@ -173,6 +193,7 @@ public interface ChallengeMapper {
             detailResponse.challengeEndDate( challenge.getChallengeEndDate() );
             detailResponse.challengeAuthDescription( challenge.getChallengeAuthDescription() );
             detailResponse.challengeAuthCycle( challenge.getChallengeAuthCycle() );
+            detailResponse.challengeAuthAvailableTime(challenge.getChallengeAuthAvailableTime());
             detailResponse.challengeDirectLink( challenge.getChallengeDirectLink() );
             detailResponse.challengeFeePerPerson( challenge.getChallengeFeePerPerson() );
             detailResponse.challengeTotalReward( challenge.getChallengeTotalReward() );

@@ -91,6 +91,8 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
+        Optional.ofNullable(changedChallenge.getChallengeAuthAvailableTime())
+                .ifPresent(existingChallenge::setChallengeAuthAvailableTime);
         /**
          * 작성자 : 유현
          * 대표 이미지 수정시 사용하는 로직
