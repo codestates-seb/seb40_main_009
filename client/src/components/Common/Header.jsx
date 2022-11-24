@@ -54,7 +54,6 @@ export default function Header() {
         },
       });
       const memberList = response.data.data;
-      console.log('memberList>>>>>', memberList);
       setMembers(memberList);
     } catch (error) {
       console.error('error', error);
@@ -70,7 +69,6 @@ export default function Header() {
         },
       });
       const challengeList = response.data.data;
-      console.log('challengeList>>>>>', challengeList);
       setChallengeList(challengeList);
     } catch (error) {
       console.error('error', error);
