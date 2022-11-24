@@ -1,6 +1,7 @@
 package be.wiselife.member.dto;
 
 import be.wiselife.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 
@@ -62,6 +63,7 @@ public class MemberDto {
         private String memberName;
         private Member.MemberBadge memberBadge;
         private int followerCount;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
     }
 
