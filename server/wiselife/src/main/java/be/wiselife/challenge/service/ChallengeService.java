@@ -117,8 +117,8 @@ public class ChallengeService {
 
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
-            imageService.patchChallengeRepImage(changedChallenge, repImage);
-            existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
+            String repImageUrl = imageService.patchChallengeRepImage(changedChallenge, repImage);
+            existingChallenge.setChallengeRepImagePath(repImageUrl);
         }
 
         /**

@@ -78,7 +78,7 @@ public class ChallengeController {
      */
     @PatchMapping("/{challenge-id}")
     public ResponseEntity patchChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
-                                         @Valid @RequestPart ChallengeDto.Patch challengePatchDto,
+                                         @Valid @RequestPart(value = "patch") ChallengeDto.Patch challengePatchDto,
                                          @RequestPart(value = "example",required = false) List<MultipartFile> exampleImage,
                                          @RequestPart(value = "rep",required = false) MultipartFile repImage,
                                          HttpServletRequest request) throws IOException {
