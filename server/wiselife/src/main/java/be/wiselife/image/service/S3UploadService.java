@@ -63,7 +63,7 @@ public class S3UploadService {
                 throw new BusinessLogicException(ExceptionCode.FILEUPLOAD_FAILED);
             }
 
-            fileNameList.add(fileName);
+            fileNameList.add(s3.getUrl(bucket, fileName).toString());
         });
 
         return fileNameList;

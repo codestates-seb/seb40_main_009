@@ -7,6 +7,7 @@ import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
+import be.wiselife.image.service.ImageService;
 import be.wiselife.member.service.MemberService;
 import org.hibernate.validator.constraints.Range;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
@@ -15,10 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,32 +34,40 @@ public class ChallengeController {
     private final ChallengeMapper challengeMapper;
     private final MemberChallengeRepository memberChallengeRepository;
 
+    private final ImageService imageService;
+
 
     public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService,
                                ChallengeTalkMapper challengeTalkMapper, MemberService memberService,
-                               MemberChallengeRepository memberChallengeRepository) {
+                               MemberChallengeRepository memberChallengeRepository, ImageService imageService) {
         this.challengeMapper = challengeMapper;
         this.challengeService = challengeService;
         this.challengeTalkMapper = challengeTalkMapper;
         this.memberService = memberService;
         this.memberChallengeRepository = memberChallengeRepository;
+        this.imageService = imageService;
     }
 
     /**
      * 챌린지 생성
      * @param challengePostDto 생성할 챌린지 관련 정보
      * @param request 챌린지 생성하려는 멤버의 token 값 받기 위해 필요
+     * @param exampleImage 예시사진들
      * @return
      */
     @PostMapping
-    public ResponseEntity postChallenge(@Valid @RequestBody ChallengeDto.Post challengePostDto,
-                                        HttpServletRequest request) {
+    public ResponseEntity postChallenge(@Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
+                                        @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
+                                        @RequestPart(value = "rep", required = false) MultipartFile repImage,
+                                        HttpServletRequest request) throws IOException {
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
-        challenge = challengeService.createChallenge(challenge, memberService.getLoginMember(request));
+        challenge = challengeService.createChallenge(challenge, memberService.getLoginMember(request), repImage, exampleImage);
+        String RepImageUrl = imageService.getRepImagePath(challenge.getRandomIdForImage());
+        List<String> ExamImagePath = imageService.getExamImagePath(challenge.getRandomIdForImage());
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, RepImageUrl, ExamImagePath))
                 , HttpStatus.CREATED);
     }
 
@@ -69,15 +80,19 @@ public class ChallengeController {
      */
     @PatchMapping("/{challenge-id}")
     public ResponseEntity patchChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
-                                         @Valid @RequestBody ChallengeDto.Patch challengePatchDto,
-                                         HttpServletRequest request) {
+                                         @Valid @RequestPart ChallengeDto.Patch challengePatchDto,
+                                         @RequestPart(value = "example",required = false) List<MultipartFile> exampleImage,
+                                         @RequestPart(value = "rep",required = false) MultipartFile repImage,
+                                         HttpServletRequest request) throws IOException {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
+        challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request), challengeId, exampleImage, repImage);
 
-        challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request), challengeId);
+        String RepImageUrl = imageService.getRepImagePath(challenge.getRandomIdForImage());
+        List<String> ExamImagePath = imageService.getExamImagePath(challenge.getRandomIdForImage());
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, RepImageUrl, ExamImagePath))
                 , HttpStatus.OK);
     }
 
@@ -157,9 +172,10 @@ public class ChallengeController {
         challenge = challengeService.updateViewCount(challenge);
         if (request.getHeader("Authorization") == null ||
                 memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request)) == null) {
-
+            String RepImageUrl = imageService.getRepImagePath(challenge.getRandomIdForImage());
+            List<String> ExamImagePath = imageService.getExamImagePath(challenge.getRandomIdForImage());
             ChallengeDto.SimpleResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge);
+                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, RepImageUrl, ExamImagePath);
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class ImageService {
     private final MemberRepository memberRepository;
     private final S3UploadService s3UploadService;
 
-    //MemberImage 부분 코드======================================
+    //MemberImage 부분 코드====================================== mem image
     /**
      * 사진을 수정한 멤버 이미지를 받는다.
      * 카카오톡 이미지 외에 등록한적이 없다면, 새로 memberImage를 생성해서 저장
@@ -59,29 +58,33 @@ public class ImageService {
         imageRepository.save(memberImage);
     }
 
-    //ChallengeRepImage 부분 코드======================================
-    public void patchChallengeRepImage(Challenge challenge) {
+    //ChallengeRepImage 부분 코드====================================== rep image 받아옴
+    public void patchChallengeRepImage(Challenge challenge, MultipartFile repImage) throws IOException {
+
         ChallengeRepImage challengeRepImageFromRepository =
                 imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
+        String newRepImage = s3UploadService.uploadJustOne(repImage);
 
         if (challengeRepImageFromRepository == null) {
             ChallengeRepImage challengeRepImage = new ChallengeRepImage();
+            challengeRepImage.setImagePath(newRepImage);
             saveChallengeRepImage(challenge, challengeRepImage);
         } else {
+            challengeRepImageFromRepository.setImagePath(newRepImage);
             saveChallengeRepImage(challenge,challengeRepImageFromRepository);
         }
     }
     // ChallengeRepImage 중복코드 줄이는 용도
     private void saveChallengeRepImage(Challenge challenge, ChallengeRepImage challengeRepImage) {
-        challengeRepImage.setImagePath(challenge.getChallengeRepImagePath());
         challengeRepImage.setRandomIdForImage(challenge.getRandomIdForImage());
         imageRepository.save(challengeRepImage);
     }
 
     //ChallengeExamImage 부분 코드======================================
-    public void postChallengeExamImage(Challenge challenge) {
+    public void postChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
+        List<String> exampleImages = s3UploadService.uploadAsList(exampleImage);
+        String[] imagePaths = exampleImages.toArray(String[]::new);
 
-        String[] imagePaths = challenge.getChallengeExamImagePath().split(",");
         for (String imagePath : imagePaths) {
             ChallengeExamImage challengeExamImage = new ChallengeExamImage();
             challengeExamImage.setImagePath(imagePath);
@@ -90,10 +93,13 @@ public class ImageService {
         }
     }
 
-    public String patchChallengeExamImage(Challenge challenge) {
+    public String patchChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
         List<ChallengeExamImage> challengeExamImages
                 = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
-        String[] imagePath = challenge.getChallengeExamImagePath().split(",");
+
+        List<String> imageUrls = s3UploadService.uploadAsList(exampleImage);
+        String[] imagePath = imageUrls.toArray(String[]::new);
+
         //겹치지않는거 판단하는 용도
         ArrayList<Boolean> imageCheckList = new ArrayList<>();
 
@@ -238,4 +244,18 @@ public class ImageService {
         memberRepository.save(loginMember);
     }
 
+    public String getRepImagePath(String randomIdForImage) {
+        ChallengeRepImage cri = imageRepository.findByImageTypeAndChallengeRep("CRI", randomIdForImage);
+        return cri.getImagePath();
+    }
+
+    public List<String> getExamImagePath(String randomIdForImage) {
+        List<ChallengeExamImage> cei = imageRepository.findByImageTypeAndChallengeExam("CEI", randomIdForImage);
+        List<String> urls = new ArrayList<>();
+        for (ChallengeExamImage image : cei) {
+            urls.add(image.getImagePath());
+        }
+
+        return urls;
+    }
 }

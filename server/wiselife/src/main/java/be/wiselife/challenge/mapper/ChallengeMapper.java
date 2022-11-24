@@ -14,7 +14,6 @@ import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,8 +60,8 @@ public interface ChallengeMapper {
                 challenge.challengeCategory(Challenge.ChallengeCategory.OFFLINE_CHALLENGE);
                 break;
         }
-        challenge.challengeExamImagePath(challengePostDto.getChallengeExamImagePath());
-        challenge.challengeRepImagePath(challengePostDto.getChallengeRepImagePath());
+//        challenge.challengeExamImagePath(challengePostDto.getChallengeExamImagePath());
+//        challenge.challengeRepImagePath(challengePostDto.getChallengeRepImagePath());
 
         return challenge.build();
     }
@@ -111,8 +110,8 @@ public interface ChallengeMapper {
     }
 
 
-    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge) {
-        if ( challenge == null ) {
+    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge, String repImagePath, List<String> examImagePath) {
+        if ( challenge == null & repImagePath == null & examImagePath == null) {
             return null;
         }
 
@@ -136,17 +135,10 @@ public interface ChallengeMapper {
         simpleResponse.setIsClosed( challenge.getIsClosed() );
         simpleResponse.setCreated_at( challenge.getCreatedAt() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
-        simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );
-
-        /**
-         * 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
-         */
-        String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
-        List<String> challengeExamImagePathList = new ArrayList<>();
-        for (String imagePath : challengeExamImagePaths) {
-            challengeExamImagePathList.add(imagePath);
-        }
-        simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
+        //대표이미지
+        simpleResponse.setChallengeRepImagePath(repImagePath);
+        //예시이미지
+//        simpleResponse.setChallengeExamImagePath(examImagePath);
 
         return simpleResponse;
     }
@@ -199,15 +191,7 @@ public interface ChallengeMapper {
                 }
                 detailResponse.challengeTalks(challengeTalkResponseDtoList);
             }
-            /**
-             * 프론트에 응답할때는 challengeExamImagePath를 리스트 형태로 준다.
-             */
-            String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
-            List<String> challengeExamImagePathList = new ArrayList<>();
-            for (String imagePath : challengeExamImagePaths) {
-                challengeExamImagePathList.add(imagePath);
-            }
-            detailResponse.challengeExamImagePath(challengeExamImagePathList);
+
 
         }
         return detailResponse.build();
