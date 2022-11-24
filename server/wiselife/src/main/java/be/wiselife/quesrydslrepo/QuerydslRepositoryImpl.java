@@ -84,6 +84,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .fetch();
     }
 
+    //검증후 삭제 예정
     @Override
     public ChallengeExamImage findByImageTypeAndImagePathAndChallengeExam(String imageType, String imagePath, String randomIdForImage) {
         return queryFactory

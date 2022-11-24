@@ -7,6 +7,7 @@ import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,6 +108,8 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTotalReward);
         Optional.ofNullable(changedChallenge.getIsClosed())
                 .ifPresent(existingChallenge::setIsClosed);
+        Optional.ofNullable(changedChallenge.getChallengeAuthAvailableTime())
+                .ifPresent(existingChallenge::setChallengeAuthAvailableTime);
         /**
          * 작성자 : 유현
          * 대표 이미지 수정시 사용하는 로직
@@ -237,6 +241,54 @@ public class ChallengeService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
     }
+
+    /**
+     * 챌린지 평균 성공률 update
+     * 챌린지에 참여한 멤버들의 성공률의 평균을 저장한다.
+     * Scheduler 사용해서 실행한다.
+     */
+    public void updateChallengeSuccessRate(){
+        //종료되지 않은 챌린지 전체 조회
+        List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+        //챌린지에 참여중인 유저의 성공률의 평균을 계산하여 챌린지에 넣는다
+        double challengeSuccessRate = 0;
+
+        for(Challenge challenge : challengeList){
+            challengeSuccessRate = 0;
+            for(MemberChallenge memberChallenge : challenge.getMemberChallenges()){
+                challengeSuccessRate += memberChallenge.getMemberChallengeSuccessRate();
+            }
+            challengeSuccessRate /= challenge.getMemberChallenges().size();
+            challenge.setChallengeSuccessRate(challengeSuccessRate);
+
+        }
+
+        challengeRepository.saveAll(challengeList);
+    }
+
+    /**
+     * 챌린지 종료에 따른 상태 변경
+     * 챌린지가 종료되었다면 Challenge table의 boolean isClosed가 true로 변경된다.
+     * Scheduler 사용해서 실행한다.
+     */
+    public void updateChallengeIsClosedStatus(){
+        //종료되지 않은 챌린지 전체 조회
+        List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+        LocalDate now = LocalDate.now();
+        //현재와 챌린지 종료일 비교
+        for(Challenge challenge : challengeList){
+            if(now.isAfter(challenge.getChallengeEndDate())){
+                challenge.setIsClosed(true);
+            }
+        }
+
+        challengeRepository.saveAll(challengeList);
+    }
+
 
     /**
      * paging 위한 pageRequest 설정

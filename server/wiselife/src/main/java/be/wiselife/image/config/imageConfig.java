@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class imageConfig implements WebMvcConfigurer {
 
+
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
 

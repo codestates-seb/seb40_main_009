@@ -7,8 +7,14 @@ import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.image.entity.ChallengeCertImage;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -57,7 +63,6 @@ public class Challenge extends WriterAudit {
     @Column(nullable = false)
     @Setter
     private String challengeAuthDescription;
-
     @Column(nullable = false)
     @Setter
     private int challengeAuthCycle; //인증 빈도
@@ -72,20 +77,8 @@ public class Challenge extends WriterAudit {
     @Setter
     private Boolean isClosed;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @JsonManagedReference
-    private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
-
-    //챌린지 진행 현황 관련 필드
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @JsonManagedReference
-    private List<MemberChallenge> memberChallenges = new ArrayList<>();
-
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
-    @ToString.Exclude
-    private List<ChallengeReview> challengeReviewList = new ArrayList<>();
+    @Setter
+    private double challengeSuccessRate;
 
     //이미지 중 챌린지 생성자가 추가할 사진 필드
     @Setter
@@ -114,12 +107,32 @@ public class Challenge extends WriterAudit {
     @Getter
     private Long authorizedMemberId;
 
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonManagedReference
+    private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
+
+    //챌린지 진행 현황 관련 필드
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonManagedReference
+    private List<MemberChallenge> memberChallenges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<ChallengeReview> challengeReviewList = new ArrayList<>();
+
+    @ElementCollection
+    @Getter
+    @Setter
+    private List<String> challengeAuthAvailableTime = new ArrayList<>();
+
     @Builder
     public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
                      String challengeDescription, int challengeMaxParty, int challengeMinParty,
                      LocalDate challengeStartDate, LocalDate challengeEndDate,
                      String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
-                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath) {
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath, List<String> challengeAuthAvailableTime) {
         this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
@@ -130,6 +143,7 @@ public class Challenge extends WriterAudit {
         this.challengeEndDate = challengeEndDate;
         this.challengeAuthDescription = challengeAuthDescription;
         this.challengeAuthCycle = challengeAuthCycle;
+        this.challengeAuthAvailableTime = challengeAuthAvailableTime;
         this.challengeFeePerPerson = challengeFeePerPerson;
 
         /*인자로 받지는 않지만 default값 설정해야 하는 것들*/
@@ -150,7 +164,7 @@ public class Challenge extends WriterAudit {
                      String challengeDescription, int challengeMaxParty, int challengeMinParty,
                      LocalDate challengeStartDate, LocalDate challengeEndDate,
                      String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
-                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath,int challengeCurrentParty) {
+                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath,int challengeCurrentParty, List<String> challengeAuthAvailableTime) {
         this.challengeId = challengeId;
         this.challengeCategory = challengeCategory;
         this.challengeTitle = challengeTitle;
@@ -161,6 +175,7 @@ public class Challenge extends WriterAudit {
         this.challengeEndDate = challengeEndDate;
         this.challengeAuthDescription = challengeAuthDescription;
         this.challengeAuthCycle = challengeAuthCycle;
+        this.challengeAuthAvailableTime = challengeAuthAvailableTime;
         this.challengeFeePerPerson = challengeFeePerPerson;
 
         /*인자로 받지는 않지만 default값 설정해야 하는 것들*/

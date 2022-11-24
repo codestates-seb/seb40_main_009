@@ -4,6 +4,7 @@ import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.image.entity.ChallengeCertImage;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -39,8 +40,9 @@ public class ChallengeDto {
         @NotNull
         private int challengeAuthCycle;
         @NotNull
+        private String challengeAuthAvailableTime;
+        @NotNull
         private int challengeFeePerPerson; //인당 참여금액
-
     }
 
     @Getter
@@ -64,12 +66,15 @@ public class ChallengeDto {
 
         private int challengeAuthCycle;
 
+        private String challengeAuthAvailableTime;
+
         private int challengeFeePerPerson; //인당 참여금액
 
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
 
         private String challengeExamImagePath;
+
     }
 
     @Getter
@@ -89,29 +94,30 @@ public class ChallengeDto {
         private int challengeMaxParty;
 
         private int challengeMinParty;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate challengeStartDate;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate challengeEndDate;
 
         private String challengeAuthDescription;
 
         private int challengeAuthCycle;
 
-        private String challengeDirectLink;//이건 프런트가 해야하지 않나??
+        private List<String> challengeAuthAvailableTime;
 
-        private int challengeFeePerPerson; //인당 참여금액
+        private String challengeDirectLink;
 
-        private int challengeTotalReward; // 현재까지의 전체 상금
+        private int challengeFeePerPerson;
+
+        private int challengeTotalReward;
 
         private int challengeViewCount;
 
         private Boolean isClosed;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updated_at;
-
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
 
@@ -120,7 +126,6 @@ public class ChallengeDto {
 
     @Getter
     @Builder
-    @Setter
     public static class DetailResponse {
 
         private Long challengeId;
@@ -136,16 +141,18 @@ public class ChallengeDto {
         private int challengeMaxParty;
 
         private int challengeMinParty;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate challengeStartDate;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate challengeEndDate;
 
         private String challengeAuthDescription;
 
         private int challengeAuthCycle;
 
-        private String challengeDirectLink;//이건 프런트가 해야하지 않나??
+        private List<String> challengeAuthAvailableTime;
+
+        private String challengeDirectLink;
 
         private int challengeFeePerPerson; //인당 참여금액
 
@@ -160,26 +167,22 @@ public class ChallengeDto {
 
         //현재 챌린지 성공률
         private int currentUserSuccessRate;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updated_at;
 
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
 
         //참여중인 멤버 리스트
-        @Setter
         private List<MemberChallengeResponseDto> participatingMember;
 
-        @Setter
         private List<String> challengeExamImagePath;
 
-        @Setter
         private List<ChallengeCertImageResponseDto> challengeCertImages;
 
-        /*챌린지 댓글 리스트 */
-        @Setter
+        //챌린지 댓글 리스트
         private List<ChallengeTalkDto.response> challengeTalks;
 
     }
@@ -218,6 +221,7 @@ public class ChallengeDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ChallengeCertImageResponseDto {
+        private Long memberId;
         private String imagePath;
     }
 

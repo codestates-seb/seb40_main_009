@@ -1,5 +1,6 @@
 package be.wiselife.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class OrderDto {
 
         private String tid;
         private String next_redirect_pc_url;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private String created_at;
     }
 
@@ -45,7 +47,9 @@ public class OrderDto {
         private String item_name;
         private String item_code;
         private int quantity;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private String created_at;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private String approved_at;
         private String payload;
         private Amount amount;

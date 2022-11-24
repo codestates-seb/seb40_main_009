@@ -164,12 +164,12 @@ public class Member extends TimeAudit {
 
     public enum MemberBadge {
         새내기(1,1), // 2 -> 좀치는도전자
-        좀치는도전자(2,3),//4-> 열정도전자
-        열정도전자(3,7),//8-> 모범도전자
-        모범도전자(4,15),//16-> 우수도전자
-        우수도전자(5,31),//16-> 챌린지 장인
-        챌린지장인(6,63),//32-> 시간의 지배자
-        시간의지배자(7,127),//64-> 챌린지 신
+        좀치는도전자(2,5),//6-> 열정도전자
+        열정도전자(3,13),//14-> 모범도전자
+        모범도전자(4,29),//30-> 우수도전자
+        우수도전자(5,61),//62-> 챌린지 장인
+        챌린지장인(6,125),//126-> 시간의 지배자
+        시간의지배자(7,253),//254-> 챌린지 신
         챌린지신(8); //128 -> 만렙
 
         @Getter
@@ -196,6 +196,20 @@ public class Member extends TimeAudit {
                 case 6:return 챌린지장인;
                 case 7:return 시간의지배자;
                 case 8:return 챌린지신;
+                default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
+            }
+        }
+
+        public static int badgeOfobjExperience(int level) {
+            switch (level) {
+                case 1:return 0;
+                case 2:return 2;
+                case 3:return 6;
+                case 4:return 14;
+                case 5:return 30;
+                case 6:return 62;
+                case 7:return 126;
+                case 8:return 254;
                 default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
             }
         }

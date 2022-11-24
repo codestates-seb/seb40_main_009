@@ -18,6 +18,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -29,17 +30,14 @@ import java.util.List;
 public class DummyService {
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
-
     private final MemberChallengeRepository memberChallengeRepository;
 
     private final ImageService imageService;
-
     private final ChallengeService challengeService;
 
     private final MemberChallengeService memberChallengeService;
 
     private final FollowService followService;
-
     private final MemberService memberService;
 
     private final JwtTokenizer jwtTokenizer;
@@ -88,22 +86,26 @@ public class DummyService {
 
 
     public void createMockChallenge() {
+
+
         Challenge challenge1 = new Challenge(1L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀1","타이틀1 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,22), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
         Challenge challenge2 = new Challenge(2L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,21), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
         Challenge challenge3 = new Challenge(3L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,20), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
         Challenge challenge4 = new Challenge(4L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,19), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
 
                
         challenge1.setAuthorizedMemberId(1L);
         challenge2.setAuthorizedMemberId(1L);
+        challenge3.setAuthorizedMemberId(1L);
+        challenge3.setAuthorizedMemberId(1L);
 
         challengeRepository.save(challenge1);
         challengeRepository.save(challenge2);

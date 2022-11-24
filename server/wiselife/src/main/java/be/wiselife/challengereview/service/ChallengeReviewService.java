@@ -22,7 +22,7 @@ public class ChallengeReviewService {
     private final ImageService imageService;
     private final MemberService memberService;
     private final ChallengeService challengeService;
-    MemberChallengeRepository memberChallengeRepository;
+    private final MemberChallengeRepository memberChallengeRepository;
 
     public ChallengeReviewService(ChallengeReviewRepository challengeReviewRepository, ImageService imageService, MemberService memberService, ChallengeService challengeService, MemberChallengeRepository memberChallengeRepository) {
         this.challengeReviewRepository = challengeReviewRepository;
