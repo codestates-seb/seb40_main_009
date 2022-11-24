@@ -181,7 +181,7 @@ function ChallengeAsk4({ register }) {
               <input
                 onClick={(e) => addTime(e)}
                 type={'checkbox'}
-                {...register('time', {
+                {...register('challengeAuthAvailableTime', {
                   required: 'Please Choice Validate Time',
                 })}
                 value={el}

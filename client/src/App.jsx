@@ -13,6 +13,8 @@ import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetai
 import CreateChallengePage from './pages/CreateChallenge';
 import EditProfilePage from './pages/EditProfilePage';
 import MemberList from './pages/MemberList';
+import ChallengeResult from './components/SearchResult/ChallengeResult';
+import MemberResult from './components/SearchResult/MemberResult';
 
 function App() {
   return (
@@ -28,7 +30,10 @@ function App() {
             path="/challengedetail/:id"
             element={<ChallengeDetailProgress />}
           />
-          <Route path="/search/*" element={<SearchResult />} />
+          <Route path="/search/:name/:id" element={<SearchResult />}>
+            <Route path={`challenge/:id`} element={<ChallengeResult />} />
+            <Route path={`member/:id`} element={<MemberResult />} />
+          </Route>
           <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
