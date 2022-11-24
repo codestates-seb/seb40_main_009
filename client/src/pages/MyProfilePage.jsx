@@ -1,34 +1,64 @@
 import { useState, useEffect } from 'react';
-import MyProfile from '../components/ProfileList/MyProfile';
-import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+
 import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
-function MyProfilePage(props) {
-  const [myProfile, setMyProfile] = useState({
-    profileimage: '',
-    name: '',
-    introduction: '',
-    percentage: '',
-    level: '',
-  });
+import MyProfile from '../components/ProfileList/MyProfile';
+import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
+
+function MyProfilePage({
+  memberImagePath,
+  memberName,
+  memberDescription,
+  percentage,
+  level,
+}) {
+  const [myProfileLists, setMyProfileLists] = useState([
+    {
+      memberImagePath: '',
+      memberName: '',
+      memberDescription: '',
+      percentage: '',
+      level: '',
+    },
+  ]);
+  const params = useParams();
+  const name = params.name;
 
   // get요청
+  const getProfile = async () => {
+    try {
+      axios
+        .get(`/member/${name}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+            Authorization:
+              'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.FlS9lUOnWzAi9UFkZOT2UqT4FYmGiiRsST2wfPJErEiQLYYsJw9jSMwYaEwrM1DceWXltVQ5r8o0_OWjFGJa8w',
+          },
+        })
+        .then((response) => {
+          const myProfile = response.data;
+          // console.log(myProfile);
+          setMyProfileLists(myProfile.data);
+        });
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  };
+
   useEffect(() => {
-    axios.get(`http://localhost:3001/userprofile`).then((res) => {
-      console.log(res.data);
-      setMyProfile(...res.data);
-    });
+    getProfile();
   }, []);
 
   return (
     <S.MyProfilePageComponent>
       <MyProfile
-        profileimage={myProfile.profileimage}
-        name={myProfile.name}
-        introduction={myProfile.introduction}
-        percentage={myProfile.percentage}
-        level={myProfile.level}
+        memberImagePath={myProfileLists.memberImagePath}
+        memberName={myProfileLists.memberName}
+        memberDescription={myProfileLists.memberDescription}
+        percentage={myProfileLists.percentage}
+        level={myProfileLists.level}
       />
       <ProfileBoxLists />
     </S.MyProfilePageComponent>

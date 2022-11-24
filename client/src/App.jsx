@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import Kakao from 'kakaojs';
+
 import ChallengeList from './pages/ChallengeList';
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
@@ -6,8 +8,8 @@ import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import DashboardPage from './pages/DashboardPage';
 import SearchResult from './pages/SearchResult';
-import ChallengeDetail from './pages/ChallengeDetail';
-import ChallengeDetailProgress from './pages/ChallengeDetailProgress';
+import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail';
+import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetailProgress';
 import CreateChallengePage from './pages/CreateChallenge';
 import EditProfilePage from './pages/EditProfilePage';
 import MemberList from './pages/MemberList';
@@ -27,10 +29,10 @@ function App() {
             element={<ChallengeDetailProgress />}
           />
           <Route path="/search/*" element={<SearchResult />} />
-          <Route path="/profile/:id" element={<MyProfilePage />} />
+          <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
-          <Route path="/editprofile" element={<EditProfilePage />} />
+          <Route path="/profile/edit" element={<EditProfilePage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -43,24 +43,7 @@ function ProfileBoxLists() {
           결제내역
         </S.Tab>
       </header>
-      <section>
-        {/* 삼항이 넘어가면 사용하지 않는 게 좋음 const TabComponent = {
-  '0' : Component,
-  '1' : Component
-}*/}
-
-        {TabComponent[clickedTab]}
-        {/* {clickedTab === 0 ? <ProfileBoxChallenge /> : null}
-        {clickedTab === 1 ? <ProfileBoxChallengeList /> : null}
-        {clickedTab === 2 ? <ProfileBoxOrderList /> : null} */}
-        {/* {clickedTab === 0 ? (
-          <ProfileBoxChallenge />
-        ) : clickedTab === 1 ? (
-          <ProfileBoxChallengeList />
-        ) : clickedTab === 2 ? (
-          <ProfileBoxOrderList />
-        ) : null} */}
-      </section>
+      <section>{TabComponent[clickedTab]}</section>
     </S.ProfileBoxComponent>
   );
 }
