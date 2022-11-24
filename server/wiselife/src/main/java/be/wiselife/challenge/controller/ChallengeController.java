@@ -63,11 +63,9 @@ public class ChallengeController {
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
         challenge = challengeService.createChallenge(challenge, memberService.getLoginMember(request), repImage, exampleImage);
-        String RepImageUrl = imageService.getRepImagePath(challenge.getRandomIdForImage());
-        List<String> ExamImagePath = imageService.getExamImagePath(challenge.getRandomIdForImage());
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, RepImageUrl, ExamImagePath))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
                 , HttpStatus.CREATED);
     }
 
@@ -86,13 +84,11 @@ public class ChallengeController {
                                          HttpServletRequest request) throws IOException {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
+
         challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request), challengeId, exampleImage, repImage);
 
-        String RepImageUrl = imageService.getRepImagePath(challenge.getRandomIdForImage());
-        List<String> ExamImagePath = imageService.getExamImagePath(challenge.getRandomIdForImage());
-
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, RepImageUrl, ExamImagePath))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
                 , HttpStatus.OK);
     }
 
@@ -172,10 +168,9 @@ public class ChallengeController {
         challenge = challengeService.updateViewCount(challenge);
         if (request.getHeader("Authorization") == null ||
                 memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request)) == null) {
-            String RepImageUrl = imageService.getRepImagePath(challenge.getRandomIdForImage());
-            List<String> ExamImagePath = imageService.getExamImagePath(challenge.getRandomIdForImage());
+
             ChallengeDto.SimpleResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, RepImageUrl, ExamImagePath);
+                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge);
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {

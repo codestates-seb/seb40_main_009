@@ -110,8 +110,8 @@ public interface ChallengeMapper {
     }
 
 
-    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge, String repImagePath, List<String> examImagePath) {
-        if ( challenge == null & repImagePath == null & examImagePath == null) {
+    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge) {
+        if ( challenge == null) {
             return null;
         }
 
@@ -136,9 +136,14 @@ public interface ChallengeMapper {
         simpleResponse.setCreated_at( challenge.getCreatedAt() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
         //대표이미지
-        simpleResponse.setChallengeRepImagePath(repImagePath);
+        simpleResponse.setChallengeRepImagePath(challenge.getChallengeRepImagePath());
         //예시이미지
-//        simpleResponse.setChallengeExamImagePath(examImagePath);
+        String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
+        List<String> challengeExamImagePathList = new ArrayList<>();
+        for (String imagePath : challengeExamImagePaths) {
+            challengeExamImagePathList.add(imagePath);
+        }
+        simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
 
         return simpleResponse;
     }

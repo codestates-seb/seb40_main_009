@@ -59,7 +59,7 @@ public class ImageService {
     }
 
     //ChallengeRepImage 부분 코드====================================== rep image 받아옴
-    public void patchChallengeRepImage(Challenge challenge, MultipartFile repImage) throws IOException {
+    public String patchChallengeRepImage(Challenge challenge, MultipartFile repImage) throws IOException {
 
         ChallengeRepImage challengeRepImageFromRepository =
                 imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
@@ -73,6 +73,8 @@ public class ImageService {
             challengeRepImageFromRepository.setImagePath(newRepImage);
             saveChallengeRepImage(challenge,challengeRepImageFromRepository);
         }
+
+        return newRepImage;
     }
     // ChallengeRepImage 중복코드 줄이는 용도
     private void saveChallengeRepImage(Challenge challenge, ChallengeRepImage challengeRepImage) {
@@ -81,7 +83,7 @@ public class ImageService {
     }
 
     //ChallengeExamImage 부분 코드======================================
-    public void postChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
+    public List<String> postChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
         List<String> exampleImages = s3UploadService.uploadAsList(exampleImage);
         String[] imagePaths = exampleImages.toArray(String[]::new);
 
@@ -91,6 +93,7 @@ public class ImageService {
             challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
             imageRepository.save(challengeExamImage);
         }
+        return exampleImages;
     }
 
     public String patchChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {

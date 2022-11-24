@@ -53,13 +53,20 @@ public class ChallengeService {
         challenge.setCreate_by_member(loginMember.getMemberName());
         challenge.setAuthorizedMemberId(loginMember.getMemberId());
 
-        imageService.patchChallengeRepImage(challenge,repImage);
-        imageService.postChallengeExamImage(challenge,exampleImage);
+        String representImagePath = imageService.patchChallengeRepImage(challenge, repImage);
+        List<String> ExamImagesPath = imageService.postChallengeExamImage(challenge, exampleImage);
+
+        String getall = listToString(ExamImagesPath);
+
+        challenge.setChallengeRepImagePath(representImagePath);
+        challenge.setChallengeExamImagePath(getall);
 
         challenge = participateChallenge(challenge, loginMember);
 
         return saveChallenge(challenge);
     }
+
+
 
     /**
      * 챌린지 수정 기능
@@ -297,5 +304,18 @@ public class ChallengeService {
         }
 
         return challengeCategory;
+    }
+
+    /**
+     * list를 String 화해주는 작업
+     */
+    private static String listToString(List<String> ExamImagesPath) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < ExamImagesPath.size(); i++) {
+            builder.append(ExamImagesPath.get(i)).append(",");
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        String getall = builder.toString();
+        return getall;
     }
 }
