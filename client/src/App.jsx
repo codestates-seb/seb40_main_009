@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import Kakao from 'kakaojs';
+
 import ChallengeList from './pages/ChallengeList';
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
@@ -27,10 +29,10 @@ function App() {
             element={<ChallengeDetailProgress />}
           />
           <Route path="/search/*" element={<SearchResult />} />
-          <Route path="/profile/:id" element={<MyProfilePage />} />
+          <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
-          <Route path="/editprofile" element={<EditProfilePage />} />
+          <Route path="/profile/edit" element={<EditProfilePage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
