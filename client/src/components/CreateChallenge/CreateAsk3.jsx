@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { addDays } from 'date-fns/esm';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
-function ChallengeAsk3() {
+function ChallengeAsk3({ register }) {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
   const [checkBtn, setCheckBtn] = useRecoilState(validButton);
 
@@ -19,11 +19,11 @@ function ChallengeAsk3() {
     },
   ]);
   const [dateInfomation] = date;
+  // console.log(dateInfomation.startDate.getMonth());
   let startDate = `${date[0].startDate.getFullYear()}-${date[0].startDate.getMonth()}-${date[0].startDate.getDate()}`;
   let lastDate = date[0].endDate;
   let lastDatee = `${lastDate.getFullYear()}-${lastDate.getMonth()}-${lastDate.getDate()}`;
 
-  const { register, handleSubmit } = useForm();
   const onValid = (data) => {
     let now = new Date();
     if (
@@ -45,34 +45,35 @@ function ChallengeAsk3() {
 
   return (
     <S.CreateAsk>
-      <form onSubmit={handleSubmit(onValid)}>
-        <DateRange
-          editableDateInputs={false}
-          onChange={(item) => setDate([item.selection])}
-          moveRangeOnFirstSelection={false}
-          ranges={date}
-          locale={ko}
+      <DateRange
+        editableDateInputs={false}
+        onChange={(item) => setDate([item.selection])}
+        moveRangeOnFirstSelection={false}
+        ranges={date}
+        locale={ko}
+      />
+      <div className="question">
+        <h3>챌린지 시작일</h3>
+        <input
+          value={startDate}
+          {...register('challengeStartDate', {
+            required: 'Please Write FirstDay',
+          })}
+          placeholder="챌린지 시작일"
+          readOnly
         />
-        <div className="question">
-          <h3>챌린지 시작일</h3>
-          <input
-            value={startDate}
-            {...register('시작일', { required: 'Please Write FirstDay' })}
-            placeholder="챌린지 시작일"
-            readOnly
-          />
-        </div>
-        <div className="question">
-          <h3>챌린지 종료일</h3>
-          <input
-            value={lastDatee}
-            {...register('종료일', { required: 'Please Write LastDat' })}
-            placeholder="챌린지 종료일"
-            readOnly
-          />
-        </div>
-        <button className="submitBtn">저장</button>
-      </form>
+      </div>
+      <div className="question">
+        <h3>챌린지 종료일</h3>
+        <input
+          value={lastDatee}
+          {...register('challengeEndDate', {
+            required: 'Please Write LastDay',
+          })}
+          placeholder="챌린지 종료일"
+          readOnly
+        />
+      </div>
     </S.CreateAsk>
   );
 }

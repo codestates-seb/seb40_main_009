@@ -42,8 +42,6 @@ function Header() {
     { id: 2, value: 'member' },
   ];
 
-  console.log('검색필터>>>', searchFilterValue);
-
   //검색필터가 유저일 때 유저조회(등급순)
   const getMembers = async () => {
     try {
