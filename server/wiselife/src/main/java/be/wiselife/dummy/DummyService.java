@@ -88,29 +88,18 @@ public class DummyService {
 
 
     public void createMockChallenge() {
-        Challenge challenge1 = new Challenge(1L, Challenge.ChallengeCategory.SHARED_CHALLENGE,
-                "타이틀1","타이틀1 챌린지입니다.",10,3,
-                LocalDate.of(2022,11,1),
-                LocalDate.of(2022,11,5),
-                "인증은 하루 3번",
+        Challenge challenge1 = new Challenge(1L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀1","타이틀1 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,22), LocalDate.of(2023,11,21), "인증은 하루 3번",
                 3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
-        Challenge challenge2 = new Challenge(2L, Challenge.ChallengeCategory.SHARED_CHALLENGE,
-                "타이틀2","타이틀2 챌린지입니다.",10,3,
-                LocalDate.of(2022,11,1),
-                LocalDate.of(2023,11,21),
-                "인증은 하루 3번",
+        Challenge challenge2 = new Challenge(2L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,21), LocalDate.of(2023,11,21), "인증은 하루 3번",
                 3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
-        Challenge challenge3 = new Challenge(3L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE,
-                "타이틀2","타이틀2 챌린지입니다.",10,3,
-                LocalDate.of(2022,11,1),
-                LocalDate.of(2023,10,31),
-                "인증은 하루 3번",
+        Challenge challenge3 = new Challenge(3L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,20), LocalDate.of(2023,11,21), "인증은 하루 3번",
                 3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
-        Challenge challenge4 = new Challenge(4L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE,
-                "타이틀2","타이틀2 챌린지입니다.",10,3,
-                LocalDate.of(2022,11,1),
-                LocalDate.of(2022,11,4),
-                "인증은 하루 3번",3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
+        Challenge challenge4 = new Challenge(4L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,19), LocalDate.of(2023,11,21), "인증은 하루 3번",
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3);
 
                
         challenge1.setAuthorizedMemberId(1L);
@@ -134,67 +123,36 @@ public class DummyService {
 
         MemberChallenge memberChallenge1 = new MemberChallenge(1L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member1, challenge1);
-        memberChallenge1.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge1.getChallenge().getChallengeStartDate(),
-                memberChallenge1.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge2 = new MemberChallenge(2L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member1, challenge2);
-        memberChallenge2.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge2.getChallenge().getChallengeStartDate(),
-                memberChallenge2.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge3 = new MemberChallenge(3L, challenge3.getChallengeFeePerPerson(),
                 0, 0, member1, challenge3);
-        memberChallenge3.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge3.getChallenge().getChallengeStartDate(),
-                memberChallenge3.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge4 = new MemberChallenge(4L, challenge4.getChallengeFeePerPerson(),
                 0, 0, member1, challenge4);
-        memberChallenge4.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge4.getChallenge().getChallengeStartDate(),
-                memberChallenge4.getChallenge().getChallengeEndDate()));
 
-        member1.setMemberChallengeTotalObjCount(member1.getMemberChallengeTotalObjCount() +memberChallenge1.getChallengeObjDay()+memberChallenge2.getChallengeObjDay()
-                +memberChallenge3.getChallengeObjDay()+memberChallenge4.getChallengeObjDay());
         memberRepository.save(member1);
 
 
         MemberChallenge memberChallenge5 = new MemberChallenge(5L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member2, challenge1);
-        memberChallenge5.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge5.getChallenge().getChallengeStartDate(),
-                memberChallenge5.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge6 = new MemberChallenge(6L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member2, challenge2);
-        memberChallenge6.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge6.getChallenge().getChallengeStartDate(),
-                memberChallenge6.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge7 = new MemberChallenge(7L, challenge3.getChallengeFeePerPerson(),
                 0, 0, member2, challenge3);
-        memberChallenge7.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge7.getChallenge().getChallengeStartDate(),
-                memberChallenge7.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge8 = new MemberChallenge(8L, challenge4.getChallengeFeePerPerson(),
                 0, 0, member2, challenge4);
-        memberChallenge8.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge8.getChallenge().getChallengeStartDate(),
-                memberChallenge8.getChallenge().getChallengeEndDate()));
 
-        member2.setMemberChallengeTotalObjCount(member2.getMemberChallengeTotalObjCount() +memberChallenge5.getChallengeObjDay()+memberChallenge6.getChallengeObjDay()
-                +memberChallenge7.getChallengeObjDay()+memberChallenge8.getChallengeObjDay());
         memberRepository.save(member2);
 
 
         MemberChallenge memberChallenge9 = new MemberChallenge(9L, challenge1.getChallengeFeePerPerson(),
                 0, 0, member3, challenge1);
-        memberChallenge9.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge9.getChallenge().getChallengeStartDate(),
-                memberChallenge9.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge10 = new MemberChallenge(10L, challenge2.getChallengeFeePerPerson(),
                 0, 0, member3, challenge2);
-        memberChallenge10.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge10.getChallenge().getChallengeStartDate(),
-                memberChallenge10.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge11 = new MemberChallenge(11L, challenge3.getChallengeFeePerPerson(),
                 0, 0, member3, challenge3);
-        memberChallenge11.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge11.getChallenge().getChallengeStartDate(),
-                memberChallenge11.getChallenge().getChallengeEndDate()));
         MemberChallenge memberChallenge12 = new MemberChallenge(12L, challenge4.getChallengeFeePerPerson(),
                 0, 0, member3, challenge4);
-        memberChallenge12.setChallengeObjDay(ChronoUnit.DAYS.between(memberChallenge12.getChallenge().getChallengeStartDate(),
-                memberChallenge12.getChallenge().getChallengeEndDate()));
-
-        member3.setMemberChallengeTotalObjCount(member3.getMemberChallengeTotalObjCount() +memberChallenge9.getChallengeObjDay()+memberChallenge10.getChallengeObjDay()
-                +memberChallenge11.getChallengeObjDay()+memberChallenge12.getChallengeObjDay());
         memberRepository.save(member3);
 
 
@@ -213,3 +171,4 @@ public class DummyService {
         memberChallengeRepository.save(memberChallenge12);
     }
 }
+

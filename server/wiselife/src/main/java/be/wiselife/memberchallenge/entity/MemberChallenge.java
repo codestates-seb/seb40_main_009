@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Getter
 @Setter
@@ -29,9 +28,6 @@ public class MemberChallenge {
 
     @Column(nullable = false)
     private double memberChallengeSuccessRate=0;
-
-    @Column(nullable = false)
-    private double challengeObjDay=0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

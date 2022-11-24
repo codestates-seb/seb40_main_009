@@ -1,6 +1,7 @@
 package be.wiselife.image.service;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challenge.repository.ChallengeRepository;
 import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
@@ -14,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,7 @@ import java.util.List;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberChallengeRepository memberChallengeRepository;
+    private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
     private final S3UploadService s3UploadService;
 
@@ -156,7 +160,7 @@ public class ImageService {
      * @param loginMember 를 통해, 로그인된 회원이 챌린지 참여중인지 파악하고, 의무 인증횟수를 채우면 성공일자를 증가 시켜준다.
      * @return
      */
-    public String patchChallengeCertImage(Challenge challenge, Member loginMember) {
+    public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
             throw new BusinessLogicException(ExceptionCode.YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST);
@@ -166,7 +170,7 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        patchCertificationImage(challenge, loginMember, challengeCertImage);
+        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
 
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
@@ -174,53 +178,46 @@ public class ImageService {
 
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
-        plusSuccessCount(challenge, loginMember);
+        plusSuccessCount(loginMember);
 
         calculateMemberChallengePercentage(loginMember);
 
-        String changeImagePath = makeCertImagePath(challengeCertImages);
-
-        return changeImagePath;
+        return challengeUpdateChallengeCertImage;
+    }
+    // 인증사진 등록 및 수정 메소드
+    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage) {
+        if (challengeCertImage == null) {
+            challengeCertImage = new ChallengeCertImage();
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            log.info("cerImage1={}",challenge.getChallengeCertImagePath());
+            challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
+            challengeCertImage.setMemberId(loginMember.getMemberId());
+            challenge.getChallengeCertImages().add(challengeCertImage);
+            challengeCertImage.setChallenge(challenge);
+            imageRepository.save(challengeCertImage);
+            return challenge;
+        }
+        challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+        imageRepository.save(challengeCertImage);
+        return challenge;
     }
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
     private void isSuccessDay(Challenge challenge, MemberChallenge memberChallengeFromRepository, List<ChallengeCertImage> challengeCertImages) {
         if (challengeCertImages.size()% challenge.getChallengeAuthCycle()==0) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
-            memberChallengeFromRepository.setMemberChallengeSuccessRate(
-                    (memberChallengeFromRepository.getMemberSuccessDay()/ memberChallengeFromRepository.getChallengeObjDay())*100);
+            double memberChallengeSuccessRate = (memberChallengeFromRepository.getMemberSuccessDay()/ChronoUnit.DAYS.between(challenge.getChallengeStartDate(), LocalDate.now()))*100;
+            memberChallengeFromRepository.setMemberChallengeSuccessRate(memberChallengeSuccessRate);
+
             memberChallengeRepository.save(memberChallengeFromRepository);
         }
-    }
-
-    // 인증사진 등록 및 수정 메소드
-    private void patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage) {
-        if (challengeCertImage == null) {
-            challengeCertImage = new ChallengeCertImage();
-            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-            challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
-            challengeCertImage.setMemberId(loginMember.getMemberId());
-        } else {
-            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-        }
-        imageRepository.save(challengeCertImage);
-    }
-
-    //응답용 경로 생성 메서드
-    private static String makeCertImagePath(List<ChallengeCertImage> challengeCertImages) {
-        String changeImagePath = "";
-        for (ChallengeCertImage certImage : challengeCertImages) {
-            changeImagePath = changeImagePath + certImage.getImagePath() + ",";
-        }
-        return changeImagePath;
     }
 
     /**
      * 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
      * 여기서 레벨업 로직 구현
       */
-
-    private void plusSuccessCount(Challenge challenge, Member loginMember) {
+    private void plusSuccessCount(Member loginMember) {
         int successCount =imageRepository.findCertImageByImageTypeAndMemberId("CCI", loginMember.getMemberId()).size();
         if (loginMember.getMemberExp() >= loginMember.getMemberBadge().getObjExperience()) {
             int memberLevel = loginMember.getMemberBadge().getLevel()+1;
@@ -233,22 +230,12 @@ public class ImageService {
     //멤버 성공률 판단 부분
     private void calculateMemberChallengePercentage(Member loginMember) {
         List<MemberChallenge> memberChallengeList = memberRepository.findMemberChallengeByMember(loginMember);
-        double oneChallengeSuccessDay = 0;
+        double memberChallengeSuccessRate = 0;
         for (MemberChallenge memberChallenge : memberChallengeList) {
-                oneChallengeSuccessDay=oneChallengeSuccessDay+memberChallenge.getMemberSuccessDay();
+                memberChallengeSuccessRate=memberChallengeSuccessRate+memberChallenge.getMemberChallengeSuccessRate();
         }
-        loginMember.setMemberChallengePercentage((oneChallengeSuccessDay/ loginMember.getMemberChallengeTotalObjCount())*100);
+        loginMember.setMemberChallengePercentage(memberChallengeSuccessRate/memberChallengeList.size());
         memberRepository.save(loginMember);
     }
-
-    public String getChallengeCertImage(Challenge challenge) {
-        List<ChallengeCertImage> challengeCertImages =
-                imageRepository.findByImageTypeAndChallengeCertIdGet("CCI", challenge.getRandomIdForImage());
-
-        String changeImagePath = makeCertImagePath(challengeCertImages);
-
-        return changeImagePath;
-    }
-
 
 }

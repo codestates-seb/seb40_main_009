@@ -39,9 +39,7 @@ public class Member extends TimeAudit {
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = 1;
         this.hasRedCard = false;
-        this.memberChallengeTotalObjCount = 0;
         this.memberExp = 0;
-        this.memberChallengePercentage = memberExp/memberChallengeTotalObjCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
@@ -51,7 +49,7 @@ public class Member extends TimeAudit {
     //더미 데이터용 생성자
     @Builder
     public Member(String memberEmail, String memberImagePath, List<String> roles, String provider,
-                  String providerId,int followerCount,MemberBadge memberBadge,int memberLevel,String memberName,double memberExp) {
+                  String providerId,int followerCount,MemberBadge memberBadge,int memberLevel,String memberName,int memberExp) {
 
         this.roles = roles;
         this.provider = provider;
@@ -64,9 +62,7 @@ public class Member extends TimeAudit {
         this.followStatus=FollowStatus.UNFOLLOW;
         this.memberLevel = memberLevel;
         this.hasRedCard = false;
-        this.memberChallengeTotalObjCount = 0;
         this.memberExp = memberExp;
-        this.memberChallengePercentage = memberExp/memberChallengeTotalObjCount;
         this.memberMoney = 0;
         this.followers = 0;
         this.followerCount = followerCount;
@@ -147,10 +143,7 @@ public class Member extends TimeAudit {
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
     @Column(nullable = false)
-    private double memberChallengeTotalObjCount;
-
-    @Column(nullable = false)
-    private double memberExp;
+    private int memberExp;
 
     @Enumerated(EnumType.STRING)
     private MemberBadge memberBadge;

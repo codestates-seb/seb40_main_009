@@ -138,10 +138,7 @@ public class ChallengeService {
     public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
         Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
         challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
-
-        String certImagePath= imageService.patchChallengeCertImage(challenge, loginMember);
-        challenge.setChallengeCertImagePath(certImagePath);
-        return challengeRepository.save(challenge);
+        return challengeRepository.save(imageService.patchChallengeCertImage(challenge, loginMember));
     }
 
     /**
@@ -149,15 +146,15 @@ public class ChallengeService {
      * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
      * 로그인 된 유저가 아닐시 인증사진은 안나오게
      * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게
-     * TODO: 로그인 된 유저 중에 이 챌린지에 참여중인 멤버가 맞는지 판단 로직 필요
+     * TODO: 로그인 된 유저 중에 이 챌린지에 참여중인 멤버가 맞는지 판단 로직 필요현 재구현
      */
-    public Challenge getCertification(Challenge certImageInfo,Member loginMember) {
-
-        String certImagePath = imageService.getChallengeCertImage(certImageInfo);
-
-        certImageInfo.setChallengeCertImagePath(certImagePath);
-        return certImageInfo;
-    }
+//    public Challenge getCertification(Challenge certImageInfo,Member loginMember) {
+//
+//        String certImagePath = imageService.getChallengeCertImage(certImageInfo);
+//
+//        certImageInfo.setChallengeCertImagePath(certImagePath);
+//        return certImageInfo;
+//    }
 
     /**
      * 챌린지 id를 통한 챌린지 조회
