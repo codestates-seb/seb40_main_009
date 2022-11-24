@@ -1,7 +1,9 @@
-import Challenge from '../ChallengeList/Challenge';
-import * as S from '../../style/ChallengeList/ChallengeList.styled';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+
+import * as S from '../../style/ChallengeList/ChallengeList.styled';
+
+import Challenge from '../ChallengeList/Challenge';
 
 export default function ChallengeResult({ searchValue }) {
   const [challengeList, setChallengeList] = useState([]);
@@ -22,8 +24,6 @@ export default function ChallengeResult({ searchValue }) {
       console.log('error: ', error);
     }
   }, [searchValue]);
-
-  console.log('challenge리스트', challengeList);
 
   useEffect(() => {
     challengeSearch();

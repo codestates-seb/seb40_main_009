@@ -25,8 +25,6 @@ export default function MemberResult({ searchValue }) {
     }
   }, [searchValue]);
 
-  console.log('member리스트', memberList);
-
   useEffect(() => {
     challengeSearch();
   }, [challengeSearch]);

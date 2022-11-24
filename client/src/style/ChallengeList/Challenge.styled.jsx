@@ -19,15 +19,20 @@ export const ContentA = styled.div`
 `;
 
 export const ContentB = styled.div`
-  padding-top: 100px;
+  padding-top: 120px;
   text-align: center;
+
   > span {
     margin-top: 10px;
+    border-radius: 10px;
+    padding: 5px 8px 0px 8px;
     display: inline-block;
     text-decoration: none;
     height: 20px;
+    color: #8673ff;
 
     :hover {
+      height: 22px;
       background: #8673ff;
       color: #fff;
     }

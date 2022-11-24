@@ -33,9 +33,7 @@ export default function MemberList() {
         }
       );
       const members = response.data.data;
-      console.log('멤바', members);
       setMemberList(members);
-      console.log('멤바리스트', memberList);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
