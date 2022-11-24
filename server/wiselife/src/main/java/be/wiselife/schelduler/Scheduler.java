@@ -21,9 +21,9 @@ public class Scheduler {
     }
 
     /**
-     * 매 00시 00분마다 챌린지 종료 status update
+     * 매 00시 10분마다 챌린지 종료 status update
      */
-    @Scheduled(cron = "0/20 * * * * *")
+    @Scheduled(cron = "0 10 0 * * *")
     public void checkChallengeIsClosed(){
         challengeService.updateChallengeIsClosedStatus();
     }
