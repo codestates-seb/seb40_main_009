@@ -35,7 +35,6 @@ public class MemberChallengeService {
     public Challenge patchMemberAndChallenge(Challenge challenge, Member member) {
 
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
-        double memberChallengeTotalObjCount = member.getMemberChallengeTotalObjCount();
         if (memberChallengeRepository.findByChallengeIdAndMember(challenge.getRandomIdForImage(), member) != null) {
             MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 
@@ -43,7 +42,6 @@ public class MemberChallengeService {
             challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
 
             challenge.getMemberChallenges().remove(memberChallengeFromRepository);
-            member.setMemberChallengeTotalObjCount(member.getMemberChallengeTotalObjCount()-memberChallengeFromRepository.getChallengeObjDay());
             memberRepository.save(member);
             member.getMemberChallenges().remove(memberChallengeFromRepository);
 
@@ -61,13 +59,9 @@ public class MemberChallengeService {
             memberChallenge.setMemberReward(challenge.getChallengeFeePerPerson());
             memberChallenge.setMember(member);
             memberChallenge.setChallenge(challenge);
-            double objectDay = ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(),
-                    memberChallenge.getChallenge().getChallengeEndDate());
-            memberChallenge.setChallengeObjDay(objectDay);
 
             challenge.getMemberChallenges().add(memberChallenge);
             member.getMemberChallenges().add(memberChallenge);
-            memberChallengeTotalObjCount = member.getMemberChallengeTotalObjCount()+objectDay;
 
             memberChallengeRepository.save(memberChallenge);
             memberRepository.save(member);

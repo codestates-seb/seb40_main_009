@@ -12,6 +12,7 @@ import java.util.List;
 public class MemberDto {
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Patch {
         private long memberId;
 
@@ -39,8 +40,6 @@ public class MemberDto {
         private int memberExp=0;
         private Member.MemberBadge memberBadge;
         private boolean hasRedCard;
-        private int memberChallengeTotalObjCount;
-        private int memberChallengeSuccessCount;
         private double memberChallengePercentage;
         private double memberMoney;
         private String memberImagePath;
