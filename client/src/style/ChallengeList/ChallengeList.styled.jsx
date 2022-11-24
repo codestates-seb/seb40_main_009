@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ListContainer = styled.section`
-  padding-top: 80px;
+  padding-top: 60px;
   width: 1024px;
   margin: 0 auto;
   display: flex;
@@ -22,9 +22,16 @@ export const ListContainer = styled.section`
         color: white;
       }
     }
-
-    > section {
-      display: flex;
+    > div {
+      position: relative;
+      > select {
+        position: absolute;
+        z-index: 3;
+        width: 130px;
+        height: 30px;
+        top: -30px;
+        right: 0px;
+      }
     }
   }
 `;

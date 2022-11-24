@@ -86,13 +86,15 @@ export default function ChallengeList() {
               </S.Tab>
             </Link>
           ))}
-          <select value={filterSelect} onChange={onSelect}>
-            {filterList.map(({ id, value }) => (
-              <option key={id} value={id}>
-                {value}
-              </option>
-            ))}
-          </select>
+          <div>
+            <select value={filterSelect} onChange={onSelect}>
+              {filterList.map(({ id, value }) => (
+                <option key={id} value={id}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
         </section>
         <S.Container>
           {challengeList.map(
