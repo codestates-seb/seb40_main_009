@@ -49,6 +49,9 @@ public class MemberDto {
         private Member.FollowStatus followStatus;
         private List<MemberChallengeResponseDto> participatingChallenge;
 
+        //멤버 페이지에서 다음 레벨까지 남은 퍼센트를 나타냄
+        private double memberExpObjRate;
+
         public void setHasRedCard(boolean hasRedCard) {
             this.hasRedCard = hasRedCard;
         }
@@ -90,7 +93,6 @@ public class MemberDto {
         private Long challengeId;
         private String challengeTitle;
         private int memberSuccessDay;
-        private int objectPeriod;
         private double memberChallengeSuccessRate;
         private double memberReward;
         private boolean isClosed;

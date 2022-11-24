@@ -253,6 +253,7 @@ public interface ChallengeMapper {
                 .stream()
                 .map(certImage -> ChallengeDto.ChallengeCertImageResponseDto
                         .builder()
+                        .memberId(certImage.getMemberId())
                         .imagePath(certImage.getImagePath())
                         .build()).collect(Collectors.toList());
     }

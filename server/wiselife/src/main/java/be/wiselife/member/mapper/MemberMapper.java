@@ -4,6 +4,7 @@ import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+
 public interface MemberMapper {
     List<MemberDto.listResponse> memberListResponses(List<Member> memberList);
     // 회원 정보를 수정할때
@@ -47,6 +49,18 @@ public interface MemberMapper {
 
         //참여중인 챌린지 정보뜨게 추가
         memberDetailResponse.setParticipatingChallenge(memberChallengeToMemberChallengeResponseDto(member.getMemberChallenges()));
+
+        //다음 레벨까지 남은 필요경험치를 퍼센트로 표현
+        double presentExp = member.getMemberExp();
+        System.out.println("presentExp = " + presentExp);
+        int preObjExp = Member.MemberBadge.badgeOfobjExperience(member.getMemberLevel());
+        System.out.println("preObjExp = " + preObjExp);
+        int nextObjExp = Member.MemberBadge.badgeOfobjExperience(member.getMemberLevel()+1);
+
+        double memberExpObjRate=((presentExp- preObjExp) /(nextObjExp- preObjExp))*100;
+
+        memberDetailResponse.setMemberExpObjRate(memberExpObjRate);
+
         return memberDetailResponse;
     }
 
@@ -88,7 +102,6 @@ public interface MemberMapper {
                         .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
-                        .objectPeriod(memberChallenge.getChallenge().getChallengeEndDate().getDayOfYear() - memberChallenge.getChallenge().getChallengeStartDate().getDayOfYear())
                         .memberReward(memberChallenge.getMemberReward())
                         .isClosed(memberChallenge.getChallenge().getIsClosed())
                         .build())

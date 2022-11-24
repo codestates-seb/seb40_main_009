@@ -226,6 +226,7 @@ public class ChallengeDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ChallengeCertImageResponseDto {
+        private Long memberId;
         private String imagePath;
     }
 
