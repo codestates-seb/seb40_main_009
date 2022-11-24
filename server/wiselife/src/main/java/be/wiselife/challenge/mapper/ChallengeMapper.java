@@ -242,6 +242,7 @@ public interface ChallengeMapper {
                         .challengeId(memberChallenge.getChallenge().getChallengeId())
                         .memberId(memberChallenge.getMember().getMemberId())
                         .participatingMemberName(memberChallenge.getMember().getMemberName())
+                        .memberBadge(memberChallenge.getMember().getMemberBadge())
                         .memberSuccessDay((int)memberChallenge.getMemberSuccessDay())
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
                         .build())

@@ -1,5 +1,6 @@
 package be.wiselife.challengetalk.dto;
 
+import be.wiselife.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class ChallengeTalkDto {
     public static class response{
         private String challengeTalkBody;
         private String memberName;
+        private String memberBadge;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

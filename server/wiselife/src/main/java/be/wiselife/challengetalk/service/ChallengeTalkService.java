@@ -30,6 +30,7 @@ public class ChallengeTalkService {
         challengeTalk.setChallenge(challenge);
         challengeTalk.setMemberId(loginMember.getMemberId());
         challengeTalk.setCreate_by_member(loginMember.getMemberName());
+        challengeTalk.setMemberBadge(loginMember.getMemberBadge().toString());
 
         challenge.addChallengeTalk(challengeTalk);
 
