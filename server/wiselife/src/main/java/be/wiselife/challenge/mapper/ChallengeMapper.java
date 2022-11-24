@@ -52,7 +52,7 @@ public interface ChallengeMapper {
         String[] authAvailableTimeList = challengePostDto.getChallengeAuthAvailableTime().split(" ");
         List<String> challengeAuthAvailableTime = new ArrayList<>();
         for(String authAvailableTime: authAvailableTimeList){
-            challengeAuthAvailableTime.add(authAvailableTime.replaceAll(",", ""));
+            challengeAuthAvailableTime.add(authAvailableTime);
         }
         challenge.challengeAuthAvailableTime(challengeAuthAvailableTime);
 
@@ -104,7 +104,7 @@ public interface ChallengeMapper {
         String[] authAvailableTimeList = challengePatchDto.getChallengeAuthAvailableTime().split(" ");
         List<String> challengeAuthAvailableTime = new ArrayList<>();
         for(String authAvailableTime: authAvailableTimeList){
-            challengeAuthAvailableTime.add(authAvailableTime.replaceAll(",", ""));
+            challengeAuthAvailableTime.add(authAvailableTime);
         }
         challenge.challengeAuthAvailableTime(challengeAuthAvailableTime);
 
@@ -153,7 +153,6 @@ public interface ChallengeMapper {
         simpleResponse.setChallengeTotalReward( challenge.getChallengeTotalReward() );
         simpleResponse.setChallengeViewCount( challenge.getChallengeViewCount() );
         simpleResponse.setIsClosed( challenge.getIsClosed() );
-        /*localDatetime => 초단위 제외한 String값*/
         simpleResponse.setCreated_at( challenge.getCreatedAt() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
         simpleResponse.setChallengeRepImagePath( challenge.getChallengeRepImagePath() );

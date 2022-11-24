@@ -4,6 +4,7 @@ import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.image.entity.ChallengeCertImage;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -98,10 +99,10 @@ public class ChallengeDto {
         private int challengeMaxParty;
 
         private int challengeMinParty;
-
-        private String challengeStartDate;
-
-        private String challengeEndDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate challengeStartDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate challengeEndDate;
 
         private String challengeAuthDescription;
 
@@ -118,9 +119,9 @@ public class ChallengeDto {
         private int challengeViewCount;
 
         private Boolean isClosed;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updated_at;
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
@@ -145,10 +146,10 @@ public class ChallengeDto {
         private int challengeMaxParty;
 
         private int challengeMinParty;
-
-        private String challengeStartDate;
-
-        private String challengeEndDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate challengeStartDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate challengeEndDate;
 
         private String challengeAuthDescription;
 
@@ -171,9 +172,9 @@ public class ChallengeDto {
 
         //현재 챌린지 성공률
         private int currentUserSuccessRate;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
-
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updated_at;
 
         //이미지 중 챌린지 생성자가 추가할 사진 필드
