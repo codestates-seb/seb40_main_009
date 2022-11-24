@@ -12,5 +12,5 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     Optional<Page<Challenge>> findChallengesByChallengeCategory(Challenge.ChallengeCategory challengeCategory, Pageable pageable);
     Optional<List<Challenge>> findChallengesByChallengeCategoryOrderByCreatedAtDesc(Challenge.ChallengeCategory challengeCategory);
     Optional<Page<Challenge>> findChallengesByChallengeTitleContaining(String challengeTitle, Pageable pageable);
-
+    Optional<List<Challenge>> findChallengesByIsClosed(boolean IsClosed);
 }

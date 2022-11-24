@@ -63,7 +63,6 @@ public class Challenge extends WriterAudit {
     @Column(nullable = false)
     @Setter
     private String challengeAuthDescription;
-
     @Column(nullable = false)
     @Setter
     private int challengeAuthCycle; //인증 빈도
@@ -77,6 +76,9 @@ public class Challenge extends WriterAudit {
     private int challengeViewCount;
     @Setter
     private Boolean isClosed;
+
+    @Setter
+    private double challengeSuccessRate;
 
     //이미지 중 챌린지 생성자가 추가할 사진 필드
     @Setter

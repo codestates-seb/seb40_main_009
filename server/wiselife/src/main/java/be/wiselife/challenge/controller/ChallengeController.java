@@ -244,4 +244,5 @@ public class ChallengeController {
                 new MultiResponseDto<>(challengeResponseDtoList, pageInfo), HttpStatus.OK);
     }
 
+
 }
