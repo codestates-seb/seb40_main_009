@@ -100,6 +100,7 @@ export const Review = styled.div`
   font-size: 20px;
   & > .flex {
     display: flex;
+    align-items: center;
   }
   & > .flex .marginRight {
     margin-right: auto;
