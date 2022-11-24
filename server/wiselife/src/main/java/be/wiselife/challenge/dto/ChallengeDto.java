@@ -3,6 +3,7 @@ package be.wiselife.challenge.dto;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
+import be.wiselife.image.entity.ChallengeCertImage;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -120,10 +121,6 @@ public class ChallengeDto {
 
         @Setter
         private List<String> challengeExamImagePath;
-
-        @Setter
-        private List<String> challengeCertImagePath;
-
     }
 
     @Getter
@@ -184,8 +181,7 @@ public class ChallengeDto {
         private List<String> challengeExamImagePath;
 
         @Setter
-        private List<String> challengeCertImagePath;
-
+        private List<ChallengeCertImageResponseDto> challengeCertImages;
 
         /*챌린지 댓글 리스트 */
         @Setter
@@ -219,6 +215,17 @@ public class ChallengeDto {
         @NotNull
         private String challengeCertImagePath;
     }
+    /**
+     * 인증사진을 리스트로 바꿔줄 dto
+     */
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ChallengeCertImageResponseDto {
+        private String imagePath;
+    }
+
 
     @Getter
     @AllArgsConstructor

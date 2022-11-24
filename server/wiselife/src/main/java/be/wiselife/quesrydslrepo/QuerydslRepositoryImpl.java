@@ -122,7 +122,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage))
                         .and(challengeCertImage.createDay.eq(now))
-                        .and(challengeCertImage.createdAt.second().eq(LocalDateTime.now().getSecond())))
+                        .and(challengeCertImage.createdAt.milliSecond().eq(LocalDateTime.now().getSecond())))
                 .orderBy(challengeCertImage.createdAt.desc())
                 .fetchOne();
     }

@@ -4,6 +4,7 @@ import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
+import be.wiselife.image.entity.ChallengeCertImage;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import org.mapstruct.Mapper;
@@ -13,6 +14,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -146,18 +148,6 @@ public interface ChallengeMapper {
         }
         simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
 
-        /**
-         * 프론트에 응답할때는 challengeCertImagePath를 리스트 형태로 준다.
-         */
-        if (!(challenge.getChallengeCertImagePath() == null)) {
-            String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
-            List<String> challengeCertImagePathList = new ArrayList<>();
-            int certCount = 0;
-            for (String imagePath : challengeCertImagePaths) {
-                challengeCertImagePathList.add(imagePath);
-            }
-            simpleResponse.setChallengeCertImagePath(challengeCertImagePathList);
-        }
         return simpleResponse;
     }
 
@@ -194,6 +184,9 @@ public interface ChallengeMapper {
             // 챌린지 참가자에 대한 정보를 응답할 수 있게 detailResponse 필드에 등록해야함
             detailResponse.participatingMember(memberChallengeToMemberChallengeResponseDto(challenge.getMemberChallenges()));
 
+            // 챌린지 인증사진을 리스트로 반환 해주는 필드
+            detailResponse.challengeCertImages(challengeCertImageToChallengeCertImageResponseDto(challenge.getChallengeCertImages()));
+
             /*
             * 챌린지 댓글을 챌린지 ResponseDto로 변환
             * 챌린지 자체는 memberId를 저장하기에 이를 실제 화면상 보이는 memberName으로 보여줘야 하기에
@@ -216,17 +209,6 @@ public interface ChallengeMapper {
             }
             detailResponse.challengeExamImagePath(challengeExamImagePathList);
 
-            /**
-             * 프론트에 응답할때는 challengeCertImagePath를 리스트 형태로 준다.
-             */
-            if (!(challenge.getChallengeCertImagePath() == null)) {
-                String[] challengeCertImagePaths = challenge.getChallengeCertImagePath().split(",");
-                List<String> challengeCertImagePathList = new ArrayList<>();
-                for (String imagePath : challengeCertImagePaths) {
-                    challengeCertImagePathList.add(imagePath);
-                }
-                detailResponse.challengeCertImagePath(challengeCertImagePathList);
-            }
         }
         return detailResponse.build();
     }
@@ -244,5 +226,14 @@ public interface ChallengeMapper {
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    default List<ChallengeDto.ChallengeCertImageResponseDto> challengeCertImageToChallengeCertImageResponseDto(List<ChallengeCertImage> certImages) {
+        return certImages
+                .stream()
+                .map(certImage -> ChallengeDto.ChallengeCertImageResponseDto
+                        .builder()
+                        .imagePath(certImage.getImagePath())
+                        .build()).collect(Collectors.toList());
     }
 }
