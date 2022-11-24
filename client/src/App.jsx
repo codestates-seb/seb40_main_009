@@ -28,7 +28,7 @@ function App() {
             path="/challengedetail/:id"
             element={<ChallengeDetailProgress />}
           />
-          <Route path="/search/*" element={<SearchResult />} />
+          <Route path="/Search/*" element={<SearchResult />} />
           <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />

@@ -9,29 +9,31 @@ import MemberResult from '../components/SearchResult/MemberResult';
 export default function SearchResult() {
   const challengeMatch = useMatch('/search/challenge');
   const memberMatch = useMatch('/search/member');
-  const navMatch = useMatch('/search');
+  const searchMatch = useMatch('/search');
+  const searchChallengeMatch = useMatch('/search/challenge');
+  const searchMembernavMatch = useMatch('/search/member');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (navMatch) {
-      navigate('/search/challenge');
+    if (searchMatch || searchChallengeMatch || searchMembernavMatch) {
+      navigate('/');
     }
   }, []);
 
   return (
     <S.ListContainer>
       <section>
-        <Link to={'/search/challenge'}>
+        <Link to={'/search/challenge/:id'}>
           <S.Tab isActive={challengeMatch !== null}>챌린지</S.Tab>
         </Link>
-        <Link to={'/search/member'}>
+        <Link to={'/search/member/:id'}>
           <S.Tab isActive={memberMatch !== null}>멤버</S.Tab>
         </Link>
       </section>
 
       <Routes>
-        <Route path="challenge" element={<ChallengeResult />} />
-        <Route path="member" element={<MemberResult />} />
+        <Route path="challenge/:id" element={<ChallengeResult />} />
+        <Route path="member/:id" element={<MemberResult />} />
       </Routes>
     </S.ListContainer>
   );

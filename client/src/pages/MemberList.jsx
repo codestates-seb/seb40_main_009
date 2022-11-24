@@ -100,7 +100,6 @@ export default function MemberList() {
             <React.Fragment key={index}>
               {memberList.length - 1 === index ? (
                 <Member
-                  key={memberId}
                   memberId={memberId}
                   memberName={memberName}
                   memberBadge={memberBadge}
@@ -110,7 +109,6 @@ export default function MemberList() {
                 />
               ) : (
                 <Member
-                  key={memberId}
                   memberId={memberId}
                   memberName={memberName}
                   memberBadge={memberBadge}
