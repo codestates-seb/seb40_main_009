@@ -26,16 +26,15 @@ export default function ChallengeDetailProgress() {
   const [challenge, setChallenge] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [imageTransform, setImageTransfrom] = useState('');
-  console.log('imageTransform>>', imageTransform);
 
   //url 파라미터값 받아오기
-  const id = Number(parmas.id);
+  const challengeId = Number(parmas.id);
 
   // 챌린지조회
   const getChallenge = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/challenges/${id}`, {
+      const response = await axios.get(`/challenges/${challengeId}`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
         },
@@ -45,7 +44,7 @@ export default function ChallengeDetailProgress() {
       setChallenge(challengeList);
       setLoading(false);
     } catch (error) {
-      //useeffevt 안에서 window. 쓸필요x
+      //useeffect 안에서 window. 쓸필요x
       alert(error);
       console.log('error', error);
     }
@@ -61,11 +60,30 @@ export default function ChallengeDetailProgress() {
     setModalOpen(true);
   };
 
+  //챌린지 진행률 계산
+  const today = new Date();
+  const startDate = new Date(challenge.challengeStartDate);
+  const endDate = new Date(challenge.challengeEndDate);
+
+  //챌린지 총 일수
+  const distance = endDate.getTime() - startDate.getTime();
+  const totalDay = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+  //챌린지 해온 시간
+  const gap = today.getTime() - startDate.getTime();
+  const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
+  console.log('지나온 시간>>', pastDay);
+  const progress = Math.ceil((pastDay / totalDay) * 100);
+  console.log('진행률>>>', progress);
+
+  // const certification = challenge.challengeCertImages.filter((id) => id === );
+
   //early return pattern
   if (loading) return <Loading />;
 
   return (
     <Container>
+      <div>{`조회수 ${challenge.challengeViewCount}`}</div>
       <ChallengeProgress>
         {/* 이미지 */}
         <div className="image">
@@ -84,8 +102,7 @@ export default function ChallengeDetailProgress() {
           <ChallengeDescription>
             <div className="margin_left3">챌린지 진행률:</div>
             <div>
-              {/* <ChartBar percentage={props.percentage} /> */}
-              <ChartBar />
+              <ChartBar percentage={progress} />
             </div>
           </ChallengeDescription>
 
@@ -107,6 +124,17 @@ export default function ChallengeDetailProgress() {
           <ChallengeDescription>
             <div className="margin_left">결제한 금액:</div>
             <div>{challenge.challengeFeePerPerson}원</div>
+          </ChallengeDescription>
+
+          <ChallengeDescription>
+            <div className="margin_left">도전중인 유저:</div>
+            {challenge.participatingMember.map((member) => {
+              return (
+                <div key={challenge.participatingMember.memberId}>
+                  {member.participatingMemberName}
+                </div>
+              );
+            })}
           </ChallengeDescription>
         </ChallengeWrapper>
       </ChallengeProgress>
@@ -132,8 +160,11 @@ export default function ChallengeDetailProgress() {
       <Review>
         <div className="flex">
           <div className="marginRight"> 인증 사진</div>
-          <div className="cursur" onClick={showModal}>
-            인증 사진 올리기
+          <div>
+            <div>{`오늘 인증 횟수  / ${challenge.challengeAuthCycle}`}</div>
+            <div className="cursur" onClick={showModal}>
+              인증 사진 올리기
+            </div>
           </div>
           {modalOpen && (
             <Modal
