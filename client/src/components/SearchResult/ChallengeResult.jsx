@@ -1,15 +1,15 @@
 import Challenge from '../ChallengeList/Challenge';
 import * as S from '../../style/ChallengeList/ChallengeList.styled';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-export default function ChallengeResult() {
+export default function ChallengeResult({ searchValue }) {
   const [challengeList, setChallengeList] = useState([]);
 
-  const challengeSearch = async () => {
+  const challengeSearch = useCallback(async () => {
     try {
       const response = await axios.get(
-        `/challenges/search?searchTitle=초코비&sort-by=populairy&page=1&size=10`,
+        `/challenges/search?searchTitle=${searchValue}&sort-by=populairy&page=1&size=10`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -21,13 +21,13 @@ export default function ChallengeResult() {
     } catch (error) {
       console.log('error: ', error);
     }
-  };
+  }, [searchValue]);
 
-  console.log(challengeList);
+  console.log('challenge리스트', challengeList);
 
   useEffect(() => {
     challengeSearch();
-  }, []);
+  }, [challengeSearch]);
 
   return (
     <S.Container>

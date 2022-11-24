@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import * as U from '../../style/MemberList/MemberList.styled';
 
 import Member from '../MemberList/MemberList';
 
-export default function MemberResult() {
+export default function MemberResult({ searchValue }) {
   const [memberList, setMemberList] = useState([]);
 
-  const challengeSearch = async () => {
+  const challengeSearch = useCallback(async () => {
     try {
       const response = await axios.get(
-        `/member/search/member?name=챌린&page=1&size=10`,
+        `/member/search/member?name=${searchValue}&page=1&size=10`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -23,13 +23,13 @@ export default function MemberResult() {
     } catch (error) {
       console.log('error: ', error);
     }
-  };
+  }, [searchValue]);
 
-  console.log(memberList);
+  console.log('member리스트', memberList);
 
   useEffect(() => {
     challengeSearch();
-  }, []);
+  }, [challengeSearch]);
 
   return (
     <U.Container>
