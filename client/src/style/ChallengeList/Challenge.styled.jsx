@@ -25,11 +25,13 @@ export const ContentB = styled.div`
   > span {
     margin-top: 10px;
     border-radius: 10px;
-    padding: 5px 8px 0px 8px;
+    padding: 8px 8px 0px 8px;
     display: inline-block;
     text-decoration: none;
     height: 20px;
     color: #8673ff;
+    font-size: 14px;
+    cursor: pointer;
 
     :hover {
       height: 22px;

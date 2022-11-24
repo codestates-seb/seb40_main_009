@@ -1,6 +1,6 @@
+import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
@@ -65,6 +65,7 @@ export default function ChallengeList() {
   }, [challengeFiltering]);
 
   if (isLoading) return <Loading />;
+
   return (
     <>
       <S.AddChallengeBtn onClick={moveToCreateChallenge}>

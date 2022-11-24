@@ -22,6 +22,10 @@ export const ListContainer = styled.section`
         color: white;
       }
     }
+
+    > section {
+      display: flex;
+    }
   }
 `;
 
