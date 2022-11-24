@@ -32,7 +32,7 @@ function App() {
           <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
-          <Route path="/profile/edit" element={<EditProfilePage />} />
+          <Route path="/profile/edit/:name" element={<EditProfilePage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

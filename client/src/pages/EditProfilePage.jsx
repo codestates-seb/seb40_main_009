@@ -11,20 +11,20 @@ function EditProfilePage() {
   const navigate = useNavigate();
   const [editProfileLists, setEditProfileLists] = useState(location.state.data);
   //   console.log(editProfileLists);
-  // const params = useParams();
+  const params = useParams();
   const name = editProfileLists.memberName;
   // const name = params.memberName;
-  console.log(location.state.data);
-  console.log(name);
+  // console.log(location.state.data);
+  console.log(params.name);
 
   // try catch로 하면 500이 나오는 이유는? Authorization을 못 받는듯!
   const config = {
     method: 'patch',
-    url: `member/test3`, // ${name}을 했을 떄 왜 안되는 걸까ㅜ
+    url: `member/${params.name}`, // ${name}을 했을 떄 왜 안되는 걸까ㅜ
     headers: {
       'ngrok-skip-browser-warning': 'none',
       Authorization:
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0M0BrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.A1nWc1oBvYRdhtcfWZDNZjxqSP6S2ZC2q5kguWE8HDlvxCJMgtRVG2p22_NiqMc3ZCLcUWE8N-Bo-uA9Jlga2A',
+        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.NDuVoTw2oLhpffs07n_f0LMCZKUXSjA9R694EQVzHCwAFkzlay3EyWeWYdazmPDRagLOsSOrjjT5SZrjoKGMnw',
     },
     data: editProfileLists,
   };
@@ -33,10 +33,11 @@ function EditProfilePage() {
     axios(config)
       .then((response) => {
         console.log(response);
-        navigate('/profile/edit/:name'); // name을 받아오는 방법
+        navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
       })
       .catch(function (error) {
         console.log(error);
+        alert('닉네임은 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.');
       });
   };
 
@@ -72,7 +73,7 @@ function EditProfilePage() {
     });
     console.log(editProfileLists);
   };
-  console.log(editProfileLists.memberName);
+  // console.log(editProfileLists.memberName);
   return (
     <S.EditProfileComponent>
       <h1 className="title">프로필 수정</h1>

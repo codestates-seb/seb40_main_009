@@ -45,7 +45,7 @@ function MyProfile({
           <div className="buttonLists">
             <S.ProfileEditButton>환급받기</S.ProfileEditButton>
             <Link
-              to="/profile/edit"
+              to={`/profile/edit/${memberName}`}
               state={{
                 data: profileData,
               }}
