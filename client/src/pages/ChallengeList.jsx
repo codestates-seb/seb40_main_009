@@ -10,6 +10,8 @@ import Loading from '../components/Loading/Loading';
 export default function ChallengeList() {
   const [challengeList, setChallengeList] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [filterSelect, setFilterSelect] = useState('1');
+  const [categorySelect, setCategorySelect] = useState('1');
 
   const navMatch = useMatch('/challengelist');
   const navigate = useNavigate();
@@ -25,51 +27,42 @@ export default function ChallengeList() {
     }
   }, []);
 
-  const test1 = 'bucketlist';
-  const categoryCheck = useMatch(`/challengelist/${test1}`);
-  // console.log('check', categoryCheck);
-
-  const filter = [
-    {
-      id: 1,
-      filterName: 'popularity',
-      value: '조회순 정렬',
-    },
-    {
-      id: 2,
-      filterName: 'newest',
-      value: '최신순 정렬',
-    },
-  ];
-
-  const [index, setIndex] = useState('1');
-  const onSelect = (event) => {
-    setIndex(event.target.value);
+  //카테고리 설정
+  const setCategory = (event) => {
+    const { value } = event.currentTarget;
+    setCategorySelect(value);
   };
 
-  const filterValue = filter[index - 1].filterName;
+  //필터 설정 인기순/최신순
+  const onSelect = (event) => {
+    setFilterSelect(event.target.value);
+  };
+  const filterValue = filterList[filterSelect - 1].filterName;
 
-  //데이터 가져오기
+  //카테고리 & 필터별 데이터 가져오기
   const challengeFiltering = useCallback(async () => {
     setLoading(true);
     setChallengeList([]);
     try {
-      const response = await axios.get(`/challenges/all/sort-by-popularity/1`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'none',
-        },
-      });
+      const response = await axios.get(
+        `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=1&size=10`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+          },
+        }
+      );
       const challenges = response.data.data;
       setChallengeList(challenges);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
     }
-  }, []);
+  }, [categorySelect, filterValue]);
 
   useEffect(() => {
     challengeFiltering();
-  }, []);
+  }, [challengeFiltering]);
 
   if (isLoading) return <Loading />;
   return (
@@ -81,23 +74,25 @@ export default function ChallengeList() {
       </S.AddChallengeBtn>
       <S.ListContainer>
         <section>
-          <Link to={'/challengelist/bucketlist'}>
-            <S.Tab isActive={categoryCheck}>버킷 리스트</S.Tab>
-          </Link>
-          <Link to={'/challengelist/sharedchallenge'}>
-            <S.Tab isActive={categoryCheck}>공유 챌린지</S.Tab>
-          </Link>
-          <Link to={'/challengelist/offlinechallenge'}>
-            <S.Tab isActive={categoryCheck}>오프라인 챌린지</S.Tab>
-          </Link>
-        </section>
-        <select value={index} onChange={onSelect}>
-          {filter.map(({ id, value }) => (
-            <option key={id} value={id}>
-              {value}
-            </option>
+          {categoryList.map(({ id, category, tabName }) => (
+            <Link to={`/challengelist/${category}`} key={id}>
+              <S.Tab
+                onClick={setCategory}
+                value={id}
+                isActive={id === categorySelect}
+              >
+                {tabName}
+              </S.Tab>
+            </Link>
           ))}
-        </select>
+          <select value={filterSelect} onChange={onSelect}>
+            {filterList.map(({ id, value }) => (
+              <option key={id} value={id}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </section>
         <S.Container>
           {challengeList.map(
             ({ challengeId, challengeTitle, challengeDescription }) => (
@@ -110,16 +105,38 @@ export default function ChallengeList() {
             )
           )}
         </S.Container>
-        {/* {paidChallenge ? (
-          <S.Container>
-            <Challenge />
-          </S.Container>
-        ) : (
-          <S.Container>
-            <Challenge />
-          </S.Container>
-        )} */}
       </S.ListContainer>
     </>
   );
 }
+
+const filterList = [
+  {
+    id: '1',
+    filterName: 'popularity',
+    value: '조회순 정렬',
+  },
+  {
+    id: '2',
+    filterName: 'newest',
+    value: '최신순 정렬',
+  },
+];
+
+const categoryList = [
+  {
+    id: '1',
+    category: 'bucketlist',
+    tabName: '버킷 리스트',
+  },
+  {
+    id: '2',
+    category: 'sharedchallenge',
+    tabName: '공유 챌린지',
+  },
+  {
+    id: '3',
+    category: 'offlinechallenge',
+    tabName: '오프라인 챌린지',
+  },
+];

@@ -83,14 +83,6 @@ function ChallengeAsk4({ register }) {
   //   }
   // };
 
-  // setCreateChallenge({
-  //   ...create,
-  //   challengeAuthCycle: '3',
-  //   challengeExamImagePath: 'image',
-  //   challengeRepImagePath: ('image1', 'image2'),
-  // });
-  // console.log('hh', create);
-
   if (isLoading) return <Loading />;
 
   return (
