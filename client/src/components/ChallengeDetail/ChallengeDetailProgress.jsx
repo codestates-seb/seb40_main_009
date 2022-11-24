@@ -29,7 +29,6 @@ export default function ChallengeDetailProgress() {
 
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-  // const memberName = parmas.name;
 
   // 챌린지조회
   const getChallenge = async () => {
@@ -130,7 +129,11 @@ export default function ChallengeDetailProgress() {
           <ChallengeDescription>
             <div className="margin_left">도전중인 유저:</div>
             {challenge.participatingMember.map((member) => {
-              return <div>{member.participatingMemberName}</div>;
+              return (
+                <div key={challenge.participatingMember.memberId}>
+                  {member.participatingMemberName}
+                </div>
+              );
             })}
           </ChallengeDescription>
         </ChallengeWrapper>
