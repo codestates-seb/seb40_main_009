@@ -246,12 +246,14 @@ public class ImageService {
         loginMember.setMemberChallengePercentage(memberChallengeSuccessRate/memberChallengeList.size());
         memberRepository.save(loginMember);
     }
-
+    
+    
+    //TODO: 안쓸꺼면 삭제
     public String getRepImagePath(String randomIdForImage) {
         ChallengeRepImage cri = imageRepository.findByImageTypeAndChallengeRep("CRI", randomIdForImage);
         return cri.getImagePath();
     }
-
+    //TODO: 안쓸꺼면 삭제
     public List<String> getExamImagePath(String randomIdForImage) {
         List<ChallengeExamImage> cei = imageRepository.findByImageTypeAndChallengeExam("CEI", randomIdForImage);
         List<String> urls = new ArrayList<>();
@@ -261,4 +263,11 @@ public class ImageService {
 
         return urls;
     }
+    /*
+     * s3서비스를 대행해주는 역할
+     */
+    public String getOneImagePath(MultipartFile multipartFile) throws IOException {
+        return s3UploadService.uploadJustOne(multipartFile);
+    }
+
 }

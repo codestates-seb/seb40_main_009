@@ -114,23 +114,25 @@ public class ChallengeController {
 
     /**
      * 작성자 : 유현
+     * 수정자 : 민섭
      * 인증사진 등록
      *
-     * @param cert    인증사진이 속한 Challenge 아이디와 인증사진 경로
+     * @param challengeId 기존 Dto 삭제후, id를 받아오는걸로 변경
+     * @param multipartFile 인증할 사진 받아오기
      * @param request 로그인한 사람의 이메일 정보를 가져오기위한 인자값
-     *                               TODO :
-     *                                챌린지 참여인원인지 판단하는 로직 추가
-     *                                응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
+     *                                              TODO :
+     *                                               챌린지 참여인원인지 판단하는 로직 추가
+     *                                               응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
-    @PatchMapping("/cert")
-    public ResponseEntity patchMemberCertification(@Valid @RequestBody ChallengeDto.Cert cert,
-                                                   HttpServletRequest request) {
-        Challenge certImageInfo = challengeMapper.certDtoToChallenge(cert);
+    @PatchMapping("/cert/{challenge-id}")
+    public ResponseEntity patchMemberCertification(@Valid @PathVariable("challenge-id") @Positive Long challengeId,
+                                                   @RequestPart(value = "cert") MultipartFile multipartFile,
+                                                   HttpServletRequest request) throws IOException {
 
-        Challenge challenge = challengeService.updateCertImage(certImageInfo, memberService.getLoginMember(request));
+        Challenge challenge = challengeService.updateCertImage(challengeId, memberService.getLoginMember(request), multipartFile);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge,challengeTalkMapper,memberService))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService))
                 , HttpStatus.CREATED);
     }
 

@@ -202,17 +202,7 @@ public class ChallengeDto {
         private int memberSuccessDay;
         private double memberChallengeSuccessRate;
     }
-    /**
-     * 인증 사진 등록 정보를 받아줄 DTO
-     */
-    @Getter
-    public static class Cert {
-        @NotNull
-        private Long challengeId;
 
-        @NotNull
-        private String challengeCertImagePath;
-    }
     /**
      * 인증사진을 리스트로 바꿔줄 dto
      */
