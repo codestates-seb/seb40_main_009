@@ -47,8 +47,9 @@ public interface MemberMapper {
         memberDetailResponse.setFollowers(followersToFollowResponseDto(member.getFollows()));
         memberDetailResponse.setFollowStatus(member.getFollowStatus());
 
-        //참여중인 챌린지 정보뜨게 추가
-        memberDetailResponse.setParticipatingChallenge(memberChallengeToMemberChallengeResponseDto(member.getMemberChallenges()));
+        //진행중인 챌린지 정보뜨게 추가
+        memberDetailResponse.setParticipatingChallenges(proceedingChallengeToMemberChallengeResponseDto(member.getMemberChallenges()));
+        memberDetailResponse.setEndChallenges(endChallengeToMemberChallengeResponseDto(member.getMemberChallenges()));
 
         //다음 레벨까지 남은 필요경험치를 퍼센트로 표현
         double presentExp = member.getMemberExp();
@@ -91,10 +92,13 @@ public interface MemberMapper {
                 .collect(Collectors.toList());
     }
 
-    default List<MemberDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+    //진행중인 챌린지 리스트
+    default List<MemberDto.MemberChallengeResponseDto> proceedingChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
 
         return memberChallenges
                 .stream()
+                .sorted(Comparator.comparing(MemberChallenge::getMemberChallengeId).reversed())
+                .filter(memberChallenge -> memberChallenge.getChallenge().getIsClosed()==false)
                 .map(memberChallenge -> MemberDto.MemberChallengeResponseDto
                         .builder()
                         .memberChallengeId(memberChallenge.getMemberChallengeId())
@@ -107,5 +111,25 @@ public interface MemberMapper {
                         .build())
                 .collect(Collectors.toList());
     }
+    //참여했던 챌린지 리스트
+    default List<MemberDto.MemberChallengeResponseDto> endChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+
+        return memberChallenges
+                .stream()
+                .sorted(Comparator.comparing(MemberChallenge::getMemberChallengeId).reversed())
+                .filter(memberChallenge -> memberChallenge.getChallenge().getIsClosed()==true)
+                .map(memberChallenge -> MemberDto.MemberChallengeResponseDto
+                        .builder()
+                        .memberChallengeId(memberChallenge.getMemberChallengeId())
+                        .challengeId(memberChallenge.getChallenge().getChallengeId())
+                        .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
+                        .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
+                        .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
+                        .memberReward(memberChallenge.getMemberReward())
+                        .isClosed(memberChallenge.getChallenge().getIsClosed())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }
 

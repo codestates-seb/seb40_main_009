@@ -47,7 +47,8 @@ public class MemberDto {
         private int followerCount;
         private List<MemberFollowerResponseDto> followers;
         private Member.FollowStatus followStatus;
-        private List<MemberChallengeResponseDto> participatingChallenge;
+        private List<MemberChallengeResponseDto> participatingChallenges;
+        private List<MemberChallengeResponseDto> endChallenges;
 
         //멤버 페이지에서 다음 레벨까지 남은 퍼센트를 나타냄
         private double memberExpObjRate;
