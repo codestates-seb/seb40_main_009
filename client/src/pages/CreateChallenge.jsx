@@ -10,7 +10,7 @@ import 'react-date-range/dist/theme/default.css';
 import CreateChallenge from '../components/CreateChallenge/CreateChallenge';
 
 const AddContainer = styled.section`
-  padding-top: 80px;
+  padding-top: 100px;
   width: 1024px;
   margin: 0 auto;
   display: flex;
@@ -20,7 +20,6 @@ const AddContainer = styled.section`
 `;
 
 const Container = styled.section`
-  height: 850px;
   padding: 92px 30px 80px 30px;
   gap: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -48,19 +47,19 @@ export default function CreateChallengePage() {
   return (
     <AddContainer>
       <Container>
-        {
+        {/* {
           <NextButton
             style={number < 2 && { visibility: 'hidden' }}
             onClick={() => setNumber(number - 1)}
           >
             {'<'}
           </NextButton>
-        }
-        {/* {number < 2 ? (
+        } */}
+        {number < 2 ? (
           <NextButton style={{ visibility: 'hidden' }} />
         ) : (
           <NextButton onClick={() => setNumber(number - 1)}>{'<'}</NextButton>
-        )} */}
+        )}
 
         <CreateChallenge />
 

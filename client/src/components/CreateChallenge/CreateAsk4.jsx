@@ -6,27 +6,30 @@ import styled from 'styled-components';
 import { createChallenge } from '../../atoms/atoms';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 import exampleImg from '../../image/example.png';
+import axios from 'axios';
+import Loading from '../Loading/Loading';
 
 const TimeContainer = styled.section`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
 `;
 
-function ChallengeAsk4() {
+function ChallengeAsk4({ register }) {
   const [create, setCreateChallenge] = useRecoilState(createChallenge);
   const [imageTransform, setImageTransfrom] = useState(exampleImg);
   const [quantity, setQuantity] = useState('-1');
   const [isThree, setIsThree] = useState(false);
   const [checkCounts, setCheckCounts] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
-  const { register, handleSubmit } = useForm();
-  const onValid = (data) => {
-    setCreateChallenge({ ...create, ...data });
-    const quantity = Number(data.quantity);
+  const onValid = async (data) => {
+    const quantity = Number(data.challengeAuthCycle);
     if (quantity !== data.time.length) {
       // 네이밍 바꾸기 if가 alert와 같은 의미를 갖도록
       alert('선택한 인증 횟수와 인증 시간이 맞지 않습니다.');
     }
+    setCreateChallenge({ ...create, ...data });
+    console.log('안', create);
   };
 
   const addTime = (e) => {
@@ -60,7 +63,27 @@ function ChallengeAsk4() {
     setQuantity(e.target.value);
   };
 
-  useEffect(() => console.log(`현재 상태는` + create), [create]);
+  // const postData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     await axios.post(
+  //       `/challenges`,
+  //       { data: create },
+  //       {
+  //         headers: {
+  //           'ngrok-skip-browser-warning': 'none',
+  //           Authorization:
+  //             'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NkBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.i4rAIdLBMReygLX0hfFZzySqQAnnc5fG-j6AhBQhW5KW-qaHk9PPuuzCrhC3rR0xamUVlHeR0-QgLElR1WLjMQ',
+  //         },
+  //       }
+  //     );
+  //     await setLoading(false);
+  //   } catch (error) {
+  //     console.log('error : ', error);
+  //   }
+  // };
+
+  if (isLoading) return <Loading />;
 
   return (
     <S.CreateAsk>
@@ -69,106 +92,105 @@ function ChallengeAsk4() {
           <S.ImgExample src={imageTransform} alt="preview.img" />
         )}
       </section>
-      <form onSubmit={handleSubmit(onValid)}>
-        <div className="question">
-          <h3>인증방법</h3>
-          <span>최대 3장까지 설정 가능합니다.</span>
-          <input
-            type={'file'}
-            accept="image/*"
-            {...register('image', { required: 'Please Upload Image' })}
-            onChange={(e) => {
-              onChange(e.target.files[0]);
-            }}
-            multiple
-          />
-        </div>
-        <div className="question">
-          <h3>인증 방법을 설명해주세요</h3>
-          <input
-            {...register('validExplain', {
-              required: 'Please Write validExplain',
-            })}
-            placeholder="인증 방법 설명하기"
-          />
-        </div>
-        <div className="question">
-          <h3>인증 빈도</h3>
-          {!isThree ? (
-            <>
-              <label>
-                <input
-                  type={'radio'}
-                  {...register('quantity', {
-                    required: 'Please Choice Quantity',
-                  })}
-                  onClick={isThreeBtn}
-                  value={'1'}
-                />
-                하루 한번
-              </label>
-              <label>
-                <input
-                  type={'radio'}
-                  {...register('quantity', {
-                    required: 'Please Choice Quantity',
-                  })}
-                  onClick={isThreeBtn}
-                  value={'2'}
-                ></input>
-                하루 두번
-              </label>
-              <label>
-                <input
-                  type={'radio'}
-                  {...register('quantity', {
-                    required: 'Please Choice Quantity',
-                  })}
-                  onClick={isThreeBtn}
-                  value={'3'}
-                ></input>
-                세번 이상
-              </label>
-            </>
-          ) : null}
-
-          {isThree ? (
-            <>
-              <span>원하는 횟수를 입력하세요</span>
+      <div className="question">
+        <h3>인증방법</h3>
+        <span>최대 3장까지 설정 가능합니다.</span>
+        <input
+          type={'file'}
+          accept="image/*"
+          {...register('challengeExamImagePath', {
+            required: 'Please Upload Image',
+          })}
+          onChange={(e) => {
+            onChange(e.target.files[0]);
+          }}
+          multiple
+        />
+      </div>
+      <div className="question">
+        <h3>인증 방법을 설명해주세요</h3>
+        <input
+          {...register('challengeAuthDescription', {
+            required: 'Please Write validExplain',
+          })}
+          placeholder="인증 방법 설명하기"
+        />
+      </div>
+      <div className="question">
+        <h3>인증 빈도</h3>
+        {!isThree ? (
+          <>
+            <label>
               <input
-                type={'number'}
-                {...register('quantity', {
+                type={'radio'}
+                {...register('challengeAuthCycle', {
                   required: 'Please Choice Quantity',
-                  validate: (value) => value < 25,
                 })}
-                placeholder="그럼 몇번?"
-                onChange={checkQuantity}
+                onClick={isThreeBtn}
+                value={'1'}
               />
-            </>
-          ) : null}
-        </div>
-        <div className="question">
-          <h3>인증 시간</h3>
-          <span>선택한 시간부터 최대 10분까지 인증 가능합니다.</span>
+              하루 한번
+            </label>
+            <label>
+              <input
+                type={'radio'}
+                {...register('challengeAuthCycle', {
+                  required: 'Please Choice Quantity',
+                })}
+                onClick={isThreeBtn}
+                value={'2'}
+              ></input>
+              하루 두번
+            </label>
+            <label>
+              <input
+                type={'radio'}
+                {...register('challengeAuthCycle', {
+                  required: 'Please Choice Quantity',
+                })}
+                onClick={isThreeBtn}
+                value={'3'}
+              ></input>
+              세번 이상
+            </label>
+          </>
+        ) : null}
 
-          <TimeContainer>
-            {timeTable.map((el) => (
-              <label key={el}>
-                <input
-                  onClick={(e) => addTime(e)}
-                  type={'checkbox'}
-                  {...register('time', {
-                    required: 'Please Choice Validate Time',
-                  })}
-                  value={el}
-                />
-                {el}
-              </label>
-            ))}
-          </TimeContainer>
-        </div>
-        <button className="submitBtn">저장</button>
-      </form>
+        {isThree ? (
+          <>
+            <span>원하는 횟수를 입력하세요</span>
+            <input
+              type={'number'}
+              {...register('challengeAuthCycle', {
+                required: 'Please Choice Quantity',
+                validate: (value) => value < 25,
+              })}
+              placeholder="그럼 몇번?"
+              onChange={checkQuantity}
+            />
+          </>
+        ) : null}
+      </div>
+      <div className="question">
+        <h3>인증 시간</h3>
+        <span>선택한 시간부터 최대 10분까지 인증 가능합니다.</span>
+
+        <TimeContainer>
+          {timeTable.map((el) => (
+            <label key={el}>
+              <input
+                onClick={(e) => addTime(e)}
+                type={'checkbox'}
+                {...register('time', {
+                  required: 'Please Choice Validate Time',
+                })}
+                value={el}
+              />
+              {el}
+            </label>
+          ))}
+        </TimeContainer>
+      </div>
     </S.CreateAsk>
   );
 }

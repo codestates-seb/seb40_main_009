@@ -1,13 +1,12 @@
-// import styled from 'styled-components';
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
-function ChartBar(props) {
+function ChartBar({ percentage }) {
   return (
-    <S.ChartBarComponent percentage={props.percentage}>
+    <S.ChartBarComponent percentage={percentage}>
       <div className="level-bar">
         Lv-1
         <div className="progress-bar">
-          <div className="progress">{props.percentage}%</div>
+          <div className="progress">{percentage}%</div>
         </div>
       </div>
     </S.ChartBarComponent>
