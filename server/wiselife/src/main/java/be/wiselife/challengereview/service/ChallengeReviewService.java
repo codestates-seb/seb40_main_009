@@ -9,8 +9,6 @@ import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
-import be.wiselife.memberchallenge.entity.MemberChallenge;
-import be.wiselife.memberchallenge.entity.QMemberChallenge;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

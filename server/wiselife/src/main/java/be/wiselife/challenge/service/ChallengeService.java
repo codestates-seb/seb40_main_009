@@ -14,8 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,27 +44,40 @@ public class ChallengeService {
 
     /**
      * 챌린지 객체 생성 및 저장
-     * @param challenge 생성 및 저장하고자 하는 챌린지 객체
-     * @param loginMember 생성 시도하는 멤버 정보(추후 챌린지 수정, 삭제할 때 해당 정보를 확인한다)
+     *
+     * @param challenge    생성 및 저장하고자 하는 챌린지 객체
+     * @param loginMember  생성 시도하는 멤버 정보(추후 챌린지 수정, 삭제할 때 해당 정보를 확인한다)
+     * @param repImage
+     * @param exampleImage
      * @return
      */
-    public Challenge createChallenge(Challenge challenge, Member loginMember){
+    public Challenge createChallenge(Challenge challenge, Member loginMember, MultipartFile repImage, List<MultipartFile> exampleImage) throws IOException {
         challenge.setCreate_by_member(loginMember.getMemberName());
         challenge.setAuthorizedMemberId(loginMember.getMemberId());
 
-        imageService.patchChallengeRepImage(challenge);
-        imageService.postChallengeExamImage(challenge);
-        challenge=participateChallenge(challenge, loginMember);
+        String representImagePath = imageService.patchChallengeRepImage(challenge, repImage);
+        List<String> ExamImagesPath = imageService.postChallengeExamImage(challenge, exampleImage);
+
+        String getall = listToString(ExamImagesPath);
+
+        challenge.setChallengeRepImagePath(representImagePath);
+        challenge.setChallengeExamImagePath(getall);
+
+        challenge = participateChallenge(challenge, loginMember);
 
         return saveChallenge(challenge);
     }
+
+
 
     /**
      * 챌린지 수정 기능
      * TODO: 1) 시작 전 일정, 돈 수정 불가
      *       2) 시작 후 아무것도 수정 불가
      * */
-    public Challenge updateChallenge(Challenge changedChallenge, Member loginMember, Long challengeId){
+    public Challenge updateChallenge(Challenge changedChallenge, Member loginMember,
+                                     Long challengeId, List<MultipartFile> exampleImage, MultipartFile repImage) throws IOException {
+
         Challenge existingChallenge = findChallengeById(challengeId);
 
         //유저 권한 확인
@@ -103,7 +117,7 @@ public class ChallengeService {
 
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
-            imageService.patchChallengeRepImage(changedChallenge);
+            imageService.patchChallengeRepImage(changedChallenge, repImage);
             existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
         }
 
@@ -113,7 +127,7 @@ public class ChallengeService {
          */
         if (!Optional.ofNullable(changedChallenge.getChallengeExamImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
-            String challengeExamImagePaths=imageService.patchChallengeExamImage(changedChallenge);
+            String challengeExamImagePaths= imageService.patchChallengeExamImage(changedChallenge, exampleImage);
             existingChallenge.setChallengeExamImagePath(challengeExamImagePaths);
         }
 
@@ -128,7 +142,7 @@ public class ChallengeService {
      * @param challenge 현재 참여하고자 하는 챌린지
      * @return challenge 참가했을때 잘 참여됐는지 즉시 확인가능
      */
-    public Challenge participateChallenge(Challenge challenge,Member loginMember) {
+    public Challenge participateChallenge(Challenge challenge, Member loginMember) {
         return memberChallengeService.patchMemberAndChallenge(challenge,loginMember);
     }
 
@@ -342,5 +356,18 @@ public class ChallengeService {
         }
 
         return challengeCategory;
+    }
+
+    /**
+     * list를 String 화해주는 작업
+     */
+    private static String listToString(List<String> ExamImagesPath) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < ExamImagesPath.size(); i++) {
+            builder.append(ExamImagesPath.get(i)).append(",");
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        String getall = builder.toString();
+        return getall;
     }
 }

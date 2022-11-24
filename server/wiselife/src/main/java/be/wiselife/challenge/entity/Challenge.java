@@ -85,6 +85,7 @@ public class Challenge extends WriterAudit {
     private String challengeRepImagePath;
 
     @Setter
+    @Column(columnDefinition = "VARCHAR(1000)")
     private String challengeExamImagePath;
 
     //이미지 중 챌린지 참여자가 추가할 사진 필드
