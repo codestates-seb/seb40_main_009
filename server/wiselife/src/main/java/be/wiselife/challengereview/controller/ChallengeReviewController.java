@@ -40,7 +40,7 @@ public class ChallengeReviewController {
      * @param request
      * @return
      */
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity postChallengeReview(@Valid @RequestPart(value = "post") ChallengeReviewDto.Post challengeReviewPostDto,
                                               @RequestPart(value = "review") MultipartFile multipartFile,
                                               HttpServletRequest request) throws IOException {
@@ -62,7 +62,7 @@ public class ChallengeReviewController {
      * @param request
      * @return
      */
-    @PatchMapping("/{challenge-review-id}")
+    @PatchMapping(value = "/{challenge-review-id}",consumes = {"multipart/form-data"})
     public ResponseEntity patchChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
                                                @Valid @RequestPart(value = "patch") ChallengeReviewDto.Patch challengeReviewPatchDto,
                                                @RequestPart(value = "review", required = false) MultipartFile multipartFile,

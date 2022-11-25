@@ -92,6 +92,7 @@ public class MemberDto {
         private Long challengeId;
         private String challengeTitle;
         private int memberSuccessDay;
+        private long objDay;
         private double memberChallengeSuccessRate;
         private double memberReward;
         private boolean isClosed;

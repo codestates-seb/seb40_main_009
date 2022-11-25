@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -56,8 +57,14 @@ public interface MemberMapper {
         int preObjExp = Member.MemberBadge.badgeOfobjExperience(member.getMemberLevel());
         System.out.println("preObjExp = " + preObjExp);
         int nextObjExp = Member.MemberBadge.badgeOfobjExperience(member.getMemberLevel()+1);
+        double memberExpObjRate=0;
+        if (member.getMemberLevel() > 8) {
+            memberExpObjRate = 100.0;
+        } else {
+            memberExpObjRate=((presentExp- preObjExp) /(nextObjExp- preObjExp))*100;
+        }
 
-        double memberExpObjRate=((presentExp- preObjExp) /(nextObjExp- preObjExp))*100;
+
 
         memberDetailResponse.setMemberExpObjRate(memberExpObjRate);
 
@@ -104,6 +111,7 @@ public interface MemberMapper {
                         .challengeId(memberChallenge.getChallenge().getChallengeId())
                         .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
+                        .objDay(ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(), memberChallenge.getChallenge().getChallengeEndDate()))
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
                         .memberReward(memberChallenge.getMemberReward())
                         .isClosed(memberChallenge.getChallenge().getIsClosed())
@@ -123,6 +131,7 @@ public interface MemberMapper {
                         .challengeId(memberChallenge.getChallenge().getChallengeId())
                         .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
+                        .objDay(ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(), memberChallenge.getChallenge().getChallengeEndDate()))
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
                         .memberReward(memberChallenge.getMemberReward())
                         .isClosed(memberChallenge.getChallenge().getIsClosed())
