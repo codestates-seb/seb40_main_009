@@ -1,6 +1,9 @@
 package be.wiselife.challenge.mapper;
 
 import be.wiselife.challenge.dto.ChallengeDto;
+import be.wiselife.challengereview.dto.ChallengeReviewDto;
+import be.wiselife.challengereview.entity.ChallengeReview;
+import be.wiselife.challengereview.mapper.ChallengeReviewMapper;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
@@ -21,7 +24,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
 
-    List<ChallengeDto.SimpleResponse> challengeListToSimpleResponseList(List<Challenge> challengeList);
+
     List<ChallengeDto.ChallengeTitleResponse> challengeListToChallengeTitleResponseList(List<Challenge> challengeList);
     /**
      * 챌린지 생성 mapping
@@ -47,13 +50,10 @@ public interface ChallengeMapper {
         challenge.challengeAuthCycle( challengePostDto.getChallengeAuthCycle() );
 
         /*챌린지 인증 시간 추가*/
-        String[] authAvailableTimeList = challengePostDto.getChallengeAuthAvailableTime().split(" ");
-        List<String> challengeAuthAvailableTime = new ArrayList<>();
-        for(String authAvailableTime: authAvailableTimeList){
-            challengeAuthAvailableTime.add(authAvailableTime);
+        List<String> list = challengePostDto.getChallengeAuthAvailableTime();
+        if ( list != null ) {
+            challenge.challengeAuthAvailableTime( new ArrayList<String>( list ) );
         }
-        challenge.challengeAuthAvailableTime(challengeAuthAvailableTime);
-
 
         challenge.challengeFeePerPerson( challengePostDto.getChallengeFeePerPerson() );
 
@@ -99,12 +99,10 @@ public interface ChallengeMapper {
         challenge.challengeFeePerPerson( challengePatchDto.getChallengeFeePerPerson() );
 
         /*챌린지 인증 시간 추가*/
-        String[] authAvailableTimeList = challengePatchDto.getChallengeAuthAvailableTime().split(" ");
-        List<String> challengeAuthAvailableTime = new ArrayList<>();
-        for(String authAvailableTime: authAvailableTimeList){
-            challengeAuthAvailableTime.add(authAvailableTime);
+        List<String> list = challengePatchDto.getChallengeAuthAvailableTime();
+        if ( list != null ) {
+            challenge.challengeAuthAvailableTime( new ArrayList<String>( list ) );
         }
-        challenge.challengeAuthAvailableTime(challengeAuthAvailableTime);
 
         /*챌린지 카테고리를 숫자로 받아 enum으로 변환하여 entity에 저장*/
         switch (challengePatchDto.getChallengeCategoryId()){
@@ -127,7 +125,7 @@ public interface ChallengeMapper {
     }
 
 
-    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge) {
+    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge, ChallengeReviewMapper challengeReviewMapper) {
         if ( challenge == null) {
             return null;
         }
@@ -169,7 +167,7 @@ public interface ChallengeMapper {
     /**
      * 챌린지 => 챌린지 상세 페이지 조회 detail ResponseDto
      */
-    default ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge, ChallengeTalkMapper challengeTalkMapper, MemberService memberService) {
+    default ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge, ChallengeTalkMapper challengeTalkMapper, MemberService memberService, ChallengeReviewMapper challengeReviewMapper) {
         if ( challenge == null && challengeTalkMapper == null ) {
             return null;
         }
@@ -216,6 +214,14 @@ public interface ChallengeMapper {
                 detailResponse.challengeTalks(challengeTalkResponseDtoList);
             }
 
+            if(!challenge.getChallengeReviewList().isEmpty()){
+                List<ChallengeReviewDto.Response> challengeReviewResponseDtoList = new ArrayList<>();
+                for(ChallengeReview challengeReview: challenge.getChallengeReviewList()){
+                    challengeReviewResponseDtoList.add(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview));
+                }
+                detailResponse.challengeReviews(challengeReviewResponseDtoList);
+            }
+
 
         }
         return detailResponse.build();
@@ -245,5 +251,15 @@ public interface ChallengeMapper {
                         .memberId(certImage.getMemberId())
                         .imagePath(certImage.getImagePath())
                         .build()).collect(Collectors.toList());
+    }
+
+    default List<ChallengeDto.SimpleResponse> challengeListToSimpleResponseDtoList(List<Challenge> challengeList, ChallengeReviewMapper challengeReviewMapper){
+        List<ChallengeDto.SimpleResponse> simpleResponseList = new ArrayList<>();
+
+        for(Challenge challenge: challengeList){
+            simpleResponseList.add(challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper));
+        }
+
+        return simpleResponseList;
     }
 }

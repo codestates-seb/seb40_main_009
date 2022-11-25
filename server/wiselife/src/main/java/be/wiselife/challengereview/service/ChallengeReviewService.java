@@ -13,6 +13,7 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,7 +94,7 @@ public class ChallengeReviewService {
     }
 
     /**
-     * 챌린지 삭제
+     * 챌린지 리뷰 삭제
      * @param challengeReviewId 삭제하려는 리뷰 id
      * @param loginMember 삭제 시도하는 멤버
      */
@@ -102,6 +103,18 @@ public class ChallengeReviewService {
         checkMemberAuthorization(challengeReview, loginMember);
 
         challengeReviewRepository.delete(challengeReview);
+    }
+
+    /**
+     * 해당 챌린지에 속한 리뷰 전체 조회
+     * @param challengeId 조회하고자 하는 챌린지 id
+     * @return
+     */
+    public List<ChallengeReview> getChallengeReviewsInChallenge(Long challengeId){
+        List<ChallengeReview> challengeReviewList = challengeReviewRepository.findChallengeReviewsByChallenge_ChallengeId(challengeId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND));
+
+        return challengeReviewList;
     }
 
     /**

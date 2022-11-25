@@ -1,6 +1,8 @@
 package be.wiselife.challenge.dto;
 
 import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challengereview.dto.ChallengeReviewDto;
+import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.image.entity.ChallengeCertImage;
@@ -41,7 +43,7 @@ public class ChallengeDto {
         @NotNull
         private int challengeAuthCycle;
         @NotNull
-        private String challengeAuthAvailableTime;
+        private List<String> challengeAuthAvailableTime;
         @NotNull
         private int challengeFeePerPerson; //인당 참여금액
     }
@@ -67,7 +69,7 @@ public class ChallengeDto {
 
         private int challengeAuthCycle;
 
-        private String challengeAuthAvailableTime;
+        private List<String> challengeAuthAvailableTime;
 
         private int challengeFeePerPerson; //인당 참여금액
 
@@ -123,6 +125,8 @@ public class ChallengeDto {
         private String challengeRepImagePath;
 
         private List<String> challengeExamImagePath;
+
+//        private List<ChallengeReviewDto.Response> challengeReviews;
     }
 
     @Getter
@@ -185,6 +189,8 @@ public class ChallengeDto {
 
         //챌린지 댓글 리스트
         private List<ChallengeTalkDto.response> challengeTalks;
+
+        private List<ChallengeReviewDto.Response> challengeReviews;
 
     }
 
