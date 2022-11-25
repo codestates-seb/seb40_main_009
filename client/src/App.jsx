@@ -41,7 +41,7 @@ function App() {
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
-          <Route path="/kakaologin" element={<KakaoLogin />} />
+          <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
         </Routes>
         <Footer />
       </BrowserRouter>

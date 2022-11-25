@@ -26,7 +26,7 @@ export default function Header() {
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
-  console.log(KAKAO_AUTH_URL);
+  // console.log(KAKAO_AUTH_URL);
 
   // 메인페이지로 이동
   const NavigateMainPage = () => {
