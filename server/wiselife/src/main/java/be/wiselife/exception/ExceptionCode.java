@@ -52,7 +52,8 @@ public enum ExceptionCode {
     //권한이 없는 자의 예외 =============시작
 
     //이미지 업로드 관련 =============시작
-    FILEUPLOAD_FAILED(404, "Failed uploading Image");
+    FILEUPLOAD_FAILED(404, "Failed uploading Image"),
+    NEED_IMAGE(404, "Need Image to get permission" );
     @Getter
     private int code;
     @Getter

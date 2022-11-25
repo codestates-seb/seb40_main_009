@@ -11,10 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/challenge-reviews")
@@ -39,11 +41,13 @@ public class ChallengeReviewController {
      * @return
      */
     @PostMapping
-    public ResponseEntity postChallengeReview(@Valid @RequestBody ChallengeReviewDto.Post challengeReviewPostDto,
-                                              HttpServletRequest request) {
+    public ResponseEntity postChallengeReview(@Valid @RequestPart(value = "post") ChallengeReviewDto.Post challengeReviewPostDto,
+                                              @RequestPart(value = "review") MultipartFile multipartFile,
+                                              HttpServletRequest request) throws IOException {
 
         ChallengeReview challengeReview = challengeReviewMapper.challengeReviewPostDtoToChallengeReview(challengeReviewPostDto);
-        challengeReview = challengeReviewService.createChallengeReview(challengeReview, memberService.getLoginMember(request), challengeService.getChallengeById(challengeReviewPostDto.getChallengeId()) );
+        challengeReview = challengeReviewService.createChallengeReview(challengeReview, memberService.getLoginMember(request),
+                            challengeService.getChallengeById(challengeReviewPostDto.getChallengeId()),multipartFile );
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview)),
@@ -60,13 +64,14 @@ public class ChallengeReviewController {
      */
     @PatchMapping("/{challenge-review-id}")
     public ResponseEntity patchChallengeReview(@PathVariable("challenge-review-id") @Positive Long challengeReviewId,
-                                               @Valid @RequestBody ChallengeReviewDto.Patch challengeReviewPatchDto,
+                                               @Valid @RequestPart(value = "patch") ChallengeReviewDto.Patch challengeReviewPatchDto,
+                                               @RequestPart(value = "review", required = false) MultipartFile multipartFile,
                                                HttpServletRequest request) {
 
         challengeReviewPatchDto.setChallengeReviewId(challengeReviewId);
         ChallengeReview changedChallengeReview = challengeReviewMapper.challengeReviewPatchDtoToChallengeReview(challengeReviewPatchDto);
 
-        ChallengeReview challengeReview = challengeReviewService.updateChallengeReview(changedChallengeReview, memberService.getLoginMember(request));
+        ChallengeReview challengeReview = challengeReviewService.updateChallengeReview(changedChallengeReview, memberService.getLoginMember(request), multipartFile);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview)),

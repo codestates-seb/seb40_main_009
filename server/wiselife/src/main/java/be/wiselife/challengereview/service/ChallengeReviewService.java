@@ -12,7 +12,8 @@ import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class ChallengeReviewService {
      * 챌린지 후기 생성
      * TODO: MemberChallnge 테이블 만들어 지면 후기 작성하려는 사용자가 실제 참가했는지 확인하는 로직
      */
-    public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge) {
+    public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge, MultipartFile image) throws IOException {
         //해당 챌린지에 참여한 유저인지 검증
         memberChallengeRepository.findMemberChallengeByChallengeChallengeIdAndMemberMemberId(challenge.getChallengeId(), loginMember.getMemberId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_PARTICIPATING_THIS_CHALLENGE));
@@ -51,21 +52,19 @@ public class ChallengeReviewService {
         challengeReview.setChallenge(challenge);
         challengeReview.setMember(loginMember);
         challengeReview.setCreate_by_member(loginMember.getMemberName());
-
         challenge.addChallengeReview(challengeReview);
         /**
          * 작성자 : 유현
          * 리뷰 이미지 등록시 사용하는 로직
          */
-        if (!Optional.ofNullable(challengeReview.getChallengeReviewImagePath()).isEmpty()) {
-            imageService.patchReviewImage(challengeReview);
-            challengeReview.setChallengeReviewImagePath(challengeReview.getChallengeReviewImagePath());
-        }
+        String imageUrl = imageService.patchReviewImage(challengeReview, image);
+        challengeReview.setChallengeReviewImagePath(imageUrl);
+
 
         return saveChallengeReview(challengeReview);
     }
 
-    public ChallengeReview updateChallengeReview(ChallengeReview changedChallengeReview, Member loginMember) {
+    public ChallengeReview updateChallengeReview(ChallengeReview changedChallengeReview, Member loginMember, MultipartFile multipartFile)  {
 
         ChallengeReview savedChallengeReview = getChallengeReview(changedChallengeReview.getChallengeReviewId());
 
@@ -86,10 +85,10 @@ public class ChallengeReviewService {
          * 작성자 : 유현
          * 리뷰 이미지 등록시 사용하는 로직
          */
-        if (!Optional.ofNullable(changedChallengeReview.getChallengeReviewImagePath()).isEmpty()) {
-            savedChallengeReview.setChallengeReviewImagePath(changedChallengeReview.getChallengeReviewImagePath());
-            imageService.patchReviewImage(savedChallengeReview);
-        }
+        String ImagePath = imageService.patchReviewImage(savedChallengeReview, multipartFile);
+        savedChallengeReview.setChallengeReviewImagePath(ImagePath);
+
+
         return saveChallengeReview(savedChallengeReview);
     }
 
