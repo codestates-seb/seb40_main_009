@@ -18,6 +18,7 @@ import Loading from '../Loading/Loading';
 import ChartBar from '../ProfileList/ChartBar';
 import DdayFormatter from './DdayFormatter';
 import Modal from './Modal';
+import ImageModal from './ImageModal';
 import smile from '../../image/smile.jpg';
 
 export default function ChallengeDetailProgress() {
@@ -25,6 +26,7 @@ export default function ChallengeDetailProgress() {
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageTransform, setImageTransfrom] = useState('');
 
   //url 파라미터값 받아오기
@@ -55,9 +57,14 @@ export default function ChallengeDetailProgress() {
     getChallenge();
   }, []);
 
-  //모달창 띄우기
-  const showModal = () => {
+  //인증하기 모달창 띄우기
+  const showCertificationModal = () => {
     setModalOpen(true);
+  };
+
+  //인증사진 더보기 모달창 띄우기
+  const showImageModal = () => {
+    setImageModalOpen(true);
   };
 
   //챌린지 진행률 계산
@@ -80,6 +87,19 @@ export default function ChallengeDetailProgress() {
 
   //early return pattern
   if (loading) return <Loading />;
+
+  const imageTest = [
+    '인증 예시1',
+    '인증 예시2',
+    '인증 예시3',
+    '인증 예시4',
+    '인증 예시5',
+    '인증 예시6',
+    '인증 예시7',
+    '인증 예시8',
+    '인증 예시9',
+    '인증 예시10',
+  ];
 
   return (
     <Container>
@@ -162,7 +182,7 @@ export default function ChallengeDetailProgress() {
           <div className="marginRight"> 인증 사진</div>
           <div>
             <div>{`오늘 인증 횟수  / ${challenge.challengeAuthCycle}`}</div>
-            <div className="cursur" onClick={showModal}>
+            <div className="cursur" onClick={showCertificationModal}>
               인증 사진 올리기
             </div>
           </div>
@@ -174,8 +194,60 @@ export default function ChallengeDetailProgress() {
             />
           )}
         </div>
-        <div style={{ border: '2px solid red', marginTop: '3%' }}>
-          <img src="*" alt="" />
+        <div
+          style={{
+            border: '2px solid #eff1fe',
+            marginTop: '3%',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            width: '100%',
+          }}
+        >
+          {/* {challenge.challengeExamImagePath.map((image) => { */}
+          {imageTest.splice(0, 8).map((image, index) => {
+            return (
+              <div
+                key={index}
+                style={{
+                  border: '2px solid red',
+                  width: '90%',
+                  height: '180px',
+                  display: 'flex',
+                  marginBottom: '3%',
+                }}
+              >
+                {/* <img src="*" alt="" /> */}
+
+                {index === 7 ? (
+                  <div
+                    style={{
+                      backgroundColor: 'grey',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <div onClick={showImageModal}>더보기gfddhgfhjf</div>
+                    {imageModalOpen && (
+                      <ImageModal
+                        setImageModalOpen={setImageModalOpen}
+                        imageTest={imageTest}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      width: '100%',
+                    }}
+                  >
+                    <div>{image}</div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </Review>
 
