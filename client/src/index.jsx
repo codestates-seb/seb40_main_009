@@ -5,7 +5,7 @@ import App from './App';
 import { RecoilRoot } from 'recoil';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://27e0-203-130-71-252.jp.ngrok.io';
+axios.defaults.baseURL = 'https://f069-203-130-71-252.jp.ngrok.io';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

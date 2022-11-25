@@ -117,12 +117,12 @@ const filterList = [
   {
     id: '1',
     filterName: 'popularity',
-    value: '조회순 정렬',
+    value: '조회순',
   },
   {
     id: '2',
     filterName: 'newest',
-    value: '최신순 정렬',
+    value: '최신순',
   },
 ];
 
