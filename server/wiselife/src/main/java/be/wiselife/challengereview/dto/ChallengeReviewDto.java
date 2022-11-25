@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 
 public class ChallengeReviewDto {
+
     @Getter
     public static class Post{
         @NotNull
@@ -23,7 +24,6 @@ public class ChallengeReviewDto {
         @Range(min =0 , max = 5)
         private int challengeReviewStar;
 
-        private String challengeReviewImagePath;
     }
 
     @Setter
@@ -57,6 +57,5 @@ public class ChallengeReviewDto {
 
         private int challengeReviewStar;
 
-        private String challengeReviewImagePath;
     }
 }

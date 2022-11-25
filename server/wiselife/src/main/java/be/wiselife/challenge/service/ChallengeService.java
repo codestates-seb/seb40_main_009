@@ -159,7 +159,7 @@ public class ChallengeService {
      */
     public Challenge updateCertImage(Long challengeId, Member loginMember, MultipartFile multipartFile) throws IOException {
         Challenge challenge = findChallengeById(challengeId);
-        challenge.setChallengeCertImagePath(imageService.getOneImagePath(multipartFile));
+        challenge.setChallengeCertImagePath(imageService.getOneImagePath(multipartFile)); //TODO 기존의 주소들은 삭제하는 로직을 구현해야하나?
         return challengeRepository.save(imageService.patchChallengeCertImage(challenge, loginMember));
     }
 

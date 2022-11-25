@@ -30,15 +30,20 @@ public class S3UploadService {
     private final AmazonS3 s3;
 
 
-    public String uploadJustOne(MultipartFile multipartFile) throws IOException {
+    public String uploadJustOne(MultipartFile multipartFile) {
+
         String s3FileName = createFileName(multipartFile.getOriginalFilename());
 
         ObjectMetadata objMeta = new ObjectMetadata();
-        objMeta.setContentLength(multipartFile.getInputStream().available());
 
-        s3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            objMeta.setContentLength(inputStream.available());
+            s3.putObject(bucket, s3FileName, inputStream, objMeta);
+            return s3.getUrl(bucket, s3FileName).toString();
+        } catch (IOException e) {
+            throw new BusinessLogicException(ExceptionCode.NEED_IMAGE);
+        }
 
-        return s3.getUrl(bucket, s3FileName).toString();
     }
 
 

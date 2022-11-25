@@ -22,8 +22,6 @@ public interface ChallengeReviewMapper {
         challengeReview.challengeReviewTitle( challengeReviewPostDto.getChallengeReviewTitle() );
         challengeReview.challengeReviewContent( challengeReviewPostDto.getChallengeReviewContent() );
         challengeReview.challengeReviewStar( challengeReviewPostDto.getChallengeReviewStar() );
-        challengeReview.challengeReviewImagePath( challengeReviewPostDto.getChallengeReviewImagePath() );
-        challengeReview.challengeReviewImagePath(challengeReviewPostDto.getChallengeReviewImagePath());
 
         return challengeReview.build();
     }

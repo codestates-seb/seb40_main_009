@@ -144,20 +144,28 @@ public class ImageService {
     }
 
     //ReviewImage 부분 코드======================================
-    public void patchReviewImage(ChallengeReview review) {
+    public String patchReviewImage(ChallengeReview review, MultipartFile image) {
         ReviewImage reviewImageFromRepository =
                 imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
+
         if (reviewImageFromRepository == null) {
             ReviewImage reviewImage = new ReviewImage();
+            String ImagePath = s3UploadService.uploadJustOne(image);
+            reviewImage.setImagePath(ImagePath);
             saveReviewImage(review, reviewImage);
+            return ImagePath;
         } else {
+            reviewImageFromRepository.setImagePath(review.getChallengeReviewImagePath());
             saveReviewImage(review, reviewImageFromRepository);
+            return reviewImageFromRepository.getImagePath();
         }
+
+
     }
 
     // MemberImage 중복코드 줄이는 용도
     private void saveReviewImage(ChallengeReview review, ReviewImage reviewImage) {
-        reviewImage.setImagePath(review.getChallengeReviewImagePath());
+
         reviewImage.setRandomIdForImage(review.getReviewRandomId());
         imageRepository.save(reviewImage);
     }
@@ -248,12 +256,12 @@ public class ImageService {
     }
     
     
-    //TODO: 안쓸꺼면 삭제
+    //TODO 안쓸꺼면 삭제
     public String getRepImagePath(String randomIdForImage) {
         ChallengeRepImage cri = imageRepository.findByImageTypeAndChallengeRep("CRI", randomIdForImage);
         return cri.getImagePath();
     }
-    //TODO: 안쓸꺼면 삭제
+    //TODO 안쓸꺼면 삭제
     public List<String> getExamImagePath(String randomIdForImage) {
         List<ChallengeExamImage> cei = imageRepository.findByImageTypeAndChallengeExam("CEI", randomIdForImage);
         List<String> urls = new ArrayList<>();
