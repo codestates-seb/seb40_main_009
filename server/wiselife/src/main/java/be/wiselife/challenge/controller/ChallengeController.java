@@ -54,7 +54,7 @@ public class ChallengeController {
      * @param exampleImage 예시사진들
      * @return
      */
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity postChallenge(@Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
                                         @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
                                         @RequestPart(value = "rep", required = false) MultipartFile repImage,
@@ -75,7 +75,7 @@ public class ChallengeController {
      * @param request 챌린지 수정하려는 멤버의 token 값 받기 위해 필요
      * @return
      */
-    @PatchMapping("/{challenge-id}")
+    @PatchMapping(value = "/{challenge-id}",consumes = {"multipart/form-data"})
     public ResponseEntity patchChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
                                          @Valid @RequestPart(value = "patch") ChallengeDto.Patch challengePatchDto,
                                          @RequestPart(value = "example",required = false) List<MultipartFile> exampleImage,
@@ -123,7 +123,7 @@ public class ChallengeController {
      *                                               챌린지 참여인원인지 판단하는 로직 추가
      *                                               응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
      */
-    @PatchMapping("/cert/{challenge-id}")
+    @PatchMapping(value = "/cert/{challenge-id}",consumes = {"multipart/form-data"})
     public ResponseEntity patchMemberCertification(@Valid @PathVariable("challenge-id") @Positive Long challengeId,
                                                    @RequestPart(value = "cert") MultipartFile multipartFile,
                                                    HttpServletRequest request) throws IOException {

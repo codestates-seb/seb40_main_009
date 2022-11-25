@@ -93,7 +93,7 @@ public class MemberController {
      * 회원이 본인의 정보를 수정할때,
      * DTO와 함께받기위해선 RequestPart를 사용해야함.
      */
-    @PatchMapping("/{memberName}")
+    @PatchMapping(value = "/{memberName}",consumes = {"multipart/form-data"})
     public ResponseEntity patchMember(@PathVariable("memberName") String memberName,
                                       @Valid @RequestPart MemberDto.Patch patchData,
                                       @RequestPart(value = "image",required = false) MultipartFile multipartFiles,

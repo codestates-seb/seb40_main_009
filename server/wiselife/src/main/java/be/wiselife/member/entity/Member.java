@@ -196,7 +196,7 @@ public class Member extends TimeAudit {
                 case 6:return 챌린지장인;
                 case 7:return 시간의지배자;
                 case 8:return 챌린지신;
-                default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
+                default:return 챌린지신;
             }
         }
 
@@ -210,7 +210,7 @@ public class Member extends TimeAudit {
                 case 6:return 62;
                 case 7:return 126;
                 case 8:return 254;
-                default:throw new BusinessLogicException(ExceptionCode.NO_MORE_HIGH_GRADE);
+                default:return 254;
             }
         }
     }

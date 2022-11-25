@@ -57,8 +57,14 @@ public interface MemberMapper {
         int preObjExp = Member.MemberBadge.badgeOfobjExperience(member.getMemberLevel());
         System.out.println("preObjExp = " + preObjExp);
         int nextObjExp = Member.MemberBadge.badgeOfobjExperience(member.getMemberLevel()+1);
+        double memberExpObjRate=0;
+        if (member.getMemberLevel() > 8) {
+            memberExpObjRate = 100.0;
+        } else {
+            memberExpObjRate=((presentExp- preObjExp) /(nextObjExp- preObjExp))*100;
+        }
 
-        double memberExpObjRate=((presentExp- preObjExp) /(nextObjExp- preObjExp))*100;
+
 
         memberDetailResponse.setMemberExpObjRate(memberExpObjRate);
 
