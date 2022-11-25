@@ -39,6 +39,10 @@ public class MemberChallenge {
     @JsonBackReference
     private Challenge challenge;
 
+    public Long getMemberChallengeId() {
+        return memberChallengeId;
+    }
+
     //더미 생성용 생성자
     public MemberChallenge(Long memberChallengeId, double memberReward, double memberSuccessDay, double memberChallengeSuccessRate, Member member, Challenge challenge) {
         this.memberChallengeId = memberChallengeId;

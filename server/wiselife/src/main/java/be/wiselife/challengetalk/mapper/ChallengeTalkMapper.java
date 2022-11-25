@@ -2,6 +2,7 @@ package be.wiselife.challengetalk.mapper;
 
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
+import be.wiselife.member.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -18,10 +19,11 @@ public interface ChallengeTalkMapper {
 
         ChallengeTalkDto.response response = new ChallengeTalkDto.response();
 
-        response.setChallengeTalkBody( challengeTalk.getChallengeTalkBody() );
-        response.setCreated_at( challengeTalk.getCreatedAt() );
-        response.setUpdated_at( challengeTalk.getUpdated_at() );
+        response.setChallengeTalkBody(challengeTalk.getChallengeTalkBody() );
+        response.setCreated_at(challengeTalk.getCreatedAt() );
+        response.setUpdated_at(challengeTalk.getUpdated_at() );
         response.setMemberName(memberName);
+        response.setMemberBadge(challengeTalk.getMemberBadge());
 
         return response;
     }

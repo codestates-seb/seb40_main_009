@@ -90,27 +90,43 @@ public class DummyService {
 
         Challenge challenge1 = new Challenge(1L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀1","타이틀1 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,22), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),false);
         Challenge challenge2 = new Challenge(2L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,21), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
-        Challenge challenge3 = new Challenge(3L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),false);
+        Challenge challenge3 = new Challenge(3L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀3 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,20), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
-        Challenge challenge4 = new Challenge(4L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀2 챌린지입니다.",10,3,
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),false);
+        Challenge challenge4 = new Challenge(4L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀4 챌린지입니다.",10,3,
                 LocalDate.of(2022,11,19), LocalDate.of(2023,11,21), "인증은 하루 3번",
-                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")));
-
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),false);
+        Challenge challenge5 = new Challenge(5L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀1","타이틀5 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,18), LocalDate.of(2023,11,21), "인증은 하루 3번",
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),false);
+        Challenge challenge6 = new Challenge(6L, Challenge.ChallengeCategory.SHARED_CHALLENGE, "타이틀2","타이틀6 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,17), LocalDate.of(2023,11,21), "인증은 하루 3번",
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),true);
+        Challenge challenge7 = new Challenge(7L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀7 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,16), LocalDate.of(2023,11,21), "인증은 하루 3번",
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),true);
+        Challenge challenge8 = new Challenge(8L, Challenge.ChallengeCategory.OFFLINE_CHALLENGE, "타이틀2","타이틀8 챌린지입니다.",10,3,
+                LocalDate.of(2022,11,15), LocalDate.of(2023,11,21), "인증은 하루 3번",
+                3,10000,"대표사진","인증예시1,인증예시2,인증예시3","",3,new ArrayList<String>(List.of("09:00", "15:00", "18:00")),true);
                
         challenge1.setAuthorizedMemberId(1L);
         challenge2.setAuthorizedMemberId(1L);
-        challenge3.setAuthorizedMemberId(1L);
-        challenge3.setAuthorizedMemberId(1L);
+        challenge4.setAuthorizedMemberId(1L);
+        challenge5.setAuthorizedMemberId(1L);
 
         challengeRepository.save(challenge1);
         challengeRepository.save(challenge2);
         challengeRepository.save(challenge3);
         challengeRepository.save(challenge4);
+        challengeRepository.save(challenge5);
+        challengeRepository.save(challenge6);
+        challengeRepository.save(challenge7);
+        challengeRepository.save(challenge8);
+
 
     }
 

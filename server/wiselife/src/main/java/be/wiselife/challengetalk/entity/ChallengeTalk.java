@@ -24,6 +24,10 @@ public class ChallengeTalk extends WriterAudit {
     @Column(updatable = false)
     private Long memberId;
 
+    @Setter
+    @Column(updatable = false)
+    private String memberBadge;
+
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     @ToString.Exclude

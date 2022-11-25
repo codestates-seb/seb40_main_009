@@ -43,6 +43,7 @@ public interface ChallengeReviewMapper {
         response.setChallengeReviewStar(challengeReview.getChallengeReviewStar() );
         response.setChallengeReviewImagePath( challengeReview.getChallengeReviewImagePath() );
         response.setMemberName(challengeReview.getMember().getMemberName());
+        response.setMemberBadge(challengeReview.getMember().getMemberBadge());
 
         return response;
     }

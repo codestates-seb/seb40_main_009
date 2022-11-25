@@ -1,5 +1,6 @@
 package be.wiselife.challengereview.dto;
 
+import be.wiselife.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,8 @@ public class ChallengeReviewDto {
         private int challengeReviewStar;
 
         private String memberName;
+
+        private Member.MemberBadge memberBadge;
 
         private String challengeReviewImagePath;
     }

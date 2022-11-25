@@ -4,6 +4,7 @@ import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.image.entity.ChallengeCertImage;
+import be.wiselife.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -199,6 +200,7 @@ public class ChallengeDto {
         private Long challengeId;
         private Long memberId;
         private String participatingMemberName;
+        private Member.MemberBadge memberBadge;
         private int memberSuccessDay;
         private double memberChallengeSuccessRate;
     }
