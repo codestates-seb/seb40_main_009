@@ -123,9 +123,9 @@ export default function Header() {
               {members
                 .filter((member) => member.indexOf(searchValue) !== -1)
                 .splice(0, 10)
-                .map((searchResult) => (
+                .map((searchResult, index) => (
                   <UserSearchResult
-                    key={searchResult}
+                    key={index}
                     onClick={() => {
                       inputValueChange(searchResult);
                     }}
@@ -146,9 +146,9 @@ export default function Header() {
                     challenge.challengeTitle.indexOf(searchValue) !== -1
                 )
                 .splice(0, 10)
-                .map((searchResult) => (
+                .map((searchResult, index) => (
                   <UserSearchResult
-                    key={searchResult.challengeTitle}
+                    key={index}
                     onClick={() => {
                       inputValueChange(searchResult.challengeTitle);
                     }}

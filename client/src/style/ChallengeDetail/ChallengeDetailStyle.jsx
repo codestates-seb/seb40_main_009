@@ -3,7 +3,12 @@ import styled from 'styled-components';
 export const Container = styled.header`
   width: 1024px;
   margin: 0 auto;
-  padding-top: 120px;
+  padding-top: 110px;
+`;
+
+export const ChallengeViewCount = styled.div`
+  margin-bottom: 1%;
+  color: #787878;
 `;
 
 export const Recruitment = styled.div`
@@ -18,7 +23,7 @@ export const Recruitment = styled.div`
     height: 350px;
     width: 30%;
     position: absolute;
-    top: 120px;
+    top: 136px;
     right: 645px;
     border-radius: 20px;
   }
@@ -48,6 +53,49 @@ export const ChallengeDescription = styled.div`
   }
 `;
 
+export const CertificationImage = styled.div`
+  display: flex;
+  margin-top: 2%;
+`;
+
+export const Image = styled.div`
+  border: 1px solid red;
+  width: 50%;
+  height: 155px;
+  margin-right: 2%;
+`;
+
+export const ReviewImageWrapper = styled.div`
+  width: 90%;
+  height: 180px;
+  display: flex;
+  margin-top: 3%;
+  margin-left: 1%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+`;
+
+export const ReviewImage = styled.div`
+  border: 2px solid red;
+  width: 90%;
+  height: 180px;
+  display: flex;
+  margin-bottom: 3%;
+`;
+
+export const ViewMore = styled.div`
+  background-color: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+export const Width = styled.div`
+  width: 100%;
+`;
+
 export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
@@ -58,6 +106,25 @@ export const Certification = styled.div`
 export const CertificationWrapper = styled.div`
   border: 2px solid #eff1fe;
   width: 25%;
+  padding: 3%;
+  border-radius: 20px;
+  & > .title {
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+  }
+  & > .pd-5 {
+    padding-top: 5%;
+  }
+  & > img {
+    padding-top: 5%;
+    width: 100%;
+  }
+`;
+
+export const CertificationDescription = styled.div`
+  border: 2px solid #eff1fe;
+  width: 60%;
   padding: 3%;
   border-radius: 20px;
   & > .title {
