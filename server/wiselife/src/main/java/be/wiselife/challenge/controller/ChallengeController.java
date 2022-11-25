@@ -4,6 +4,7 @@ import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.mapper.ChallengeMapper;
 import be.wiselife.challenge.service.ChallengeService;
+import be.wiselife.challengereview.mapper.ChallengeReviewMapper;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
@@ -32,18 +33,16 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final ChallengeTalkMapper challengeTalkMapper;
     private final ChallengeMapper challengeMapper;
+    private final ChallengeReviewMapper challengeReviewMapper;
     private final MemberChallengeRepository memberChallengeRepository;
-
     private final ImageService imageService;
 
-
-    public ChallengeController(ChallengeMapper challengeMapper, ChallengeService challengeService,
-                               ChallengeTalkMapper challengeTalkMapper, MemberService memberService,
-                               MemberChallengeRepository memberChallengeRepository, ImageService imageService) {
-        this.challengeMapper = challengeMapper;
+    public ChallengeController(MemberService memberService, ChallengeService challengeService, ChallengeTalkMapper challengeTalkMapper, ChallengeMapper challengeMapper, ChallengeReviewMapper challengeReviewMapper, MemberChallengeRepository memberChallengeRepository, ImageService imageService) {
+        this.memberService = memberService;
         this.challengeService = challengeService;
         this.challengeTalkMapper = challengeTalkMapper;
-        this.memberService = memberService;
+        this.challengeMapper = challengeMapper;
+        this.challengeReviewMapper = challengeReviewMapper;
         this.memberChallengeRepository = memberChallengeRepository;
         this.imageService = imageService;
     }
@@ -65,7 +64,7 @@ public class ChallengeController {
         challenge = challengeService.createChallenge(challenge, memberService.getLoginMember(request), repImage, exampleImage);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
                 , HttpStatus.CREATED);
     }
 
@@ -88,7 +87,7 @@ public class ChallengeController {
         challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request), challengeId, exampleImage, repImage);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
                 , HttpStatus.OK);
     }
 
@@ -108,7 +107,7 @@ public class ChallengeController {
         Challenge challenge = challengeService.participateChallenge(challengeFromRepository, memberService.getLoginMember(request));
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.
-                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService))
+                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper))
                 , HttpStatus.CREATED);
     }
 
@@ -132,7 +131,7 @@ public class ChallengeController {
         Challenge challenge = challengeService.updateCertImage(challengeId, memberService.getLoginMember(request), multipartFile);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper))
                 , HttpStatus.CREATED);
     }
 
@@ -156,14 +155,14 @@ public class ChallengeController {
                 memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request)) == null) {
 
             ChallengeDto.SimpleResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge);
+                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper);
 
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {
 
             ChallengeDto.DetailResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
+                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper);
 
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
@@ -200,7 +199,7 @@ public class ChallengeController {
                                                      @Positive @RequestParam(value = "size", defaultValue = "10") int size) {
 
         Page<Challenge> pageInfo = challengeService.getAllChallengesInCategory(categoryId, page - 1, size, sortBy);
-        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(pageInfo.getContent());
+        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseDtoList(pageInfo.getContent(), challengeReviewMapper);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(challengeResponseDtoList, pageInfo),
@@ -237,7 +236,7 @@ public class ChallengeController {
                                                            @Positive @RequestParam(value = "size", defaultValue = "10") int size) {
 
         Page<Challenge> pageInfo = challengeService.searchChallengesByChallengeTitle(searchTitle, page - 1, size, sortBy);
-        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseList(pageInfo.getContent());
+        List<ChallengeDto.SimpleResponse> challengeResponseDtoList = challengeMapper.challengeListToSimpleResponseDtoList(pageInfo.getContent(), challengeReviewMapper);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(challengeResponseDtoList, pageInfo), HttpStatus.OK);
