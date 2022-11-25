@@ -55,6 +55,7 @@ public class ImageService {
     private void saveMemberImage(Member member, MemberImage memberImage, String imageUrl) {
         memberImage.setImagePath(imageUrl);
         memberImage.setMemberId(member.getMemberId());
+        member.setMemberImagePath(imageUrl);
         imageRepository.save(memberImage);
     }
 

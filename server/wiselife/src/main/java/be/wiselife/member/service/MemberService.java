@@ -112,7 +112,8 @@ public class MemberService {
                 .ifPresent(new_memberName->memberFromRepository.setMemberName(new_memberName));
         Optional.ofNullable(member.getMemberDescription())
                 .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
-        if (!Optional.ofNullable(member.getMemberImagePath()).isEmpty()) {
+        if (!multipartFiles.isEmpty()) {
+            log.info("multipartFiles={}",multipartFiles.getBytes());
             member.setMemberId(memberFromRepository.getMemberId());
             imageService.patchMemberImage(member,multipartFiles);
             memberFromRepository.setMemberImagePath(member.getMemberImagePath());
