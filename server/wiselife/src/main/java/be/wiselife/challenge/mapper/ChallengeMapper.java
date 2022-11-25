@@ -202,7 +202,15 @@ public interface ChallengeMapper {
 
             // 챌린지 인증사진을 리스트로 반환 해주는 필드
             detailResponse.challengeCertImages(challengeCertImageToChallengeCertImageResponseDto(challenge.getChallengeCertImages()));
-
+            //대표이미지
+            detailResponse.challengeRepImagePath(challenge.getChallengeRepImagePath());
+            //예시이미지
+            String[] challengeExamImagePaths = challenge.getChallengeExamImagePath().split(",");
+            List<String> challengeExamImagePathList = new ArrayList<>();
+            for (String imagePath : challengeExamImagePaths) {
+                challengeExamImagePathList.add(imagePath);
+            }
+            detailResponse.challengeExamImagePath(challengeExamImagePathList);
             /*
             * 챌린지 댓글을 챌린지 ResponseDto로 변환
             * 챌린지 자체는 memberId를 저장하기에 이를 실제 화면상 보이는 memberName으로 보여줘야 하기에
