@@ -16,9 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,8 +118,8 @@ public class ChallengeService {
 
         if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
-            imageService.patchChallengeRepImage(changedChallenge, repImage);
-            existingChallenge.setChallengeRepImagePath(changedChallenge.getChallengeRepImagePath());
+            String repImageUrl = imageService.patchChallengeRepImage(changedChallenge, repImage);
+            existingChallenge.setChallengeRepImagePath(repImageUrl);
         }
 
         /**
@@ -149,14 +150,16 @@ public class ChallengeService {
     /**
      * 작성자 : 유현
      * 인증사진 등록 / 수정
-     * @param certImageInfo 인증사진이 속한 Challenge 아이디와 인증사진 경로
-     * @param loginMember 로그인한 사람의 이메일 정보를 가져오기위한 인자값
-     * TODO
-     * 챌린지 참여인원인지 판단하는 로직 추가
+     *
+     * @param challengeId
+     * @param loginMember   로그인한 사람의 이메일 정보를 가져오기위한 인자값
+     *                      TODO
+     *                      챌린지 참여인원인지 판단하는 로직 추가
+     * @param multipartFile
      */
-    public Challenge updateCertImage(Challenge certImageInfo, Member loginMember) {
-        Challenge challenge = findChallengeById(certImageInfo.getChallengeId());
-        challenge.setChallengeCertImagePath(certImageInfo.getChallengeCertImagePath());
+    public Challenge updateCertImage(Long challengeId, Member loginMember, MultipartFile multipartFile) throws IOException {
+        Challenge challenge = findChallengeById(challengeId);
+        challenge.setChallengeCertImagePath(imageService.getOneImagePath(multipartFile));
         return challengeRepository.save(imageService.patchChallengeCertImage(challenge, loginMember));
     }
 
