@@ -7,6 +7,7 @@ import Member from '../MemberList/MemberList';
 
 export default function MemberResult({ searchValue }) {
   const [memberList, setMemberList] = useState([]);
+  console.log('써벨', searchValue);
 
   const challengeSearch = useCallback(async () => {
     try {

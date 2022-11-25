@@ -5,7 +5,7 @@ function Challenge({ challengeId, challengeTitle, challengeDescription }) {
   const navigate = useNavigate();
 
   const clickDetail = () => {
-    navigate(`/challengedetail/${challengeId}`);
+    navigate(`/detail/${challengeId}`);
   };
 
   return (
