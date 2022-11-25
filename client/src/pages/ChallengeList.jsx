@@ -1,6 +1,6 @@
+import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
@@ -65,6 +65,7 @@ export default function ChallengeList() {
   }, [challengeFiltering]);
 
   if (isLoading) return <Loading />;
+
   return (
     <>
       <S.AddChallengeBtn onClick={moveToCreateChallenge}>
@@ -85,13 +86,15 @@ export default function ChallengeList() {
               </S.Tab>
             </Link>
           ))}
-          <select value={filterSelect} onChange={onSelect}>
-            {filterList.map(({ id, value }) => (
-              <option key={id} value={id}>
-                {value}
-              </option>
-            ))}
-          </select>
+          <div>
+            <select value={filterSelect} onChange={onSelect}>
+              {filterList.map(({ id, value }) => (
+                <option key={id} value={id}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
         </section>
         <S.Container>
           {challengeList.map(
@@ -114,12 +117,12 @@ const filterList = [
   {
     id: '1',
     filterName: 'popularity',
-    value: '조회순 정렬',
+    value: '조회순',
   },
   {
     id: '2',
     filterName: 'newest',
-    value: '최신순 정렬',
+    value: '최신순',
   },
 ];
 
