@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useInView } from 'react-intersection-observer';
 
 import * as S from '../style/MemberList/MemberList.styled';
 
 import Loading from '../components/Loading/Loading';
 import Member from '../components/MemberList/MemberList';
-import { useInView } from 'react-intersection-observer';
 
 export default function MemberList() {
   const [memberList, setMemberList] = useState([]);
