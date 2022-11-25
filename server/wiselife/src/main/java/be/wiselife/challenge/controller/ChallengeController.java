@@ -136,49 +136,35 @@ public class ChallengeController {
                 , HttpStatus.CREATED);
     }
 
-
-    /**
-     * 챌린지 상세페이지 조회
-     * TODO:
-     *  1) 만약 유저가 해당 챌린지 참여중이라면 별도로 유저의 해당 챌린지 성공률도 표시함
-     *  2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
-     *  3) 동일한 사용자의 조회수 중복 증가 방지 기능
-     */
-    @GetMapping("/{challenge-id}")
-    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId) {
-
-        Challenge challenge = challengeService.getChallengeById(challengeId); //챌린지 찾기
-        challenge = challengeService.updateViewCount(challenge); //조회수 증가 로직 포함
-
-        ChallengeDto.DetailResponse challengeResponseDto = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeResponseDto)
-                , HttpStatus.OK);
-    }
-
     /**
      * 작성자 : 유현
      * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
      * 로그인 된 유저가 아닐시 인증사진은 안나오게 simpleResponse로 응답을 준다.
      * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게 detailResponse를 응답해 준다.
+     *    TODO
+     *     1) 만약 유저가 해당 챌린지 참여중이라면 별도로 유저의 해당 챌린지 성공률도 표시함
+     *     2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
+     *     3) 동일한 사용자의 조회수 중복 증가 방지 기능
      */
-    @GetMapping("/test/{challenge-id}")
-    public ResponseEntity getChallengeV1(@PathVariable("challenge-id") @Positive Long challengeId,
+    @GetMapping("/{challenge-id}")
+    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
                                          HttpServletRequest request) {
-        Challenge challenge = challengeService.findChallengeById(challengeId);
+        Challenge challenge = challengeService.findChallengeById(challengeId); // 찾아왔는데 왜 패스값이 없냐? DB상에는있는데...
         challenge = challengeService.updateViewCount(challenge);
+
         if (request.getHeader("Authorization") == null ||
                 memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request)) == null) {
 
             ChallengeDto.SimpleResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeSimpleResponseDto(challenge);
+
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {
 
             ChallengeDto.DetailResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService);
+
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         }
