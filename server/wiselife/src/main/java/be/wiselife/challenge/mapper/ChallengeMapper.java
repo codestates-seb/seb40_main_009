@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ChallengeMapper {
 
-
     List<ChallengeDto.ChallengeTitleResponse> challengeListToChallengeTitleResponseList(List<Challenge> challengeList);
     /**
      * 챌린지 생성 mapping
@@ -203,8 +202,6 @@ public interface ChallengeMapper {
 
             /*
             * 챌린지 댓글을 챌린지 ResponseDto로 변환
-            * 챌린지 자체는 memberId를 저장하기에 이를 실제 화면상 보이는 memberName으로 보여줘야 하기에
-            * ChallengeTalkMapper ,MemberService 까지 사용해야 한다...
             */
             if(!challenge.getChallengeTalkList().isEmpty()){
                 List<ChallengeTalkDto.response> challengeTalkResponseDtoList = new ArrayList<>();
@@ -253,6 +250,12 @@ public interface ChallengeMapper {
                         .build()).collect(Collectors.toList());
     }
 
+    /**
+     *  (챌린지 to 챌린지 responseDto)의 MultiResponse 버전
+     * @param challengeList
+     * @param challengeReviewMapper
+     * @return
+     */
     default List<ChallengeDto.SimpleResponse> challengeListToSimpleResponseDtoList(List<Challenge> challengeList, ChallengeReviewMapper challengeReviewMapper){
         List<ChallengeDto.SimpleResponse> simpleResponseList = new ArrayList<>();
 
