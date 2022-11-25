@@ -13,8 +13,13 @@ import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetai
 import CreateChallengePage from './pages/CreateChallenge';
 import EditProfilePage from './pages/EditProfilePage';
 import MemberList from './pages/MemberList';
+<<<<<<< HEAD
 import Login from './components/Login/Login';
 import KakaoLogin from './components/Login/KakaoLogin';
+=======
+import ChallengeResult from './components/SearchResult/ChallengeResult';
+import MemberResult from './components/SearchResult/MemberResult';
+>>>>>>> c8e4e04e3c4ed21950428aae907304da6f7e0e14
 
 function App() {
   return (
@@ -30,7 +35,14 @@ function App() {
             path="/challengedetail/:id"
             element={<ChallengeDetailProgress />}
           />
+<<<<<<< HEAD
           <Route path="/search/*" element={<SearchResult />} />
+=======
+          <Route path="/search/:name/:id" element={<SearchResult />}>
+            <Route path={`challenge/:id`} element={<ChallengeResult />} />
+            <Route path={`member/:id`} element={<MemberResult />} />
+          </Route>
+>>>>>>> c8e4e04e3c4ed21950428aae907304da6f7e0e14
           <Route path="/profile/:name" element={<MyProfilePage />} />
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />

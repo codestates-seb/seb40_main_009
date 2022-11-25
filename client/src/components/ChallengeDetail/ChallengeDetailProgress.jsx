@@ -12,12 +12,19 @@ import {
   Certification,
   CertificationWrapper,
   Review,
+  CertifiationImageWrapper,
+  CertificationImage,
+  ViewMore,
+  Width,
+  ReviewImageWrapper,
+  ReviewImage,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
 import Loading from '../Loading/Loading';
 import ChartBar from '../ProfileList/ChartBar';
 import DdayFormatter from './DdayFormatter';
 import Modal from './Modal';
+import ImageModal from './ImageModal';
 import smile from '../../image/smile.jpg';
 
 export default function ChallengeDetailProgress() {
@@ -25,17 +32,17 @@ export default function ChallengeDetailProgress() {
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageTransform, setImageTransfrom] = useState('');
-  console.log('imageTransform>>', imageTransform);
 
   //url 파라미터값 받아오기
-  const id = Number(parmas.id);
+  const challengeId = Number(parmas.id);
 
   // 챌린지조회
   const getChallenge = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/challenges/${id}`, {
+      const response = await axios.get(`/challenges/${challengeId}`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
         },
@@ -45,7 +52,7 @@ export default function ChallengeDetailProgress() {
       setChallenge(challengeList);
       setLoading(false);
     } catch (error) {
-      //useeffevt 안에서 window. 쓸필요x
+      //useeffect 안에서 window. 쓸필요x
       alert(error);
       console.log('error', error);
     }
@@ -56,16 +63,61 @@ export default function ChallengeDetailProgress() {
     getChallenge();
   }, []);
 
-  //모달창 띄우기
-  const showModal = () => {
+  //인증하기 모달창 띄우기
+  const showCertificationModal = () => {
     setModalOpen(true);
   };
+
+  //인증사진 더보기 모달창 띄우기
+  const showImageModal = () => {
+    setImageModalOpen(true);
+  };
+
+  //챌린지 진행률 계산
+  const today = new Date();
+  const startDate = new Date(challenge.challengeStartDate);
+  const endDate = new Date(challenge.challengeEndDate);
+
+  //챌린지 총 일수
+  const distance = endDate.getTime() - startDate.getTime();
+  const totalDay = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+  //챌린지 해온 시간
+  const gap = today.getTime() - startDate.getTime();
+  const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
+  console.log('지나온 시간>>', pastDay);
+  const progress = Math.ceil((pastDay / totalDay) * 100);
+  console.log('진행률>>>', progress);
+
+  // const certification = challenge.challengeCertImages.filter((id) => id === );
 
   //early return pattern
   if (loading) return <Loading />;
 
+  const imageTest = [
+    '인증 예시1',
+    '인증 예시2',
+    '인증 예시3',
+    '인증 예시4',
+    '인증 예시5',
+    '인증 예시6',
+    '인증 예시7',
+    '인증 예시8',
+    '인증 예시9',
+    '인증 예시10',
+  ];
+
+  const reviwTest = [
+    '인증 예시1',
+    '인증 예시2',
+    '인증 예시3',
+    '인증 예시4',
+    '인증 예시5',
+  ];
+
   return (
     <Container>
+      <div>{`조회수 ${challenge.challengeViewCount}`}</div>
       <ChallengeProgress>
         {/* 이미지 */}
         <div className="image">
@@ -84,8 +136,7 @@ export default function ChallengeDetailProgress() {
           <ChallengeDescription>
             <div className="margin_left3">챌린지 진행률:</div>
             <div>
-              {/* <ChartBar percentage={props.percentage} /> */}
-              <ChartBar />
+              <ChartBar percentage={progress} />
             </div>
           </ChallengeDescription>
 
@@ -107,6 +158,17 @@ export default function ChallengeDetailProgress() {
           <ChallengeDescription>
             <div className="margin_left">결제한 금액:</div>
             <div>{challenge.challengeFeePerPerson}원</div>
+          </ChallengeDescription>
+
+          <ChallengeDescription>
+            <div className="margin_left">도전중인 유저:</div>
+            {challenge.participatingMember.map((member) => {
+              return (
+                <div key={challenge.participatingMember.memberId}>
+                  {member.participatingMemberName}
+                </div>
+              );
+            })}
           </ChallengeDescription>
         </ChallengeWrapper>
       </ChallengeProgress>
@@ -132,8 +194,11 @@ export default function ChallengeDetailProgress() {
       <Review>
         <div className="flex">
           <div className="marginRight"> 인증 사진</div>
-          <div className="cursur" onClick={showModal}>
-            인증 사진 올리기
+          <div>
+            <div>{`오늘 인증 횟수  / ${challenge.challengeAuthCycle}`}</div>
+            <div className="cursur" onClick={showCertificationModal}>
+              인증 사진 올리기
+            </div>
           </div>
           {modalOpen && (
             <Modal
@@ -143,16 +208,60 @@ export default function ChallengeDetailProgress() {
             />
           )}
         </div>
-        <div style={{ border: '2px solid red', marginTop: '3%' }}>
-          <img src="*" alt="" />
-        </div>
+        {/* 인증사진 */}
+        <CertifiationImageWrapper>
+          {/* {challenge.challengeExamImagePath.map((image) => { */}
+          {imageTest.splice(0, 8).map((image, index) => {
+            return (
+              <CertificationImage key={index}>
+                {/* <img src="*" alt="" /> */}
+
+                {index === 7 ? (
+                  <ViewMore>
+                    <div onClick={showImageModal}>더보기</div>
+                    {imageModalOpen && (
+                      <ImageModal
+                        setImageModalOpen={setImageModalOpen}
+                        imageTest={imageTest}
+                      />
+                    )}
+                  </ViewMore>
+                ) : (
+                  <Width>
+                    <div>{image}</div>
+                  </Width>
+                )}
+              </CertificationImage>
+            );
+          })}
+        </CertifiationImageWrapper>
       </Review>
 
       <Review>
         <div>후기 사진</div>
-        <div style={{ border: '2px solid red', marginTop: '3%' }}>
-          <img src="*" alt="" />
-        </div>
+        <ReviewImageWrapper>
+          {/* {challenge.challengeExamImagePath.map((image) => { */}
+          {reviwTest.splice(0, 8).map((image, index) => {
+            return (
+              <ReviewImage key={index}>
+                {/* <img src="*" alt="" /> */}
+
+                {index === 7 ? (
+                  <ViewMore>
+                    <div onClick={showImageModal}>더보기</div>
+                    {imageModalOpen && (
+                      <ImageModal setImageModalOpen={setImageModalOpen} />
+                    )}
+                  </ViewMore>
+                ) : (
+                  <Width>
+                    <div>{image}</div>
+                  </Width>
+                )}
+              </ReviewImage>
+            );
+          })}
+        </ReviewImageWrapper>
       </Review>
     </Container>
   );

@@ -29,7 +29,7 @@ import {
   Members,
 } from '../style/Dashboard/DashboardPageStyle';
 
-import ChallengeList from '../components/ChallengeList/Challenge';
+import Challenge from '../components/ChallengeList/Challenge';
 import SlideBanner from '../components/Dashboard/SlideBanner';
 import Loading from '../components/Loading/Loading';
 
@@ -39,6 +39,7 @@ export default function MainPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState([]);
+  const [challenges, setChallenges] = useState([]);
 
   // 유저조회(등급순)
   const getMembers = async () => {
@@ -53,7 +54,6 @@ export default function MainPage() {
         }
       );
       const memberList = response.data.data;
-      // console.log(memberList);
       setMembers(memberList);
       setLoading(false);
     } catch (error) {
@@ -64,6 +64,31 @@ export default function MainPage() {
   //유저조회 axios 실행
   useEffect(() => {
     getMembers();
+  }, []);
+
+  // 챌린지조회(최신순)
+  const getChallenge = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `/challenges/all/2?sort-by=newest&page=1&size=3`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+          },
+        }
+      );
+      const challengeList = response.data.data;
+      setChallenges(challengeList);
+      setLoading(false);
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  };
+
+  //챌린지조회 axios 실행
+  useEffect(() => {
+    getChallenge();
   }, []);
 
   // 챌린지 리스트로 이동
@@ -142,8 +167,36 @@ export default function MainPage() {
               <Container>
                 <div>
                   <FontSize30>신규챌린지</FontSize30>
-                  <div>
-                    <ChallengeList />
+                  <div
+                    style={{
+                      border: '2px solid #eff1fe',
+                      marginTop: '3%',
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(4, 1fr)',
+                      width: '100%',
+                    }}
+                  ></div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '1024px',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    {challenges.map(
+                      ({
+                        challengeId,
+                        challengeTitle,
+                        challengeDescription,
+                      }) => (
+                        <Challenge
+                          key={challengeId}
+                          challengeId={challengeId}
+                          challengeTitle={challengeTitle}
+                          challengeDescription={challengeDescription}
+                        />
+                      )
+                    )}
                   </div>
                 </div>
               </Container>
@@ -180,41 +233,6 @@ export default function MainPage() {
                     </UserRanking>
                   ))}
                 </UserRankingWrapper>
-
-                {/* <Flex>
-                  <div style={{ marginLight: 'auto', border: '1px solid red' }}>
-                    <TitleWrapper>이달의 랭커</TitleWrapper>
-                    <div>
-                      <MemberOfTheMonth src={smile} alt="이번달 1등 유저사진" />
-                    </div>
-                  </div>
-
-                  <div style={{ border: '1px solid orange' }}>
-                    <TitleWrapper>
-                      <div className="wrapper">
-                        <div className="title">전체 랭킹</div>
-                        <div
-                          className="view_all"
-                          onClick={navigateChallengePage}
-                        >
-                          더보기
-                        </div>
-                      </div>
-                    </TitleWrapper>
-                    <div style={{ display: 'flex', border: '' }}>
-                      <div>유저이름</div>
-                      <div>레벨</div>
-                      <div>팔로워수</div>
-                    </div>
-                    {members.map((user) => (
-                      <Members key={user.memberId}>
-                        <div>{user.memberName}</div>
-                        <div>{user.memberBadge}</div>
-                        <div>{user.followerCount}</div>
-                      </Members>
-                    ))}
-                  </div>
-                </Flex> */}
               </Container>
             </Animator>
           </MarginTop>

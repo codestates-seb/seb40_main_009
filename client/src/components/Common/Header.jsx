@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,14 +12,12 @@ import {
   Icon,
 } from '../../style/Common/HeaderStyle';
 
-function Header() {
+export default function Header() {
   const navigate = useNavigate();
   const [searchFilterValue, setSearchFilterValue] = useState('challenge');
   const [searchValue, setSearchValue] = useState('');
   const [members, setMembers] = useState([]);
-  const [result, setResult] = useState();
-  // const result = useRef();
-  // console.log('result>>', result);
+  const [challengeList, setChallengeList] = useState([]);
 
   // 메인페이지로 이동
   const NavigateMainPage = () => {
@@ -36,37 +34,53 @@ function Header() {
     navigate('/memberlist');
   };
 
+  //검색클릭시 검색결과창으로 이동
+  const moveSearchResultPage = () => {
+    navigate(`/search/${searchFilterValue}/${searchValue}`);
+  };
+
   //검색필터 데이터
   const searchFilterData = [
     { id: 1, value: 'challenge' },
     { id: 2, value: 'member' },
   ];
 
-  console.log('검색필터>>>', searchFilterValue);
-
-  //검색필터가 유저일 때 유저조회(등급순)
+  //검색필터가 유저일 때 유저조회(맴버이름만)
   const getMembers = async () => {
     try {
-      // const response = await axios.get(`/member?page=1&size=10&sort=memberId`, {
-      const response = await axios.get(`/member`, {
+      const response = await axios.get(`/member/names`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
         },
       });
-      // const memberList = response.data.data;
-      const memberList = response.data;
-      console.log('memberList>>>>>', memberList);
+      const memberList = response.data.data;
       setMembers(memberList);
     } catch (error) {
       console.error('error', error);
     }
   };
 
-  //유저조회 axios 실행
+  //검색필터가 챌린지일 때 챌린지조회(이름만)
+  const getChallenges = async () => {
+    try {
+      const response = await axios.get(`/challenges/titles`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+        },
+      });
+      const challengeList = response.data.data;
+      setChallengeList(challengeList);
+    } catch (error) {
+      console.error('error', error);
+    }
+  };
+
+  //유저 ,챌린지 조회 axios 실행
   useEffect(() => {
     if (searchFilterValue === 'member') {
       getMembers();
     } else if (searchFilterValue === 'challenge') {
+      getChallenges();
     }
   }, [searchFilterValue]);
 
@@ -74,9 +88,6 @@ function Header() {
   const inputValueChange = (name) => {
     setSearchValue(name);
   };
-
-  //검색클릭시 검색결과창으로 이동
-  const moveSearchResultPage = () => {};
 
   return (
     <HeaderContainer>
@@ -104,22 +115,45 @@ function Header() {
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
           />
-          {searchValue !== '' && members !== [] ? (
+          {/* 유저검색 */}
+          {searchValue !== '' &&
+          members !== [] &&
+          searchFilterValue === 'member' ? (
             <ul>
               {members
-                .filter(
-                  (member) =>
-                    member.memberName.toLowerCase().indexOf(searchValue) !== -1
-                )
+                .filter((member) => member.indexOf(searchValue) !== -1)
                 .splice(0, 10)
-                .map((searchResult) => (
+                .map((searchResult, index) => (
                   <UserSearchResult
-                    key={searchResult.memberId}
+                    key={index}
                     onClick={() => {
-                      inputValueChange(searchResult.memberName);
+                      inputValueChange(searchResult);
                     }}
                   >
-                    {searchResult.memberName}
+                    {searchResult}
+                  </UserSearchResult>
+                ))}
+            </ul>
+          ) : null}
+          {/* 챌린지 검색 */}
+          {searchValue !== '' &&
+          challengeList !== [] &&
+          searchFilterValue === 'challenge' ? (
+            <ul>
+              {challengeList
+                .filter(
+                  (challenge) =>
+                    challenge.challengeTitle.indexOf(searchValue) !== -1
+                )
+                .splice(0, 10)
+                .map((searchResult, index) => (
+                  <UserSearchResult
+                    key={index}
+                    onClick={() => {
+                      inputValueChange(searchResult.challengeTitle);
+                    }}
+                  >
+                    {searchResult.challengeTitle}
                   </UserSearchResult>
                 ))}
             </ul>
@@ -131,5 +165,3 @@ function Header() {
     </HeaderContainer>
   );
 }
-
-export default Header;

@@ -100,6 +100,7 @@ export const Review = styled.div`
   font-size: 20px;
   & > .flex {
     display: flex;
+    align-items: center;
   }
   & > .flex .marginRight {
     margin-right: auto;
@@ -107,4 +108,50 @@ export const Review = styled.div`
   & > .flex .cursur {
     cursor: pointer;
   }
+`;
+
+export const CertifiationImageWrapper = styled.div`
+  width: 100%;
+  margin-top: 3%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+`;
+
+export const CertificationImage = styled.div`
+  border: 2px solid red;
+  width: 90%;
+  height: 180px;
+  display: flex;
+  margin-bottom: 3%;
+`;
+
+export const ViewMore = styled.div`
+  background-color: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+export const Width = styled.div`
+  width: 100%;
+`;
+
+export const ReviewImageWrapper = styled.div`
+  width: 90%;
+  height: 180px;
+  display: flex;
+  margin-top: 3%;
+  margin-left: 1%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+`;
+
+export const ReviewImage = styled.div`
+  border: 2px solid red;
+  width: 90%;
+  height: 180px;
+  display: flex;
+  margin-bottom: 3%;
 `;

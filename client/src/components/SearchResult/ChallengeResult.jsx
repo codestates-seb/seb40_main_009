@@ -1,18 +1,46 @@
-import Challenge from '../ChallengeList/Challenge';
+import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+
 import * as S from '../../style/ChallengeList/ChallengeList.styled';
 
-function ChallengeResult() {
+import Challenge from '../ChallengeList/Challenge';
+
+export default function ChallengeResult({ searchValue }) {
+  const [challengeList, setChallengeList] = useState([]);
+
+  const challengeSearch = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `/challenges/search?searchTitle=${searchValue}&sort-by=populairy&page=1&size=10`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+          },
+        }
+      );
+      const challenges = response.data.data;
+      setChallengeList(challenges);
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    challengeSearch();
+  }, [challengeSearch]);
+
   return (
     <S.Container>
-      <Challenge />
-      <Challenge />
-      <Challenge />
-      <Challenge />
-      <Challenge />
-      <Challenge />
-      <Challenge />
+      {challengeList.map(
+        ({ challengeId, challengeTitle, challengeDescription }) => (
+          <Challenge
+            challengeId={challengeId}
+            challengeTitle={challengeTitle}
+            challengeDescription={challengeDescription}
+            key={challengeId}
+          />
+        )
+      )}
     </S.Container>
   );
 }
-
-export default ChallengeResult;
