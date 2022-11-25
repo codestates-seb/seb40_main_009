@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import KakaoLoginButton from '../../image/kakaoIcon.png';
+import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
 import axios from 'axios';
 
 import {
@@ -18,6 +20,13 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState('');
   const [members, setMembers] = useState([]);
   const [challengeList, setChallengeList] = useState([]);
+
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const handleLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
+  console.log(KAKAO_AUTH_URL);
 
   // 메인페이지로 이동
   const NavigateMainPage = () => {
@@ -160,7 +169,9 @@ export default function Header() {
           ) : null}
           <Icon onClick={moveSearchResultPage} />
         </Search>
-        <div style={{ color: 'black' }}>로그인버튼</div>
+        <div style={{ color: 'black' }}>
+          <img src={KakaoLoginButton} alt="로그인 버튼" onClick={handleLogin} />
+        </div>
       </Container>
     </HeaderContainer>
   );
