@@ -12,6 +12,12 @@ import {
   Certification,
   CertificationWrapper,
   Review,
+  CertifiationImageWrapper,
+  CertificationImage,
+  ViewMore,
+  Width,
+  ReviewImageWrapper,
+  ReviewImage,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
 import Loading from '../Loading/Loading';
@@ -99,6 +105,14 @@ export default function ChallengeDetailProgress() {
     '인증 예시8',
     '인증 예시9',
     '인증 예시10',
+  ];
+
+  const reviwTest = [
+    '인증 예시1',
+    '인증 예시2',
+    '인증 예시3',
+    '인증 예시4',
+    '인증 예시5',
   ];
 
   return (
@@ -194,68 +208,60 @@ export default function ChallengeDetailProgress() {
             />
           )}
         </div>
-        <div
-          style={{
-            border: '2px solid #eff1fe',
-            marginTop: '3%',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            width: '100%',
-          }}
-        >
+        {/* 인증사진 */}
+        <CertifiationImageWrapper>
           {/* {challenge.challengeExamImagePath.map((image) => { */}
           {imageTest.splice(0, 8).map((image, index) => {
             return (
-              <div
-                key={index}
-                style={{
-                  border: '2px solid red',
-                  width: '90%',
-                  height: '180px',
-                  display: 'flex',
-                  marginBottom: '3%',
-                }}
-              >
+              <CertificationImage key={index}>
                 {/* <img src="*" alt="" /> */}
 
                 {index === 7 ? (
-                  <div
-                    style={{
-                      backgroundColor: 'grey',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      width: '100%',
-                    }}
-                  >
-                    <div onClick={showImageModal}>더보기gfddhgfhjf</div>
+                  <ViewMore>
+                    <div onClick={showImageModal}>더보기</div>
                     {imageModalOpen && (
                       <ImageModal
                         setImageModalOpen={setImageModalOpen}
                         imageTest={imageTest}
                       />
                     )}
-                  </div>
+                  </ViewMore>
                 ) : (
-                  <div
-                    style={{
-                      width: '100%',
-                    }}
-                  >
+                  <Width>
                     <div>{image}</div>
-                  </div>
+                  </Width>
                 )}
-              </div>
+              </CertificationImage>
             );
           })}
-        </div>
+        </CertifiationImageWrapper>
       </Review>
 
       <Review>
         <div>후기 사진</div>
-        <div style={{ border: '2px solid red', marginTop: '3%' }}>
-          <img src="*" alt="" />
-        </div>
+        <ReviewImageWrapper>
+          {/* {challenge.challengeExamImagePath.map((image) => { */}
+          {reviwTest.splice(0, 8).map((image, index) => {
+            return (
+              <ReviewImage key={index}>
+                {/* <img src="*" alt="" /> */}
+
+                {index === 7 ? (
+                  <ViewMore>
+                    <div onClick={showImageModal}>더보기</div>
+                    {imageModalOpen && (
+                      <ImageModal setImageModalOpen={setImageModalOpen} />
+                    )}
+                  </ViewMore>
+                ) : (
+                  <Width>
+                    <div>{image}</div>
+                  </Width>
+                )}
+              </ReviewImage>
+            );
+          })}
+        </ReviewImageWrapper>
       </Review>
     </Container>
   );

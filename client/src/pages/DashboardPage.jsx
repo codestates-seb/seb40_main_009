@@ -71,7 +71,7 @@ export default function MainPage() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `/challenges/all/2?sort-by=popularity&page=1&size=3`,
+        `/challenges/all/2?sort-by=newest&page=1&size=3`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -167,6 +167,15 @@ export default function MainPage() {
               <Container>
                 <div>
                   <FontSize30>신규챌린지</FontSize30>
+                  <div
+                    style={{
+                      border: '2px solid #eff1fe',
+                      marginTop: '3%',
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(4, 1fr)',
+                      width: '100%',
+                    }}
+                  ></div>
                   <div
                     style={{
                       display: 'flex',

@@ -20,6 +20,7 @@
     "react-scroll-motion": "^0.3.0",
     "recoil": "^0.7.6",
     "styled-components": "^5.3.6",
+    "sweetalert2": "^11.6.14",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

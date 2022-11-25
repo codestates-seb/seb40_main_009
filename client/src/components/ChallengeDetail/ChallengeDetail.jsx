@@ -1,25 +1,37 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import {
   Container,
+  ChallengeViewCount,
   Recruitment,
   ChallengeDescriptionWrapper,
   ChallengeDescription,
   Certification,
   CertificationWrapper,
+  CertificationDescription,
+  CertificationImage,
+  Image,
+  ReviewImageWrapper,
+  ReviewImage,
+  ViewMore,
+  Width,
   Review,
   ButtonWrapper,
 } from '../../style/ChallengeDetail/ChallengeDetailStyle';
 
+import ImageModal from './ImageModal';
+import Swal from 'sweetalert2';
 import Loading from '../Loading/Loading';
 import smile from '../../image/smile.jpg';
 
 export default function ChallengeDetail() {
   const parmas = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState([]);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
 
   //url 파라미터값 받아오기
   const id = Number(parmas.id);
@@ -49,11 +61,64 @@ export default function ChallengeDetail() {
     getChallenge();
   }, []);
 
+  // 참여하기 클릭시 페이지 이동
+  const NavigateMPaymentPage = () => {
+    if (challenge.challengeFeePerPerson !== 0) {
+      Swal.fire({
+        icon: 'question',
+        title: '재확인',
+        text: `${challenge.challengeTitle}에 도전 하시겠습니까?`,
+        showCancelButton: true,
+        confirmButtonText: '도전!',
+        cancelButtonText: '다음에...',
+      }).then((res) => {
+        if (res.isConfirmed) {
+          //결제페이지로 이동
+          navigate('/ordersheet');
+        }
+      });
+    } else if (challenge.challengeFeePerPerson === 0) {
+      //챌린지 도전중 페이지로 이동
+      Swal.fire({
+        icon: 'question',
+        title: '재확인',
+        text: `${challenge.challengeTitle}에 도전 하시겠습니까?`,
+        showCancelButton: true,
+        confirmButtonText: '도전!',
+        cancelButtonText: '다음에...',
+      }).then((res) => {
+        if (res.isConfirmed) {
+          //챌린지 도전중 페이지로 이동
+          navigate(`/challengedetail/${id}`);
+        }
+      });
+    }
+  };
+
+  //후기사진 더보기 모달창 띄우기
+  const showImageModal = () => {
+    setImageModalOpen(true);
+  };
+
+  const imageTest = [
+    '인증 예시1',
+    '인증 예시2',
+    '인증 예시3',
+    '인증 예시4',
+    '인증 예시5',
+    '인증 예시6',
+    '인증 예시7',
+    '인증 예시8',
+    '인증 예시9',
+    '인증 예시10',
+  ];
+
   //early return pattern
   if (loading) return <Loading />;
 
   return (
     <Container>
+      <ChallengeViewCount>{`조회수 ${challenge.challengeViewCount}`}</ChallengeViewCount>
       <Recruitment>
         <img src={smile} alt="도전 할 항목의 이미지" />
         <div>
@@ -81,7 +146,7 @@ export default function ChallengeDetail() {
             {/* 참여버튼 */}
             <ButtonWrapper>
               <button className="custom-btn btn-8">
-                <span>참여하기</span>
+                <span onClick={NavigateMPaymentPage}>참여하기</span>
               </button>
               {/* <div>공유아이콘</div> */}
             </ButtonWrapper>
@@ -95,23 +160,45 @@ export default function ChallengeDetail() {
           <div className="title">챌린지 설명</div>
           <div className="pd-5">{challenge.challengeDescription}</div>
         </CertificationWrapper>
+
         {/* 인증 방법 */}
-        <CertificationWrapper>
-          <div className="title">인증 방법</div>
+        <CertificationDescription>
+          <div className="title">인증 방법 / 인증 예시</div>
           <div className="pd-5">{challenge.challengeAuthDescription}</div>
-        </CertificationWrapper>
-        {/* 인증 예시 */}
-        <CertificationWrapper>
-          <div className="title">인증 예시</div>
-          <img src="./img/smile.jpg" alt="*" />
-        </CertificationWrapper>
+          {/* 인증예시 */}
+          <CertificationImage>
+            {challenge.challengeExamImagePath.map((image, index) => {
+              return <Image key={index}>{image}</Image>;
+            })}
+          </CertificationImage>
+        </CertificationDescription>
       </Certification>
 
       <Review>
         <div>후기 사진</div>
-        <div style={{ border: '2px solid red', marginTop: '3%' }}>
-          <img src="*" alt="" />
-        </div>
+        <ReviewImageWrapper>
+          {/* {challenge.challengeExamImagePath.map((image) => { */}
+          {imageTest.splice(0, 8).map((image, index) => {
+            return (
+              <ReviewImage key={index}>
+                {/* <img src="*" alt="" /> */}
+
+                {index === 7 ? (
+                  <ViewMore>
+                    <div onClick={showImageModal}>더보기</div>
+                    {imageModalOpen && (
+                      <ImageModal setImageModalOpen={setImageModalOpen} />
+                    )}
+                  </ViewMore>
+                ) : (
+                  <Width>
+                    <div>{image}</div>
+                  </Width>
+                )}
+              </ReviewImage>
+            );
+          })}
+        </ReviewImageWrapper>
       </Review>
     </Container>
   );
