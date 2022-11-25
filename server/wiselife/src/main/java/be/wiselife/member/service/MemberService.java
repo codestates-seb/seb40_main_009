@@ -106,13 +106,13 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON);
         }
         verifyExistsMemberName(member.getMemberName());
-        log.info("patch.name = {}",member.getMemberName());
 
         Optional.ofNullable(member.getMemberName())
                 .ifPresent(new_memberName->memberFromRepository.setMemberName(new_memberName));
         Optional.ofNullable(member.getMemberDescription())
                 .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
-        if (!Optional.ofNullable(member.getMemberImagePath()).isEmpty()) {
+
+        if(!multipartFiles.isEmpty()){
             member.setMemberId(memberFromRepository.getMemberId());
             imageService.patchMemberImage(member,multipartFiles);
             memberFromRepository.setMemberImagePath(member.getMemberImagePath());

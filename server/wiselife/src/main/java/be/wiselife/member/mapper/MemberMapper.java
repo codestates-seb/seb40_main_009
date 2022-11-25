@@ -23,7 +23,6 @@ public interface MemberMapper {
 
         member.setMemberName(patchMember.getMemberName());
         member.setMemberDescription(patchMember.getMemberDescription());
-        member.setMemberImagePath(patchMember.getMemberImagePath());
 
         return member;
     }
