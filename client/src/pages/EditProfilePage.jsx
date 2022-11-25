@@ -20,7 +20,7 @@ function EditProfilePage() {
   // try catch로 하면 500이 나오는 이유는? Authorization을 못 받는듯!
   const config = {
     method: 'patch',
-    url: `member/${params.name}`, // ${name}을 했을 떄 왜 안되는 걸까ㅜ
+    url: `/member/${params.name}`, // ${name}을 했을 떄 왜 안되는 걸까ㅜ
     headers: {
       'ngrok-skip-browser-warning': 'none',
       Authorization:

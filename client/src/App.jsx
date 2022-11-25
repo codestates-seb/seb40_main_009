@@ -13,6 +13,8 @@ import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetai
 import CreateChallengePage from './pages/CreateChallenge';
 import EditProfilePage from './pages/EditProfilePage';
 import MemberList from './pages/MemberList';
+import Login from './components/Login/Login';
+import KakaoLogin from './components/Login/KakaoLogin';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/ordersheet" element={<OrderSheetPage />} />
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
         </Routes>
         <Footer />
       </BrowserRouter>
