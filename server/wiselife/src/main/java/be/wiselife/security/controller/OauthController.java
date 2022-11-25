@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RequiredArgsConstructor
 @Slf4j
 @RestController
@@ -25,9 +27,10 @@ public class OauthController {
      * @return 맴버에 대한 모든 정보를 반환한다.
      */
     @GetMapping("/oauth/{provider}")
-    public ResponseEntity Oauth2login(@PathVariable String provider, @RequestParam String code){
+    public ResponseEntity Oauth2login(@PathVariable String provider, @RequestParam String code, HttpServletResponse response){
         LoginDto loginDto = oauthservice.login(provider, code);
-
+        response.setHeader("Authorization",loginDto.getAccessToken());
+        response.setHeader("Refresh", loginDto.getRefreshToken());
         return new ResponseEntity<>(loginDto, HttpStatus.ACCEPTED);
     }
 
