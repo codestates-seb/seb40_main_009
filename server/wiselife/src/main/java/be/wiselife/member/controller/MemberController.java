@@ -95,7 +95,7 @@ public class MemberController {
      */
     @PatchMapping(value = "/{memberName}",consumes = {"multipart/form-data"})
     public ResponseEntity patchMember(@PathVariable("memberName") String memberName,
-                                      @Valid @RequestPart MemberDto.Patch patchData,
+                                      @Valid @RequestPart("patch") MemberDto.Patch patchData,
                                       @RequestPart(value = "image",required = false) MultipartFile multipartFiles,
                                       HttpServletRequest request) throws IOException {
 

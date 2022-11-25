@@ -22,8 +22,6 @@ public class MemberDto {
 
         private String memberDescription;
 
-        private String memberImagePath;
-
         //관리자일 경우 수정가능하게
         private boolean hasRedCard;
 
