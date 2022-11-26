@@ -1,40 +1,55 @@
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
 import { useRecoilValue } from 'recoil';
-import { createNumber } from '../../atoms/atoms';
+
 import styled from 'styled-components';
+
+import {
+  createChallengePageNumber,
+  createChallengeStateNumber,
+} from '../../atoms/atoms';
 import ChallengeAsk1 from './CreateAsk1';
 import ChallengeAsk2 from './CreateAsk2';
 import ChallengeAsk3 from './CreateAsk3';
 import ChallengeAsk4 from './CreateAsk4';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
 
 const CreateContainer = styled.section`
-  display: flex;
-  flex-direction: column;
+  > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export default function CreateChallenge() {
-  const questionNumber = useRecoilValue(createNumber);
+  const pageNumber = useRecoilValue(createChallengePageNumber);
+  const pageStateNumber = useRecoilValue(createChallengeStateNumber);
 
-  const { register, handleSubmit } = useForm();
-  const onValid = (createData) => {
-    console.log('ho', createData);
-    const dataBox = createData; // 전체 데이터
-    const rep = createData.challengeRepImagePath[0]; // 사진 파일
-    const example = createData.challengeExamImagePath;
+  /**신규 챌린지 생성 데이터 전송 */
+  const { register, handleSubmit, watch, getValues } = useForm();
 
-    const data = new FormData(); // 폼 데이터 만들기
-    data.append('rep', rep); // 사진 넣기
+  /**유효성 검사 & 데이터 전송 */
+  const onValid = (setDate) => {
+    const dataBox = setDate; // 전체 데이터
+    const rep = setDate.challengeRepImagePath[0]; // 챌린지 대표 이미지
+    const example = setDate.challengeExamImagePath; // 챌린지 인증 이미지
 
-    const dataValue = JSON.stringify(dataBox);
+    const data = new FormData(); // 폼 데이터 생성
+    data.append('rep', rep); // 대표 이미지 추가
+
+    // 인증 이미지 추가
     for (let i = 0; i < example.length; i++) {
       data.append('example', example[i]);
     }
-
-    delete dataBox.challengeRepImagePath; // 데이터에서 사진 지우기
+    delete dataBox.challengeRepImagePath; // 이미지 데이터 삭제
     delete dataBox.challengeExamImagePath;
-    const blub = new Blob([dataValue], { type: 'application/json' }); // 텍스트값
-    data.append('post', blub); // 텍스트 추가
+    delete dataBox.lastCheck;
+
+    const dataValue = JSON.stringify(dataBox); // 텍스트 형식 JSON 변환
+
+    const blob = new Blob([dataValue], { type: 'application/json' }); // 텍스트 데이터 Blob에 추가
+    data.append('post', blob); // post 데이터 추가
 
     try {
       axios.post('/challenges', data, {
@@ -53,18 +68,24 @@ export default function CreateChallenge() {
   return (
     <CreateContainer>
       <form onSubmit={handleSubmit(onValid)}>
-        <ChallengeAsk1 register={register} />
-        <ChallengeAsk2 register={register} />
-        <ChallengeAsk3 register={register} />
-        <ChallengeAsk4 register={register} />
-        <button>submit</button>
+        {pageNumber === 1 ? (
+          <ChallengeAsk1 register={register} watch={watch} />
+        ) : null}
+        {pageNumber === 2 ? (
+          <ChallengeAsk2 register={register} watch={watch} />
+        ) : null}
+        {pageNumber === 3 ? <ChallengeAsk3 register={register} /> : null}
+        {pageNumber === 4 ? (
+          <>
+            <ChallengeAsk4
+              register={register}
+              watch={watch}
+              getValues={getValues}
+            />
+          </>
+        ) : null}
+        {pageStateNumber === 6 ? <button>submit</button> : null}
       </form>
     </CreateContainer>
-    // <CreateContainer>
-    //   {questionNumber === 1 ? <ChallengeAsk1 /> : null}
-    //   {questionNumber === 2 ? <ChallengeAsk2 /> : null}
-    //   {questionNumber === 3 ? <ChallengeAsk3 /> : null}
-    //   {questionNumber === 4 ? <ChallengeAsk4 /> : null}
-    // </CreateContainer>
   );
 }

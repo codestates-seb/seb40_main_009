@@ -8,8 +8,6 @@ import MemberResult from '../components/SearchResult/MemberResult';
 export default function SearchResult() {
   const { name, id } = useParams();
 
-  console.log('name', name, 'id', id);
-
   return (
     <S.ListContainer>
       {name === 'challenge' ? (

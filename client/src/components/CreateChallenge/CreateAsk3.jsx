@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { createChallenge, validButton } from '../../atoms/atoms';
-import { ko } from 'date-fns/locale';
+import { useSetRecoilState } from 'recoil';
 import { DateRange } from 'react-date-range';
-import { useForm } from 'react-hook-form';
-import { addDays } from 'date-fns/esm';
+import { ko } from 'date-fns/locale';
+
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
-function ChallengeAsk3({ register }) {
-  const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const [checkBtn, setCheckBtn] = useRecoilState(validButton);
+import { createChallengeStateNumber } from '../../atoms/atoms';
+
+export default function ChallengeAsk3({ register }) {
+  const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
 
   const [date, setDate] = useState([
     {
@@ -18,29 +17,19 @@ function ChallengeAsk3({ register }) {
       key: 'selection',
     },
   ]);
-  const [dateInfomation] = date;
-  // console.log(dateInfomation.startDate.getMonth());
-  let startDate = `${date[0].startDate.getFullYear()}-${date[0].startDate.getMonth()}-${date[0].startDate.getDate()}`;
-  let lastDate = date[0].endDate;
-  let lastDatee = `${lastDate.getFullYear()}-${lastDate.getMonth()}-${lastDate.getDate()}`;
 
-  const onValid = (data) => {
-    let now = new Date();
-    if (
-      now.getFullYear() <= date[0].startDate.getFullYear() &&
-      now.getMonth() <= date[0].startDate.getMonth() &&
-      now.getDate() <= date[0].startDate.getDate()
-    ) {
-      setCreateChallenge({ ...data, ...create });
-      setCheckBtn(true);
-    } else {
-      alert(
-        `시작일은 ${now.getFullYear()}년 ${now.getMonth()}월 ${now.getDate()}일 이후여야 합니다.`
-      );
-    }
-  };
+  const [dateInfomation] = date;
+
+  const startDate = `${dateInfomation.startDate.getFullYear()}-${
+    dateInfomation.startDate.getMonth() + 1
+  }-${dateInfomation.startDate.getDate()}`;
+  const lastDate = dateInfomation.endDate;
+  const lastDatee = `${lastDate.getFullYear()}-${
+    lastDate.getMonth() + 1
+  }-${lastDate.getDate()}`;
+
   useEffect(() => {
-    setCheckBtn(false);
+    setStatePageNumber(4);
   }, []);
 
   return (
@@ -77,5 +66,3 @@ function ChallengeAsk3({ register }) {
     </S.CreateAsk>
   );
 }
-
-export default ChallengeAsk3;

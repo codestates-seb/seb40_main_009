@@ -19,7 +19,7 @@ export default function MemberList() {
     setCheckedFilter(value);
   };
 
-  // 회원 조회 필터링 (등급 memberBadge / 인기 followerCount / 가입일순 memberId)
+  /**  회원 조회 필터링 (등급 memberBadge / 인기 followerCount / 가입일순 memberId)*/
   const memberFiltering = useCallback(async () => {
     setLoading(true);
     setMemberList([]);
@@ -40,7 +40,7 @@ export default function MemberList() {
     }
   }, [checkedFilter]);
 
-  // 필터에 맞게 서버에서 데이터 가져오기
+  /** 필터에 맞는 데이터 가져오기*/
   useEffect(() => {
     memberFiltering();
   }, [memberFiltering]);

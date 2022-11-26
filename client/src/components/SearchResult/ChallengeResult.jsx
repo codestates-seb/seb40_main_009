@@ -8,6 +8,7 @@ import Challenge from '../ChallengeList/Challenge';
 export default function ChallengeResult({ searchValue }) {
   const [challengeList, setChallengeList] = useState([]);
 
+  /**챌린지 검색 결과 데이터 요청 */
   const challengeSearch = useCallback(async () => {
     try {
       const response = await axios.get(

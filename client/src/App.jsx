@@ -19,7 +19,7 @@ import KakaoLogin from './components/Login/KakaoLogin';
 import ChallengeResult from './components/SearchResult/ChallengeResult';
 import MemberResult from './components/SearchResult/MemberResult';
 
-function App() {
+export default function App() {
   return (
     <>
       <BrowserRouter>
@@ -48,5 +48,3 @@ function App() {
     </>
   );
 }
-
-export default App;

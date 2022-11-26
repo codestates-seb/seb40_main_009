@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function Challenge({ challengeId, challengeTitle, challengeDescription }) {
   const navigate = useNavigate();
 
+  /**챌린지 상세 페이지로 이동 */
   const clickDetail = () => {
     navigate(`/detail/${challengeId}`);
   };
