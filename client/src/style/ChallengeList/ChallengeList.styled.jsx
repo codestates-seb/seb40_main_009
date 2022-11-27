@@ -26,7 +26,6 @@ export const ListContainer = styled.section`
       position: relative;
       > select {
         position: absolute;
-        z-index: 3;
         width: 130px;
         height: 30px;
         top: -30px;

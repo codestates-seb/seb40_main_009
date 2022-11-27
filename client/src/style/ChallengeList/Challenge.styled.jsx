@@ -79,6 +79,7 @@ export const Card = styled.div`
   :hover {
     ${Face} {
       &.face1 {
+        background-color: #8673ff;
         transform: translateY(10px);
       }
 
@@ -90,7 +91,7 @@ export const Card = styled.div`
       > h4 {
         opacity: 1;
         font-weight: bold;
-        color: #8673ff;
+        color: #ffffff;
       }
     }
   }

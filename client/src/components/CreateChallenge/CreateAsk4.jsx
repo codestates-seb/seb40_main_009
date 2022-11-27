@@ -31,7 +31,7 @@ export default function ChallengeAsk4({ register, watch }) {
     });
   };
 
-  /**3이상 값 선택시 주관식으로 전환 */
+  /**인증 시간 3번 선택시 주관식으로 전환 */
   const checkAuthCycle = (e) => {
     if (e.target.value === '3') {
       setThreeMoreAuthCycle(true);

@@ -12,6 +12,7 @@ import ChallengeAsk1 from './CreateAsk1';
 import ChallengeAsk2 from './CreateAsk2';
 import ChallengeAsk3 from './CreateAsk3';
 import ChallengeAsk4 from './CreateAsk4';
+import { useNavigate } from 'react-router-dom';
 
 const CreateContainer = styled.section`
   > form {
@@ -25,15 +26,16 @@ const CreateContainer = styled.section`
 export default function CreateChallenge() {
   const pageNumber = useRecoilValue(createChallengePageNumber);
   const pageStateNumber = useRecoilValue(createChallengeStateNumber);
+  const navigate = useNavigate();
 
   /**신규 챌린지 생성 데이터 전송 */
   const { register, handleSubmit, watch, getValues } = useForm();
 
   /**유효성 검사 & 데이터 전송 */
-  const onValid = (setDate) => {
-    const dataBox = setDate; // 전체 데이터
-    const rep = setDate.challengeRepImagePath[0]; // 챌린지 대표 이미지
-    const example = setDate.challengeExamImagePath; // 챌린지 인증 이미지
+  const onValid = async (setData) => {
+    const dataBox = setData; // 전체 데이터
+    const rep = setData.challengeRepImagePath[0]; // 챌린지 대표 이미지
+    const example = setData.challengeExamImagePath; // 챌린지 인증 이미지
 
     const data = new FormData(); // 폼 데이터 생성
     data.append('rep', rep); // 대표 이미지 추가
@@ -52,7 +54,7 @@ export default function CreateChallenge() {
     data.append('post', blob); // post 데이터 추가
 
     try {
-      axios.post('/challenges', data, {
+      await axios.post('/challenges', data, {
         headers: {
           'Content-Type': 'multipart/form-data', // 전송 타입 설정
           'ngrok-skip-browser-warning': 'none',
@@ -60,6 +62,7 @@ export default function CreateChallenge() {
             'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NkBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.i4rAIdLBMReygLX0hfFZzySqQAnnc5fG-j6AhBQhW5KW-qaHk9PPuuzCrhC3rR0xamUVlHeR0-QgLElR1WLjMQ',
         },
       });
+      await navigate(-1);
     } catch (error) {
       console.log('error : ', error);
     }
