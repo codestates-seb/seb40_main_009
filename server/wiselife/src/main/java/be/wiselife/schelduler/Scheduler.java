@@ -22,16 +22,8 @@ public class Scheduler {
         challengeService.updateChallengeIsClosedStatus();
     }
 
-//    /**
-//     * 매 00시 분마다 챌린지 성공률 update
-//     */
-//    @Scheduled(cron = "0/30 0 0 * * *")
-//    public void updateChallengeSuccessRate(){
-//
-//    }
-
     /**
-     *
+     * 매 00시 분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
      */
     @Scheduled(cron = "0/20 * * * * *")
     public void updateChallengeReward(){
