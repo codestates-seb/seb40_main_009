@@ -112,7 +112,7 @@ public class ChallengeDto {
 
         private int challengeFeePerPerson;
 
-        private int challengeTotalReward;
+        private double challengeTotalReward;
 
         private int challengeViewCount;
 
@@ -161,19 +161,21 @@ public class ChallengeDto {
 
         private int challengeFeePerPerson; //인당 참여금액
 
-        private int challengeTotalReward; // 현재까지의 전체 상금
+        private double challengeTotalReward; // 현재까지의 전체 상금
 
         private int challengeViewCount;
 
         private Boolean isClosed;
 
         /*멤버챌린지 테이블의 정보와 합쳐 별도로 계산이 필요한 값들*/
-        private int averageChallengeSuccessRate;
+        private double averageChallengeSuccessRate;
 
         //현재 챌린지 성공률
-        private int currentUserSuccessRate;
+        private double currentUserSuccessRate;
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updated_at;
 

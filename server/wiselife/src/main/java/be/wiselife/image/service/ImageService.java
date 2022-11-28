@@ -222,9 +222,10 @@ public class ImageService {
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
     private void isSuccessDay(Challenge challenge, MemberChallenge memberChallengeFromRepository, List<ChallengeCertImage> challengeCertImages) {
-        if (challengeCertImages.size()% challenge.getChallengeAuthCycle()==0) {
+        if (challengeCertImages.size() == challenge.getChallengeAuthCycle()) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
-            double memberChallengeSuccessRate = (memberChallengeFromRepository.getMemberSuccessDay()/ChronoUnit.DAYS.between(challenge.getChallengeStartDate(), LocalDate.now()))*100;
+
+            double memberChallengeSuccessRate = ((double)memberChallengeFromRepository.getMemberSuccessDay()/(ChronoUnit.DAYS.between(challenge.getChallengeStartDate(), LocalDate.now())+ 1) )*100;
             memberChallengeFromRepository.setMemberChallengeSuccessRate(memberChallengeSuccessRate);
 
             memberChallengeRepository.save(memberChallengeFromRepository);
@@ -249,6 +250,7 @@ public class ImageService {
     private void calculateMemberChallengePercentage(Member loginMember) {
         List<MemberChallenge> memberChallengeList = memberRepository.findMemberChallengeByMember(loginMember);
         double memberChallengeSuccessRate = 0;
+
         for (MemberChallenge memberChallenge : memberChallengeList) {
                 memberChallengeSuccessRate=memberChallengeSuccessRate+memberChallenge.getMemberChallengeSuccessRate();
         }

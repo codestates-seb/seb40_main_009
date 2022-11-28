@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @Entity
@@ -19,9 +18,9 @@ public class MemberChallenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberChallengeId;
 
-    // 성공시 상금
+    // 환급 받을 금액
     @Column(nullable = false)
-    private double memberReward=0;
+    private double expectedRefundToMember =0;
 
     @Column(nullable = false)
     private double memberSuccessDay=0;
@@ -44,9 +43,9 @@ public class MemberChallenge {
     }
 
     //더미 생성용 생성자
-    public MemberChallenge(Long memberChallengeId, double memberReward, double memberSuccessDay, double memberChallengeSuccessRate, Member member, Challenge challenge) {
+    public MemberChallenge(Long memberChallengeId, double expectedRefundToMember, double memberSuccessDay, double memberChallengeSuccessRate, Member member, Challenge challenge) {
         this.memberChallengeId = memberChallengeId;
-        this.memberReward = memberReward;
+        this.expectedRefundToMember = expectedRefundToMember;
         this.memberSuccessDay = memberSuccessDay;
         this.memberChallengeSuccessRate = memberChallengeSuccessRate;
         this.member = member;

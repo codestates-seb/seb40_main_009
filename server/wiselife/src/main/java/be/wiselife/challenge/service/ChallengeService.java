@@ -16,10 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -251,19 +250,19 @@ public class ChallengeService {
      * Scheduler 사용해서 실행한다.
      */
     public void updateChallengeSuccessRate(){
-        //종료되지 않은 챌린지 전체 조회
+        //진행중인 챌린지 전체 조회
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
         //챌린지에 참여중인 유저의 성공률의 평균을 계산하여 챌린지에 넣는다
-        double challengeSuccessRate = 0;
+        double challengeSuccessRate;
 
         for(Challenge challenge : challengeList){
             challengeSuccessRate = 0;
             for(MemberChallenge memberChallenge : challenge.getMemberChallenges()){
-                challengeSuccessRate += memberChallenge.getMemberChallengeSuccessRate();
+                challengeSuccessRate += (memberChallenge.getMemberChallengeSuccessRate() / 100);
             }
-            challengeSuccessRate /= challenge.getMemberChallenges().size();
+            challengeSuccessRate /= challenge.getMemberChallenges().size() ;
             challenge.setChallengeSuccessRate(challengeSuccessRate);
 
         }
@@ -277,7 +276,7 @@ public class ChallengeService {
      * Scheduler 사용해서 실행한다.
      */
     public void updateChallengeIsClosedStatus(){
-        //종료되지 않은 챌린지 전체 조회
+        //진행중인 챌린지 전체 조회
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
@@ -372,5 +371,51 @@ public class ChallengeService {
         builder.deleteCharAt(builder.length() - 1);
         String getall = builder.toString();
         return getall;
+    }
+
+    /**
+     * 챌린지 상금 & 개인당 환급 받을 금액을 계산
+     * 챌린지 상금과 개인당 환급 받을 금액이 연결되어 있어 함께 계산
+     * 주의할 점은 챌린지 상금을 기반으로 개인당 환급 받을 금액을 계산하기에 추후 수정한다면 순서에 유의
+     */
+    public void updateChallengeTotalRewardAndMemberChallengeToBeRefunded() {
+        //진행중인 챌린지 전체 조회
+        List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+
+        double progressRate;
+        double challengeSuccessRate;
+        int challengeFeePerPerson;
+        int challengeParticipantsNum;
+
+        for(Challenge challenge : challengeList){
+            progressRate = getChallengeProgressRate(challenge.getChallengeStartDate(), challenge.getChallengeEndDate());
+            challengeSuccessRate = challenge.getChallengeSuccessRate();
+            challengeFeePerPerson = challenge.getChallengeFeePerPerson();
+            challengeParticipantsNum = challenge.getMemberChallenges().size();
+            //인당 참가비 * 진행률 * 참가 인원 * (1 - 평균 성공률) = 챌린지 상금
+            challenge.setChallengeTotalReward(challengeFeePerPerson * progressRate * challengeParticipantsNum * (1-challengeSuccessRate));
+
+            //개인당 환급 받을 금액 update
+            memberChallengeService.updateMemberChallengeExpectedRefund(challenge, progressRate);
+        }
+
+        challengeRepository.saveAll(challengeList);
+    }
+
+
+    /**
+     * 챌린지 진행률 계산
+     * @param startDate 챌린지 시작 일자
+     * @param endDate   챌린지 종료 일자
+     * @return
+     */
+    public double getChallengeProgressRate(LocalDate startDate, LocalDate endDate){
+        double challengeTotalDay;
+        LocalDate now = LocalDate.now();
+
+        challengeTotalDay = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
+        return ((double)ChronoUnit.DAYS.between(startDate, now) + 1) / challengeTotalDay;
     }
 }
