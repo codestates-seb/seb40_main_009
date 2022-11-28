@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ec2-user/cicd
+    overwrite: yes
+
+hooks:
+  ApplicationStop:
+    - location: Scripts/kill_process.sh
+  BeforeInstall:
+    - location: Scripts/remove_before.sh
+  ApplicationStart:
+    - location: Scripts/run_process.sh
