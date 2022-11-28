@@ -1,23 +1,28 @@
 spring:
+  profiles:
+    include: oauth
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:test;MODE=MYSQL
   jpa:
     hibernate:
-      ddl-auto: create  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
+#      hb2ddl.auto: validate
+      ddl-auto: create-drop  # ?? ? ????!!!
+    show-sql: true      # ??????
     properties:
       hibernate:
-        format_sql: true  # (3) SQL pretty print
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wiseLifeTest?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC #wiseLifeTest->각자 스키마이름으로 변경 필
-    username: root #wiseLifeTest->각자 계정이름으로 변경 필
-    password: 72957295 #wiseLifeTest->각자 비번으로 변경 필
-  profiles:
-    include: oauth # oauth yml 불러오긴 위한 파일
-
+        format_sql: true # ??? ????
+  sql:
+    init:
+      data-locations: classpath*:db/h2/data.sql
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
 
 logging:
   level:
@@ -45,7 +50,7 @@ jwt:
     expire-length: 900000
   refresh-token:
     expire-length: 12096000
-    
+
 #TODO: 관리자 추가란
 mail:
   address:
