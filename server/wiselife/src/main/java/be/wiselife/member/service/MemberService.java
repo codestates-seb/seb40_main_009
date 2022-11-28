@@ -9,10 +9,7 @@ import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -210,9 +207,11 @@ public class MemberService {
      */
 
     public Page<Member> searchMember(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
         List<Member> memberList = memberRepository.searchMemberName(name);
-
-        return new PageImpl<>(memberList);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), memberList.size());
+        return new PageImpl<>(memberList.subList(start, end), pageable, memberList.size());
     }
 }

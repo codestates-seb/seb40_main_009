@@ -129,12 +129,17 @@ public class ChallengeController {
      *                                                                   TODO :
      *                                                                    챌린지 참여인원인지 판단하는 로직 추가
      *                                                                    응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
+     *                멘토님 조언
+     *                서버에서도 인증사진을 등록하는 것에 대한 유효성 검사가 필요하다.
+     *                사진을 동시에 등록하는 것에 대한 대책 마련
+     *                사진을 줄이는 리사이징에 대한 고민
+
      */
     @PatchMapping(value = "/cert/{challenge-id}", consumes = {"multipart/form-data"})
     public ResponseEntity patchMemberCertification(@Valid @PathVariable("challenge-id") @Positive Long challengeId,
                                                    @RequestPart(value = "cert", required = false) MultipartFile multipartFile,
                                                    HttpServletRequest request) throws IOException {
-
+        //메서드의 호출을 줄인다.AOP, ArgumentResolver 고민 횡단관심사로 빼서 역할 위임하기/접근권한을 두기(멘토님 조언)
         Challenge challenge = challengeService.updateCertImage(challengeId, memberService.getLoginMember(request), multipartFile);
 
         return new ResponseEntity<>(

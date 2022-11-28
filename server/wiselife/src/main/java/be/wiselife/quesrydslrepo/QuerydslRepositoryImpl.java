@@ -106,7 +106,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(challengeCertImage.memberId.eq(memberId))
                         .and(challengeCertImage.randomIdForImage.eq(randomIdForImage)) // 필드명 imageSource로 변경
                         .and(challengeCertImage.createDay.eq(now))) // localDateTime에
-                .orderBy(challengeCertImage.createdAt.desc())
+                .orderBy(challengeCertImage.createdAt.desc())//인덱스에 대한 고민
                 .fetch();
     }
 
