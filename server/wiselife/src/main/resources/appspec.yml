@@ -1,9 +1,10 @@
 version: 0.0
-os: ubuntu
+os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user
+    destination: /home/ec2-user/cicd
+    overwrite: yes
 
 hooks:
   ApplicationStop:
