@@ -23,9 +23,9 @@ public class Scheduler {
     }
 
     /**
-     * 매 00시 분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
+     * 매 03시 00분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
      */
-    @Scheduled(cron = "0/20 * * * * *")
+    @Scheduled(cron = "0 0 3 * * *")
     public void updateChallengeReward(){
         challengeService.updateChallengeSuccessRate();
         challengeService.updateChallengeTotalRewardAndMemberChallengeToBeRefunded();
