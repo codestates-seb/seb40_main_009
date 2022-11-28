@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function CancellationPayment() {
-  return (
-    <div></div>
-  )
+  return <div></div>;
 }
 
-export default CancellationPayment
+export default CancellationPayment;

@@ -4,20 +4,22 @@ import ProfileBoxChallenge from './ProfileBoxChallenge';
 import ProfileBoxChallengeList from './ProfileBoxChallengeList';
 import ProfileBoxOrderList from './ProfileBoxOrderList';
 
-function ProfileBoxLists() {
+function ProfileBoxLists({ participatingChallenges, endChallenges }) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
-  console.log(clickedTab);
+
+  console.log('dkdk', participatingChallengeLists.challengeTitle);
+
   const TabComponent = {
     0: <ProfileBoxChallenge />,
     1: <ProfileBoxChallengeList />,
     2: <ProfileBoxOrderList />,
   };
+  console.log('99', participatingChallenges.memberChallengeId);
   return (
     <S.ProfileBoxComponent>
       <header>
         <S.Tab
           className={clickedTab === 0 ? 'active-tabs' : 'tabs'}
-          // eventKey="link-0"
           onClick={() => {
             setClickedTab(0);
           }}
@@ -26,7 +28,6 @@ function ProfileBoxLists() {
         </S.Tab>
         <S.Tab
           className={clickedTab === 1 ? 'active-tabs' : 'tabs'}
-          // eventKey="link-1"
           onClick={() => {
             setClickedTab(1);
           }}
@@ -35,7 +36,6 @@ function ProfileBoxLists() {
         </S.Tab>
         <S.Tab
           className={clickedTab === 2 ? 'active-tabs' : 'tabs'}
-          // eventKey="link-2"
           onClick={() => {
             setClickedTab(2);
           }}

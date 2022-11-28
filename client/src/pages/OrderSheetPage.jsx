@@ -21,14 +21,14 @@ function OrderSheetPage(props) {
     },
   ]);
 
-  useEffect(() => {
-    axios.get(`http://localhost:3001/order`).then((res) => {
-      //
-      const orders = res.data;
-      console.log(orders);
-      setOrderList(orders);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`/order`).then((res) => {
+  //     //
+  //     const orders = res.data;
+  //     console.log(orders);
+  //     setOrderList(orders);
+  //   });
+  // }, []);
   return (
     <S.OrderSheetInfoPageComponent>
       <h1 className="order-title">주문서 작성</h1>
