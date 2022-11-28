@@ -8,8 +8,10 @@ import be.wiselife.challengetalk.dto.ChallengeTalkDto;
 import be.wiselife.challengetalk.entity.ChallengeTalk;
 import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.image.entity.ChallengeCertImage;
+import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
+import be.wiselife.memberchallenge.service.MemberChallengeService;
 import org.mapstruct.Mapper;
 
 import be.wiselife.challenge.entity.Challenge;
@@ -166,7 +168,7 @@ public interface ChallengeMapper {
     /**
      * 챌린지 => 챌린지 상세 페이지 조회 detail ResponseDto
      */
-    default ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge, ChallengeTalkMapper challengeTalkMapper, MemberService memberService, ChallengeReviewMapper challengeReviewMapper) {
+    default ChallengeDto.DetailResponse challengeToChallengeDetailResponseDto(Challenge challenge, ChallengeTalkMapper challengeTalkMapper, MemberService memberService, ChallengeReviewMapper challengeReviewMapper, Member member, MemberChallengeService memberChallengeService) {
         if ( challenge == null && challengeTalkMapper == null ) {
             return null;
         }
@@ -193,6 +195,8 @@ public interface ChallengeMapper {
             detailResponse.isClosed( challenge.getIsClosed() );
             detailResponse.created_at( challenge.getCreatedAt() );
             detailResponse.updated_at( challenge.getUpdated_at() );
+            detailResponse.averageChallengeSuccessRate(challenge.getChallengeSuccessRate());
+            detailResponse.currentUserSuccessRate(memberChallengeService.findMemberChallengeByMemberAndChallenge(challenge, member).getMemberChallengeSuccessRate());
 
             // 챌린지 참가자에 대한 정보를 응답할 수 있게 detailResponse 필드에 등록해야함
             detailResponse.participatingMember(memberChallengeToMemberChallengeResponseDto(challenge.getMemberChallenges()));

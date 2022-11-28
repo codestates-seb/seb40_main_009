@@ -12,19 +12,22 @@ public class Scheduler {
         this.challengeService = challengeService;
     }
 
+
+
     /**
-     * 매 00시 00분마다 챌린지 성공률 update
+     * 매 00시 00분마다 챌린지 종료 status update
      */
     @Scheduled(cron = "0 0 0 * * *")
-    public void checkChallengeSuccessRate(){
-        challengeService.updateChallengeSuccessRate();
+    public void checkChallengeIsClosed(){
+        challengeService.updateChallengeIsClosedStatus();
     }
 
     /**
-     * 매 00시 10분마다 챌린지 종료 status update
+     * 매 03시 00분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
      */
-    @Scheduled(cron = "0 10 0 * * *")
-    public void checkChallengeIsClosed(){
-        challengeService.updateChallengeIsClosedStatus();
+    @Scheduled(cron = "0 0 3 * * *")
+    public void updateChallengeReward(){
+        challengeService.updateChallengeSuccessRate();
+        challengeService.updateChallengeTotalRewardAndMemberChallengeToBeRefunded();
     }
 }

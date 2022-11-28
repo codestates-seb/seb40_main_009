@@ -2,8 +2,6 @@ package be.wiselife.memberchallenge.service;
 
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.repository.ChallengeRepository;
-import be.wiselife.exception.BusinessLogicException;
-import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
@@ -11,18 +9,15 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MemberChallengeService {
     private final MemberChallengeRepository memberChallengeRepository;
-
     private final MemberRepository memberRepository;
-
     private final ChallengeRepository challengeRepository;
 
     /**
@@ -40,9 +35,8 @@ public class MemberChallengeService {
 
             challenge.setChallengeCurrentParty(challengeCurrentParty-1);
             challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
-
             challenge.getMemberChallenges().remove(memberChallengeFromRepository);
-            memberRepository.save(member);
+
             member.getMemberChallenges().remove(memberChallengeFromRepository);
 
             memberChallengeRepository.delete(memberChallengeFromRepository);
@@ -54,9 +48,9 @@ public class MemberChallengeService {
             MemberChallenge memberChallenge = new MemberChallenge();
 
             challenge.setChallengeCurrentParty(challengeCurrentParty+1);
-            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
+//            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
 
-            memberChallenge.setMemberReward(challenge.getChallengeFeePerPerson());
+            memberChallenge.setExpectedRefundToMember(challenge.getChallengeFeePerPerson());
             memberChallenge.setMember(member);
             memberChallenge.setChallenge(challenge);
 
@@ -68,5 +62,26 @@ public class MemberChallengeService {
 
             return challengeRepository.save(challenge);
         }
+    }
+
+    public void updateMemberChallengeExpectedRefund(Challenge challenge, double challengeProgressRate){
+        List<MemberChallenge> memberChallengeList = challenge.getMemberChallenges();
+        if(memberChallengeList == null) return ;
+
+        int challengeFeePerPerson = challenge.getChallengeFeePerPerson();
+        double challengeTotalReward = challenge.getChallengeTotalReward();
+        int challengeParticipantsNum = memberChallengeList.size();
+
+        for(MemberChallenge memberChallenge : memberChallengeList){
+            //인당 참여금액 * 챌린지 진행률 * 해당 맴버의 인증 성공률 + 챌린지 전체 상금 / 참가 인원수
+            memberChallenge.setExpectedRefundToMember(challengeFeePerPerson * challengeProgressRate * memberChallenge.getMemberChallengeSuccessRate()/100
+                    + challengeTotalReward / challengeParticipantsNum);
+        }
+
+        memberChallengeRepository.saveAll(memberChallengeList);
+    }
+
+    public MemberChallenge findMemberChallengeByMemberAndChallenge(Challenge challenge, Member member){
+        return memberChallengeRepository.findByChallengeAndMember(challenge, member);
     }
 }

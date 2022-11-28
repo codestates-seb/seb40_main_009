@@ -4,7 +4,6 @@ import be.wiselife.follow.entity.Follow;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
-import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -113,7 +112,7 @@ public interface MemberMapper {
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
                         .objDay(ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(), memberChallenge.getChallenge().getChallengeEndDate()))
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
-                        .memberReward(memberChallenge.getMemberReward())
+                        .memberReward(memberChallenge.getExpectedRefundToMember())
                         .isClosed(memberChallenge.getChallenge().getIsClosed())
                         .build())
                 .collect(Collectors.toList());
@@ -133,7 +132,7 @@ public interface MemberMapper {
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
                         .objDay(ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(), memberChallenge.getChallenge().getChallengeEndDate()))
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
-                        .memberReward(memberChallenge.getMemberReward())
+                        .memberReward(memberChallenge.getExpectedRefundToMember())
                         .isClosed(memberChallenge.getChallenge().getIsClosed())
                         .build())
                 .collect(Collectors.toList());

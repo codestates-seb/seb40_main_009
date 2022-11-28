@@ -71,7 +71,7 @@ public class Challenge extends WriterAudit {
     @Setter
     private int challengeFeePerPerson; //인당 참여금액
     @Setter
-    private int challengeTotalReward; // 현재까지의 전체 상금
+    private double challengeTotalReward; // 현재까지의 전체 상금
     @Setter
     private int challengeViewCount;
     @Setter
