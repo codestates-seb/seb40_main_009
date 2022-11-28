@@ -50,8 +50,9 @@ dependencies {
 	//AWS cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-	//firebase
-//	implementation 'com.google.firebase:firebase-admin:7.1.0'
+
+	//파라미터 스토어
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config'
 }
 
 tasks.named('test') {
@@ -61,4 +62,14 @@ tasks.named('test') {
 //Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
 clean {
 delete file('src/main/generated')
+}
+
+ext {
+	set('springCloudVersion', "Hoxton.SR6")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2.7.5"
+	}
 }

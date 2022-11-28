@@ -40,7 +40,7 @@ server:
 
 jwt:
   token:
-    secret-key: qazwsxedcrfvtgbyhnujmiklop!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234
+    secret-key: ${TOKEN_SECRET_KEY}
   access-token:
     expire-length: 900000
   refresh-token:
