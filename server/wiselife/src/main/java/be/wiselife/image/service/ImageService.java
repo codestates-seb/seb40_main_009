@@ -222,7 +222,7 @@ public class ImageService {
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
     private void isSuccessDay(Challenge challenge, MemberChallenge memberChallengeFromRepository, List<ChallengeCertImage> challengeCertImages) {
-        if (challengeCertImages.size() == challenge.getChallengeAuthCycle()) {
+        if (challengeCertImages.size() == challenge.getChallengeAuthCycle()) { //TODO 유현체크
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
 
             double memberChallengeSuccessRate = ((double)memberChallengeFromRepository.getMemberSuccessDay()/(ChronoUnit.DAYS.between(challenge.getChallengeStartDate(), LocalDate.now())+ 1) )*100;
