@@ -7,36 +7,38 @@ import * as S from '../style/MemberList/MemberList.styled';
 import Loading from '../components/Loading/Loading';
 import Member from '../components/MemberList/MemberList';
 
-export default function MemberList() {
+export default function MemberListPage() {
   const [memberList, setMemberList] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [checkedFilter, setCheckedFilter] = useState('memberBadge');
 
-  const [page, setPage] = useState(1);
-  const [ref, inView] = useInView();
+  const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [ref, inView] = useInView();
 
   const handleFilter = (event) => {
     const { value } = event.currentTarget;
     setCheckedFilter(value);
   };
 
-  /**  회원 조회 필터링 (등급 memberBadge / 인기 followerCount / 가입일순 memberId)*/
+  /** 회원 조회 필터 (등급 memberBadge / 인기 followerCount / 가입일순 memberId)*/
   const memberFiltering = useCallback(async () => {
     setLoading(true);
-    setPage(1);
+    setPageNumber(1);
     setMemberList([]);
+
     try {
       const response = await axios.get(
-        `/member?page=1&size=20&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=20&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
           },
         }
       );
-      setTotalPages(response.data.pageInfo.totalPages);
       const members = response.data.data;
+
+      setTotalPages(response.data.pageInfo.totalPages);
       setMemberList(members);
       setLoading(false);
     } catch (error) {
@@ -44,7 +46,7 @@ export default function MemberList() {
     }
   }, [checkedFilter]);
 
-  /** 필터에 맞는 데이터 가져오기*/
+  /** 필터별 데이터 가져오기*/
   useEffect(() => {
     memberFiltering();
   }, [memberFiltering]);
@@ -52,9 +54,10 @@ export default function MemberList() {
   // 무한 스크롤
   const getMemberList = useCallback(async () => {
     setLoading(true);
+
     try {
       const response = await axios.get(
-        `/member?page=${page}&size=20&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=20&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -62,14 +65,16 @@ export default function MemberList() {
         }
       );
       const members = response.data.data;
-      if (page !== 1) {
+
+      if (pageNumber !== 1) {
         setMemberList((prevMembers) => [...prevMembers, ...members]);
       }
+
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
     }
-  }, [page]);
+  }, [pageNumber]);
 
   useEffect(() => {
     getMemberList();
@@ -77,7 +82,7 @@ export default function MemberList() {
 
   useEffect(() => {
     if (inView && !isLoading) {
-      setPage((prevState) => prevState + 1);
+      setPageNumber((prevState) => prevState + 1);
     }
   }, [inView, isLoading]);
 
@@ -95,26 +100,26 @@ export default function MemberList() {
         </S.IndexContainer>
         {memberList.map(
           (
-            { memberId, memberName, memberBadge, followerCount, created_at },
+            { id, memberName, memberBadge, followerCount, created_at },
             index
           ) => (
             <React.Fragment key={index}>
-              {memberList.length - 1 === index ? (
+              {isLastMember(memberList.length - 1, index) ? (
                 <>
                   <Member
-                    memberId={memberId}
-                    memberName={memberName}
-                    memberBadge={memberBadge}
+                    id={id}
+                    name={memberName}
+                    badge={memberBadge}
                     followerCount={followerCount}
                     created_at={created_at}
                   />
-                  {totalPages !== page ? <div ref={ref}></div> : null}
+                  {totalPages !== pageNumber ? <div ref={ref}></div> : null}
                 </>
               ) : (
                 <Member
-                  memberId={memberId}
-                  memberName={memberName}
-                  memberBadge={memberBadge}
+                  id={id}
+                  name={memberName}
+                  badge={memberBadge}
                   followerCount={followerCount}
                   created_at={created_at}
                 />
@@ -126,6 +131,10 @@ export default function MemberList() {
     </S.ListContainer>
   );
 }
+
+const isLastMember = (lastIndex, targetIndex) => {
+  return lastIndex === targetIndex;
+};
 
 const filterList = [
   { id: 0, title: '이름', value: 'memberBadge' },

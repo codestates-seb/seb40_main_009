@@ -38,7 +38,7 @@ const NextButton = styled.button`
 `;
 
 export default function CreateChallengePage() {
-  const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber); // 이름바꾸기 페이지 넘어가는것을 알수있게
+  const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber);
   const stateNumber = useRecoilValue(createChallengeStateNumber);
   const navigate = useNavigate();
 

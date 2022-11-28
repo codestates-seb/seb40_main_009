@@ -6,12 +6,12 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import exampleImg from '../../image/example.png';
 
-export default function ChallengeAsk2({ register, watch }) {
+export default function SecondQuestionSet({ register, watch }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
   const [imageTransform, setImageTransfrom] = useState(exampleImg);
 
   /**이미지 미리보기 세팅 */
-  const imagePreview = (file) => {
+  const setImagePreview = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise((resolve) => {
@@ -51,7 +51,7 @@ export default function ChallengeAsk2({ register, watch }) {
             required: 'Please Upload Picture',
           })}
           onChange={(event) => {
-            imagePreview(event.target.files[0]);
+            setImagePreview(event.target.files[0]);
             answerCheck(event);
           }}
         />

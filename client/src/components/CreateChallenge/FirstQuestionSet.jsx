@@ -4,7 +4,7 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 
-export default function ChallengeAsk1({ register, watch }) {
+export default function FirstQuestionSet({ register, watch }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
 
   /**1번 페이지에서 입력할 모든 값을 입력시 페이지 이동 버튼 활성화 */

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ContentA = styled.div`
+export const UpperCard = styled.div`
   transition: 0.5s;
 
   img {
@@ -18,7 +18,7 @@ export const ContentA = styled.div`
   }
 `;
 
-export const ContentB = styled.div`
+export const LowerCard = styled.div`
   padding-top: 120px;
   text-align: center;
 
@@ -41,7 +41,7 @@ export const ContentB = styled.div`
   }
 `;
 
-export const Face = styled.div`
+export const CardContents = styled.div`
   transition: 0.5s;
   border-radius: 10px;
 
@@ -71,13 +71,13 @@ export const Face = styled.div`
   }
 `;
 
-export const Card = styled.div`
+export const CardContainer = styled.div`
   position: relative;
   margin-top: -90px;
   margin-bottom: -30px;
 
   :hover {
-    ${Face} {
+    ${CardContents} {
       &.face1 {
         background-color: #8673ff;
         transform: translateY(10px);
@@ -87,7 +87,7 @@ export const Card = styled.div`
         transform: translateY(-100px);
       }
     }
-    ${ContentA} {
+    ${UpperCard} {
       > h4 {
         opacity: 1;
         font-weight: bold;

@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { DateRange } from 'react-date-range';
 import { ko } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 
-export default function ChallengeAsk3({ register }) {
-  const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
+export default function ThirdQuestionSet({ register }) {
+  const setPageNumber = useSetRecoilState(createChallengeStateNumber);
 
   const [date, setDate] = useState([
     {
@@ -20,16 +21,11 @@ export default function ChallengeAsk3({ register }) {
 
   const [dateInfomation] = date;
 
-  const startDate = `${dateInfomation.startDate.getFullYear()}-${
-    dateInfomation.startDate.getMonth() + 1
-  }-${dateInfomation.startDate.getDate()}`;
-  const lastDate = dateInfomation.endDate;
-  const lastDatee = `${lastDate.getFullYear()}-${
-    lastDate.getMonth() + 1
-  }-${lastDate.getDate()}`;
+  const startDate = format(dateInfomation.startDate, 'yyyy-MM-dd');
+  const lastDate = format(dateInfomation.endDate, 'yyyy-MM-dd');
 
   useEffect(() => {
-    setStatePageNumber(4);
+    setPageNumber(4);
   }, []);
 
   return (
@@ -55,7 +51,7 @@ export default function ChallengeAsk3({ register }) {
       <div className="question">
         <h3>챌린지 종료일</h3>
         <input
-          value={lastDatee}
+          value={lastDate}
           {...register('challengeEndDate', {
             required: 'Please Write LastDay',
           })}

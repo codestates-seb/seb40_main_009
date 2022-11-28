@@ -5,18 +5,18 @@ import styled from 'styled-components';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
-import exampleImg from '../../image/example.png';
+import exampleImage from '../../image/example.png';
 
 const TimeContainer = styled.section`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
 `;
 
-export default function ChallengeAsk4({ register, watch }) {
+export default function FourthQuestionSet({ register, watch }) {
   const [pageStateNumber, setStatePageNumber] = useRecoilState(
     createChallengeStateNumber
   );
-  const [imageTransform, setImageTransfrom] = useState(exampleImg);
+  const [imageTransform, setImageTransfrom] = useState(exampleImage);
   const [threeMoreAuthCycle, setThreeMoreAuthCycle] = useState(false);
 
   /**이미지 미리보기 */
@@ -32,8 +32,8 @@ export default function ChallengeAsk4({ register, watch }) {
   };
 
   /**인증 시간 3번 선택시 주관식으로 전환 */
-  const checkAuthCycle = (e) => {
-    if (e.target.value === '3') {
+  const checkAuthCycle = (event) => {
+    if (event.target.value === '3') {
       setThreeMoreAuthCycle(true);
     }
   };
@@ -59,6 +59,7 @@ export default function ChallengeAsk4({ register, watch }) {
       : setStatePageNumber(4);
   };
 
+  //throw
   const lastCheck = () => {
     if (
       Number(watch('challengeAuthCycle')) ===
