@@ -15,7 +15,9 @@ permissions:
 hooks:
   ApplicationStop:
     - location: Scripts/kill_process.sh
-  BeforeInstall:
-    - location: Scripts/remove_before.sh
+      timeout: 60
+      runas: ec2-user
   ApplicationStart:
     - location: Scripts/run_process.sh
+      timeout: 60
+      runas: ec2-user
