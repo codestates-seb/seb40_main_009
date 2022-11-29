@@ -1,6 +1,6 @@
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 import ChartBar from './ChartBar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { GiMedallist } from 'react-icons/gi';
 import Badge from './MyProfileBox/Badge';
@@ -17,8 +17,11 @@ function MyProfile({
     memberImagePath,
     memberName,
     memberDescription,
-    memberBadge,
+    // memberBadge,
   };
+
+  const location = useLocation();
+  // const profileData = { memberImagePath, memberName, memberDescription };
 
   return (
     <S.MyProfileComponent>

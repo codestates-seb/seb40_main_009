@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 // import ProfilePicture from '../../image/ProfilePicture.png';
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
-function ProfileImage(props) {
-  const [Image, setImage] = useState();
+function ProfileImage({ profileimage }) {
+  const [Image, setImage] = useState({ profileimage });
   const fileInput = useRef(null);
 
   const onChange = (e) => {
@@ -28,7 +28,7 @@ function ProfileImage(props) {
       <img
         className="profilePicture"
         alt="profile img"
-        src={props.profileimage}
+        src={profileimage}
         onClick={() => {
           fileInput.current.click();
         }}
