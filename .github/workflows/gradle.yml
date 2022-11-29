@@ -49,16 +49,6 @@ jobs:
     - name : Grant execute permission for gradlew
       run: chmod +x server/wiselife/gradlew
       shell: bash
-
-    - name: Setup MySQL
-      uses: samin/mysql-action@v1
-      with:
-        character set server: 'utf8' 
-        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-        mysql database: wiseLifeTest
-        mysql user: root
-        mysql password: ${{ secrets.MYSQL_PASSWORD }} # github Secret 탭에서 설정하세요!
-
     
     # build gradlew
     - name: Build with Gradle
