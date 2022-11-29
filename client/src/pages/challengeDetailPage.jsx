@@ -9,9 +9,10 @@ import ChallengeDetailProgress from '../components/ChallengeDetail/ChallengeDeta
 export default function ChallengeDetailPage() {
   const parmas = useParams();
   const [loading, setLoading] = useState(true);
-  const [participate, setParticipate] = useState([]);
+  const [challenges, setChallenges] = useState([]);
 
   const memberId = localStorage.getItem('LoginId');
+  const authorizationToken = localStorage.getItem('authorizationToken');
 
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
@@ -24,20 +25,15 @@ export default function ChallengeDetailPage() {
       const response = await axios.get(`/challenges/${challengeId}`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
-          Authorization:
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
+          Authorization: authorizationToken,
         },
       });
+      // .then(() => {
       const challengeList = response.data.data;
       console.log('challengeList>>>', challengeList);
-      //참가중인 챌린지인지 체크
-      const participate = challengeList?.participatingMember.map((member) => {
-        return member.memberId === memberId;
-      });
-      console.log('participate', participate);
-      setParticipate(participate);
-
+      setChallenges(challengeList);
       setLoading(false);
+      // });
     } catch (error) {
       console.log('error', error);
     }
@@ -48,16 +44,27 @@ export default function ChallengeDetailPage() {
     getChallenge();
   }, []);
 
+  //참가중인 챌린지인지 체크
+  // const participateUser =
+  //   challenges.participatingMember &&
+  //   challenges.participatingMember.map((member) => {
+  //     return member.memberId === memberId;
+  //   });
+  // console.log('participateUser', participateUser);
+
   //early return pattern
   if (loading) return <Loading />;
 
   return (
     <>
-      {participate.indexOf(true) < 0 ? (
+      {/* 참여중인지보고  */}
+      {/* {participateUser.indexOf(true) < 0 ? (
+        //챌린지 상세페이지
         <ChallengeDetail />
       ) : (
+        //챌린지 도전중 페이지
         <ChallengeDetailProgress />
-      )}
+      )} */}
     </>
   );
 }
