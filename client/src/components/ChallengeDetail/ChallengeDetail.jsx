@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import {
   Container,
@@ -33,15 +34,17 @@ export default function ChallengeDetail() {
   const [imageModalOpen, setImageModalOpen] = useState(false);
 
   //url 파라미터값 받아오기
-  const id = Number(parmas.id);
+  const challengeId = Number(parmas.id);
 
   // 챌린지조회
   const getChallenge = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/challenges/${id}`, {
+      const response = await axios.get(`/challenges/${challengeId}`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
+          Authorization:
+            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
         },
       });
       const challengeList = response.data.data;
@@ -104,19 +107,6 @@ export default function ChallengeDetail() {
     setImageModalOpen(true);
   };
 
-  const imageTest = [
-    '인증 예시1',
-    '인증 예시2',
-    '인증 예시3',
-    '인증 예시4',
-    '인증 예시5',
-    '인증 예시6',
-    '인증 예시7',
-    '인증 예시8',
-    '인증 예시9',
-    '인증 예시10',
-  ];
-
   //early return pattern
   if (loading) return <Loading />;
 
@@ -151,12 +141,15 @@ export default function ChallengeDetail() {
             </ChallengeDescription>
 
             {/* 참여버튼 */}
-            <ButtonWrapper>
-              <button className="custom-btn btn-8">
-                <span onClick={NavigateMPaymentPage}>참여하기</span>
-              </button>
-              {/* <div>공유아이콘</div> */}
-            </ButtonWrapper>
+            {dayjs().format('YYYY-MM-DD') <
+            dayjs(challenge.challengeStartDate).format('YYYY-MM-DD') ? (
+              <ButtonWrapper>
+                <button className="custom-btn btn-8">
+                  <span onClick={NavigateMPaymentPage}>참여하기</span>
+                </button>
+                {/* <div>공유아이콘</div> */}
+              </ButtonWrapper>
+            ) : null}
           </ChallengeDescriptionWrapper>
         </div>
       </Recruitment>
@@ -185,22 +178,27 @@ export default function ChallengeDetail() {
         <div>후기 사진</div>
         <ReviewImageWrapper>
           {/* {challenge.challengeExamImagePath.map((image) => { */}
-          {imageTest.splice(0, 8).map((image, index) => {
+          {challenge.challengeReviews.slice(0, 8).map((image, index) => {
             return (
               <ReviewImage key={index}>
-                {/* <img src="*" alt="" /> */}
-
                 {index === 7 ? (
                   <ViewMore>
                     <div onClick={showImageModal}>더보기</div>
                     {imageModalOpen && (
-                      <ImageModal setImageModalOpen={setImageModalOpen} />
+                      <ImageModal
+                        setImageModalOpen={setImageModalOpen}
+                        image={challenge.challengeReviews}
+                      />
                     )}
                   </ViewMore>
                 ) : (
-                  <FullWidth>
-                    <div>{image}</div>
-                  </FullWidth>
+                  // <FullWidth>
+                  <img
+                    src={image.challengeReviewImagePath}
+                    alt=""
+                    style={{ width: '200px' }}
+                  />
+                  // </FullWidth>
                 )}
               </ReviewImage>
             );
