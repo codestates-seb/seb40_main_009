@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
@@ -8,6 +8,7 @@ import * as S from '../style/ChallengeList/ChallengeList.styled';
 import Challenge from '../components/ChallengeList/Challenge';
 import Loading from '../components/Loading/Loading';
 import { LoginState } from '../components/Login/KakaoLoginData';
+import { useInView } from 'react-intersection-observer';
 
 export default function ChallengeListPage() {
   const loginState = useRecoilValue(LoginState);
@@ -15,6 +16,10 @@ export default function ChallengeListPage() {
   const [isLoading, setLoading] = useState(true);
   const [filterSelect, setFilterSelect] = useState('1');
   const [categorySelect, setCategorySelect] = useState('1');
+  const [pageNumber, setPageNumber] = useState(1);
+  const [challengeTotalPages, setChallengeTotalPages] = useState();
+
+  const [ref, inView] = useInView();
 
   const navMatch = useMatch('/challengelist');
   const navigate = useNavigate();
@@ -49,7 +54,7 @@ export default function ChallengeListPage() {
     setChallengeList([]);
     try {
       const response = await axios.get(
-        `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=1&size=10`,
+        `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=1&size=30`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -58,6 +63,7 @@ export default function ChallengeListPage() {
       );
       const challenges = response.data.data;
 
+      setChallengeTotalPages(response.data.pageInfo.totalPages);
       setChallengeList(challenges);
       setLoading(false);
     } catch (error) {
@@ -68,6 +74,41 @@ export default function ChallengeListPage() {
   useEffect(() => {
     challengeFiltering();
   }, [challengeFiltering]);
+
+  /** 무한 스크롤*/
+  const getMemberList = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios.get(
+        `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=${pageNumber}&size=30`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+          },
+        }
+      );
+      const members = response.data.data;
+
+      if (pageNumber !== 1) {
+        setChallengeList((prevMembers) => [...prevMembers, ...members]);
+      }
+      console.log(challengeList.length);
+      setLoading(false);
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  }, [pageNumber]);
+
+  useEffect(() => {
+    getMemberList();
+  }, [getMemberList]);
+
+  useEffect(() => {
+    if (inView && !isLoading) {
+      setPageNumber((prevState) => prevState + 1);
+    }
+  }, [inView, isLoading]);
 
   if (isLoading) return <Loading />;
 
@@ -105,19 +146,39 @@ export default function ChallengeListPage() {
         </section>
         <S.Container>
           {challengeList.map(
-            ({
-              challengeId,
-              challengeTitle,
-              challengeDescription,
-              challengeRepImagePath,
-            }) => (
-              <Challenge
-                key={challengeId}
-                id={challengeId}
-                title={challengeTitle}
-                description={challengeDescription}
-                image={challengeRepImagePath}
-              />
+            (
+              {
+                challengeId,
+                challengeTitle,
+                challengeDescription,
+                challengeRepImagePath,
+              },
+              index
+            ) => (
+              <React.Fragment key={index}>
+                {isLastMember(challengeList.length - 1, index) ? (
+                  <>
+                    <Challenge
+                      key={challengeId}
+                      id={challengeId}
+                      title={challengeTitle}
+                      description={challengeDescription}
+                      image={challengeRepImagePath}
+                    />
+                    {challengeTotalPages !== pageNumber ? (
+                      <div ref={ref} />
+                    ) : null}
+                  </>
+                ) : (
+                  <Challenge
+                    key={challengeId}
+                    id={challengeId}
+                    title={challengeTitle}
+                    description={challengeDescription}
+                    image={challengeRepImagePath}
+                  />
+                )}
+              </React.Fragment>
             )
           )}
         </S.Container>
@@ -125,6 +186,10 @@ export default function ChallengeListPage() {
     </>
   );
 }
+
+const isLastMember = (lastIndex, targetIndex) => {
+  return lastIndex === targetIndex;
+};
 
 const filterList = [
   {

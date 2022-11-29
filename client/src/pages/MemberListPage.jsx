@@ -13,7 +13,7 @@ export default function MemberListPage() {
   const [checkedFilter, setCheckedFilter] = useState('memberBadge');
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [totalPages, setTotalPages] = useState();
+  const [memberTotalPages, setMemberTotalPages] = useState();
   const [ref, inView] = useInView();
 
   const handleFilter = (event) => {
@@ -38,7 +38,7 @@ export default function MemberListPage() {
       );
       const members = response.data.data;
       console.log(members);
-      setTotalPages(response.data.pageInfo.totalPages);
+      setMemberTotalPages(response.data.pageInfo.totalPages);
       setMemberList(members);
       setLoading(false);
     } catch (error) {
@@ -51,7 +51,7 @@ export default function MemberListPage() {
     memberFiltering();
   }, [memberFiltering]);
 
-  // 무한 스크롤
+  /** 무한 스크롤*/
   const getMemberList = useCallback(async () => {
     setLoading(true);
 
@@ -69,7 +69,7 @@ export default function MemberListPage() {
       if (pageNumber !== 1) {
         setMemberList((prevMembers) => [...prevMembers, ...members]);
       }
-      console.log(memberList.length);
+
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
@@ -119,7 +119,9 @@ export default function MemberListPage() {
                     created_at={created_at}
                     image={memberImagePath}
                   />
-                  {totalPages !== pageNumber ? <div ref={ref}></div> : null}
+                  {memberTotalPages !== pageNumber ? (
+                    <div ref={ref}></div>
+                  ) : null}
                 </>
               ) : (
                 <Member
