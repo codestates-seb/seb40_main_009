@@ -62,6 +62,7 @@ public class MemberDto {
     @Setter
     public static class listResponse {
         private Long memberId;
+        private String memberImagePath;
         private String memberName;
         private Member.MemberBadge memberBadge;
         private int followerCount;
@@ -92,6 +93,7 @@ public class MemberDto {
         private Long challengeId;
         private String challengeTitle;
         private int memberSuccessDay;
+        private String challengeRepImage;
         private long objDay;
         private double memberChallengeSuccessRate;
         private double memberReward;
