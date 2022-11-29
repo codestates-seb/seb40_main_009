@@ -52,7 +52,7 @@ jobs:
     
     # build gradlew
     - name: Build with Gradle
-      run: cd server/catvillage; ./gradlew build -Pprofile=prod
+      run: cd server/wiselife; ./gradlew build -Pprofile=prod
       shell: bash
       # env:
       #   RDS_ENDPOINT: ${{ secrets.ENDPOINT }}
