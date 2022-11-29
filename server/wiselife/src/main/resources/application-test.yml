@@ -9,8 +9,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://wiselife-db.cicdq0knxkqb.ap-northeast-2.rds.amazonaws.com:3306/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul #wiseLifeTest->각자 스키마이름으로 변경 필
-    username: admin #wiseLifeTest->각자 계정이름으로 변경 필
-    password: 1q2w3e4r! #wiseLifeTest->각자 비번으로 변경 필
+    username: ${/test/DB_ID}
+    password: ${/test/DB_PASSWORD}
   profiles:
     include: oauth # oauth yml 불러오긴 위한 파일
 
@@ -40,26 +40,28 @@ server:
 
 jwt:
   token:
-    secret-key: qazwsxedcrfvtgbyhnujmiklop!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234
+    secret-key: ${/test/JWT_SECRET_KEY}
   access-token:
     expire-length: 900000
   refresh-token:
     expire-length: 12096000
-
+    
 #TODO: 관리자 추가란
 mail:
   address:
-    admin: mins402kim@kakao.com
+      admin: mins402kim@kakao.com
 
 cloud:
   aws:
-    credentials:
-      access-key: ${AWS_ACCESS_KEY_ID} # 디코에있는거
-      secret-key: ${AWS_SECRET_ACCESS_KEY} # 디코에있는거
-    s3:
-      bucket: wiselife-image
-      #dir: 안해도될듯?
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID} # 디코에있는거
+        secret-key: ${AWS_SECRET_ACCESS_KEY} # 디코에있는거
+      s3:
+        bucket: wiselife-image
+        #dir: 안해도될듯?
+      region:
+        static: ap-northeast-2
+      stack:
+        auto: false
+
+

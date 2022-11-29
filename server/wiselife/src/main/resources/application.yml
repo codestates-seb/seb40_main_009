@@ -1,65 +1,7 @@
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: none  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
-    properties:
-      hibernate:
-        format_sql: true  # (3) SQL pretty print
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wise_life_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC #wiseLifeTest->각자 스키마이름으로 변경 필
-    username: root #wiseLifeTest->각자 계정이름으로 변경 필
-    password: david1aa #wiseLifeTest->각자 비번으로 변경 필
+  application:
+    name:
   profiles:
-    include: oauth # oauth yml 불러오긴 위한 파일
-
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
-
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-
-log4j:
-  appender:
-    sql:
-
-server:
-  servlet:
-    encoding:
-      force-response: true
-      charset: utf-8
-      force: true
-  port: 3000
-
-jwt:
-  token:
-    secret-key: qazwsxedcrfvtgbyhnujmiklop!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234qazwsxedcrfvtgbyhnujmiklop;!@#$1234
-  access-token:
-    expire-length: 900000
-  refresh-token:
-    expire-length: 12096000
-    
-#TODO: 관리자 추가란
-mail:
-  address:
-      admin: mins402kim@kakao.com
-
-cloud:
-  aws:
-      credentials:
-        access-key: ${AWS_ACCESS_KEY_ID} # 디코에있는거
-        secret-key: ${AWS_SECRET_ACCESS_KEY} # 디코에있는거
-      s3:
-        bucket: wiselife-image
-        #dir: 안해도될듯?
-      region:
-        static: ap-northeast-2
-      stack:
-        auto: false
+    active: aws
+  config:
+    import: classpath:/application-aws.yml
