@@ -43,7 +43,10 @@ export default function App() {
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
           <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<AdminPage />}>
+            <Route path="challenge" />
+            <Route path="member" />
+          </Route>
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import * as S from '../style/MemberList/MemberList.styled';
 
 import Loading from '../components/Loading/Loading';
-import Member from '../components/MemberList/MemberList';
+import Member from '../components/MemberList/Member';
 
 export default function MemberListPage() {
   const [memberList, setMemberList] = useState([]);
@@ -29,7 +29,7 @@ export default function MemberListPage() {
 
     try {
       const response = await axios.get(
-        `/member?page=${pageNumber}&size=20&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=30&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -37,7 +37,7 @@ export default function MemberListPage() {
         }
       );
       const members = response.data.data;
-
+      console.log(members);
       setTotalPages(response.data.pageInfo.totalPages);
       setMemberList(members);
       setLoading(false);
@@ -57,7 +57,7 @@ export default function MemberListPage() {
 
     try {
       const response = await axios.get(
-        `/member?page=${pageNumber}&size=20&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=30&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -69,7 +69,7 @@ export default function MemberListPage() {
       if (pageNumber !== 1) {
         setMemberList((prevMembers) => [...prevMembers, ...members]);
       }
-
+      console.log(memberList.length);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
@@ -86,8 +86,6 @@ export default function MemberListPage() {
     }
   }, [inView, isLoading]);
 
-  if (isLoading) return <Loading />;
-
   return (
     <S.ListContainer>
       <S.Container>
@@ -100,7 +98,14 @@ export default function MemberListPage() {
         </S.IndexContainer>
         {memberList.map(
           (
-            { id, memberName, memberBadge, followerCount, created_at },
+            {
+              id,
+              memberName,
+              memberBadge,
+              followerCount,
+              created_at,
+              memberImagePath,
+            },
             index
           ) => (
             <React.Fragment key={index}>
@@ -112,6 +117,7 @@ export default function MemberListPage() {
                     badge={memberBadge}
                     followerCount={followerCount}
                     created_at={created_at}
+                    image={memberImagePath}
                   />
                   {totalPages !== pageNumber ? <div ref={ref}></div> : null}
                 </>
@@ -122,11 +128,13 @@ export default function MemberListPage() {
                   badge={memberBadge}
                   followerCount={followerCount}
                   created_at={created_at}
+                  image={memberImagePath}
                 />
               )}
             </React.Fragment>
           )
         )}
+        {isLoading ? <Loading /> : null}
       </S.Container>
     </S.ListContainer>
   );

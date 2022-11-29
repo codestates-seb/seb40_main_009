@@ -54,6 +54,7 @@ export default function ChallengeListPage() {
         }
       );
       const challenges = response.data.data;
+
       setChallengeList(challenges);
       setLoading(false);
     } catch (error) {
@@ -99,12 +100,18 @@ export default function ChallengeListPage() {
         </section>
         <S.Container>
           {challengeList.map(
-            ({ challengeId, challengeTitle, challengeDescription }) => (
+            ({
+              challengeId,
+              challengeTitle,
+              challengeDescription,
+              challengeRepImagePath,
+            }) => (
               <Challenge
                 key={challengeId}
-                challengeId={challengeId}
-                challengeTitle={challengeTitle}
-                challengeDescription={challengeDescription}
+                id={challengeId}
+                title={challengeTitle}
+                description={challengeDescription}
+                image={challengeRepImagePath}
               />
             )
           )}

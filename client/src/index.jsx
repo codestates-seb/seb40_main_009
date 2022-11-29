@@ -7,7 +7,7 @@ import './style/common.css';
 
 import App from './App';
 
-axios.defaults.baseURL = 'https://f9be-203-130-71-252.jp.ngrok.io';
+axios.defaults.baseURL = 'https://b8b9-203-130-71-252.jp.ngrok.io';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
