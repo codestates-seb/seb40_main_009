@@ -2,6 +2,19 @@ import styled from 'styled-components';
 
 import { FaSearch } from 'react-icons/fa';
 
+export const Select = styled.select`
+  /* 생략 */
+  font-size: 1rem;
+  color: #787878;
+  background-color: #fff;
+
+  padding: 0.2em;
+  margin: 0;
+
+  border: 1px solid #aaa;
+  border-radius: 0.5em;
+`;
+
 export const HeaderContainer = styled.header`
   width: 100%;
   padding: 0.7% 0;

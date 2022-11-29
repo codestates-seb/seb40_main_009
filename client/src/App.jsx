@@ -6,7 +6,8 @@ import OrderSheetPage from './pages/OrderSheetPage';
 import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import DashboardPage from './pages/DashboardPage';
-import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail';
+import ChallengeDetailPage from './pages/challengeDetailPage';
+// import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail';
 import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetailProgress';
 import CreateChallengePage from './pages/CreateChallengePage';
 import EditProfilePage from './pages/EditProfilePage';
@@ -29,7 +30,8 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/challengelist/*" element={<ChallengeListPage />} />
           <Route path="/memberlist" element={<MemberListPage />} />
-          <Route path="/detail/:id" element={<ChallengeDetail />} />
+          {/* <Route path="/detail/:id" element={<ChallengeDetail />} /> */}
+          <Route path="/detail/:id" element={<ChallengeDetailPage />} />
           <Route
             path="/challengedetail/:id"
             element={<ChallengeDetailProgress />}

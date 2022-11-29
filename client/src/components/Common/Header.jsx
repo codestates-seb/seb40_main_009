@@ -11,6 +11,7 @@ import {
   Search,
   UserSearchResult,
   Icon,
+  Select,
 } from '../../style/Common/HeaderStyle';
 
 import KakaoLoginButton from '../../image/kakaoIcon.png';
@@ -33,7 +34,6 @@ export default function Header() {
     window.location.href = KAKAO_AUTH_URL;
   };
 
-  const memberId = localStorage.getItem('LoginId');
   const memberName = localStorage.getItem('LoginName');
 
   // 메인페이지로 이동
@@ -124,7 +124,6 @@ export default function Header() {
         },
       });
       const userInfo = response.data.data;
-      console.log('userInfo>>', userInfo);
       setUser(userInfo);
     } catch (error) {
       console.error('error', error);
@@ -156,11 +155,11 @@ export default function Header() {
           style={{ color: 'black' }}
           onChange={(event) => setSearchFilterValue(event.target.value)}
         >
-          <select>
+          <Select>
             {searchFilterData.map((element) => {
               return <option key={element.id}>{element.value}</option>;
             })}
-          </select>
+          </Select>
         </div>
         <Search>
           <input
