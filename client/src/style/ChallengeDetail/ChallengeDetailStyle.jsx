@@ -58,8 +58,8 @@ export const CertificationImage = styled.div`
   margin-top: 2%;
 `;
 
-export const Image = styled.div`
-  border: 1px solid red;
+export const Image = styled.img`
+  border: 1px solid #eff1fe;
   width: 50%;
   height: 155px;
   margin-right: 2%;

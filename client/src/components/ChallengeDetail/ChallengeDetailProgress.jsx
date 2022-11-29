@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import {
   Container,
@@ -18,6 +19,8 @@ import {
   Width,
   ReviewImageWrapper,
   ReviewImage,
+  CertificationDescription,
+  Image,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
 import Loading from '../Loading/Loading';
@@ -25,7 +28,6 @@ import ChartBar from '../ProfileList/ChartBar';
 import DdayFormatter from './DdayFormatter';
 import Modal from './Modal';
 import ImageModal from './ImageModal';
-import smile from '../../image/smile.jpg';
 
 export default function ChallengeDetailProgress() {
   const parmas = useParams();
@@ -44,6 +46,8 @@ export default function ChallengeDetailProgress() {
       const response = await axios.get(`/challenges/${challengeId}`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
+          Authorization:
+            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
         },
       });
       const challengeList = response.data.data;
@@ -82,9 +86,9 @@ export default function ChallengeDetailProgress() {
   //챌린지 해온 시간
   const gap = today.getTime() - startDate.getTime();
   const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
-  console.log('지나온 시간>>', pastDay);
+  // console.log('지나온 시간>>', pastDay);
   const progress = Math.ceil((pastDay / totalDay) * 100);
-  console.log('진행률>>>', progress);
+  // console.log('진행률>>>', progress);
 
   //early return pattern
   if (loading) return <Loading />;
@@ -116,7 +120,10 @@ export default function ChallengeDetailProgress() {
       <ChallengeProgress>
         {/* 이미지 */}
         <div className="image">
-          <ChallengeImage src={smile} alt="도전 할 항목의 이미지" />
+          <ChallengeImage
+            src={challenge.challengeRepImagePath}
+            alt="도전 할 항목의 이미지"
+          />
         </div>
 
         <ChallengeWrapper>
@@ -175,15 +182,17 @@ export default function ChallengeDetailProgress() {
           <div className="pd-5">{challenge.challengeDescription}</div>
         </CertificationWrapper>
 
-        <CertificationWrapper>
-          <div className="title">인증 방법</div>
+        {/* 인증 방법 */}
+        <CertificationDescription>
+          <div className="title">인증 방법 / 인증 예시</div>
           <div className="pd-5">{challenge.challengeAuthDescription}</div>
-        </CertificationWrapper>
-
-        <CertificationWrapper>
-          <div className="title">인증 예시</div>
-          <img src="./img/smile.jpg" alt="*" />
-        </CertificationWrapper>
+          {/* 인증예시 */}
+          <CertificationImage>
+            {challenge.challengeExamImagePath.map((image, index) => {
+              return <Image key={index} src={image}></Image>;
+            })}
+          </CertificationImage>
+        </CertificationDescription>
       </Certification>
 
       <Review>
@@ -191,6 +200,12 @@ export default function ChallengeDetailProgress() {
           <div className="marginRight"> 인증 사진</div>
           <div>
             <div>{`오늘 인증 횟수  인증횟수/ ${challenge.challengeAuthCycle}`}</div>
+            {/* {challenge.challengeAuthAvailableTime ===
+            dayjs().format('HH:mm') ? (
+              <div className="cursur" onClick={showCertificationModal}>
+                인증 사진 올리기
+              </div>
+            ) : null} */}
             <div className="cursur" onClick={showCertificationModal}>
               인증 사진 올리기
             </div>
