@@ -39,6 +39,8 @@ public enum ExceptionCode {
     CHALLENGE_EXAM_IMAGE_MUST_ENROLL(404, "Challenge example image must be enroll min one-image"),
 
     //ChallengeCertImage 부분 예외 ===========시작
+    NOT_CERTIFICATION_AVAILABLE_TIME(404, "Must upload certification photo at the appropriate time"),
+
     YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST(404, "You must participate to challenge first"),
 
     //Challenge Talk 부분 예외 ==============시작
