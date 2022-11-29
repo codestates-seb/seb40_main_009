@@ -45,33 +45,10 @@ function EditProfilePage() {
       });
   };
 
-  // // patch요청
-  // const patchEdit = async () => {
-  //   try {
-  //     console.log('aaaaa', editProfileLists);
-  //     axios
-  //       .patch(`member/${name}`, {
-  //         headers: {
-  //           'ngrok-skip-browser-warning': 'none',
-  //           Authorization:
-  //             'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.FlS9lUOnWzAi9UFkZOT2UqT4FYmGiiRsST2wfPJErEiQLYYsJw9jSMwYaEwrM1DceWXltVQ5r8o0_OWjFGJa8w',
-  //         },
-  //         data: editProfileLists,
-  //       })
-  //       .then(() => {
-  //         console.log('dkdk');
-  //         setEditProfileLists();
-  //         navigate('/profile/:name');
-  //       });
-  //   } catch (error) {
-  //     console.log('error: ', error);
-  //     console.log('지나갑니다');
-  //   }
-  // };
-  const onChangeEdit = (e) => {
+  const onChangeEdit = (event) => {
     setEditProfileLists({
       ...editProfileLists,
-      [e.target.name]: e.target.value,
+      [event.target.name]: event.target.value,
     });
     console.log(editProfileLists);
   };
