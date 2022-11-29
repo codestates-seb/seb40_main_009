@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import * as S from '../style/MyProfilePageStyle/EditProfileStyle';
-
 import ProfileImage from '../components/ProfileList/ProfileImage';
-
 function EditProfilePage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [editProfileLists, setEditProfileLists] = useState(location.state.data);
-  //   console.log(editProfileLists);
   const params = useParams();
+
+  //   console.log(editProfileLists);
+  const [editProfileLists, setEditProfileLists] = useState(location.state.data);
+
   const name = editProfileLists.memberName;
   // const name = params.memberName;
   // console.log(location.state.data);
-  console.log(params.name);
+
+  // const data = location.state.data;
+  // console.log('ㅇㅁㅅㅁ', data);
+  // 왜 안받아도 있는거지
+
+  // console.log('aaaa', name);
+  // console.log(params.name);
 
   // try catch로 하면 500이 나오는 이유는? Authorization을 못 받는듯!
   const config = {
@@ -28,7 +33,6 @@ function EditProfilePage() {
     },
     data: editProfileLists,
   };
-
   const patchEdit = () => {
     axios(config)
       .then((response) => {
@@ -54,7 +58,6 @@ function EditProfilePage() {
   //         },
   //         data: editProfileLists,
   //       })
-
   //       .then(() => {
   //         console.log('dkdk');
   //         setEditProfileLists();
@@ -65,7 +68,6 @@ function EditProfilePage() {
   //     console.log('지나갑니다');
   //   }
   // };
-
   const onChangeEdit = (e) => {
     setEditProfileLists({
       ...editProfileLists,
@@ -77,12 +79,11 @@ function EditProfilePage() {
   return (
     <S.EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
-
       <ProfileImage
         profileimage={editProfileLists.profileimage}
-        name="profileimage"
-        // onClick={onChangeEdit}
-        value={editProfileLists.profileimage}
+        // name="profileimage"
+        // // onClick={onChangeEdit}
+        // value={editProfileLists.profileimage}
       />
       <S.Edit>
         <div>닉네임</div>
@@ -108,5 +109,4 @@ function EditProfilePage() {
     </S.EditProfileComponent>
   );
 }
-
 export default EditProfilePage;

@@ -6,23 +6,47 @@ import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
 import MyProfile from '../components/ProfileList/MyProfile';
 import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../components/Login/KakaoLoginData';
 
-function MyProfilePage({
-  memberImagePath,
-  memberName,
-  memberDescription,
-  percentage,
-  level,
-}) {
+function MyProfilePage() {
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+
   const [myProfileLists, setMyProfileLists] = useState([
     {
-      memberImagePath: '',
-      memberName: '',
       memberDescription: '',
-      percentage: '',
-      level: '',
+      memberName: '', // 사용할 모든 데이터? usestate안에 채워야 하는지? 다 쓰지 않아도 데이터를 불러 오는데 문제 없음
+      memberBadge: '',
+      memberImagePath: '',
+      memberChallengePercentage: '',
+      memberExpObjRate: '',
+      participatingChallenges: [
+        {
+          memberChallengeId: '',
+          challengeId: '',
+          challengeTitle: '',
+          memberSuccessDay: '',
+          objectPeriod: '',
+          memberChallengeSuccessRate: '',
+          memberReward: '',
+          closed: '',
+        },
+      ],
+      endChallenges: [
+        {
+          memberChallengeId: '',
+          challengeId: '',
+          challengeTitle: '',
+          memberSuccessDay: '',
+          objDay: '',
+          memberChallengeSuccessRate: '',
+          memberReward: '',
+          closed: '',
+        },
+      ],
     },
   ]);
+
   const params = useParams();
   const name = params.name;
 
@@ -39,7 +63,7 @@ function MyProfilePage({
         })
         .then((response) => {
           const myProfile = response.data;
-          // console.log(myProfile);
+          console.log('my', myProfile);
           setMyProfileLists(myProfile.data);
         });
     } catch (error) {
@@ -50,6 +74,7 @@ function MyProfilePage({
   useEffect(() => {
     getProfile();
   }, []);
+  console.log('aoaoao', myProfileLists.participatingChallenges); // 왜 안받아져오는지 데이터 부르는게 잘못된건가?
 
   return (
     <S.MyProfilePageComponent>
@@ -57,10 +82,15 @@ function MyProfilePage({
         memberImagePath={myProfileLists.memberImagePath}
         memberName={myProfileLists.memberName}
         memberDescription={myProfileLists.memberDescription}
-        percentage={myProfileLists.percentage}
-        level={myProfileLists.level}
+        memberBadge={myProfileLists.memberBadge}
+        memberExpObjRate={myProfileLists.memberExpObjRate}
       />
-      <ProfileBoxLists />
+      <ProfileBoxLists
+        // participatingChallenges={myProfileLists.map((data) => {
+        //   return data.participatingChallenges;
+        // })}
+        endChallenges={myProfileLists.endChallenges}
+      />
     </S.MyProfilePageComponent>
   );
 }

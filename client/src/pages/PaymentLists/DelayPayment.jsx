@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function DelayPayment() {
-  return (
-    <div>DelayPayment</div>
-  )
+  return <div>DelayPayment</div>;
 }
 
-export default DelayPayment
+export default DelayPayment;
