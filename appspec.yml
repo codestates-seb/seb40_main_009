@@ -3,7 +3,7 @@ os: linux #ec2에 배포하는 경우 필수 값이며, amazon linux를 사용�
 ​
 files:
   - source: /
-    destination: /home/ec2-user
+    destination: /home/ec2-user/build
     overwrite: yes
 ​
 permissions:
@@ -13,5 +13,9 @@ permissions:
     group: ec2-user
 
 hooks:
+  BeforeInstall:
+    - location: deploy-before.sh
+      runas: ec2-user
   ApplicationStart:
-    - location: scripts/deploy.sh
+    - location: deploy.sh
+      runas: ec2-user
