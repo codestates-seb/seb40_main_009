@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-
 import {
   HeaderContainer,
   Container,
@@ -17,6 +16,9 @@ import {
 import KakaoLoginButton from '../../image/kakaoIcon.png';
 import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
 import { LoginState } from '../Login/KakaoLoginData';
+import { FaRunning } from 'react-icons/fa';
+import { TiArrowDownThick, TiArrowUpThick } from 'react-icons/ti';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export default function Header() {
   const [challengeList, setChallengeList] = useState([]);
   const [user, setUser] = useState([]);
   const [searchBox, setSearchBox] = useState(true);
+  const [view, setView] = useState(false);
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
@@ -62,6 +65,10 @@ export default function Header() {
   const navigateMypage = () => {
     navigate(`/profile/${memberName}`);
   };
+
+  //회원이미지 클릭시 드롭다운
+  const dropDownData = ['내 프로필', '로그아웃'];
+  const defaultOption = dropDownData[0];
 
   //검색필터 데이터
   const searchFilterData = [
@@ -146,11 +153,19 @@ export default function Header() {
   return (
     <HeaderContainer>
       <Container>
+        <FaRunning
+          style={{ color: '#8673ff', fontSize: '20px', marginLeft: '5%' }}
+        />
         <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo>
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
-        <ChallengeButton onClick={NavigateMemberPage}>Ranking</ChallengeButton>
+        <ChallengeButton
+          style={{ marginRight: '8%' }}
+          onClick={NavigateMemberPage}
+        >
+          Ranking
+        </ChallengeButton>
         <div
           style={{ color: 'black' }}
           onChange={(event) => setSearchFilterValue(event.target.value)}
@@ -222,14 +237,64 @@ export default function Header() {
           <Icon onClick={moveSearchResultPage} />
         </Search>
         {loginState ? (
-          <div style={{ color: 'black', display: 'flex' }}>
-            <img
-              style={{ width: '30px', borderRadius: '50px' }}
-              src={user.memberImagePath}
-              alt="유저이미지"
-              onClick={navigateMypage}
-            />
-            <div onClick={logOut}>로그아웃</div>
+          <div
+            style={{
+              color: 'black',
+              display: 'flex',
+              marginLeft: '540px',
+              alignItems: 'center',
+            }}
+          >
+            <div>반가워요, {memberName} 님!</div>
+
+            <ul
+              onClick={() => {
+                setView(!view);
+              }}
+            >
+              {
+                <img
+                  style={{
+                    width: '30px',
+                    marginLeft: '3px',
+                    borderRadius: '50px',
+                  }}
+                  src={user.memberImagePath}
+                  alt="유저이미지"
+                />
+              }
+              {view ? (
+                <IoIosArrowUp style={{ color: '#8673FF' }} />
+              ) : (
+                <IoIosArrowDown style={{ color: '#8673FF' }} />
+              )}
+              {view && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 52,
+                    backgroundColor: '#F2F4FE',
+                    padding: '20px 10px',
+                    borderRadius: '10px',
+                    color: '#787878',
+                  }}
+                >
+                  <li
+                    style={{
+                      // borderBottom: '2px solid #8673FF',
+                      marginBottom: '10px',
+                      // hover: 'background-color: #f2f4fe',
+                    }}
+                    onClick={navigateMypage}
+                  >
+                    마이페이지
+                  </li>
+                  <li onClick={logOut}>로그아웃</li>
+                </div>
+              )}
+            </ul>
+
+            {/* <div onClick={logOut}>로그아웃</div> */}
           </div>
         ) : (
           <div style={{ color: 'black' }}>
