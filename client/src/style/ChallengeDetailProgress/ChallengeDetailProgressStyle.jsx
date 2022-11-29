@@ -117,8 +117,33 @@ export const CertifiationImageWrapper = styled.div`
   grid-template-columns: repeat(4, 1fr);
 `;
 
+export const CertificationDescription = styled.div`
+  border: 2px solid #eff1fe;
+  width: 60%;
+  padding: 3%;
+  border-radius: 20px;
+  & > .title {
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+  }
+  & > .pd-5 {
+    padding-top: 5%;
+  }
+  & > img {
+    padding-top: 5%;
+    width: 100%;
+  }
+`;
+
+export const Image = styled.img`
+  border: 1px solid #eff1fe;
+  width: 50%;
+  height: 155px;
+  margin-right: 2%;
+`;
+
 export const CertificationImage = styled.div`
-  border: 2px solid red;
   width: 90%;
   height: 180px;
   display: flex;
