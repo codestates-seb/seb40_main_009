@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import * as S from '../style/MyProfilePageStyle/EditProfileStyle';
-
 import ProfileImage from '../components/ProfileList/ProfileImage';
-
 function EditProfilePage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,7 +25,6 @@ function EditProfilePage() {
     },
     data: editProfileLists,
   };
-
   const patchEdit = () => {
     axios(config)
       .then((response) => {
@@ -54,7 +50,6 @@ function EditProfilePage() {
   //         },
   //         data: editProfileLists,
   //       })
-
   //       .then(() => {
   //         console.log('dkdk');
   //         setEditProfileLists();
@@ -65,11 +60,10 @@ function EditProfilePage() {
   //     console.log('지나갑니다');
   //   }
   // };
-
-  const onChangeEdit = (e) => {
+  const onChangeEdit = (event) => {
     setEditProfileLists({
       ...editProfileLists,
-      [e.target.name]: e.target.value,
+      [event.target.name]: event.target.value,
     });
     console.log(editProfileLists);
   };
@@ -77,7 +71,6 @@ function EditProfilePage() {
   return (
     <S.EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
-
       <ProfileImage
         profileimage={editProfileLists.profileimage}
         name="profileimage"
@@ -108,5 +101,4 @@ function EditProfilePage() {
     </S.EditProfileComponent>
   );
 }
-
 export default EditProfilePage;

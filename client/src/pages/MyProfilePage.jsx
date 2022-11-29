@@ -6,8 +6,12 @@ import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
 import MyProfile from '../components/ProfileList/MyProfile';
 import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
+import { useRecoilState } from 'recoil';
+import { LoginState } from '../components/Login/KakaoLoginData';
 
 function MyProfilePage() {
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+
   const [myProfileLists, setMyProfileLists] = useState([
     {
       memberDescription: '',
@@ -82,9 +86,9 @@ function MyProfilePage() {
         memberExpObjRate={myProfileLists.memberExpObjRate}
       />
       <ProfileBoxLists
-        participatingChallenges={myProfileLists.map((data) => {
-          return data.participatingChallenges;
-        })}
+        // participatingChallenges={myProfileLists.map((data) => {
+        //   return data.participatingChallenges;
+        // })}
         endChallenges={myProfileLists.endChallenges}
       />
     </S.MyProfilePageComponent>

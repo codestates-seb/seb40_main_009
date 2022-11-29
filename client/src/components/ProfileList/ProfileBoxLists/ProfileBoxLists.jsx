@@ -6,15 +6,12 @@ import ProfileBoxOrderList from './ProfileBoxOrderList';
 
 function ProfileBoxLists({ participatingChallenges, endChallenges }) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
-
-  console.log('dkdk', participatingChallengeLists.challengeTitle);
-
   const TabComponent = {
     0: <ProfileBoxChallenge />,
     1: <ProfileBoxChallengeList />,
     2: <ProfileBoxOrderList />,
   };
-  console.log('99', participatingChallenges.memberChallengeId);
+  // console.log('99', participatingChallenges.memberChallengeId);
   return (
     <S.ProfileBoxComponent>
       <header>

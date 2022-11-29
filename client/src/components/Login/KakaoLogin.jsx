@@ -19,13 +19,13 @@ function KakaoLogin() {
         .then((response) => {
           localStorage.setItem('refreshToken', response.data.refreshToken);
           localStorage.setItem('authorizationToken', response.data.accessToken);
-          // navigate('/');
-        })
-        .then(window.location.replace('/'));
+          navigate('/');
+        });
     } catch (error) {
       console.log('error: ', error);
     }
   }, [KAKAO_CODE]);
+  console.log('get', localStorage.getItem());
 
   useEffect(() => {
     getKakaoToken();
