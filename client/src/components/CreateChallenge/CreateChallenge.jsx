@@ -1,70 +1,94 @@
-import { useRecoilValue } from 'recoil';
-import { createNumber } from '../../atoms/atoms';
-import styled from 'styled-components';
-import ChallengeAsk1 from './CreateAsk1';
-import ChallengeAsk2 from './CreateAsk2';
-import ChallengeAsk3 from './CreateAsk3';
-import ChallengeAsk4 from './CreateAsk4';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+
+import styled from 'styled-components';
+
+import {
+  createChallengePageNumber,
+  createChallengeStateNumber,
+} from '../../atoms/atoms';
+import { useNavigate } from 'react-router-dom';
+import FirstQuestionSet from './FirstQuestionSet';
+import SecondQuestionSet from './SecondQuestionSet';
+import ThirdQuestionSet from './ThirdQuestionSet';
+import FourthQuestionSet from './FourthQuestionSet';
 
 const CreateContainer = styled.section`
-  display: flex;
-  flex-direction: column;
+  > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export default function CreateChallenge() {
-  const questionNumber = useRecoilValue(createNumber);
+  const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber);
+  const [pageStateNumber, setPageStateNumber] = useRecoilState(
+    createChallengeStateNumber
+  );
+  const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm();
-  const onValid = (createData) => {
-    console.log('ho', createData);
-    const dataBox = createData; // 전체 데이터
-    const rep = createData.challengeRepImagePath[0]; // 사진 파일
-    const example = createData.challengeExamImagePath;
+  /**신규 챌린지 생성 데이터 전송 */
+  const { register, handleSubmit, watch, getValues } = useForm();
 
-    const data = new FormData(); // 폼 데이터 만들기
-    data.append('rep', rep); // 사진 넣기
+  /**유효성 검사 & 데이터 전송 */
+  const onValid = async (setData) => {
+    const dataBox = setData; // 전체 데이터
+    const representImage = setData.challengeRepImagePath[0]; // 챌린지 대표 이미지
+    const exampleImage = setData.challengeExamImagePath; // 챌린지 인증 이미지
 
-    const dataValue = JSON.stringify(dataBox);
-    for (let i = 0; i < example.length; i++) {
-      data.append('example', example[i]);
+    const data = new FormData(); // 폼 데이터 생성
+    data.append('rep', representImage); // 대표 이미지 추가
+
+    // 인증 이미지 추가
+    for (let i = 0; i < exampleImage.length; i++) {
+      data.append('example', exampleImage[i]);
     }
-
-    delete dataBox.challengeRepImagePath; // 데이터에서 사진 지우기
+    delete dataBox.challengeRepImagePath; // 이미지 데이터 삭제
     delete dataBox.challengeExamImagePath;
-    const blub = new Blob([dataValue], { type: 'application/json' }); // 텍스트값
-    data.append('post', blub); // 텍스트 추가
+    delete dataBox.lastCheck;
+
+    const dataValue = JSON.stringify(dataBox); // 텍스트 형식 JSON 변환
+
+    const stringData = new Blob([dataValue], { type: 'application/json' }); // 텍스트 데이터 Blob에 추가
+    data.append('post', stringData); // post 데이터 추가
 
     try {
-      axios.post('/challenges', data, {
+      await axios.post('/challenges', data, {
         headers: {
           'Content-Type': 'multipart/form-data', // 전송 타입 설정
           'ngrok-skip-browser-warning': 'none',
           Authorization:
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NkBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.i4rAIdLBMReygLX0hfFZzySqQAnnc5fG-j6AhBQhW5KW-qaHk9PPuuzCrhC3rR0xamUVlHeR0-QgLElR1WLjMQ',
+            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
         },
       });
+      await setPageStateNumber(1);
+      await setPageNumber(1);
+      await navigate('/');
     } catch (error) {
       console.log('error : ', error);
     }
   };
 
+  const challengeComponents = [
+    <FirstQuestionSet register={register} watch={watch} />,
+    <SecondQuestionSet register={register} watch={watch} />,
+    <ThirdQuestionSet register={register} />,
+    <FourthQuestionSet
+      register={register}
+      watch={watch}
+      getValues={getValues}
+    />,
+  ];
+
   return (
     <CreateContainer>
       <form onSubmit={handleSubmit(onValid)}>
-        <ChallengeAsk1 register={register} />
-        <ChallengeAsk2 register={register} />
-        <ChallengeAsk3 register={register} />
-        <ChallengeAsk4 register={register} />
-        <button>submit</button>
+        {challengeComponents[pageNumber - 1]}
+        {pageStateNumber === 6 ? <button>submit</button> : null}
       </form>
     </CreateContainer>
-    // <CreateContainer>
-    //   {questionNumber === 1 ? <ChallengeAsk1 /> : null}
-    //   {questionNumber === 2 ? <ChallengeAsk2 /> : null}
-    //   {questionNumber === 3 ? <ChallengeAsk3 /> : null}
-    //   {questionNumber === 4 ? <ChallengeAsk4 /> : null}
-    // </CreateContainer>
   );
 }

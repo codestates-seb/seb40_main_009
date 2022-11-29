@@ -1,17 +1,12 @@
 import { atom } from 'recoil';
 
-export const createChallenge = atom({
-  key: 'createChallenge',
-  default: {},
+export const createChallengeStateNumber = atom({
+  key: 'createChallengeStateNumber',
+  default: 1,
   dangerouslyAllowMutability: true,
 });
 
-export const createNumber = atom({
-  key: 'addNumber',
+export const createChallengePageNumber = atom({
+  key: 'createChallengePageNumber',
   default: 1,
-});
-
-export const validButton = atom({
-  key: 'validButton',
-  default: false,
 });

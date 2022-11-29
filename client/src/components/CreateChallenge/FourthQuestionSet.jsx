@@ -1,48 +1,26 @@
-import { useEffect } from 'react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
+
 import styled from 'styled-components';
-import { createChallenge } from '../../atoms/atoms';
 import * as S from '../../style/CreateChallenge/Challenge.styled';
-import exampleImg from '../../image/example.png';
-import axios from 'axios';
-import Loading from '../Loading/Loading';
+
+import { createChallengeStateNumber } from '../../atoms/atoms';
+import exampleImage from '../../image/example.png';
 
 const TimeContainer = styled.section`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
 `;
 
-function ChallengeAsk4({ register }) {
-  const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const [imageTransform, setImageTransfrom] = useState(exampleImg);
-  const [quantity, setQuantity] = useState('-1');
-  const [isThree, setIsThree] = useState(false);
-  const [checkCounts, setCheckCounts] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+export default function FourthQuestionSet({ register, watch }) {
+  const [pageStateNumber, setStatePageNumber] = useRecoilState(
+    createChallengeStateNumber
+  );
+  const [imageTransform, setImageTransfrom] = useState(exampleImage);
+  const [threeMoreAuthCycle, setThreeMoreAuthCycle] = useState(false);
 
-  const onValid = async (data) => {
-    const quantity = Number(data.challengeAuthCycle);
-    if (quantity !== data.time.length) {
-      // 네이밍 바꾸기 if가 alert와 같은 의미를 갖도록
-      alert('선택한 인증 횟수와 인증 시간이 맞지 않습니다.');
-    }
-    setCreateChallenge({ ...create, ...data });
-    console.log('안', create);
-  };
-
-  const addTime = (e) => {
-    if (e.target.checked) {
-      setCheckCounts([...checkCounts, e.target.value]);
-    }
-    if (!e.target.checked) {
-      setCheckCounts(checkCounts.filter((el) => el !== e.target.value));
-    }
-  };
-
-  //이미지 미리보기
-  const onChange = (file) => {
+  /**이미지 미리보기 */
+  const imagePreview = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise((resolve) => {
@@ -53,37 +31,53 @@ function ChallengeAsk4({ register }) {
     });
   };
 
-  const isThreeBtn = (e) => {
-    setQuantity(e.target.value);
-    if (e.target.value === '3') {
-      setIsThree(true);
+  /**인증 시간 3번 선택시 주관식으로 전환 */
+  const checkAuthCycle = (event) => {
+    if (event.target.value === '3') {
+      setThreeMoreAuthCycle(true);
     }
   };
-  const checkQuantity = (e) => {
-    setQuantity(e.target.value);
+
+  /**모든 값 입력시 제출 버튼 활성화 */
+  const answerCheck = (event) => {
+    const allValidateList = [
+      'challengeExamImagePath',
+      'challengeAuthDescription',
+      'challengeAuthCycle',
+      'challengeAuthAvailableTime',
+    ];
+
+    const validateList = allValidateList.filter(
+      (element) => element !== event.target.name
+    );
+
+    event.target.value &&
+    watch(validateList[0]) &&
+    watch(validateList[1]) &&
+    watch(validateList[2])
+      ? setStatePageNumber(5)
+      : setStatePageNumber(4);
   };
 
-  // const postData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     await axios.post(
-  //       `/challenges`,
-  //       { data: create },
-  //       {
-  //         headers: {
-  //           'ngrok-skip-browser-warning': 'none',
-  //           Authorization:
-  //             'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NkBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.i4rAIdLBMReygLX0hfFZzySqQAnnc5fG-j6AhBQhW5KW-qaHk9PPuuzCrhC3rR0xamUVlHeR0-QgLElR1WLjMQ',
-  //         },
-  //       }
-  //     );
-  //     await setLoading(false);
-  //   } catch (error) {
-  //     console.log('error : ', error);
-  //   }
-  // };
+  //throw
+  const lastCheck = () => {
+    if (
+      Number(watch('challengeAuthCycle')) ===
+      Number(watch('challengeAuthAvailableTime').length)
+    ) {
+      setStatePageNumber(6);
+    } else {
+      console.error('인증 빈도와 인증 시간의 갯수가 다릅니다');
+      alert('인증 빈도와 시간이 다릅니다');
+      setStatePageNumber(5);
+    }
 
-  if (isLoading) return <Loading />;
+    if (Number(watch('challengeExamImagePath').length) > 3) {
+      console.error('인증 사진은 최대 3개까지 설정 가능합니다');
+      alert('인증 사진은 최대 3장까지 설정 가능합니다.');
+      setStatePageNumber(5);
+    }
+  };
 
   return (
     <S.CreateAsk>
@@ -101,12 +95,14 @@ function ChallengeAsk4({ register }) {
           {...register('challengeExamImagePath', {
             required: 'Please Upload Image',
           })}
-          onChange={(e) => {
-            onChange(e.target.files[0]);
+          onChange={(event) => {
+            imagePreview(event.target.files[0]);
+            answerCheck(event);
           }}
           multiple
         />
       </div>
+
       <div className="question">
         <h3>인증 방법을 설명해주세요</h3>
         <input
@@ -114,20 +110,23 @@ function ChallengeAsk4({ register }) {
             required: 'Please Write validExplain',
           })}
           placeholder="인증 방법 설명하기"
+          onChange={(event) => answerCheck(event)}
         />
       </div>
+
       <div className="question">
         <h3>인증 빈도</h3>
-        {!isThree ? (
+        {!threeMoreAuthCycle ? (
           <>
             <label>
               <input
                 type={'radio'}
                 {...register('challengeAuthCycle', {
-                  required: 'Please Choice Quantity',
+                  required: 'Please Choice challengeAuthCycle',
                 })}
-                onClick={isThreeBtn}
+                onClick={checkAuthCycle}
                 value={'1'}
+                onChange={(event) => answerCheck(event)}
               />
               하루 한번
             </label>
@@ -135,10 +134,11 @@ function ChallengeAsk4({ register }) {
               <input
                 type={'radio'}
                 {...register('challengeAuthCycle', {
-                  required: 'Please Choice Quantity',
+                  required: 'Please Choice challengeAuthCycle',
                 })}
-                onClick={isThreeBtn}
+                onClick={checkAuthCycle}
                 value={'2'}
+                onChange={(event) => answerCheck(event)}
               ></input>
               하루 두번
             </label>
@@ -146,56 +146,64 @@ function ChallengeAsk4({ register }) {
               <input
                 type={'radio'}
                 {...register('challengeAuthCycle', {
-                  required: 'Please Choice Quantity',
+                  required: 'Please Choice challengeAuthCycle',
                 })}
-                onClick={isThreeBtn}
+                onClick={checkAuthCycle}
                 value={'3'}
+                onChange={(event) => answerCheck(event)}
               ></input>
               세번 이상
             </label>
           </>
         ) : null}
 
-        {isThree ? (
+        {threeMoreAuthCycle ? (
           <>
             <span>원하는 횟수를 입력하세요</span>
             <input
               type={'number'}
               {...register('challengeAuthCycle', {
-                required: 'Please Choice Quantity',
+                required: 'Please Choice challengeAuthCycle',
                 validate: (value) => value < 25,
               })}
               placeholder="그럼 몇번?"
-              onChange={checkQuantity}
+              onChange={(event) => answerCheck(event)}
             />
           </>
         ) : null}
       </div>
+
       <div className="question">
         <h3>인증 시간</h3>
         <span>선택한 시간부터 최대 10분까지 인증 가능합니다.</span>
-
         <TimeContainer>
           {timeTable.map((el) => (
             <label key={el}>
               <input
-                onClick={(e) => addTime(e)}
                 type={'checkbox'}
                 {...register('challengeAuthAvailableTime', {
                   required: 'Please Choice Validate Time',
                 })}
                 value={el}
+                onChange={(event) => answerCheck(event)}
               />
               {el}
             </label>
           ))}
         </TimeContainer>
       </div>
+
+      {pageStateNumber === 5 ? (
+        <input
+          type={'button'}
+          {...register('lastCheck')}
+          value={'모든 내용을 입력하셨습니까?'}
+          onClick={() => lastCheck()}
+        />
+      ) : null}
     </S.CreateAsk>
   );
 }
-
-export default ChallengeAsk4;
 
 const timeTable = [
   '01:00',

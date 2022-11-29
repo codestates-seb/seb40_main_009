@@ -1,39 +1,40 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Kakao from 'kakaojs';
 
-import ChallengeList from './pages/ChallengeList';
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
 import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import DashboardPage from './pages/DashboardPage';
-import SearchResult from './pages/SearchResult';
 import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail';
 import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetailProgress';
-import CreateChallengePage from './pages/CreateChallenge';
+import CreateChallengePage from './pages/CreateChallengePage';
 import EditProfilePage from './pages/EditProfilePage';
-import MemberList from './pages/MemberList';
 
 import KakaoLogin from './components/Login/KakaoLogin';
 
 import ChallengeResult from './components/SearchResult/ChallengeResult';
 import MemberResult from './components/SearchResult/MemberResult';
+import ChallengeListPage from './pages/ChallengeListPage';
+import MemberListPage from './pages/MemberListPage';
+import SearchResultPage from './pages/SearchResultPage';
+import AdminPage from './pages/AdminPage';
 
-function App() {
+export default function App() {
   return (
     <>
       <BrowserRouter>
         <Header />
         <Routes>
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/challengelist/*" element={<ChallengeList />} />
-          <Route path="/memberlist" element={<MemberList />} />
+          <Route path="/challengelist/*" element={<ChallengeListPage />} />
+          <Route path="/memberlist" element={<MemberListPage />} />
           <Route path="/detail/:id" element={<ChallengeDetail />} />
           <Route
             path="/challengedetail/:id"
             element={<ChallengeDetailProgress />}
           />
-          <Route path="/search/:name/:id" element={<SearchResult />}>
+          <Route path="/search/:name/:id" element={<SearchResultPage />}>
             <Route path={`challenge/:id`} element={<ChallengeResult />} />
             <Route path={`member/:id`} element={<MemberResult />} />
           </Route>
@@ -42,11 +43,10 @@ function App() {
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
           <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
     </>
   );
 }
-
-export default App;

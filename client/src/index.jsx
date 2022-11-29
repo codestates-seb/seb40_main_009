@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './style/common.css';
-import App from './App';
-import { RecoilRoot } from 'recoil';
 import axios from 'axios';
+import { RecoilRoot } from 'recoil';
 
+import './style/common.css';
 
-axios.defaults.baseURL = 'https://1cda-203-130-71-252.jp.ngrok.io';
+import App from './App';
+
+axios.defaults.baseURL = 'https://f9be-203-130-71-252.jp.ngrok.io';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

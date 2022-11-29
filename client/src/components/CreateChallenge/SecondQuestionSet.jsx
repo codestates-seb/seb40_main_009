@@ -1,21 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
-import { createChallenge, validButton } from '../../atoms/atoms';
+import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { createChallengeStateNumber } from '../../atoms/atoms';
+
 import * as S from '../../style/CreateChallenge/Challenge.styled';
+
 import exampleImg from '../../image/example.png';
 
-function ChallengeAsk2({ register }) {
-  const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const [checkBtn, setCheckBtn] = useRecoilState(validButton);
+export default function SecondQuestionSet({ register, watch }) {
+  const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
   const [imageTransform, setImageTransfrom] = useState(exampleImg);
 
-  const onValid = (data) => {
-    setCreateChallenge({ ...data, ...create });
-    setCheckBtn(true);
-  };
-
-  const onChange = (file) => {
+  /**이미지 미리보기 세팅 */
+  const setImagePreview = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise((resolve) => {
@@ -26,9 +22,21 @@ function ChallengeAsk2({ register }) {
     });
   };
 
-  useEffect(() => {
-    setCheckBtn(false);
-  }, []);
+  const answerCheck = (event) => {
+    const allValidateList = [
+      'challengeRepImagePath',
+      'challengeTitle',
+      'challengeDescription',
+    ];
+
+    const validateList = allValidateList.filter(
+      (element) => element !== event.target.name
+    );
+
+    event.target.value && watch(validateList[0]) && watch(validateList[1])
+      ? setStatePageNumber(3)
+      : setStatePageNumber(2);
+  };
 
   return (
     <S.CreateAsk>
@@ -42,8 +50,9 @@ function ChallengeAsk2({ register }) {
           {...register('challengeRepImagePath', {
             required: 'Please Upload Picture',
           })}
-          onChange={(e) => {
-            onChange(e.target.files[0]);
+          onChange={(event) => {
+            setImagePreview(event.target.files[0]);
+            answerCheck(event);
           }}
         />
       </div>
@@ -52,6 +61,7 @@ function ChallengeAsk2({ register }) {
         <input
           className="inputBox"
           {...register('challengeTitle', { required: 'Please Write Title' })}
+          onChange={(event) => answerCheck(event)}
           placeholder="ex) 미라클 모닝 챌린지"
         />
       </div>
@@ -62,11 +72,10 @@ function ChallengeAsk2({ register }) {
           {...register('challengeDescription', {
             required: 'Please Write Content',
           })}
+          onChange={(event) => answerCheck(event)}
           placeholder="ex) 매일 아침 지정된 시간에 인증합니다"
         />
       </div>
     </S.CreateAsk>
   );
 }
-
-export default ChallengeAsk2;
