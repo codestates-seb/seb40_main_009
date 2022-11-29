@@ -1,21 +1,14 @@
 package be.wiselife.interceptor;
 
-import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.service.ChallengeService;
-import be.wiselife.image.entity.ChallengeCertImage;
 import be.wiselife.image.repository.ImageRepository;
-import be.wiselife.image.service.ImageService;
-import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalTime;
-import java.util.List;
 
 @Slf4j
 public class ChallengeCertImageInterceptor implements HandlerInterceptor {
