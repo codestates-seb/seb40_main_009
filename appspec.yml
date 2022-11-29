@@ -1,11 +1,11 @@
 version: 0.0 #version은 필수 값이며 0.0이 고정입니다.
 os: linux #ec2에 배포하는 경우 필수 값이며, amazon linux를 사용하므로 linux를 입력합니다.
-​
+
 files:
   - source: /
-    destination: /home/ec2-user
+    destination: /home/ec2-user/build
     overwrite: yes
-​
+
 permissions:
   - object: /
     pattern: "**"
@@ -13,6 +13,9 @@ permissions:
     group: ec2-user
 
 hooks:
+  BeforeInstall:
+    - location: scripts/deploy-before.sh
+      runas: ec2-user
   ApplicationStart:
     - location: scripts/deploy.sh
       timeout: 60
