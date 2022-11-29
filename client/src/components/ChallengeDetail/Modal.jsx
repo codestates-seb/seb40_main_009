@@ -8,13 +8,14 @@ import {
 
 export default function Modal({ setModalOpen, challengeId }) {
   const [imageTransform, setImageTransfrom] = useState('');
+  const [image, setImage] = useState();
   // 모달 끄기
   const closeModal = () => {
     setModalOpen(false);
   };
 
   const imageUpload = (file) => {
-    // console.log('file>>>', img);
+    // console.log('file>>>', file);
     //이미지 미리보기
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -26,27 +27,28 @@ export default function Modal({ setModalOpen, challengeId }) {
     });
   };
 
-  const uploadImage = async (image) => {
+  const uploadImage = async () => {
     const data = new FormData(); // 폼 데이터 생성
     //이미지 선택시 이미지값 넣기
     data.append('cert', image); //이미지 추가
+    alert('ggg', image);
     try {
-      await axios.patch(
-        `/challenges/cert/${challengeId}`,
-        { data },
-        {
+      await axios
+        .patch(`/challenges/cert/${challengeId}`, data, {
           headers: {
             'content-type': 'multipart/form-data',
             'ngrok-skip-browser-warning': 'none',
             Authorization:
               'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NkBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.i4rAIdLBMReygLX0hfFZzySqQAnnc5fG-j6AhBQhW5KW-qaHk9PPuuzCrhC3rR0xamUVlHeR0-QgLElR1WLjMQ',
           },
-        }
-      );
+        })
+        .then(alert(image));
     } catch (error) {
       console.error('error', error);
     }
   };
+
+  console.log('나야나', image);
 
   return (
     <Container>
@@ -66,6 +68,7 @@ export default function Modal({ setModalOpen, challengeId }) {
             type={'file'}
             onChange={(e) => {
               imageUpload(e.target.files[0]);
+              setImage(e.target.files[0]);
             }}
           />
 

@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
 import Challenge from '../components/ChallengeList/Challenge';
 import Loading from '../components/Loading/Loading';
+import { LoginState } from '../components/Login/KakaoLoginData';
 
 export default function ChallengeListPage() {
+  const loginState = useRecoilValue(LoginState);
   const [challengeList, setChallengeList] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [filterSelect, setFilterSelect] = useState('1');
@@ -70,11 +73,13 @@ export default function ChallengeListPage() {
 
   return (
     <>
-      <S.AddChallengeButton onClick={moveToCreateChallenge}>
-        <span>챌린지</span>
-        <br />
-        <span>추가</span>
-      </S.AddChallengeButton>
+      {loginState ? (
+        <S.AddChallengeButton onClick={moveToCreateChallenge}>
+          <span>챌린지</span>
+          <br />
+          <span>추가</span>
+        </S.AddChallengeButton>
+      ) : null}
       <S.ListContainer>
         <section>
           {categoryList.map(({ id, category, tabName }) => (

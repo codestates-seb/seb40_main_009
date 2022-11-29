@@ -18,7 +18,6 @@ import MemberResult from './components/SearchResult/MemberResult';
 import ChallengeListPage from './pages/ChallengeListPage';
 import MemberListPage from './pages/MemberListPage';
 import SearchResultPage from './pages/SearchResultPage';
-import AdminPage from './pages/AdminPage';
 
 export default function App() {
   return (
@@ -43,10 +42,6 @@ export default function App() {
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
           <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
-          <Route path="/admin" element={<AdminPage />}>
-            <Route path="challenge" />
-            <Route path="member" />
-          </Route>
         </Routes>
         <Footer />
       </BrowserRouter>
