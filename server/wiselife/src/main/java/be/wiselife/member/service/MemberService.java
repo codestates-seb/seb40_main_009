@@ -205,13 +205,10 @@ public class MemberService {
      * 검색기능
      * @param name 검색된 데이터
      */
-
     public Page<Member> searchMember(String name, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
 
-        List<Member> memberList = memberRepository.searchMemberName(name);
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), memberList.size());
-        return new PageImpl<>(memberList.subList(start, end), pageable, memberList.size());
+        return memberRepository.findAllByMemberNameContaining(name, PageRequest.of(page, size, Sort.by("createdAt")))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
+
 }
