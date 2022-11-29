@@ -50,7 +50,8 @@ dependencies {
 	//AWS cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
+	//firebase
+//	implementation 'com.google.firebase:firebase-admin:7.1.0'
 }
 
 tasks.named('test') {

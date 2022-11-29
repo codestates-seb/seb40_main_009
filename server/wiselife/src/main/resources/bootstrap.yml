@@ -1,7 +1,0 @@
-aws:
-  paramstore:
-    enabled: true
-    prefix: /spring-boot-aws # /aaa/bbb/ccc 와 같은 구조에서 /aaa를 담당함
-    name: cloud-parameter-store
-    profileSeparator: _
-    failFast: false #true이면 애플리케이션 실행을 못하도록 한다. (즉, 파라미터 스토어 값을 못 읽어도 애플리케이션 실행을 원하면 false로 둔다)
