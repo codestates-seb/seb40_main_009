@@ -24,7 +24,6 @@ import {
 import ImageModal from './ImageModal';
 import Swal from 'sweetalert2';
 import Loading from '../Loading/Loading';
-import smile from '../../image/smile.jpg';
 
 export default function ChallengeDetail() {
   const parmas = useParams();
@@ -72,24 +71,32 @@ export default function ChallengeDetail() {
       });
       if (response.isConfirmed) {
         //결제페이지로 이동
-        return navigate('/ordersheet');
+        return navigate('/ordersheet', {
+          state: {
+            title: challenge.challengeTitle,
+            startDate: challenge.challengeStartDate,
+            endDate: challenge.challengeEndDate,
+            price: challenge.challengeFeePerPerson,
+            image: challenge.challengeRepImagePath,
+          },
+        });
       }
     }
-    if (challenge.challengeFeePerPerson === 0) {
-      //챌린지 도전중 페이지로 이동
-      const response = await Swal.fire({
-        icon: 'question',
-        title: '재확인',
-        text: `${challenge.challengeTitle}에 도전 하시겠습니까?`,
-        showCancelButton: true,
-        confirmButtonText: '도전!',
-        cancelButtonText: '다음에...',
-      });
-      if (response.isConfirmed) {
-        //챌린지 도전중 페이지로 이동
-        return navigate(`/challengedetail/${id}`);
-      }
-    }
+    // if (challenge.challengeFeePerPerson === 0) {
+    //   //챌린지 도전중 페이지로 이동
+    //   const response = await Swal.fire({
+    //     icon: 'question',
+    //     title: '재확인',
+    //     text: `${challenge.challengeTitle}에 도전 하시겠습니까?`,
+    //     showCancelButton: true,
+    //     confirmButtonText: '도전!',
+    //     cancelButtonText: '다음에...',
+    //   });
+    //   if (response.isConfirmed) {
+    //     //챌린지 도전중 페이지로 이동
+    //     return navigate(`/challengedetail/${id}`);
+    //   }
+    // }
   };
 
   //후기사진 더보기 모달창 띄우기
@@ -117,7 +124,10 @@ export default function ChallengeDetail() {
     <Container>
       <ChallengeViewCount>{`조회수 ${challenge.challengeViewCount}`}</ChallengeViewCount>
       <Recruitment>
-        <img src={smile} alt="도전 할 항목의 이미지" />
+        <img
+          src={challenge.challengeRepImagePath}
+          alt="도전 할 항목의 이미지"
+        />
         <div>
           {/* 챌린지 설명 */}
           <ChallengeDescriptionWrapper>
@@ -165,7 +175,7 @@ export default function ChallengeDetail() {
           {/* 인증예시 */}
           <CertificationImage>
             {challenge.challengeExamImagePath.map((image, index) => {
-              return <Image key={index}>{image}</Image>;
+              return <Image key={index} src={image}></Image>;
             })}
           </CertificationImage>
         </CertificationDescription>
