@@ -10,7 +10,6 @@ public enum ExceptionCode {
     //Member 부분 예외 ==============시작
     MEMBER_NOT_FOUND(404, "Member not exists"),
     MEMBER_NAME_ALREADY_EXISTS(400, "This memberName already exists"),
-    NO_MORE_HIGH_GRADE(400,"Your Badge Highest Badge"),
     CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON(404, "Can't Update User Information Other Person"),
     MEMBER_EXISTS(409, "User exists"),
 
@@ -20,6 +19,7 @@ public enum ExceptionCode {
     CHALLENGE_CATEGORY_NOT_FOUND(404, "Category not found. Category-id must be between 1 to 3"),
     YOU_ALREADY_PARTICIPATE(404, "You already participate"),
     USER_NOT_PARTICIPATING_THIS_CHALLENGE(404, "Only users who have participated in the challenge can write reviews"),
+    YOU_NEED_TO_CHARGE_MONEY(404, "You need to charge money"),
     
     //Follower 부분 예외 ==========시작
     CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself"),
