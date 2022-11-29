@@ -1,0 +1,17 @@
+version: 0.0 #version은 필수 값이며 0.0이 고정입니다.
+os: linux #ec2에 배포하는 경우 필수 값이며, amazon linux를 사용하므로 linux를 입력합니다.
+​
+files:
+  - source: /
+    destination: /home/ec2-user
+    overwrite: yes
+​
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+
+hooks:
+  ApplicationStart:
+    - location: scripts/deploy.sh
