@@ -33,7 +33,6 @@ export default function ChallengeDetailProgress() {
   const [challenge, setChallenge] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [imageTransform, setImageTransfrom] = useState('');
 
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
@@ -52,8 +51,6 @@ export default function ChallengeDetailProgress() {
       setChallenge(challengeList);
       setLoading(false);
     } catch (error) {
-      //useeffect 안에서 window. 쓸필요x
-      alert(error);
       console.log('error', error);
     }
   };
@@ -88,8 +85,6 @@ export default function ChallengeDetailProgress() {
   console.log('지나온 시간>>', pastDay);
   const progress = Math.ceil((pastDay / totalDay) * 100);
   console.log('진행률>>>', progress);
-
-  // const certification = challenge.challengeCertImages.filter((id) => id === );
 
   //early return pattern
   if (loading) return <Loading />;
@@ -162,13 +157,14 @@ export default function ChallengeDetailProgress() {
 
           <ChallengeDescription>
             <div className="margin_left">도전중인 유저:</div>
-            {challenge.participatingMember.map((member) => {
-              return (
-                <div key={challenge.participatingMember.memberId}>
-                  {member.participatingMemberName}
-                </div>
-              );
-            })}
+            {challenge.participatingMember &&
+              challenge.participatingMember.map((member) => {
+                return (
+                  <div key={challenge.participatingMember.memberId}>
+                    {member.participatingMemberName}
+                  </div>
+                );
+              })}
           </ChallengeDescription>
         </ChallengeWrapper>
       </ChallengeProgress>
@@ -189,13 +185,12 @@ export default function ChallengeDetailProgress() {
           <img src="./img/smile.jpg" alt="*" />
         </CertificationWrapper>
       </Certification>
-      {/* challengeId, challengeCertImagePath */}
 
       <Review>
         <div className="flex">
           <div className="marginRight"> 인증 사진</div>
           <div>
-            <div>{`오늘 인증 횟수  / ${challenge.challengeAuthCycle}`}</div>
+            <div>{`오늘 인증 횟수  인증횟수/ ${challenge.challengeAuthCycle}`}</div>
             <div className="cursur" onClick={showCertificationModal}>
               인증 사진 올리기
             </div>
@@ -203,14 +198,16 @@ export default function ChallengeDetailProgress() {
           {modalOpen && (
             <Modal
               setModalOpen={setModalOpen}
-              imageTransform={imageTransform}
-              setImageTransfrom={setImageTransfrom}
+              // imageTransform={imageTransform}
+              // setImageTransfrom={setImageTransfrom}
+              challengeId={challengeId}
             />
           )}
         </div>
         {/* 인증사진 */}
         <CertifiationImageWrapper>
           {/* {challenge.challengeExamImagePath.map((image) => { */}
+          {/* splice 쓰지않기 */}
           {imageTest.splice(0, 8).map((image, index) => {
             return (
               <CertificationImage key={index}>

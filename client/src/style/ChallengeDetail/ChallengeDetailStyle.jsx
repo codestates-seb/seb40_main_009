@@ -92,7 +92,7 @@ export const ViewMore = styled.div`
   width: 100%;
 `;
 
-export const Width = styled.div`
+export const FullWidth = styled.div`
   width: 100%;
 `;
 

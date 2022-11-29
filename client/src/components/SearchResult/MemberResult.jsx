@@ -7,9 +7,9 @@ import Member from '../MemberList/MemberList';
 
 export default function MemberResult({ searchValue }) {
   const [memberList, setMemberList] = useState([]);
-  console.log('써벨', searchValue);
 
-  const challengeSearch = useCallback(async () => {
+  /**멤버 검색 결과 데이터 요청 */
+  const memberSearch = async () => {
     try {
       const response = await axios.get(
         `/member/search/member?name=${searchValue}&page=1&size=10`,
@@ -24,11 +24,11 @@ export default function MemberResult({ searchValue }) {
     } catch (error) {
       console.log('error: ', error);
     }
-  }, [searchValue]);
+  };
 
   useEffect(() => {
-    challengeSearch();
-  }, [challengeSearch]);
+    memberSearch();
+  }, []);
 
   return (
     <U.Container>

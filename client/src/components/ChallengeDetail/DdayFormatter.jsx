@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-
+// day.js 라이브러리사용
 export default function DdayFormatter(props) {
   const setDate = new Date(props.endDate);
   const now = new Date();
   //끝나는 날 까지 남은 시간
-  const dis = setDate.getTime() - now.getTime();
+  const distance = setDate.getTime() - now.getTime();
   //1000=1초
   const min = 1000 * 60;
   //시간 계산
-  const h = Math.floor(dis / (min * 60 * 24));
-  const m = Math.floor((dis % (min * 60 * 24)) / (min * 60));
-  const d = Math.floor((dis % (min * 60)) / min);
-  const s = Math.floor((dis % min) / 1000);
+  const h = Math.floor(distance / (min * 60 * 24));
+  const m = Math.floor((distance % (min * 60 * 24)) / (min * 60));
+  const d = Math.floor((distance % (min * 60)) / min);
+  const s = Math.floor((distance % min) / 1000);
 
   const [day, setDay] = useState(h);
   const [hour, setHour] = useState(m);

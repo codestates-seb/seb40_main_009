@@ -1,14 +1,31 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { createChallenge, validButton } from '../../atoms/atoms';
+import { useSetRecoilState } from 'recoil';
+
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
-function ChallengeAsk1({ register }) {
-  const [create, setCreateChallenge] = useRecoilState(createChallenge);
-  const checkBtn = useSetRecoilState(validButton);
+import { createChallengeStateNumber } from '../../atoms/atoms';
 
-  const onValid = (data) => {
-    setCreateChallenge({ ...create, ...data });
-    checkBtn(true);
+export default function FirstQuestionSet({ register, watch }) {
+  const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
+
+  /**1번 페이지에서 입력할 모든 값을 입력시 페이지 이동 버튼 활성화 */
+  const answerCheck = (event) => {
+    const allValidateList = [
+      'challengeCategoryId',
+      'challengeMinParty',
+      'challengeMaxParty',
+      'challengeFeePerPerson',
+    ];
+
+    const validateList = allValidateList.filter(
+      (element) => element !== event.target.name
+    );
+
+    event.target.value &&
+    watch(validateList[0]) &&
+    watch(validateList[1]) &&
+    watch(validateList[2])
+      ? setStatePageNumber(2)
+      : setStatePageNumber(1);
   };
 
   return (
@@ -22,6 +39,7 @@ function ChallengeAsk1({ register }) {
               {...register('challengeCategoryId', {
                 required: 'Please Choice Quantity',
               })}
+              onChange={(event) => answerCheck(event)}
               value={'1'}
             />
             버킷 리스트
@@ -32,6 +50,7 @@ function ChallengeAsk1({ register }) {
               {...register('challengeCategoryId', {
                 required: 'Please Choice Quantity',
               })}
+              onChange={(event) => answerCheck(event)}
               value={'2'}
             />
             공유 챌린지
@@ -42,6 +61,7 @@ function ChallengeAsk1({ register }) {
               {...register('challengeCategoryId', {
                 required: 'Please Choice Quantity',
               })}
+              onChange={(event) => answerCheck(event)}
               value={'3'}
             />
             오프라인 챌린지
@@ -56,6 +76,7 @@ function ChallengeAsk1({ register }) {
             required: 'Please Write Content',
           })}
           placeholder="최소 인원수를 입력하세요"
+          onChange={(event) => answerCheck(event)}
           type={'number'}
         />
       </div>
@@ -67,6 +88,7 @@ function ChallengeAsk1({ register }) {
             required: 'Please Write Content',
           })}
           placeholder="최대 인원수를 입력하세요"
+          onChange={(event) => answerCheck(event)}
           type={'number'}
         />
       </div>
@@ -78,11 +100,10 @@ function ChallengeAsk1({ register }) {
             required: 'Please Write Content',
           })}
           placeholder="참가 금액"
+          onChange={(event) => answerCheck(event)}
           type={'number'}
         />
       </div>
     </S.CreateAsk>
   );
 }
-
-export default ChallengeAsk1;
