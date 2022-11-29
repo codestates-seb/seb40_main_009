@@ -13,7 +13,7 @@ import {
   InstagramIcon,
 } from '../../style/Common/FooterStyle';
 
-function Footer() {
+export default function Footer() {
   const navigate = useNavigate();
   // 챌린지 리스트페이지로 이동
   const LinkChallengePage = () => {
@@ -63,5 +63,3 @@ function Footer() {
     </FooterContainer>
   );
 }
-
-export default Footer;

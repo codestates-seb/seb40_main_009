@@ -16,7 +16,7 @@ import {
   ReviewImageWrapper,
   ReviewImage,
   ViewMore,
-  Width,
+  FullWidth,
   Review,
   ButtonWrapper,
 } from '../../style/ChallengeDetail/ChallengeDetailStyle';
@@ -50,8 +50,6 @@ export default function ChallengeDetail() {
       setChallenge(challengeList);
       setLoading(false);
     } catch (error) {
-      //useeffevt 안에서 window. 쓸필요x
-      alert(error);
       console.log('error', error);
     }
   };
@@ -62,36 +60,35 @@ export default function ChallengeDetail() {
   }, []);
 
   // 참여하기 클릭시 페이지 이동
-  const NavigateMPaymentPage = () => {
+  const NavigateMPaymentPage = async () => {
     if (challenge.challengeFeePerPerson !== 0) {
-      Swal.fire({
+      const response = await Swal.fire({
         icon: 'question',
         title: '재확인',
         text: `${challenge.challengeTitle}에 도전 하시겠습니까?`,
         showCancelButton: true,
         confirmButtonText: '도전!',
         cancelButtonText: '다음에...',
-      }).then((res) => {
-        if (res.isConfirmed) {
-          //결제페이지로 이동
-          navigate('/ordersheet');
-        }
       });
-    } else if (challenge.challengeFeePerPerson === 0) {
+      if (response.isConfirmed) {
+        //결제페이지로 이동
+        return navigate('/ordersheet');
+      }
+    }
+    if (challenge.challengeFeePerPerson === 0) {
       //챌린지 도전중 페이지로 이동
-      Swal.fire({
+      const response = await Swal.fire({
         icon: 'question',
         title: '재확인',
         text: `${challenge.challengeTitle}에 도전 하시겠습니까?`,
         showCancelButton: true,
         confirmButtonText: '도전!',
         cancelButtonText: '다음에...',
-      }).then((res) => {
-        if (res.isConfirmed) {
-          //챌린지 도전중 페이지로 이동
-          navigate(`/challengedetail/${id}`);
-        }
       });
+      if (response.isConfirmed) {
+        //챌린지 도전중 페이지로 이동
+        return navigate(`/challengedetail/${id}`);
+      }
     }
   };
 
@@ -191,9 +188,9 @@ export default function ChallengeDetail() {
                     )}
                   </ViewMore>
                 ) : (
-                  <Width>
+                  <FullWidth>
                     <div>{image}</div>
-                  </Width>
+                  </FullWidth>
                 )}
               </ReviewImage>
             );

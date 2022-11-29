@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import KakaoLoginButton from '../../image/kakaoIcon.png';
-import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
 import axios from 'axios';
 
 import {
@@ -14,6 +12,9 @@ import {
   Icon,
 } from '../../style/Common/HeaderStyle';
 
+import KakaoLoginButton from '../../image/kakaoIcon.png';
+import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
+
 export default function Header() {
   const navigate = useNavigate();
   const [searchFilterValue, setSearchFilterValue] = useState('challenge');
@@ -22,11 +23,10 @@ export default function Header() {
   const [challengeList, setChallengeList] = useState([]);
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
+  // 카카오로그인 api로 이동
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
-  // console.log(KAKAO_AUTH_URL);
 
   // 메인페이지로 이동
   const NavigateMainPage = () => {

@@ -8,7 +8,7 @@ const bogliasco = 'https://i.imgur.com/Gu5Cznz.jpg';
 const craterRock = 'https://i.imgur.com/8DYumaY.jpg';
 const giauPass = 'https://i.imgur.com/8IuucQZ.jpg';
 
-function SlideBanner() {
+export default function SlideBanner() {
   return (
     <HeroSlider
       height={'100vh'}
@@ -66,5 +66,3 @@ function SlideBanner() {
     </HeroSlider>
   );
 }
-
-export default SlideBanner;

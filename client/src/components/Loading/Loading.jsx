@@ -2,7 +2,7 @@ import { Background, LoadingText } from '../../style/LoadingStyle/LoadingStyle';
 
 import spinner from '../../image/spinner.gif';
 
-function Loading() {
+export default function Loading() {
   return (
     <Background>
       <LoadingText>잠시만 기다려 주세요.</LoadingText>
@@ -10,5 +10,3 @@ function Loading() {
     </Background>
   );
 }
-
-export default Loading;
