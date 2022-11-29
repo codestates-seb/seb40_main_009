@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import Dropdown from '../Common/DropDown';
 import {
   HeaderContainer,
   Container,
