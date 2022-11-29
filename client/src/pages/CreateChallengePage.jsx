@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { createNumber, validButton } from '../atoms/atoms';
+import {
+  createChallengePageNumber,
+  createChallengeStateNumber,
+} from '../atoms/atoms';
 
 import styled from 'styled-components';
 import 'react-date-range/dist/styles.css';
@@ -35,40 +38,34 @@ const NextButton = styled.button`
 `;
 
 export default function CreateChallengePage() {
-  const [number, setNumber] = useRecoilState(createNumber); // 이름바꾸기 페이지 넘어가는것을 알수있게
-  const checkButton = useRecoilValue(validButton);
+  const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber);
+  const stateNumber = useRecoilValue(createChallengeStateNumber);
   const navigate = useNavigate();
 
   useEffect(() => {
     //현재 상태에 맞춰 url 변화
-    navigate(`/createchallenge/${number}`);
-  }, [number]);
+    navigate(`/createchallenge/${pageNumber}`);
+  }, [pageNumber]);
 
   return (
     <AddContainer>
       <Container>
-        {/* {
-          <NextButton
-            style={number < 2 && { visibility: 'hidden' }}
-            onClick={() => setNumber(number - 1)}
-          >
-            {'<'}
-          </NextButton>
-        } */}
-        {number < 2 ? (
+        {pageNumber < 2 ? (
           <NextButton style={{ visibility: 'hidden' }} />
         ) : (
-          <NextButton onClick={() => setNumber(number - 1)}>{'<'}</NextButton>
+          <NextButton onClick={() => setPageNumber(pageNumber - 1)}>
+            {'<'}
+          </NextButton>
         )}
 
         <CreateChallenge />
 
-        {number > 3 ? (
-          <NextButton style={{ visibility: 'hidden' }} />
-        ) : checkButton === false ? (
+        {pageNumber > 3 || stateNumber === pageNumber ? (
           <NextButton style={{ visibility: 'hidden' }} />
         ) : (
-          <NextButton onClick={() => setNumber(number + 1)}>{'>'}</NextButton>
+          <NextButton onClick={() => setPageNumber(pageNumber + 1)}>
+            {'>'}
+          </NextButton>
         )}
       </Container>
     </AddContainer>

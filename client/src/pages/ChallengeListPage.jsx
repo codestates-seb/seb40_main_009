@@ -1,13 +1,13 @@
-import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
 import Challenge from '../components/ChallengeList/Challenge';
 import Loading from '../components/Loading/Loading';
 
-export default function ChallengeList() {
+export default function ChallengeListPage() {
   const [challengeList, setChallengeList] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [filterSelect, setFilterSelect] = useState('1');
@@ -16,7 +16,7 @@ export default function ChallengeList() {
   const navMatch = useMatch('/challengelist');
   const navigate = useNavigate();
 
-  //챌린지 추가 페이지로 이동
+  /**챌린지 추가 페이지로 이동*/
   const moveToCreateChallenge = () => {
     navigate('/createchallenge/1');
   };
@@ -27,19 +27,20 @@ export default function ChallengeList() {
     }
   }, []);
 
-  //카테고리 설정
+  /**카테고리 설정*/
   const setCategory = (event) => {
     const { value } = event.currentTarget;
     setCategorySelect(value);
   };
 
-  //필터 설정 인기순/최신순
+  /**필터 설정 인기순/최신순*/
   const onSelect = (event) => {
     setFilterSelect(event.target.value);
   };
+
   const filterValue = filterList[filterSelect - 1].filterName;
 
-  //카테고리 & 필터별 데이터 가져오기
+  /**카테고리 & 필터별 데이터 GET 요청*/
   const challengeFiltering = useCallback(async () => {
     setLoading(true);
     setChallengeList([]);
@@ -68,11 +69,11 @@ export default function ChallengeList() {
 
   return (
     <>
-      <S.AddChallengeBtn onClick={moveToCreateChallenge}>
+      <S.AddChallengeButton onClick={moveToCreateChallenge}>
         <span>챌린지</span>
         <br />
         <span>추가</span>
-      </S.AddChallengeBtn>
+      </S.AddChallengeButton>
       <S.ListContainer>
         <section>
           {categoryList.map(({ id, category, tabName }) => (
