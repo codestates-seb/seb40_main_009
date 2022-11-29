@@ -11,7 +11,9 @@ import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
+import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Range;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/challenges")
 @Validated
+@Slf4j
 public class ChallengeController {
     private final MemberService memberService;
     private final ChallengeService challengeService;
@@ -112,6 +115,15 @@ public class ChallengeController {
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
         Challenge challenge = challengeService.participateChallenge(challengeFromRepository, memberService.getLoginMember(request));
+
+        MemberChallenge memberChallenge = memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request));
+
+        if (memberChallenge==null) {
+            log.info("unparti");
+            return new ResponseEntity<>(
+                    new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper)),HttpStatus.OK);
+        }
+        log.info("parti");
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.
                         challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, memberService.getLoginMember(request), memberChallengeService))
