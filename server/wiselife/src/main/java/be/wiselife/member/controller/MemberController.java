@@ -124,8 +124,9 @@ public class MemberController {
      */
     @GetMapping("/search/member")
     public ResponseEntity getSearchMembers(@RequestParam("name")String name,
-                                           @Positive @RequestParam int page,
-                                           @Positive @RequestParam int size) {
+                                           @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                           @Positive @RequestParam(value = "size", defaultValue = "10") int size) {
+
         Page<Member> pageInfo = memberService.searchMember(name, page - 1, size);
         List<Member> memberList = pageInfo.getContent();
 
