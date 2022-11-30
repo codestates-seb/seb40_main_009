@@ -11,6 +11,8 @@ import {
   UserSearchResult,
   Icon,
   Select,
+  DropdownMypage,
+  DropdownLogout,
 } from '../../style/Common/HeaderStyle';
 
 import KakaoLoginButton from '../../image/kakaoIcon.png';
@@ -65,10 +67,6 @@ export default function Header() {
   const navigateMypage = () => {
     navigate(`/profile/${memberName}`);
   };
-
-  //회원이미지 클릭시 드롭다운
-  const dropDownData = ['내 프로필', '로그아웃'];
-  const defaultOption = dropDownData[0];
 
   //검색필터 데이터
   const searchFilterData = [
@@ -154,7 +152,7 @@ export default function Header() {
     <HeaderContainer>
       <Container>
         <FaRunning
-          style={{ color: '#8673ff', fontSize: '20px', marginLeft: '5%' }}
+          style={{ color: '#8673ff', fontSize: '25px', marginLeft: '5%' }}
         />
         <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo>
         <ChallengeButton onClick={NavigateChallengePage}>
@@ -220,7 +218,7 @@ export default function Header() {
                   (challenge) =>
                     challenge.challengeTitle.indexOf(searchValue) !== -1
                 )
-                .splice(0, 10)
+                .slice(0, 10)
                 .map((searchResult, index) => (
                   <UserSearchResult
                     key={index}
@@ -258,15 +256,18 @@ export default function Header() {
                     width: '30px',
                     marginLeft: '3px',
                     borderRadius: '50px',
+                    cursor: 'pointer',
                   }}
                   src={user.memberImagePath}
                   alt="유저이미지"
                 />
               }
               {view ? (
-                <IoIosArrowUp style={{ color: '#8673FF' }} />
+                <IoIosArrowUp style={{ color: '#8673FF', cursor: 'pointer' }} />
               ) : (
-                <IoIosArrowDown style={{ color: '#8673FF' }} />
+                <IoIosArrowDown
+                  style={{ color: '#8673FF', cursor: 'pointer' }}
+                />
               )}
               {view && (
                 <div
@@ -279,25 +280,36 @@ export default function Header() {
                     color: '#787878',
                   }}
                 >
-                  <li
+                  <DropdownMypage
                     style={{
-                      // borderBottom: '2px solid #8673FF',
                       marginBottom: '10px',
-                      // hover: 'background-color: #f2f4fe',
+                      cursor: 'pointer',
                     }}
                     onClick={navigateMypage}
                   >
                     마이페이지
-                  </li>
-                  <li onClick={logOut}>로그아웃</li>
+                  </DropdownMypage>
+                  <DropdownLogout
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={logOut}
+                  >
+                    로그아웃
+                  </DropdownLogout>
                 </div>
               )}
             </ul>
-
-            {/* <div onClick={logOut}>로그아웃</div> */}
           </div>
         ) : (
-          <div style={{ color: 'black' }}>
+          <div
+            style={{
+              color: 'black',
+              display: 'flex',
+              marginLeft: '540px',
+              alignItems: 'center',
+            }}
+          >
             <img
               src={KakaoLoginButton}
               alt="로그인 버튼"

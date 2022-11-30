@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import ImageGallery from 'react-image-gallery';
 
 import {
   Container,
@@ -21,15 +22,16 @@ import {
   ReviewImage,
   CertificationDescription,
   Image,
+  ChallengeViewCount,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
 import Loading from '../Loading/Loading';
-import ChartBar from '../ProfileList/ChartBar';
+import ProgressBar from './ProgressBar';
 import DdayFormatter from './DdayFormatter';
 import Modal from './Modal';
 import ImageModal from './ImageModal';
 
-export default function ChallengeDetailProgress() {
+export default function ChallengeDetailProgress({ challengeData }) {
   const parmas = useParams();
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState([]);
@@ -37,36 +39,13 @@ export default function ChallengeDetailProgress() {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [talk, setTalk] = useState([]);
   const [isValid, setIsValid] = useState(false);
+  const [progress, setProgress] = useState(0);
   const memberId = localStorage.getItem('LoginId');
   const memberName = localStorage.getItem('LoginName');
-
+  const authorizationToken = localStorage.getItem('authorizationToken');
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-
-  // 챌린지조회
-  const getChallenge = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`/challenges/${challengeId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'none',
-          Authorization:
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
-        },
-      });
-      const challengeList = response.data.data;
-      console.log('challengeList>>>', challengeList);
-      setChallenge(challengeList);
-      setLoading(false);
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  //챌린지조회 axios 실행
-  useEffect(() => {
-    getChallenge();
-  }, []);
+  console.log('dggfgdfgfddf>>>>', challengeData);
 
   // 댓글보내기
   const postTalk = async () => {
@@ -76,13 +55,12 @@ export default function ChallengeDetailProgress() {
         `/challenge-talks`,
         {
           challengeTalkBody: talk,
-          challengeId: challenge.challengeId,
+          challengeId: challengeData.challengeId,
         },
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
-            Authorization:
-              'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
+            Authorization: authorizationToken,
           },
         }
       );
@@ -99,8 +77,7 @@ export default function ChallengeDetailProgress() {
       await axios.delete(`/challenge-talks/2`, {
         headers: {
           'ngrok-skip-browser-warning': 'none',
-          Authorization:
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MkBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.pcx-guhyVpHAQwSwpgoHwkgqXDzGDYhWWp-s-r2iNRSGXYi7ZD1LOILaZc-oM4m6jJJ0hTpyH2rC6YWSBAgU4w',
+          Authorization: authorizationToken,
         },
       });
       alert('삭제성공');
@@ -119,10 +96,13 @@ export default function ChallengeDetailProgress() {
     setImageModalOpen(true);
   };
 
+  // if (new Date() < new Date(challengeData.challengeStartDate)) {
+  //   setProgress(0);
+  // } else {
   //챌린지 진행률 계산
   const today = new Date();
-  const startDate = new Date(challenge.challengeStartDate);
-  const endDate = new Date(challenge.challengeEndDate);
+  const startDate = new Date(challengeData.challengeStartDate);
+  const endDate = new Date(challengeData.challengeEndDate);
 
   //챌린지 총 일수
   const distance = endDate.getTime() - startDate.getTime();
@@ -131,25 +111,43 @@ export default function ChallengeDetailProgress() {
   //챌린지 해온 시간
   const gap = today.getTime() - startDate.getTime();
   const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
-  // console.log('지나온 시간>>', pastDay);
-  const progress = Math.ceil((pastDay / totalDay) * 100);
+  console.log('지나온 시간>>', pastDay);
+  if (pastDay !== 0) {
+    //   setProgress(0);
+    // } else {
+    const progress = Math.ceil((pastDay / totalDay) * 100);
+    setProgress(progress);
+  }
   // console.log('진행률>>>', progress);
+  // }
 
-  const certificationCount = challenge.challengeCertImages?.filter(
+  const certificationCount = challengeData.challengeCertImages?.filter(
     (member) => member.memberId === 100001
   ).length;
 
-  //early return pattern
-  if (loading) return <Loading />;
+  const images = [
+    {
+      original: 'https://picsum.photos/id/1018/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1018/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1015/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1015/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1019/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1019/250/150/',
+    },
+  ];
 
   return (
     <Container>
-      <div>{`조회수 ${challenge.challengeViewCount}`}</div>
+      <ChallengeViewCount>{`조회수 ${challengeData.challengeViewCount}`}</ChallengeViewCount>
       <ChallengeProgress>
         {/* 이미지 */}
         <div className="image">
           <ChallengeImage
-            src={challenge.challengeRepImagePath}
+            src={challengeData.challengeRepImagePath}
             alt="도전 할 항목의 이미지"
           />
         </div>
@@ -157,45 +155,50 @@ export default function ChallengeDetailProgress() {
         <ChallengeWrapper>
           {/* 챌린지 이름, 디데이 */}
           <ChallengeTitle>
-            <div className="title">{challenge.challengeTitle}</div>
+            <div className="title">{challengeData.challengeTitle}</div>
             <div className="d_day">
-              <DdayFormatter endDate={challenge.challengeEndDate} />
+              <DdayFormatter endDate={challengeData.challengeEndDate} />
             </div>
           </ChallengeTitle>
 
           <ChallengeDescription>
             <div className="margin_left3">챌린지 진행률:</div>
             <div>
-              <ChartBar percentage={progress} />
+              {/* {new Date() <= new Date(challengeData.challengeStartDate) ? (
+                <ProgressBar percentage={0} />
+              ) : ( */}
+              <ProgressBar percentage={progress} />
+              {/* )} */}
+              {/* <ProgressBar percentage={progress} /> */}
             </div>
           </ChallengeDescription>
 
           <ChallengeDescription>
             <div className="margin_left2">참여 인원:</div>
-            <div>{`${challenge.challengeCurrentParty}명`}</div>
+            <div>{`${challengeData.challengeCurrentParty}명`}</div>
           </ChallengeDescription>
 
           <ChallengeDescription>
             <div className="margin_left">챌린지 기간:</div>
-            <div>{`${challenge.challengeStartDate} ~ ${challenge.challengeEndDate}`}</div>
+            <div>{`${challengeData.challengeStartDate} ~ ${challengeData.challengeEndDate}`}</div>
           </ChallengeDescription>
 
           <ChallengeDescription>
             <div className="margin_left">챌린지 금액:</div>
-            <div>{challenge.challengeFeePerPerson}원</div>
+            <div>{challengeData.challengeFeePerPerson}원</div>
           </ChallengeDescription>
 
           <ChallengeDescription>
             <div className="margin_left">결제한 금액:</div>
-            <div>{challenge.challengeFeePerPerson}원</div>
+            <div>{challengeData.challengeFeePerPerson}원</div>
           </ChallengeDescription>
 
           <ChallengeDescription>
             <div className="margin_left">도전중인 유저:</div>
-            {challenge.participatingMember &&
-              challenge.participatingMember.map((member) => {
+            {challengeData.participatingMember &&
+              challengeData.participatingMember.map((member) => {
                 return (
-                  <div key={challenge.participatingMember.memberId}>
+                  <div key={challengeData.participatingMember.memberId}>
                     {member.participatingMemberName}
                   </div>
                 );
@@ -207,16 +210,16 @@ export default function ChallengeDetailProgress() {
       <Certification>
         <CertificationWrapper>
           <div className="title">챌린지 설명</div>
-          <div className="pd-5">{challenge.challengeDescription}</div>
+          <div className="pd-5">{challengeData.challengeDescription}</div>
         </CertificationWrapper>
 
         {/* 인증 방법 */}
         <CertificationDescription>
           <div className="title">인증 방법 / 인증 예시</div>
-          <div className="pd-5">{challenge.challengeAuthDescription}</div>
+          <div className="pd-5">{challengeData.challengeAuthDescription}</div>
           {/* 인증예시 */}
           <CertificationImage>
-            {challenge.challengeExamImagePath.map((image, index) => {
+            {challengeData.challengeExamImagePath.map((image, index) => {
               return <Image key={index} src={image}></Image>;
             })}
           </CertificationImage>
@@ -227,8 +230,10 @@ export default function ChallengeDetailProgress() {
         <div className="flex">
           <div className="marginRight"> 인증 사진</div>
           <div>
-            <div>{`인증 횟수  ${certificationCount} / ${challenge.challengeAuthCycle}`}</div>
-            {challenge.challengeAuthAvailableTime ===
+            <div
+              style={{ fontSize: '20px' }}
+            >{`인증 횟수:  ${certificationCount} / ${challengeData.challengeAuthCycle}`}</div>
+            {challengeData.challengeAuthAvailableTime ===
             dayjs().format('HH:mm') ? (
               <div className="cursur" onClick={showCertificationModal}>
                 인증 사진 올리기
@@ -249,59 +254,63 @@ export default function ChallengeDetailProgress() {
         </div>
         {/* 인증사진 */}
         <CertifiationImageWrapper>
-          {challenge.challengeCertImages.slice(0, 8).map((image, index) => {
-            return (
-              <CertificationImage key={index}>
-                {index === 7 ? (
-                  <ViewMore key={index}>
-                    <div onClick={showImageModal}>더보기</div>
-                    {imageModalOpen && (
-                      <ImageModal
-                        setImageModalOpen={setImageModalOpen}
-                        image={challenge.challengeCertImages}
-                      />
+          {challengeData.challengeCertImages &&
+            challengeData.challengeCertImages
+              .slice(0, 8)
+              .map((image, index) => {
+                return (
+                  <CertificationImage key={index}>
+                    {index === 7 ? (
+                      <ViewMore key={index}>
+                        <div onClick={showImageModal}>더보기</div>
+                        {imageModalOpen && (
+                          <ImageModal
+                            setImageModalOpen={setImageModalOpen}
+                            image={challengeData.challengeCertImages}
+                          />
+                        )}
+                      </ViewMore>
+                    ) : (
+                      // <Width>
+                      <img src={image.imagePath} alt="인증사진들"></img>
+                      // </Width>
                     )}
-                  </ViewMore>
-                ) : (
-                  // <Width>
-                  <img src={image.imagePath} alt="인증사진들"></img>
-                  // </Width>
-                )}
-              </CertificationImage>
-            );
-          })}
+                  </CertificationImage>
+                );
+              })}
         </CertifiationImageWrapper>
       </Review>
 
       <Review>
         <div>후기 사진</div>
         <ReviewImageWrapper>
-          {/* {challenge.challengeExamImagePath.map((image) => { */}
-          {challenge.challengeReviews.slice(0, 8).map((image, index) => {
-            return (
-              <ReviewImage key={index}>
-                {index === 7 ? (
-                  <ViewMore key={index}>
-                    <div onClick={showImageModal}>더보기</div>
-                    {imageModalOpen && (
-                      <ImageModal
-                        setImageModalOpen={setImageModalOpen}
-                        image={challenge.challengeReviews}
-                      />
-                    )}
-                  </ViewMore>
-                ) : (
-                  // <Width>
-                  <img
-                    src={image.challengeReviewImagePath}
-                    alt=""
-                    style={{ width: '200px' }}
-                  />
-                  // </Width>
-                )}
-              </ReviewImage>
-            );
-          })}
+          <ImageGallery items={images} />
+          {/* {challenge.challengeReviews &&
+            challenge.challengeReviews.slice(0, 8).map((image, index) => {
+              return (
+                <ReviewImage key={index}>
+                  {index === 7 ? (
+                    <ViewMore key={index}>
+                      <div onClick={showImageModal}>더보기</div>
+                      {imageModalOpen && (
+                        <ImageModal
+                          setImageModalOpen={setImageModalOpen}
+                          image={challenge.challengeReviews}
+                        />
+                      )}
+                    </ViewMore>
+                  ) : (
+                    // <Width>
+                    <img
+                      src={image.challengeReviewImagePath}
+                      alt=""
+                      style={{ width: '200px' }}
+                    />
+                    // </Width>
+                  )}
+                </ReviewImage>
+              );
+            })} */}
         </ReviewImageWrapper>
       </Review>
 
@@ -325,19 +334,20 @@ export default function ChallengeDetailProgress() {
           </button>
         </div>
         <div style={{ border: '1px solid green' }}>
-          {challenge.challengeTalks.map((talk) => {
-            return (
-              <div style={{ display: 'flex' }}>
-                <div>{talk.memberBadge}</div>
-                <div>{talk.memberName}</div>
-                <div>{talk.challengeTalkBody}</div>
-                <div>{talk.updated_at}</div>
-                {/* 본인이 작성한 것만 authorized,랑 id 로그인 한사람거넣기 */}
-                <div>수정</div>
-                <div onClick={deleteTalk}>삭제{talk.challengeReviewId}</div>
-              </div>
-            );
-          })}
+          {challengeData.challengeTalks &&
+            challengeData.challengeTalks.map((talk) => {
+              return (
+                <div style={{ display: 'flex' }}>
+                  <div>{talk.memberBadge}</div>
+                  <div>{talk.memberName}</div>
+                  <div>{talk.challengeTalkBody}</div>
+                  <div>{talk.updated_at}</div>
+                  {/* 본인이 작성한 것만 authorized,랑 id 로그인 한사람거넣기 */}
+                  <div>수정</div>
+                  <div onClick={deleteTalk}>삭제{talk.challengeReviewId}</div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </Container>

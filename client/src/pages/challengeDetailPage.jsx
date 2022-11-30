@@ -9,7 +9,7 @@ import ChallengeDetailProgress from '../components/ChallengeDetail/ChallengeDeta
 export default function ChallengeDetailPage() {
   const parmas = useParams();
   const [loading, setLoading] = useState(true);
-  const [challenges, setChallenges] = useState([]);
+  const [challengeData, setChallengeData] = useState([]);
 
   const memberId = localStorage.getItem('LoginId');
   const authorizationToken = localStorage.getItem('authorizationToken');
@@ -30,8 +30,8 @@ export default function ChallengeDetailPage() {
       });
       // .then(() => {
       const challengeList = response.data.data;
-      console.log('challengeList>>>', challengeList);
-      setChallenges(challengeList);
+      console.log('fdsfsdfschallengeList>>>', challengeList);
+      setChallengeData(challengeList);
       setLoading(false);
       // });
     } catch (error) {
@@ -44,27 +44,18 @@ export default function ChallengeDetailPage() {
     getChallenge();
   }, []);
 
-  //참가중인 챌린지인지 체크
-  // const participateUser =
-  //   challenges.participatingMember &&
-  //   challenges.participatingMember.map((member) => {
-  //     return member.memberId === memberId;
-  //   });
-  // console.log('participateUser', participateUser);
-
   //early return pattern
   if (loading) return <Loading />;
 
   return (
     <>
-      {/* 참여중인지보고  */}
-      {/* {participateUser.indexOf(true) < 0 ? (
+      {challengeData.isSimpleResponse === true ? ( //true:참여x, false:참여
         //챌린지 상세페이지
-        <ChallengeDetail />
+        <ChallengeDetail challengeData={challengeData} />
       ) : (
         //챌린지 도전중 페이지
-        <ChallengeDetailProgress />
-      )} */}
+        <ChallengeDetailProgress challengeData={challengeData} />
+      )}
     </>
   );
 }
