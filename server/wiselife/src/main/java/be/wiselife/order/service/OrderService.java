@@ -34,11 +34,11 @@ public class OrderService {
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";
     String approveUrl = "https://kapi.kakao.com/v1/payment/approve";
 
-    static final String successUrl = "http://localhost:3000/order/success"; //TODO s3연결후 URL 주소 변경필요
+    static final String successUrl = "https://just.wiselife.click/order/success";
 
-    static final String cancelUrl = "http://localhost:3000/order/cancel";
+    static final String cancelUrl = "https://just.wiselife.click/order/cancel";
 
-    static final String failUrl = "http://localhost:3000/order/fail";
+    static final String failUrl = "https://just.wiselife.click/order/fail";
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
