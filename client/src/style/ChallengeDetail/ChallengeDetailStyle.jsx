@@ -56,6 +56,8 @@ export const ChallengeDescription = styled.div`
 export const CertificationImage = styled.div`
   display: flex;
   margin-top: 2%;
+  width: 623px;
+  height: 180px;
 `;
 
 export const Image = styled.img`
@@ -63,6 +65,8 @@ export const Image = styled.img`
   width: 50%;
   height: 155px;
   margin-right: 2%;
+  border-radius: 20px;
+  box-shadow: 3px 7px 12px 0 #c2c2c2;
 `;
 
 export const ReviewImageWrapper = styled.div`
@@ -104,17 +108,19 @@ export const Certification = styled.div`
 `;
 
 export const CertificationWrapper = styled.div`
-  border: 2px solid #eff1fe;
+  border: 4px solid #eff1fe;
   width: 25%;
   padding: 3%;
   border-radius: 20px;
   & > .title {
     display: flex;
     justify-content: center;
-    font-size: 20px;
+    font-size: 25px;
+    border-bottom: 2px solid #cfc7fd;
   }
   & > .pd-5 {
     padding-top: 5%;
+    font-size: 20px;
   }
   & > img {
     padding-top: 5%;
@@ -123,29 +129,25 @@ export const CertificationWrapper = styled.div`
 `;
 
 export const CertificationDescription = styled.div`
-  border: 2px solid #eff1fe;
+  border: 4px solid #eff1fe;
   width: 60%;
   padding: 3%;
   border-radius: 20px;
   & > .title {
     display: flex;
     justify-content: center;
-    font-size: 20px;
+    font-size: 25px;
+    border-bottom: 2px solid #cfc7fd;
   }
-  & > .pd-5 {
-    padding-top: 5%;
-  }
-  & > img {
-    padding-top: 5%;
-    width: 100%;
-  }
+  padding-top: 3%;
+  font-size: 20px;
+  padding-bottom: 3%;
 `;
 
 export const Review = styled.div`
-  border: 2px solid #eff1fe;
   margin-top: 5%;
-  height: 500px;
-  font-size: 20px;
+
+  font-size: 25px;
 `;
 
 export const ButtonWrapper = styled.div`

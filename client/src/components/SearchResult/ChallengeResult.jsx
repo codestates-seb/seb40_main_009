@@ -34,12 +34,18 @@ export default function ChallengeResult({ searchValue }) {
   return (
     <S.Container>
       {challengeList.map(
-        ({ challengeId, challengeTitle, challengeDescription }) => (
+        ({
+          challengeId,
+          challengeTitle,
+          challengeDescription,
+          challengeRepImagePath,
+        }) => (
           <Challenge
-            challengeId={challengeId}
-            challengeTitle={challengeTitle}
-            challengeDescription={challengeDescription}
+            id={challengeId}
+            title={challengeTitle}
+            description={challengeDescription}
             key={challengeId}
+            image={challengeRepImagePath}
           />
         )
       )}

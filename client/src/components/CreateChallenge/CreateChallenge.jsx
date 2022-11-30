@@ -60,8 +60,7 @@ export default function CreateChallenge() {
         headers: {
           'Content-Type': 'multipart/form-data', // 전송 타입 설정
           'ngrok-skip-browser-warning': 'none',
-          Authorization:
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
+          Authorization: localStorage.getItem('authorizationToken'),
         },
       });
       await setPageStateNumber(1);

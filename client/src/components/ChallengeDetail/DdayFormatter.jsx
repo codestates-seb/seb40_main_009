@@ -48,6 +48,12 @@ export default function DdayFormatter(props) {
   }, [day, hour, minutes, seconds]);
 
   return (
-    <div>{`D-DAY까지 ${day}일 ${hour}시간 ${minutes}분 ${seconds}초`}</div>
+    <div>
+      {day <= 0 ? (
+        <div>오늘이 마지막날이예요! 화이팅</div>
+      ) : (
+        <div>{`도전 성공까지 ${day}일 ${hour}시간 ${minutes}분`}</div>
+      )}
+    </div>
   );
 }
