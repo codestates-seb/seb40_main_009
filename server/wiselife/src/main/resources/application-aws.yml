@@ -8,7 +8,7 @@ spring:
         format_sql: true  # (3) SQL pretty print
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://wiselife-db.cicdq0knxkqb.ap-northeast-2.rds.amazonaws.com:3306/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul #wiseLifeTest->각자 스키마이름으로 변경 필
+    url: jdbc:mysql://${ENDPOINT}:${PORT}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ${DB_ID}
     password: ${DB_PASSWORD}
   profiles:
@@ -16,8 +16,8 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 logging:
   level:

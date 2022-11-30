@@ -37,14 +37,15 @@ jobs:
       with:
         files: ${{ env.RESOURCE_PATH }}
       env:
-        # spring.datasource.url: jdbc:mysql://${{ secrets.ENDPOINT }}:${{ secrets.PORT }}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        spring.datasource.url: jdbc:mysql://${{ secrets.ENDPOINT }}:${{ secrets.PORT }}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
         spring.datasource.username: ${{ secrets.DB_ID }}
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
         spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CILENT_ID }}
-        # spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+        spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
         jwt.token.secret-key: ${{ secrets.JWT_SECRET_KEY }}
         cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
         cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        Kakaopay.KakaoAk: ${{KAKAO_AUTH_ORDER_KEY}}
 
      # grant execute permission for gradlew
     - name : Grant execute permission for gradlew
@@ -56,15 +57,16 @@ jobs:
       run: cd server/wiselife; ./gradlew build
       shell: bash
       env:
-        # RDS_ENDPOINT: ${{ secrets.ENDPOINT }}
-        # RDS_PORT: ${{ secrets.PORT }}
+        RDS_ENDPOINT: ${{ secrets.ENDPOINT }}
+        RDS_PORT: ${{ secrets.PORT }}
         DB_ID: ${{ secrets.DB_ID }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         KAKAO_CILENT_ID: ${{ secrets.KAKAO_CILENT_ID }}
-        # KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+        KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        KAKAO_AUTH_ORDER_KEY: ${{secrets.KAKAO_AUTH_ORDER_KEY}}
     
     - name: Make zip file
       run: zip -r ./wiselife-deploy.zip .
@@ -73,8 +75,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }} # 등록한 Github Secret이 자동으로 불려옵니다.
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # 등록한 Github Secret이 자동으로 불려옵니다.
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
     
     - name: Upload to S3
