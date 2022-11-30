@@ -17,11 +17,11 @@ permissions:
 
 env:
   S3_BUCKET_NAME: wiselife-main
-  RESOURCE_PATH: ./server/wiselife/src/main/resources/application-aws.yml
-  RESOURCE_PATH_OAUTH: ./server/wiselife/src/main/resources/application-oauth.yml
+  RESOURCE_PATH: ./server/wiselife/src/main/resources/application.yml
   
 jobs:
   build:
+  
     runs-on: ubuntu-latest
 
     steps:
@@ -43,13 +43,7 @@ jobs:
         jwt.token.secret-key: ${{ secrets.JWT_SECRET_KEY }}
         cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
         cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        Kakaopay.KakaoAk: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
-
-     - name: Set Outh file
-      uses: microsoft/variable-substitution@v1
-      with:
-        files: ${{ env.RESOURCE_PATH_OAUTH }}
-      env:
+        kakaopay.kakaoAk: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
         spring.security.oauth2.cilent.registration.client-id: ${{ secrets.KAKAO_CILENT_ID }}
         spring.security.oauth2.cilent.registration.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
 
