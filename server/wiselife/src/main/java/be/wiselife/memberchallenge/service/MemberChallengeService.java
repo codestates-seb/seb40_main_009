@@ -60,11 +60,6 @@ public class MemberChallengeService {
 
             challenge.getMemberChallenges().add(memberChallenge);
             member.getMemberChallenges().add(memberChallenge);
-            double memberMoney = member.getMemberMoney();
-            if (memberMoney < challenge.getChallengeFeePerPerson()) {
-                throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_CHARGE_MONEY);
-            }
-            member.setMemberMoney(memberMoney-challenge.getChallengeFeePerPerson());
 
             memberChallengeRepository.save(memberChallenge);
             memberRepository.save(member);
