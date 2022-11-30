@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/server/wiselife/build/libs/wiselife-0.0.1-SNAPSHOT.jar)
+BUILD_JAR=$(ls /home/ec2-user/build/server/wiselife/build/libs/wiselife-1.0.0-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
 echo "> 현재 시간: $(date)" >> /home/ec2-user/deploy.log

@@ -7,8 +7,10 @@ import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.order.dto.OrderDto;
 import be.wiselife.order.entity.Order;
 import be.wiselife.order.repository.OrderRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,17 @@ import java.util.List;
 @Transactional
 public class OrderService {
     static final String cid = "TC0ONETIME"; //가맹점 테스트 코드
-    static final String authorization = "KakaoAK 79fd132c770be75df16bbafdcfe48463"; //TODO: 배포시 환경설정으로 바꾸기
+    @Getter
+    @Value("${common.data.kakaoAK}")
+    private String authorization;
+
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";
     String approveUrl = "https://kapi.kakao.com/v1/payment/approve";
-    static final String successUrl = "http://localhost:3000/order/success";
+
+    static final String successUrl = "http://localhost:3000/order/success"; //TODO s3연결후 URL 주소 변경필요
+
     static final String cancelUrl = "http://localhost:3000/order/cancel";
+
     static final String failUrl = "http://localhost:3000/order/fail";
 
     private final OrderRepository orderRepository;
