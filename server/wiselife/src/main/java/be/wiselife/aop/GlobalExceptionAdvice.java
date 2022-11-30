@@ -3,6 +3,7 @@ package be.wiselife.aop;
 import be.wiselife.dto.ErrorResponse;
 import be.wiselife.dto.ErrorResponseDto;
 import be.wiselife.exception.BusinessLogicException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -138,17 +139,17 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
-//    /**
-//     * 프론트에서 요청한 사항:
-//     * token이 만기됐을때 웹훅이 아닌 바디로 나갈수도있도록 구현 필요
-//     */
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse JwtTokenExcepiton(ExpiredJwtException e) {
-//
-//        final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "Jwt expired");
-//        return response;
-//    }
+    /**
+     * 프론트에서 요청한 사항:
+     * token이 만기됐을때 웹훅이 아닌 바디로 나갈수도있도록 구현 필요
+     */
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse JwtTokenExcepiton(ExpiredJwtException e) {
+
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.UNAUTHORIZED, "Jwt expired");
+        return response;
+    }
 
 
 }

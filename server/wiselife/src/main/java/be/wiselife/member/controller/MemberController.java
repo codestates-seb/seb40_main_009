@@ -1,5 +1,6 @@
 package be.wiselife.member.controller;
 
+import be.wiselife.aop.NeedEmail;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.exception.BusinessLogicException;
@@ -93,6 +94,7 @@ public class MemberController {
      * 회원이 본인의 정보를 수정할때,
      * DTO와 함께받기위해선 RequestPart를 사용해야함.
      */
+    @NeedEmail
     @PatchMapping(value = "/{memberName}",consumes = {"multipart/form-data"})
     public ResponseEntity patchMember(@PathVariable("memberName") String memberName,
                                       @Valid @RequestPart("patch") MemberDto.Patch patchData,
