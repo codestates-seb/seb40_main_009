@@ -16,8 +16,6 @@ function ProfileBoxChallenge() {
     },
   ]);
 
-  console.log('1010', orderLists);
-
   // // get요청
   // const getOrder = async () => {
   //   try {

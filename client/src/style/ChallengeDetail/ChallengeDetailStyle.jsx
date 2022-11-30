@@ -78,7 +78,7 @@ export const ReviewImageWrapper = styled.div`
 
 export const ReviewImage = styled.div`
   border: 2px solid red;
-  width: 90%;
+  width: 200px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;
@@ -89,11 +89,11 @@ export const ViewMore = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 200px;
 `;
 
 export const FullWidth = styled.div`
-  width: 100%;
+  width: 200px;
 `;
 
 export const Certification = styled.div`
