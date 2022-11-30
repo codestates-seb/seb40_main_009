@@ -17,10 +17,10 @@ spring:
       client:
         registration:
           kakao:
-            client-id: e9cbf2e31aa946c52e55e753135126c3
+            client-id: e9cbf2e31aa946c52e55e753135126c3 # ${KAKAO_CILENT_ID}
             redirect-uri: http://localhost:3000/oauth/callback/kakao #TODO S3 연결후 바꿔야함
             client-authentication-method: POST
-            client-secret: 3upB7uLbKjqRB2OnXrkDQNWPLbqwH5fr
+            client-secret: 3upB7uLbKjqRB2OnXrkDQNWPLbqwH5fr # ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
@@ -89,4 +89,4 @@ cloud:
         
 common:
   data:
-    kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463
+    kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463 # ${KAKAO_AUTH_ORDER_KEY}

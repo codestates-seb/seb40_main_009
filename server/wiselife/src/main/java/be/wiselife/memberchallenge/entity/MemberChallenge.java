@@ -42,13 +42,4 @@ public class MemberChallenge {
         return memberChallengeId;
     }
 
-    //더미 생성용 생성자
-    public MemberChallenge(Long memberChallengeId, double expectedRefundToMember, double memberSuccessDay, double memberChallengeSuccessRate, Member member, Challenge challenge) {
-        this.memberChallengeId = memberChallengeId;
-        this.expectedRefundToMember = expectedRefundToMember;
-        this.memberSuccessDay = memberSuccessDay;
-        this.memberChallengeSuccessRate = memberChallengeSuccessRate;
-        this.member = member;
-        this.challenge = challenge;
-    }
 }
