@@ -2,6 +2,19 @@ import styled from 'styled-components';
 
 import { FaSearch } from 'react-icons/fa';
 
+export const Select = styled.select`
+  /* 생략 */
+  font-size: 1rem;
+  color: #494949;
+  background-color: #fff;
+
+  padding: 0.2em;
+  margin-right: 15px;
+
+  border: 1px solid #aaa;
+  border-radius: 0.5em;
+`;
+
 export const HeaderContainer = styled.header`
   width: 100%;
   padding: 0.7% 0;
@@ -13,25 +26,27 @@ export const HeaderContainer = styled.header`
 `;
 
 export const Container = styled.div`
-  width: 1024px;
+  /* width: 1024px; */
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  /* border: 1px solid red; */
 `;
 
 export const Logo = styled.div`
   color: #8673ff;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 23px;
+  margin-right: 8%;
 `;
 
 export const ChallengeButton = styled.button`
   border: 0;
   outline: 0;
   background-color: #ffffff;
-  color: #787878;
+  color: #494949;
   font-size: 16px;
+  margin-right: 1%;
   cursor: pointer;
 `;
 
@@ -48,8 +63,8 @@ export const Search = styled.div`
   }
   & ul {
     width: 94%;
-    padding: 20px 12px 10px 12px;
-    color: #787878;
+    padding: 10px 12px 10px 12px;
+    color: #494949;
     left: 18px;
     border-radius: 0 0 10px 10px;
     background-color: #ffff;
@@ -62,6 +77,7 @@ export const UserSearchResult = styled.div`
   :hover {
     background-color: #f2f4fe;
   }
+  padding: 1%;
 `;
 
 export const Icon = styled(FaSearch)`
@@ -70,5 +86,5 @@ export const Icon = styled(FaSearch)`
   top: 10px;
   right: 0;
   margin: 0;
-  color: #787878;
+  color: #494949;
 `;
