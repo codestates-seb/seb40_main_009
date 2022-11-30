@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ###.yml ###
-/server/wiselife/src/main/resources/.application-local.yml
+**/server/wiselife/src/main/resources/.application-local.yml
