@@ -69,7 +69,7 @@ export default function FirstQuestionSet({ register, watch }) {
         </div>
       </div>
       <div className="question">
-        <h3>함께할 최소인원수를 정해주세요</h3>
+        <h3>함께 챌린지를 진행할 최소 인원을 정해주세요</h3>
         <input
           className="inputBox"
           {...register('challengeMinParty', {
@@ -81,7 +81,7 @@ export default function FirstQuestionSet({ register, watch }) {
         />
       </div>
       <div className="question">
-        <h3>함께할 최대인원수를 정해주세요</h3>
+        <h3>함께 챌린지를 진행할 최대 인원을 정해주세요</h3>
         <input
           className="inputBox"
           {...register('challengeMaxParty', {
@@ -93,7 +93,7 @@ export default function FirstQuestionSet({ register, watch }) {
         />
       </div>
       <div className="question">
-        <h3>챌린지 참가금액을 입력해주세요</h3>
+        <h3>챌린지 참가 금액을 입력해주세요</h3>
         <input
           className="inputBox"
           {...register('challengeFeePerPerson', {

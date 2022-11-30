@@ -58,7 +58,6 @@ export const Container = styled.section`
 `;
 
 // 컴포넌트
-
 export const UserContainer = styled.div`
   width: 80%;
   height: 50px;
@@ -66,6 +65,9 @@ export const UserContainer = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   > a {
     margin-top: 3px;

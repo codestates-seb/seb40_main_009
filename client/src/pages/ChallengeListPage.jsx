@@ -110,8 +110,6 @@ export default function ChallengeListPage() {
     }
   }, [inView, isLoading]);
 
-  if (isLoading) return <Loading />;
-
   return (
     <>
       {loginState ? (
@@ -181,6 +179,7 @@ export default function ChallengeListPage() {
               </React.Fragment>
             )
           )}
+          {isLoading ? <Loading /> : null}
         </S.Container>
       </S.ListContainer>
     </>
