@@ -122,12 +122,21 @@ public class OrderService {
             order.setRequestuniquenumber(approveResponse.getAid()); //요청고유번호 저장
             order.setOrderSuccess(Boolean.TRUE);
             orderRepository.save(order);
+            updateMemberMoney(order);
 
             return approveResponse;
 
         } else //거래가 이상하다면 approveResponse가 안온걸로 반환.
             throw new BusinessLogicException(ExceptionCode.NO_ORDER_RESOPNSE);
 
+    }
+
+    private void updateMemberMoney(Order order) {
+        Member member = order.getMember();
+        double memberMoney=member.getMemberMoney();
+        memberMoney+= order.getTotalAmount();
+        member.setMemberMoney(memberMoney);
+        memberRepository.save(member);
     }
 
     /**
@@ -138,6 +147,7 @@ public class OrderService {
         Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         List<Order> orders = orderRepository.findByMemberId(member); //쿼리dsl 통해서 얻어낸 order들.
+
         return orders;
     }
 

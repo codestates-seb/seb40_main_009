@@ -6,6 +6,7 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.image.service.ImageService;
 import be.wiselife.member.entity.Member;
+import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
@@ -28,13 +29,15 @@ import java.util.Optional;
 @Slf4j
 public class ChallengeService {
     private final ChallengeRepository challengeRepository;
+    private final MemberRepository memberRepository;
     private final ImageService imageService;
     private final MemberService memberService;
     private final MemberChallengeService memberChallengeService;
 
 
-    public ChallengeService(ChallengeRepository challengeRepository, ImageService imageService, MemberService memberService, MemberChallengeService memberChallengeService) {
+    public ChallengeService(ChallengeRepository challengeRepository,MemberRepository memberRepository, ImageService imageService, MemberService memberService, MemberChallengeService memberChallengeService) {
         this.challengeRepository = challengeRepository;
+        this.memberRepository = memberRepository;
         this.imageService = imageService;
         this.memberService = memberService;
         this.memberChallengeService = memberChallengeService;
@@ -283,10 +286,25 @@ public class ChallengeService {
         for(Challenge challenge : challengeList){
             if(now.isAfter(challenge.getChallengeEndDate())){
                 challenge.setIsClosed(true);
+                updateMemberMoney(challenge);
+            }
+            if (now.equals(challenge.getChallengeStartDate())&&(challenge.getChallengeCurrentParty()<challenge.getChallengeMinParty())) {
+                challenge.setIsClosed(true);
+                updateMemberMoney(challenge);
             }
         }
-
         challengeRepository.saveAll(challengeList);
+    }
+
+    private void updateMemberMoney(Challenge challenge) {
+        List<MemberChallenge> memberChallenges = challenge.getMemberChallenges();
+        for (MemberChallenge memberChallenge : memberChallenges) {
+            Member member = memberChallenge.getMember();
+            double memberMoney = member.getMemberMoney();
+            memberMoney+=memberChallenge.getExpectedRefundToMember();
+            member.setMemberMoney(memberMoney);
+            memberRepository.save(member);
+        }
     }
 
 

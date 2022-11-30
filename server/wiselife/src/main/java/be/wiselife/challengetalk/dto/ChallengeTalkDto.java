@@ -34,7 +34,9 @@ public class ChallengeTalkDto {
     @Getter
     @Setter
     public static class response{
+        private Long challengeTalkId;
         private String challengeTalkBody;
+        private Long memberId;
         private String memberName;
         private String memberBadge;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

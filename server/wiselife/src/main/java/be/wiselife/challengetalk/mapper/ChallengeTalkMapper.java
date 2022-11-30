@@ -19,9 +19,11 @@ public interface ChallengeTalkMapper {
 
         ChallengeTalkDto.response response = new ChallengeTalkDto.response();
 
+        response.setChallengeTalkId(challengeTalk.getChallengeTalkId());
         response.setChallengeTalkBody(challengeTalk.getChallengeTalkBody() );
         response.setCreated_at(challengeTalk.getCreatedAt() );
         response.setUpdated_at(challengeTalk.getUpdated_at() );
+        response.setMemberId(challengeTalk.getMemberId());
         response.setMemberName(memberName);
         response.setMemberBadge(challengeTalk.getMemberBadge());
 
