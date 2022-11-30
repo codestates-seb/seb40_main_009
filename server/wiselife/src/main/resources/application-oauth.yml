@@ -7,10 +7,10 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ${KAKAO_CILENT_ID} #e9cbf2e31aa946c52e55e753135126c3
-            redirect-uri: http://localhost:3000/oauth/callback/kakao
+            client-id: ${KAKAO_CILENT_ID}
+            redirect-uri: http://localhost:3000/oauth/callback/kakao #TODO S3 연결후 바꿔야함
             client-authentication-method: POST
-            client-secret: 3upB7uLbKjqRB2OnXrkDQNWPLbqwH5fr
+            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
@@ -23,6 +23,10 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token #토큰을 요청하는 url
             user-info-uri: https://kapi.kakao.com/v2/user/me #회원 정보를 가져오는 url
             user-name-attribute: id
+
+
+Kakaopay:
+    KakaoAK: ${KAKAO_AUTH_ORDER_KEY}
 
 
 
