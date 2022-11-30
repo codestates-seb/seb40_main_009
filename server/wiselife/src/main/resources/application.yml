@@ -8,7 +8,7 @@ spring:
         format_sql: true  # (3) SQL pretty print
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wiseLifeTest?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC #wiseLifeTest->각자 스키마이름으로 변경 필
+    url: jdbc:mysql://localhost:3306/wiselife?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC #wiseLifeTest->각자 스키마이름으로 변경 필
     username: root #wiseLifeTest->각자 계정이름으로 변경 필
     password: 72957295 #wiseLifeTest->각자 비번으로 변경 필
   profiles:
