@@ -17,7 +17,7 @@ permissions:
 
 env:
   S3_BUCKET_NAME: wiselife-main
-  RESOURCE_PATH: ./server/wiselife/src/main/resources/application.yml
+  RESOURCE_PATH: ./server/wiselife/src/main/resources/application-aws.yml
   
 jobs:
   build:
