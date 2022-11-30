@@ -122,6 +122,7 @@ public interface ChallengeMapper {
         challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
 
 
+
         return challenge.build();
     }
 
@@ -161,6 +162,7 @@ public interface ChallengeMapper {
             challengeExamImagePathList.add(imagePath);
         }
         simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
+        simpleResponse.setIsSimpleResponse(true);
 
         return simpleResponse;
     }
@@ -230,6 +232,7 @@ public interface ChallengeMapper {
                 }
                 detailResponse.challengeReviews(challengeReviewResponseDtoList);
             }
+            detailResponse.isSimpleResponse(false);
 
 
         }

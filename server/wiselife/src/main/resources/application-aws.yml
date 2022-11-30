@@ -11,8 +11,6 @@ spring:
     url: jdbc:mysql://wiselife-db.cicdq0knxkqb.ap-northeast-2.rds.amazonaws.com:3306/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul #wiseLifeTest->각자 스키마이름으로 변경 필
     username: ${DB_ID}
     password: ${DB_PASSWORD}
-  profiles:
-    include: oauth # oauth yml 불러오긴 위한 파일
 
   servlet:
     multipart:

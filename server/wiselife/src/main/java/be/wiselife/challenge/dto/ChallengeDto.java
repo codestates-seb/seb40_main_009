@@ -126,6 +126,8 @@ public class ChallengeDto {
 
         private List<String> challengeExamImagePath;
 
+        private Boolean isSimpleResponse;
+
 //        private List<ChallengeReviewDto.Response> challengeReviews;
     }
 
@@ -192,6 +194,8 @@ public class ChallengeDto {
         private List<ChallengeTalkDto.response> challengeTalks;
 
         private List<ChallengeReviewDto.Response> challengeReviews;
+
+        private Boolean isSimpleResponse;
 
     }
 
