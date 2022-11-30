@@ -13,7 +13,7 @@ function KakaoLogin() {
   const navigate = useNavigate();
   const setLoginState = useSetRecoilState(LoginState);
   const KAKAO_CODE = location.search.split('=')[1]; // 인가코드
-
+  // 로그인
   const getKakaoToken = useCallback(async () => {
     try {
       axios
