@@ -162,6 +162,14 @@ public interface ChallengeMapper {
             challengeExamImagePathList.add(imagePath);
         }
         simpleResponse.setChallengeExamImagePath(challengeExamImagePathList);
+
+        if(!challenge.getChallengeReviewList().isEmpty()){
+            List<ChallengeReviewDto.Response> challengeReviewResponseDtoList = new ArrayList<>();
+            for(ChallengeReview challengeReview: challenge.getChallengeReviewList()){
+                challengeReviewResponseDtoList.add(challengeReviewMapper.challengeReviewToChallengeReviewResponseDto(challengeReview));
+            }
+            simpleResponse.setChallengeReviews(challengeReviewResponseDtoList);
+        }
         simpleResponse.setIsSimpleResponse(true);
 
         return simpleResponse;
