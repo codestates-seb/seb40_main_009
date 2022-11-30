@@ -11,9 +11,31 @@ spring:
     url: jdbc:mysql://${ENDPOINT}:${PORT}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ${DB_ID}
     password: ${DB_PASSWORD}
-  profiles:
-    include: oauth # oauth yml 불러오긴 위한 파일
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CILENT_ID}
+            redirect-uri: http://localhost:3000/oauth/callback/kakao #TODO S3 연결후 바꿔야함
+            client-authentication-method: POST
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            client_name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize #인증을 요청하는 url을 작성
+            token-uri: https://kauth.kakao.com/oauth/token #토큰을 요청하는 url
+            user-info-uri: https://kapi.kakao.com/v2/user/me #회원 정보를 가져오는 url
+            user-name-attribute: id
+  # OAuth2ClientPropertiesRegistrationAdapter를 통해OAuth2ClientProperties에서 각 OAuth2 server마다 ClientRegistration 생성
+  # ClientRegistration 리스트를 InMemoryClientRegistrationRepository에 저장
 
+# 이미지 사이즈 저장공간
   servlet:
     multipart:
       max-file-size: 5MB
@@ -58,11 +80,11 @@ cloud:
         secret-key: ${AWS_SECRET_ACCESS_KEY} # 디코에있는거
       s3:
         bucket: wiselife-image
-        #dir: 안해도될듯?
       region:
         static: ap-northeast-2
       stack:
         auto: false
         
-kakaopay:
+common:
+  data:
     kakaoAK: ${KAKAO_AUTH_ORDER_KEY}
