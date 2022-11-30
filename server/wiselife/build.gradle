@@ -50,8 +50,15 @@ dependencies {
 	//AWS cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
 	//firebase
 //	implementation 'com.google.firebase:firebase-admin:7.1.0'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-starter-parent:Hoxton.SR12"
+	}
 }
 
 tasks.named('test') {

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,11 +189,19 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
+//        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
+//
+//        List<ChallengeCertImage> challengeCertImages =
+//                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
+//                        loginMember.getMemberId(), challenge.getRandomIdForImage());
 
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage, challengeCertImages);
+
+        challengeCertImages.add(challengeCertImage);
 
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
@@ -203,21 +212,41 @@ public class ImageService {
         return challengeUpdateChallengeCertImage;
     }
     // 인증사진 등록 및 수정 메소드
-    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage) {
+    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage,List<ChallengeCertImage> challengeCertImages) {
+        //인증가능 시간인지 검증
+        if(!isAuthAvailableTime(challenge, challengeCertImages))
+            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
+
         if (challengeCertImage == null) {
             challengeCertImage = new ChallengeCertImage();
-            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
             log.info("cerImage1={}",challenge.getChallengeCertImagePath());
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
             challengeCertImage.setChallenge(challenge);
-            imageRepository.save(challengeCertImage);
-            return challenge;
+//            중복되니까 지워도 될듯합니다 - 영운
+//            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+//            imageRepository.save(challengeCertImage);
+//            return challenge;
         }
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
         imageRepository.save(challengeCertImage);
         return challenge;
+    }
+
+    /**
+     * 인증가능 시간인지 검증
+     * @param challenge 인증 사진 관련된 해당 챌린지
+     * @param challengeCertImages 오늘 해당 멤버가 올린 인증 사진들
+     * @return
+     */
+    private boolean isAuthAvailableTime(Challenge challenge, List<ChallengeCertImage> challengeCertImages){
+        int todayAuthenticationsCnt = challengeCertImages.size();
+        List<String> challengeAuthAvailableTime = challenge.getChallengeAuthAvailableTime();
+        LocalTime authAvailableTime = LocalTime.parse(challengeAuthAvailableTime.get(todayAuthenticationsCnt));
+        LocalTime now = LocalTime.now();
+
+        return authAvailableTime.equals(now) || now.isAfter(authAvailableTime) && now.isBefore(authAvailableTime.plusMinutes(10));
     }
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직

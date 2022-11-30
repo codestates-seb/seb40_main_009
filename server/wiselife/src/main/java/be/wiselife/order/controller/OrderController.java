@@ -42,7 +42,7 @@ public class OrderController {
      * @return
      * @throws IOException
      */
-    @GetMapping("/ready")
+    @PostMapping("/ready")
     public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postInfo, HttpServletRequest request){
         String EmailFromToken = jwtTokenizer.getEmailWithToken(request);
         
