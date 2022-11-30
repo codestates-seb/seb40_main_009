@@ -291,6 +291,10 @@ public class ChallengeService {
                 challenge.setIsClosed(true);
                 updateMemberMoney(challenge);
             }
+            if (now.isAfter(challenge.getChallengeStartDate())&&(challenge.getChallengeCurrentParty()<challenge.getChallengeMinParty())) {
+                challenge.setIsClosed(true);
+                updateMemberMoney(challenge);
+            }
         }
         challengeRepository.saveAll(challengeList);
     }
