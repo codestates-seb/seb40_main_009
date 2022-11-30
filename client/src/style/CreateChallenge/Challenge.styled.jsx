@@ -26,6 +26,8 @@ export const CreateAsk = styled.section`
   .question {
     height: 80px;
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
 
     > h3 {
       margin-bottom: 10px;

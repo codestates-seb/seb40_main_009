@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import * as U from '../../style/MemberList/MemberList.styled';
 
-import Member from '../MemberList/MemberList';
+import Member from '../MemberList/Member';
 
 export default function MemberResult({ searchValue }) {
   const [memberList, setMemberList] = useState([]);
@@ -39,14 +39,22 @@ export default function MemberResult({ searchValue }) {
         <div>가입일</div>
       </U.IndexContainer>
       {memberList.map(
-        ({ memberId, memberName, memberBadge, followerCount, created_at }) => (
+        ({
+          memberId,
+          memberName,
+          memberBadge,
+          followerCount,
+          created_at,
+          memberImagePath,
+        }) => (
           <Member
             key={memberId}
-            memberId={memberId}
-            memberName={memberName}
-            memberBadge={memberBadge}
+            id={memberId}
+            name={memberName}
+            badge={memberBadge}
             followerCount={followerCount}
             created_at={created_at}
+            image={memberImagePath}
           />
         )
       )}
