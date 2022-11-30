@@ -28,7 +28,7 @@ import java.util.List;
 public class OrderService {
     static final String cid = "TC0ONETIME"; //가맹점 테스트 코드
     @Getter
-    @Value("${Kakaopay.KakaoAK}")
+    @Value("${kakaopay.kakaoAK}")
     private String authorization;
 
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";

@@ -18,6 +18,7 @@ permissions:
 env:
   S3_BUCKET_NAME: wiselife-main
   RESOURCE_PATH: ./server/wiselife/src/main/resources/application-aws.yml
+  RESOURCE_PATH_OAUTH: ./server/wiselife/src/main/resources/application-oauth.yml
   
 jobs:
   build:
@@ -40,12 +41,18 @@ jobs:
         spring.datasource.url: jdbc:mysql://${{ secrets.ENDPOINT }}:${{ secrets.PORT }}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
         spring.datasource.username: ${{ secrets.DB_ID }}
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-        spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CILENT_ID }}
-        spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
         jwt.token.secret-key: ${{ secrets.JWT_SECRET_KEY }}
         cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
         cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        Kakaopay.KakaoAk: ${{secrets.KAKAO_AUTH_ORDER_KEY}}
+        Kakaopay.KakaoAk: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
+
+     - name: Set Outh file
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: ${{ env.RESOURCE_PATH_OAUTH }}
+      env:
+        spring.security.oauth2.cilent.registration.client-id: ${{ secrets.KAKAO_CILENT_ID }}
+        spring.security.oauth2.cilent.registration.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
 
      # grant execute permission for gradlew
     - name : Grant execute permission for gradlew
@@ -66,7 +73,7 @@ jobs:
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        KAKAO_AUTH_ORDER_KEY: ${{secrets.KAKAO_AUTH_ORDER_KEY}}
+        KAKAO_AUTH_ORDER_KEY: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
     
     - name: Make zip file
       run: zip -r ./wiselife-deploy.zip .

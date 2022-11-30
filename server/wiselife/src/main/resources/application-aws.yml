@@ -64,5 +64,5 @@ cloud:
       stack:
         auto: false
         
-Kakaopay:
-    KakaoAK: ${KAKAO_AUTH_ORDER_KEY}
+kakaopay:
+    kakaoAK: ${KAKAO_AUTH_ORDER_KEY}
