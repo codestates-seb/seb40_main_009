@@ -63,3 +63,6 @@ cloud:
         static: ap-northeast-2
       stack:
         auto: false
+        
+Kakaopay:
+    KakaoAK: ${KAKAO_AUTH_ORDER_KEY}
