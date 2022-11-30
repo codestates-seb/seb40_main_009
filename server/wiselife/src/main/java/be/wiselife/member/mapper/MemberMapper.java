@@ -75,6 +75,7 @@ public interface MemberMapper {
         MemberDto.listResponse memberListResponse = new MemberDto.listResponse();
 
         memberListResponse.setMemberId(member.getMemberId());
+        memberListResponse.setMemberImagePath(member.getMemberImagePath());
         memberListResponse.setMemberName(member.getMemberName());
         memberListResponse.setMemberBadge(member.getMemberBadge());
         memberListResponse.setFollowerCount(member.getFollowerCount());
@@ -109,6 +110,7 @@ public interface MemberMapper {
                         .memberChallengeId(memberChallenge.getMemberChallengeId())
                         .challengeId(memberChallenge.getChallenge().getChallengeId())
                         .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
+                        .challengeRepImage(memberChallenge.getChallenge().getChallengeRepImagePath())
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
                         .objDay(ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(), memberChallenge.getChallenge().getChallengeEndDate()))
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
@@ -129,6 +131,7 @@ public interface MemberMapper {
                         .memberChallengeId(memberChallenge.getMemberChallengeId())
                         .challengeId(memberChallenge.getChallenge().getChallengeId())
                         .challengeTitle(memberChallenge.getChallenge().getChallengeTitle())
+                        .challengeRepImage(memberChallenge.getChallenge().getChallengeRepImagePath())
                         .memberSuccessDay((int) memberChallenge.getMemberSuccessDay())
                         .objDay(ChronoUnit.DAYS.between(memberChallenge.getChallenge().getChallengeStartDate(), memberChallenge.getChallenge().getChallengeEndDate()))
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())

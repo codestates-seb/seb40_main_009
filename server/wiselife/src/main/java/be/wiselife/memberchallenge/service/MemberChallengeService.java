@@ -2,6 +2,8 @@ package be.wiselife.memberchallenge.service;
 
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.repository.ChallengeRepository;
+import be.wiselife.exception.BusinessLogicException;
+import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
@@ -35,8 +37,8 @@ public class MemberChallengeService {
 
             challenge.setChallengeCurrentParty(challengeCurrentParty-1);
             challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
+            member.setMemberMoney(member.getMemberMoney()+challenge.getChallengeFeePerPerson());
             challenge.getMemberChallenges().remove(memberChallengeFromRepository);
-
             member.getMemberChallenges().remove(memberChallengeFromRepository);
 
             memberChallengeRepository.delete(memberChallengeFromRepository);
@@ -49,13 +51,20 @@ public class MemberChallengeService {
 
             challenge.setChallengeCurrentParty(challengeCurrentParty+1);
 //            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
-
+            if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
+                throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
+            }
             memberChallenge.setExpectedRefundToMember(challenge.getChallengeFeePerPerson());
             memberChallenge.setMember(member);
             memberChallenge.setChallenge(challenge);
 
             challenge.getMemberChallenges().add(memberChallenge);
             member.getMemberChallenges().add(memberChallenge);
+            double memberMoney = member.getMemberMoney();
+            if (memberMoney < challenge.getChallengeFeePerPerson()) {
+                throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_CHARGE_MONEY);
+            }
+            member.setMemberMoney(memberMoney-challenge.getChallengeFeePerPerson());
 
             memberChallengeRepository.save(memberChallenge);
             memberRepository.save(member);

@@ -1,7 +1,0 @@
-spring:
-  application:
-    name:
-  profiles:
-    active: local
-  config:
-    import: classpath:/application-aws.yml

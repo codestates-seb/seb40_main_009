@@ -158,38 +158,6 @@ public class Challenge extends WriterAudit {
 
         this.challengeCertImagePath = challengeCertImagePath;
     }
-    //더미용 생성자
-    @Builder
-    public Challenge(Long challengeId, ChallengeCategory challengeCategory, String challengeTitle,
-                     String challengeDescription, int challengeMaxParty, int challengeMinParty,
-                     LocalDate challengeStartDate, LocalDate challengeEndDate,
-                     String challengeAuthDescription, int challengeAuthCycle, int challengeFeePerPerson,
-                     String challengeRepImagePath, String challengeExamImagePath, String challengeCertImagePath,int challengeCurrentParty, List<String> challengeAuthAvailableTime,Boolean isClosed) {
-        this.challengeId = challengeId;
-        this.challengeCategory = challengeCategory;
-        this.challengeTitle = challengeTitle;
-        this.challengeDescription = challengeDescription;
-        this.challengeMaxParty = challengeMaxParty;
-        this.challengeMinParty = challengeMinParty;
-        this.challengeStartDate = challengeStartDate;
-        this.challengeEndDate = challengeEndDate;
-        this.challengeAuthDescription = challengeAuthDescription;
-        this.challengeAuthCycle = challengeAuthCycle;
-        this.challengeAuthAvailableTime = challengeAuthAvailableTime;
-        this.challengeFeePerPerson = challengeFeePerPerson;
-
-        /*인자로 받지는 않지만 default값 설정해야 하는 것들*/
-        this.isClosed = isClosed;
-        this.challengeViewCount = 0;
-        this.challengeCurrentParty = challengeCurrentParty;
-        this.challengeTotalReward = 0;
-
-        this.challengeRepImagePath=challengeRepImagePath;
-        this.challengeExamImagePath = challengeExamImagePath;
-        this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
-
-        this.challengeCertImagePath = challengeCertImagePath;
-    }
 
     /**
      * 챌린지 댓글 추가
