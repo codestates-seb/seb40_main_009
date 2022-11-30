@@ -20,6 +20,10 @@ import MemberListPage from './pages/MemberListPage';
 import SearchResultPage from './pages/SearchResultPage';
 import AdminPage from './pages/AdminPage';
 
+import SuccessPayment from './components/KakaoPay/PaymentLists/SuccessPayment';
+import FailedPayment from './components/KakaoPay/PaymentLists/FailedPayment';
+import CancellationPayment from './components/KakaoPay/PaymentLists/CancellationPayment';
+
 export default function App() {
   return (
     <>
@@ -44,6 +48,9 @@ export default function App() {
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
           <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/order/success" element={<SuccessPayment />} />
+          <Route path="/order/fail" element={<FailedPayment />} />
+          <Route path="/order/cancel" element={<CancellationPayment />} />
         </Routes>
         <Footer />
       </BrowserRouter>

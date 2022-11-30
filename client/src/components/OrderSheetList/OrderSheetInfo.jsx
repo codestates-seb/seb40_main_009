@@ -1,21 +1,13 @@
 import axios from 'axios';
 import * as S from '../../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx.jsx';
 // import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
-// import { LoginState } from '../Login/KakaoLoginData';
-import { useNavigate } from 'react-router-dom';
 
 function OrderSheetInfo({ price, title }) {
-  const navigate = useNavigate();
-
   const itemName = title;
   const totalAmount = price;
+
   const data = { itemName, totalAmount, orderTax: price * 0.1, quantity: 1 };
   console.log(data);
-
-  // const URL = '/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}'
-
-  // PG_TOKEN c501fa57431bf9a985fb
-  // TID T3761b5a7c755d997e87
 
   const config = {
     method: 'post',
@@ -30,8 +22,10 @@ function OrderSheetInfo({ price, title }) {
   const postKakaoPay = () => {
     axios(config)
       .then((response) => {
-        console.log('rr', response);
-        // navigate(`/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`);
+        console.log('rr', response.data.data);
+        const KAKAO_PAYMENT_URL = response.data.data.next_redirect_pc_url;
+        localStorage.setItem('TID', response.data.data.tid);
+        window.location.href = KAKAO_PAYMENT_URL;
       })
       .catch(function (error) {
         console.log(error);
@@ -43,7 +37,7 @@ function OrderSheetInfo({ price, title }) {
       <S.InfoContainerLists>
         <h1 className="order-info-title">결제 정보</h1>
         <h2>참가비 : {price}원</h2>
-        <div>세금 : {price * 0.1}원 포함</div>
+        <div>세금 : {data.orderTax}원 포함</div>
         <div>100% 성공 시 : 참가비 + 상금</div>
         <div>80% 성공 시 : 달성률에 따른 원금 + 상금</div>
         <div>50% 성공 시 : 달성률에 따른 원금 + 상금</div>
