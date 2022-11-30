@@ -14,17 +14,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = false)
 public class OrderService {
     static final String cid = "TC0ONETIME"; //가맹점 테스트 코드
     @Getter
@@ -143,6 +143,7 @@ public class OrderService {
      * 이메일을 통해서 맴버를 찾고
      * @return  맴버아이디와 일치되는 오더기록을 리턴한다.
      */
+    @Transactional(readOnly = true)
     public List<Order> getOrderList(String email) {
         Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
@@ -154,6 +155,7 @@ public class OrderService {
     /**
      * @return 카톡측에서 요구하는 헤더값 리턴
      */
+
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authorization);

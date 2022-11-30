@@ -15,9 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * TODO: 수정, 삭제시 권한 확인하는 함수
  * */
-@Transactional
+@Transactional(readOnly = false)
 @Service
 @Slf4j
 public class ChallengeService {
@@ -167,25 +167,11 @@ public class ChallengeService {
     }
 
     /**
-     * 작성자 : 유현
-     * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
-     * 로그인 된 유저가 아닐시 인증사진은 안나오게
-     * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게
-     * TODO: 로그인 된 유저 중에 이 챌린지에 참여중인 멤버가 맞는지 판단 로직 필요현 재구현
-     */
-//    public Challenge getCertification(Challenge certImageInfo,Member loginMember) {
-//
-//        String certImagePath = imageService.getChallengeCertImage(certImageInfo);
-//
-//        certImageInfo.setChallengeCertImagePath(certImagePath);
-//        return certImageInfo;
-//    }
-
-    /**
      * 챌린지 id를 통한 챌린지 조회
      * @param challengeId CHALLENGE 테이블의 PK
      * @return
      */
+    @Transactional(readOnly = true)
     public Challenge getChallengeById(Long challengeId) {
         return findChallengeById(challengeId);
     }
@@ -214,6 +200,7 @@ public class ChallengeService {
         return saveChallenge(challenge);
     }
 
+    @Transactional(readOnly = true)
     public Challenge findChallengeById(Long challengeId){
         return verifyChallengeById(challengeId);
     }
@@ -223,6 +210,7 @@ public class ChallengeService {
      * @param categoryId 1~3 사이의 카테고리 id
      * @return 해당 카테고리의 챌린지 list
      */
+    @Transactional(readOnly = true)
     public Page<Challenge> getAllChallengesInCategory(Long categoryId, int page, int size, String sortBy) {
         Challenge.ChallengeCategory challengeCategory = categoryIdToChallengeCategory(categoryId);
 
@@ -230,6 +218,7 @@ public class ChallengeService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public List<Challenge> getAllChallenges() {
         List<Challenge> challengeList = challengeRepository.findAll();
 
@@ -241,6 +230,7 @@ public class ChallengeService {
      * @param searchTitle 챌린지 제목 검색어
      * @return
      */
+    @Transactional(readOnly = true)
     public Page<Challenge> searchChallengesByChallengeTitle(String searchTitle, int page, int size, String sortBy) {
 
         return challengeRepository.findChallengesByChallengeTitleContaining(searchTitle, getPageRequest(page, size, sortBy))
@@ -429,6 +419,7 @@ public class ChallengeService {
      * @param endDate   챌린지 종료 일자
      * @return
      */
+    @Transactional(readOnly = true)
     public double getChallengeProgressRate(LocalDate startDate, LocalDate endDate){
         double challengeTotalDay;
         LocalDate now = LocalDate.now();

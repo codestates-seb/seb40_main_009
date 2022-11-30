@@ -14,6 +14,7 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,10 +26,10 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = false)
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberChallengeRepository memberChallengeRepository;
-    private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
     private final S3UploadService s3UploadService;
 
@@ -189,12 +190,6 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-//        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
-//
-//        List<ChallengeCertImage> challengeCertImages =
-//                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
-//                        loginMember.getMemberId(), challenge.getRandomIdForImage());
-
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
@@ -219,15 +214,10 @@ public class ImageService {
 
         if (challengeCertImage == null) {
             challengeCertImage = new ChallengeCertImage();
-            log.info("cerImage1={}",challenge.getChallengeCertImagePath());
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
             challengeCertImage.setChallenge(challenge);
-//            중복되니까 지워도 될듯합니다 - 영운
-//            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-//            imageRepository.save(challengeCertImage);
-//            return challenge;
         }
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
         imageRepository.save(challengeCertImage);
@@ -264,7 +254,7 @@ public class ImageService {
     /**
      * 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
      * 여기서 레벨업 로직 구현
-      */
+     */
     private void plusSuccessCount(Member loginMember) {
         int successCount =imageRepository.findCertImageByImageTypeAndMemberId("CCI", loginMember.getMemberId()).size();
         if (loginMember.getMemberExp() >= loginMember.getMemberBadge().getObjExperience()) {
@@ -286,23 +276,7 @@ public class ImageService {
         loginMember.setMemberChallengePercentage(memberChallengeSuccessRate/memberChallengeList.size());
         memberRepository.save(loginMember);
     }
-    
-    
-    //TODO 안쓸꺼면 삭제
-    public String getRepImagePath(String randomIdForImage) {
-        ChallengeRepImage cri = imageRepository.findByImageTypeAndChallengeRep("CRI", randomIdForImage);
-        return cri.getImagePath();
-    }
-    //TODO 안쓸꺼면 삭제
-    public List<String> getExamImagePath(String randomIdForImage) {
-        List<ChallengeExamImage> cei = imageRepository.findByImageTypeAndChallengeExam("CEI", randomIdForImage);
-        List<String> urls = new ArrayList<>();
-        for (ChallengeExamImage image : cei) {
-            urls.add(image.getImagePath());
-        }
 
-        return urls;
-    }
     /*
      * s3서비스를 대행해주는 역할
      */

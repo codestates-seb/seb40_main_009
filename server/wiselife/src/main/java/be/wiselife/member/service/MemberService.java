@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MemberService {
 
     /**
@@ -41,6 +43,7 @@ public class MemberService {
      * 자신이 접근하게 되면 followStatus self, 타인이 접근하면 follow 유무에 따라 follow/unfollow로 나타난다.
      * 참여한 챌린지의 인증일자를 70% 초과하면 성공으로 간주 한다.
      */
+    @Transactional(readOnly = false)
     public Member findMember(Member follower,Member following) {
         Follow follow = memberRepository.findByFollowerIdAndFollowing(follower.getMemberId(), following);
 
@@ -96,6 +99,7 @@ public class MemberService {
         return memberRepository.findAll(PageRequest.of(page, size, Sort.by(sort).descending()));
     }
 
+    @Transactional(readOnly = false)
     public Member updateMemberInfo(String memberName, Member member, Member loginMember, MultipartFile multipartFiles) throws IOException {
         Member memberFromRepository = findMemberByMemberName(memberName);
 
@@ -136,7 +140,6 @@ public class MemberService {
     private Member verifiedMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member foundMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        log.info("follower size={}",foundMember.getFollows().size());
         return foundMember;
     }
 
@@ -146,25 +149,10 @@ public class MemberService {
         return foundMember;
     }
 
-    //Badge 기준 sort 동작 확인용 추후 삭제 예정
-    public void changeBadge(Long memberId) {
-        Member member = verifiedMemberById(memberId);
-        int memberLevel = member.getMemberBadge().getLevel()+1;
-        member.setMemberLevel(memberLevel);
-        member.setMemberBadge(Member.MemberBadge.badgeOfLevel(memberLevel));
-        memberRepository.save(member);
-    }
-
-    /**
-     * email 비교를 통해 권한이 있는 유저인지 확인
-     * */
-    public boolean isVerifiedMember(String authorizedMemberEmail, String tryingMemberEmail){
-        return Objects.equals(authorizedMemberEmail, tryingMemberEmail);
-    }
-
     /**
      * member ID 비교를 통해 권한이 있는 유저인지 확인
-     * */
+     *
+     */
     public boolean isVerifiedMember(Long authorizedMemberId, Long tryingMemberId){
         return Objects.equals(authorizedMemberId, tryingMemberId);
     }

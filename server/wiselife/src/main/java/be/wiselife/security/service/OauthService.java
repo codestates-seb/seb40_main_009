@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -93,6 +94,7 @@ public class OauthService extends DefaultOAuth2UserService {
      * @param refreshToken
      * @return
      */
+    @Transactional(readOnly = false)
     private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider, String refreshToken) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
         

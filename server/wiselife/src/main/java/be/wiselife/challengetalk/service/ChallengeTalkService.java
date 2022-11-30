@@ -9,10 +9,12 @@ import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = false)
 public class ChallengeTalkService {
     private final ChallengeTalkRepository challengeTalkRepository;
     private final MemberService memberService;
@@ -53,6 +55,7 @@ public class ChallengeTalkService {
         return challengeTalkRepository.save(challengeTalk);
     }
 
+    @Transactional(readOnly = true)
     public ChallengeTalk findChallengeTalkById(Long challengeTalkId){
         ChallengeTalk savedChallengeTalk =  challengeTalkRepository.findById(challengeTalkId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_TALK_NOT_FOUND));

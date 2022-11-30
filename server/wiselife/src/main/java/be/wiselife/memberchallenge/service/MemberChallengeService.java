@@ -11,12 +11,14 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = false)
 public class MemberChallengeService {
     private final MemberChallengeRepository memberChallengeRepository;
     private final MemberRepository memberRepository;
@@ -85,6 +87,7 @@ public class MemberChallengeService {
         memberChallengeRepository.saveAll(memberChallengeList);
     }
 
+    @Transactional(readOnly = true)
     public MemberChallenge findMemberChallengeByMemberAndChallenge(Challenge challenge, Member member){
         return memberChallengeRepository.findByChallengeAndMember(challenge, member);
     }

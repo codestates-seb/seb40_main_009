@@ -12,6 +12,7 @@ import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Transactional(readOnly = false)
 public class ChallengeReviewService {
     private final ChallengeReviewRepository challengeReviewRepository;
     private final ImageService imageService;
@@ -109,6 +111,7 @@ public class ChallengeReviewService {
      * @param challengeId 조회하고자 하는 챌린지 id
      * @return
      */
+    @Transactional(readOnly = true)
     public List<ChallengeReview> getChallengeReviewsInChallenge(Long challengeId){
         List<ChallengeReview> challengeReviewList = challengeReviewRepository.findChallengeReviewsByChallenge_ChallengeId(challengeId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND));
@@ -121,6 +124,7 @@ public class ChallengeReviewService {
      * @param challengeReviewId 찾고 싶은 챌린지 리뷰 id
      * @return 찾은 챌린지 리뷰
      */
+    @Transactional(readOnly = true)
     public ChallengeReview getChallengeReview(Long challengeReviewId) {
         return findVerifiedChallengeReviewById(challengeReviewId);
     }
