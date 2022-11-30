@@ -144,7 +144,7 @@ export const Image = styled.img`
 `;
 
 export const CertificationImage = styled.div`
-  width: 90%;
+  width: 200px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;
@@ -155,7 +155,7 @@ export const ViewMore = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 200px;
 `;
 
 export const Width = styled.div`
@@ -175,7 +175,7 @@ export const ReviewImageWrapper = styled.div`
 
 export const ReviewImage = styled.div`
   border: 2px solid red;
-  width: 90%;
+  width: 200px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;

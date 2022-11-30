@@ -20,6 +20,8 @@ function MyProfilePage() {
       memberImagePath: '',
       memberChallengePercentage: '',
       memberExpObjRate: '',
+      followStatus: '',
+      followerCount: '',
       participatingChallenges: [
         {
           memberChallengeId: '',
@@ -74,7 +76,6 @@ function MyProfilePage() {
   useEffect(() => {
     getProfile();
   }, []);
-  console.log('aoaoao', myProfileLists.participatingChallenges); // 왜 안받아져오는지 데이터 부르는게 잘못된건가?
 
   return (
     <S.MyProfilePageComponent>
@@ -84,6 +85,8 @@ function MyProfilePage() {
         memberDescription={myProfileLists.memberDescription}
         memberBadge={myProfileLists.memberBadge}
         memberExpObjRate={myProfileLists.memberExpObjRate}
+        followerCount={myProfileLists.followerCount}
+        followStatus={myProfileLists.followStatus}
       />
       <ProfileBoxLists
         // participatingChallenges={myProfileLists.map((data) => {

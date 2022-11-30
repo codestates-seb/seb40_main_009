@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { GiMedallist } from 'react-icons/gi';
 import Badge from './MyProfileBox/Badge';
+import Follower from './Follower';
 
 function MyProfile({
   memberDescription,
@@ -12,6 +13,8 @@ function MyProfile({
   memberImagePath,
   memberChallengePercentage,
   memberExpObjRate,
+  followStatus,
+  followerCount,
 }) {
   const profileData = {
     memberImagePath,
@@ -19,9 +22,7 @@ function MyProfile({
     memberDescription,
     // memberBadge,
   };
-
   const location = useLocation();
-  // const profileData = { memberImagePath, memberName, memberDescription };
 
   return (
     <S.MyProfileComponent>
@@ -35,7 +36,10 @@ function MyProfile({
           <S.ProfileList>
             <p>{memberName}</p>
             {/* Todo */}
-            <p>인기도0 ❤️</p>
+            <Follower
+              followStatus={followStatus}
+              followerCount={followerCount}
+            />
           </S.ProfileList>
           <div className="profile-list">
             <div>
