@@ -19,7 +19,6 @@ import MemberResult from './components/SearchResult/MemberResult';
 import ChallengeListPage from './pages/ChallengeListPage';
 import MemberListPage from './pages/MemberListPage';
 import SearchResultPage from './pages/SearchResultPage';
-import AdminPage from './pages/AdminPage';
 
 import SuccessPayment from './components/KakaoPay/PaymentLists/SuccessPayment';
 import FailedPayment from './components/KakaoPay/PaymentLists/FailedPayment';
@@ -49,7 +48,6 @@ export default function App() {
           <Route path="/createchallenge/*" element={<CreateChallengePage />} />
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
           <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/order/success" element={<SuccessPayment />} />
           <Route path="/order/fail" element={<FailedPayment />} />
           <Route path="/order/cancel" element={<CancellationPayment />} />
