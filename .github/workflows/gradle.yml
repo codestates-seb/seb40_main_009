@@ -45,7 +45,7 @@ jobs:
         jwt.token.secret-key: ${{ secrets.JWT_SECRET_KEY }}
         cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
         cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        Kakaopay.KakaoAk: ${{KAKAO_AUTH_ORDER_KEY}}
+        Kakaopay.KakaoAk: ${{secrets.KAKAO_AUTH_ORDER_KEY}}
 
      # grant execute permission for gradlew
     - name : Grant execute permission for gradlew
