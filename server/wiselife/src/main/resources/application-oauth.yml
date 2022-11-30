@@ -25,9 +25,6 @@ spring:
             user-name-attribute: id
 
 
-Kakaopay:
-    KakaoAK: ${KAKAO_AUTH_ORDER_KEY}
-
 
 
 
