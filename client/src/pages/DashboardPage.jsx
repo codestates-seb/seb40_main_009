@@ -188,12 +188,14 @@ export default function MainPage() {
                         challengeId,
                         challengeTitle,
                         challengeDescription,
+                        challengeRepImagePath,
                       }) => (
                         <Challenge
                           key={challengeId}
-                          challengeId={challengeId}
-                          challengeTitle={challengeTitle}
-                          challengeDescription={challengeDescription}
+                          id={challengeId}
+                          title={challengeTitle}
+                          description={challengeDescription}
+                          image={challengeRepImagePath}
                         />
                       )
                     )}

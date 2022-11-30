@@ -36,6 +36,7 @@ export default function CreateChallenge() {
   /**유효성 검사 & 데이터 전송 */
   const onValid = async (setData) => {
     const dataBox = setData; // 전체 데이터
+    console.log('나우', dataBox);
     const representImage = setData.challengeRepImagePath[0]; // 챌린지 대표 이미지
     const exampleImage = setData.challengeExamImagePath; // 챌린지 인증 이미지
 
@@ -74,7 +75,7 @@ export default function CreateChallenge() {
   const challengeComponents = [
     <FirstQuestionSet register={register} watch={watch} />,
     <SecondQuestionSet register={register} watch={watch} />,
-    <ThirdQuestionSet register={register} />,
+    <ThirdQuestionSet register={register} watch={watch} />,
     <FourthQuestionSet
       register={register}
       watch={watch}
