@@ -6,11 +6,11 @@ import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
 import MyProfile from '../components/ProfileList/MyProfile';
 import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
-import { useRecoilState } from 'recoil';
-import { LoginState } from '../components/Login/KakaoLoginData';
+// import { useRecoilState } from 'recoil';
+// import { LoginState } from '../components/Login/KakaoLoginData';
 
 function MyProfilePage() {
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+  // const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
 
   const [myProfileLists, setMyProfileLists] = useState([
     {
@@ -115,10 +115,9 @@ function MyProfilePage() {
         followStatus={myProfileLists.followStatus}
       />
       <ProfileBoxLists
-        // participatingChallenges={myProfileLists.map((data) => {
-        //   return data.participatingChallenges;
-        // })}
         endChallenges={myProfileLists.endChallenges}
+        participatingChallenges={myProfileLists.participatingChallenges}
+        memberName={myProfileLists.memberName}
       />
     </S.MyProfilePageComponent>
   );
