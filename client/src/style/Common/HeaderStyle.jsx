@@ -36,7 +36,7 @@ export const Container = styled.div`
 export const Logo = styled.div`
   color: #8673ff;
   cursor: pointer;
-  font-size: 23px;
+  font-size: 25px;
   margin-right: 8%;
 `;
 
@@ -78,6 +78,23 @@ export const UserSearchResult = styled.div`
     background-color: #f2f4fe;
   }
   padding: 1%;
+`;
+
+export const DropdownMypage = styled.li`
+  /* background: blue; */
+
+  &:hover {
+    border-bottom: 3px solid #8673ff;
+  }
+  margin-bottom: 10px;
+`;
+
+export const DropdownLogout = styled.li`
+  /* background: blue; */
+
+  &:hover {
+    border-bottom: 3px solid #8673ff;
+  }
 `;
 
 export const Icon = styled(FaSearch)`
