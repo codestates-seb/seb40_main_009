@@ -11,6 +11,8 @@ import {
   MoveOut,
   Sticky,
   ZoomIn,
+  ZoomInScrollOut,
+  FadeUp,
 } from 'react-scroll-motion';
 
 import {
@@ -96,6 +98,25 @@ export default function MainPage() {
     navigate('/challengelist');
   };
 
+  const Spin = (cycle) => ({
+    in: {
+      style: {
+        // `p` is number (0~1)
+        // When just before this page appear, `p` will be 0
+        // When this page filled your screen, `p` will be 1
+        transform: (p) => `rotate(${p * 360 * cycle}deg)`,
+      },
+    },
+    // out: {
+    //   style: {
+    // `p` is number (0~1)
+    // When this page filled your screen, `p` will be 0
+    // When just after this page disappear, `p` will be 1
+    // transform: (p) => `rotate(${p * 360 * cycle}deg)`,
+    // },
+    // },
+  });
+
   //early return pattern
   if (loading) return <Loading />;
 
@@ -144,6 +165,27 @@ export default function MainPage() {
         </ScrollPage>
 
         <ScrollPage page={5}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <span style={{ fontSize: '40px' }}>
+              <Animator animation={MoveIn(-1000, 0)}>지금 바로</Animator>
+              <Animator animation={MoveIn(1000, 0)}>
+                슬기로운 생활과 함께
+              </Animator>
+              목표를 향해
+              <Animator animation={MoveOut(1000, 0)}>건강하게 </Animator>
+              <Animator animation={MoveOut(-1000, 0)}>앞서 나아가다</Animator>
+            </span>
+          </div>
+        </ScrollPage>
+
+        {/* <ScrollPage page={5}>
           <FifthPage>
             <Animator animation={MoveIn(0, -1000)}>
               <FontSize50>지금 바로</FontSize50>
@@ -158,24 +200,27 @@ export default function MainPage() {
               <FontSize50>건강하게 앞서 나아가다</FontSize50>
             </Animator>
           </FifthPage>
-        </ScrollPage>
+        </ScrollPage> */}
 
-        {/* 신규챌린지, 이달의 랭커, 전체 랭킹 */}
+        {/* 신규챌린지 */}
         <ScrollPage page={6}>
-          <MarginTop>
-            <Animator animation={batch(Fade(), MoveIn(-1000, 0))}>
-              <Container>
-                <div>
-                  <FontSize30>신규챌린지</FontSize30>
-                  <div
-                    style={{
-                      border: '2px solid #eff1fe',
-                      marginTop: '3%',
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(4, 1fr)',
-                      width: '100%',
-                    }}
-                  ></div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <div>
+              <Animator animation={MoveIn(-1000, 0)}>
+                <span style={{ fontSize: '30px' }}>
+                  ✨지금 바로 챌린지에 도전해보세요✨
+                </span>
+              </Animator>
+              <Animator animation={MoveIn(1000, 0)}>
+                <div style={{ marginTop: '5%' }}>
+                  <div style={{ fontSize: '25px' }}>신규챌린지</div>
                   <div
                     style={{
                       display: 'flex',
@@ -201,43 +246,85 @@ export default function MainPage() {
                     )}
                   </div>
                 </div>
-              </Container>
-            </Animator>
+              </Animator>
+            </div>
+          </div>
+        </ScrollPage>
 
-            <Animator animation={batch(Fade(), MoveIn(1000, 0))}>
-              <Container>
-                {/* 인기 챌린지 */}
-                {/* 3개 순환하는거 만들기 */}
-                <PopularChallengeWrapper>
-                  <FontSize30>인기 챌린지</FontSize30>
+        <ScrollPage page={7}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh',
+              // width: '1024px',
+              // border: '1px solid blue',
+            }}
+          >
+            <Container>
+              {/* 인기 챌린지 */}
+              {/* 3개 순환하는거 만들기 */}
+              <div
+                style={{
+                  // border: '1px solid orange',
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Animator animation={Spin(10)}>
                   <div>
-                    <PopularChallenge src={smile} alt="인기 챌린지" />
-                  </div>
-                </PopularChallengeWrapper>
-                {/* 유저 랭킹 */}
-                <UserRankingWrapper>
-                  <TitleWrapper>
-                    <div className="title">유저 랭킹</div>
-                    <div className="view_all" onClick={navigateChallengePage}>
-                      더보기
+                    <TitleWrapper>
+                      <div className="title">✨슬기로운 생활의 1등 유저✨</div>
+                    </TitleWrapper>
+                    <div>
+                      <PopularChallenge
+                        src={members[0]?.memberImagePath}
+                        alt="인기 챌린지"
+                      />
                     </div>
-                  </TitleWrapper>
-                  <Members>
-                    <div>유저이름</div>
-                    <div>레벨</div>
-                    <div>팔로워수</div>
-                  </Members>
-                  {members.map((user) => (
-                    <UserRanking key={user.memberId}>
-                      <div>{user.memberName}</div>
-                      <div>{user.memberBadge}</div>
-                      <div>{user.followerCount}</div>
-                    </UserRanking>
-                  ))}
-                </UserRankingWrapper>
-              </Container>
-            </Animator>
-          </MarginTop>
+                  </div>
+                </Animator>
+              </div>
+
+              {/* 유저 랭킹 */}
+              <Animator animation={MoveIn(1000, 0)}>
+                <div
+                  style={{
+                    // border: '1px solid orange',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: '2%',
+                  }}
+                >
+                  <UserRankingWrapper>
+                    <TitleWrapper>
+                      <div className="title">유저 랭킹</div>
+                      <div className="view_all" onClick={navigateChallengePage}>
+                        더보기
+                      </div>
+                    </TitleWrapper>
+                    <Members>
+                      <div>순위</div>
+                      <div>유저이름</div>
+                      <div>레벨</div>
+                      <div>팔로워수</div>
+                    </Members>
+                    {members.map((user, index) => (
+                      <UserRanking key={user.memberId}>
+                        <div>{index + 1}</div>
+                        <div>{user.memberName}</div>
+                        <div>{user.memberBadge}</div>
+                        <div>{user.followerCount}</div>
+                      </UserRanking>
+                    ))}
+                  </UserRankingWrapper>
+                </div>
+              </Animator>
+            </Container>
+          </div>
         </ScrollPage>
       </ScrollContainer>
     </MainContainer>

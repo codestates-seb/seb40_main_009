@@ -190,7 +190,8 @@ export default function ChallengeDetail({ challengeData }) {
               {/* 참여버튼 */}
               {new Date() < new Date(challengeData.challengeStartDate) &&
               Number(challengeData.challengeMinParty) !==
-                Number(challengeData.challengeMaxParty) ? (
+                Number(challengeData.challengeMaxParty) &&
+              authorizationToken !== null ? (
                 // {new Date() < new Date(challengeData.challengeStartDate) ? (
                 <ButtonWrapper>
                   <button className="custom-btn btn-8">
