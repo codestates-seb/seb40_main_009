@@ -6,6 +6,11 @@ export const Container = styled.header`
   padding-top: 120px;
 `;
 
+export const ChallengeViewCount = styled.div`
+  margin-bottom: 1%;
+  color: #787878;
+`;
+
 export const ChallengeProgress = styled.div`
   display: flex;
   width: 100%;
@@ -36,7 +41,8 @@ export const ChallengeTitle = styled.div`
   }
   & > .d_day {
     border: 3px solid #eff1fe;
-    padding: 0.5%;
+    padding: 1%;
+    border-radius: 20px;
   }
 `;
 
@@ -82,10 +88,12 @@ export const CertificationWrapper = styled.div`
   & > .title {
     display: flex;
     justify-content: center;
-    font-size: 20px;
+    font-size: 25px;
+    border-bottom: 2px solid #cfc7fd;
   }
   & > .pd-5 {
     padding-top: 5%;
+    font-size: 20px;
   }
   & > img {
     padding-top: 5%;
@@ -94,10 +102,10 @@ export const CertificationWrapper = styled.div`
 `;
 
 export const Review = styled.div`
-  border: 2px solid #eff1fe;
+  /* border: 2px solid #eff1fe; */
   margin-top: 5%;
   height: 500px;
-  font-size: 20px;
+  font-size: 25px;
   & > .flex {
     display: flex;
     align-items: center;
@@ -113,6 +121,7 @@ export const Review = styled.div`
 export const CertifiationImageWrapper = styled.div`
   width: 100%;
   margin-top: 3%;
+  border: 1px solid #eff1fe;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 `;
@@ -125,14 +134,13 @@ export const CertificationDescription = styled.div`
   & > .title {
     display: flex;
     justify-content: center;
-    font-size: 20px;
+    font-size: 25px;
+    border-bottom: 2px solid #cfc7fd;
   }
   & > .pd-5 {
-    padding-top: 5%;
-  }
-  & > img {
-    padding-top: 5%;
-    width: 100%;
+    padding-top: 3%;
+    font-size: 20px;
+    padding-bottom: 3%;
   }
 `;
 
@@ -141,10 +149,12 @@ export const Image = styled.img`
   width: 50%;
   height: 155px;
   margin-right: 2%;
+  border-radius: 20px;
+  box-shadow: 3px 7px 12px 0 #c2c2c2;
 `;
 
 export const CertificationImage = styled.div`
-  width: 200px;
+  width: 623px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;
@@ -163,14 +173,15 @@ export const Width = styled.div`
 `;
 
 export const ReviewImageWrapper = styled.div`
-  width: 90%;
-  height: 180px;
-  display: flex;
-  margin-top: 3%;
-  margin-left: 1%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 100%;
+  /* width: 90%; */
+  width: 70%;
+  height: 10px;
+  /* height: 180px; */
+  /* display: flex; */
+  /* margin-top: 3%; */
+  /* margin-left: 1%; */
+  /* display: grid; */
+  /* grid-template-columns: repeat(4, 1fr); */
 `;
 
 export const ReviewImage = styled.div`
