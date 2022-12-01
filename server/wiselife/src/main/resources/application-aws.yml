@@ -18,7 +18,7 @@ spring:
         registration:
           kakao:
             client-id: e9cbf2e31aa946c52e55e753135126c3
-            redirect-uri: https://just.wiselife.click/oauth/callback/kakao
+            redirect-uri: https://wiselife.click/oauth/callback/kakao
             client-authentication-method: POST
             client-secret: 3upB7uLbKjqRB2OnXrkDQNWPLbqwH5fr # ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
