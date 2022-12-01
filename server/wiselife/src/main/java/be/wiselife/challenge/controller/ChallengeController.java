@@ -120,7 +120,7 @@ public class ChallengeController {
 
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
-        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, member);
+        Challenge challenge = challengeService.minusParticipateChallenge(challengeFromRepository, member);
 
         MemberChallenge memberChallenge = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 

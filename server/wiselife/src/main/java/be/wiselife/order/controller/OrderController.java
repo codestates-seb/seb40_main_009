@@ -48,7 +48,7 @@ public class OrderController {
     private final JwtTokenizer jwtTokenizer;
 
     /**
-     * 
+     *
      * @param postInfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
      * @param request : 
      * @return
@@ -57,11 +57,11 @@ public class OrderController {
     @PostMapping("/ready")
     public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postInfo, HttpServletRequest request){
         String EmailFromToken = jwtTokenizer.getEmailWithToken(request);
-        
+
         Order order = orderMapper.postInfoToOrder(postInfo);
-        
+
         OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order, EmailFromToken);
-        
+
         return new ResponseEntity(
                 new SingleResponseDto<>(readyForPay), HttpStatus.OK);
     }

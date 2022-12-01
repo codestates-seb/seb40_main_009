@@ -25,13 +25,40 @@ public class MemberChallengeService {
     private final ChallengeRepository challengeRepository;
 
     /**
-     * Challenge를 생성하거나 참여, 참여취소를 할때 사용되는 메서드
-     * 역할 1. 챌린지 참여인원 증가
-     * 역할 2. 참여 시점의 예상 멤버가 가져갈 예상 상금, 챌린지에 모인 총상금 계산
-     * 역할 3. 취소 시점의 챌린지 참여인원 감소
-     * 역할 4. 취소 시점의 예상 멤버가 가져갈 예상 상금 계산, 챌린지에 모인 총상금 계산
+     * Challenge를 생성 할때 사용되는 메서드
+     * 역할 1. 생성 시점의 챌린지 참여인원 증가
+     * 역할 2. 생성 시점의 예상 멤버가 가져갈 예상 상금 계산, 챌린지에 모인 총상금 계산
      */
-    public Challenge patchMemberAndChallenge(Challenge challenge, Member member) {
+    public Challenge plusMemberAndChallenge(Challenge challenge, Member member) {
+        log.info("plusMemberAndChallenge tx start");
+        double challengeCurrentParty = challenge.getChallengeCurrentParty();
+        MemberChallenge memberChallenge = new MemberChallenge();
+
+        challenge.setChallengeCurrentParty(challengeCurrentParty+1);
+//            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
+        if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
+            throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
+        }
+        memberChallenge.setExpectedRefundToMember(challenge.getChallengeFeePerPerson());
+        memberChallenge.setMember(member);
+        memberChallenge.setChallenge(challenge);
+
+        challenge.getMemberChallenges().add(memberChallenge);
+        member.getMemberChallenges().add(memberChallenge);
+
+        memberChallengeRepository.save(memberChallenge);
+        memberRepository.save(member);
+        log.info("patchMemberAndChallenge tx end");
+        return challengeRepository.save(challenge);
+    }
+
+
+    /**
+     * Challenge를 참여취소를 할때 사용되는 메서드
+     * 역할 1. 취소 시점의 챌린지 참여인원 감소
+     * 역할 2. 취소 시점의 예상 멤버가 가져갈 예상 상금 계산, 챌린지에 모인 총상금 계산
+     */
+    public Challenge minusMemberAndChallenge(Challenge challenge, Member member) {
         log.info("patchMemberAndChallenge tx start");
 
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
@@ -50,24 +77,7 @@ public class MemberChallengeService {
             return challengeRepository.save(challenge);
 
         } else {
-            MemberChallenge memberChallenge = new MemberChallenge();
-
-            challenge.setChallengeCurrentParty(challengeCurrentParty+1);
-//            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
-            if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
-                throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
-            }
-            memberChallenge.setExpectedRefundToMember(challenge.getChallengeFeePerPerson());
-            memberChallenge.setMember(member);
-            memberChallenge.setChallenge(challenge);
-
-            challenge.getMemberChallenges().add(memberChallenge);
-            member.getMemberChallenges().add(memberChallenge);
-
-            memberChallengeRepository.save(memberChallenge);
-            memberRepository.save(member);
-            log.info("patchMemberAndChallenge tx end");
-            return challengeRepository.save(challenge);
+            throw new BusinessLogicException(ExceptionCode.YOU_ALREADY_UNPARTICIPATED);
         }
     }
 

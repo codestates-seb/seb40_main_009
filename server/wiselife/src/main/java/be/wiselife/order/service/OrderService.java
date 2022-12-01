@@ -55,7 +55,7 @@ public class OrderService {
 
         log.info("startKakaoPay tx start");
         Member member = memberRepository.findByMemberEmail(emailFromToken).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        order.addMember(member); 
+        order.addMember(member);
         orderRepository.save(order); //ORDERID 값을 지정받기 위해 값을 저장하고 주문한 맴버를 저장한다.
 
 

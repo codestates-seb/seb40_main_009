@@ -75,6 +75,11 @@ public class ChallengeService {
         return saveChallenge(challenge);
     }
 
+    public Challenge participateChallenge(Challenge challenge, Member loginMember) {
+        log.info("participateChallenge tx start");
+        log.info("participateChallenge tx end");
+        return memberChallengeService.plusMemberAndChallenge(challenge,loginMember);
+    }
 
 
     /**
@@ -150,10 +155,10 @@ public class ChallengeService {
      * @param challenge 현재 참여하고자 하는 챌린지
      * @return challenge 참가했을때 잘 참여됐는지 즉시 확인가능
      */
-    public Challenge participateChallenge(Challenge challenge, Member loginMember) {
-        log.info("participateChallenge tx start");
-        log.info("participateChallenge tx end");
-        return memberChallengeService.patchMemberAndChallenge(challenge,loginMember);
+    public Challenge minusParticipateChallenge(Challenge challenge, Member loginMember) {
+        log.info("minusParticipateChallenge tx start");
+        log.info("minusParticipateChallenge tx end");
+        return memberChallengeService.minusMemberAndChallenge(challenge,loginMember);
     }
 
     /**
