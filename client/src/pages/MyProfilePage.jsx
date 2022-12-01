@@ -15,7 +15,7 @@ function MyProfilePage() {
   const [myProfileLists, setMyProfileLists] = useState([
     {
       memberDescription: '',
-      memberName: '', // 사용할 모든 데이터? usestate안에 채워야 하는지? 다 쓰지 않아도 데이터를 불러 오는데 문제 없음
+      memberName: '',
       memberBadge: '',
       memberImagePath: '',
       memberChallengePercentage: '',
@@ -51,6 +51,7 @@ function MyProfilePage() {
 
   const params = useParams();
   const name = params.name;
+  console.log('my', myProfileLists);
 
   // get요청
   const getProfile = async () => {

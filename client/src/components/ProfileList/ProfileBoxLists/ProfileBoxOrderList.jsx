@@ -15,7 +15,7 @@ function ProfileBoxChallenge() {
       totalAmount: '',
     },
   ]);
-  console.log('aa', orderLists);
+
   // get요청;
   const getOrderLists = async () => {
     try {
@@ -126,11 +126,11 @@ function ProfileBoxChallenge() {
         <div className="totalAmount-size">결제금액</div>
       </S.ProfileBoxOrderList>
       <BoxOrderList
-      // orderId={orderLists.orderId}
-      // approved_at={orderLists.approved_at}
-      // requestuniquenumber={orderLists.equestuniquenumber}
-      // itemName={orderLists.itemName}
-      // totalAmount={orderLists.totalAmount}
+        orderId={orderLists.orderId}
+        approved_at={orderLists.approved_at}
+        requestuniquenumber={orderLists.equestuniquenumber}
+        itemName={orderLists.itemName}
+        totalAmount={orderLists.totalAmount}
       />
     </S.ProfileBoxOrderListComponent>
   );

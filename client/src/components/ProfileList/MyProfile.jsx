@@ -21,10 +21,16 @@ function MyProfile({
     memberName,
     memberDescription,
     // memberBadge,
+    challengeTitle: '',
+    memberSuccessDay: '',
+    objectPeriod: '',
   };
   const location = useLocation();
   const LoginName = localStorage.getItem('LoginName');
-
+  const color = {
+    새내기: 'red',
+    좀치는도전자: 'orange',
+  };
   return (
     <S.MyProfileComponent>
       <header className="profile-info">
@@ -44,31 +50,7 @@ function MyProfile({
           </S.ProfileList>
           <div className="profile-list">
             <div>
-              {memberBadge}
-              {/* {{ memberBadge } === '새내기' ? (
-                <GiMedallist style={{ color: 'red' }} />
-              ) : null}
-              {{ memberBadge } === '좀치는도전자' ? (
-                <GiMedallist style={{ color: 'orange' }} />
-              ) : null}
-              {{ memberBadge } === '열정도전자' ? (
-                <GiMedallist style={{ color: 'yellow' }} />
-              ) : null}
-              {{ memberBadge } === '모범도전자' ? (
-                <GiMedallist style={{ color: 'green' }} />
-              ) : null}
-              {{ memberBadge } === '우수도전자' ? (
-                <GiMedallist style={{ color: 'blue' }} />
-              ) : null}
-              {{ memberBadge } === '챌린지장인' ? (
-                <GiMedallist style={{ color: 'navy' }} />
-              ) : null}
-              {{ memberBadge } === '시간의지배자' ? (
-                <GiMedallist style={{ color: 'violet' }} />
-              ) : null}
-              {{ memberBadge } === '챌린지신' ? (
-                <GiMedallist style={{ color: 'purple' }} />
-              ) : null} */}
+              <GiMedallist style={{ color: [memberBadge] }} />
 
               {/* <Badge memberBadge={memberBadge} /> */}
             </div>

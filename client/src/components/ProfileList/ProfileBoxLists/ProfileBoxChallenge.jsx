@@ -1,6 +1,18 @@
 import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
+//반복되는 대상 맵 필요x
 
-function ProfileBoxList() {
+function ProfileBoxList({
+  participatingChallenges,
+  memberName,
+  endChallenges,
+}) {
+  // console.log('qq', participatingChallenges);
+  const data = {
+    participatingChallenges,
+    memberName,
+    endChallenges,
+  };
+  console.log('11', data);
   return (
     <S.ProfileBoxChallengeComponent>
       <h1>

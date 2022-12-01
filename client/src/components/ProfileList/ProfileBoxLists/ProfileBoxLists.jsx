@@ -1,56 +1,68 @@
 import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProfileBoxChallenge from './ProfileBoxChallenge';
 import ProfileBoxChallengeList from './ProfileBoxChallengeList';
 import ProfileBoxOrderList from './ProfileBoxOrderList';
 
 function ProfileBoxLists({
-  participatingChallenges,
-  endChallenges,
+  participatingChallenges = [],
+  endChallenges = [],
   memberName,
 }) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
-  const TabComponent = {
-    0: <ProfileBoxChallenge />,
-    1: <ProfileBoxChallengeList />,
-    2: <ProfileBoxOrderList />,
-  };
+  const [challenges, setChallenges] = useState(participatingChallenges);
   // console.log('99', participatingChallenges.memberChallengeId);
   const LoginName = localStorage.getItem('LoginName');
+  const tabName = {
+    0: '도전 중',
+    1: '도전 내역',
+    2: '결제 내역',
+  };
+
+  useEffect(() => {
+    if (clickedTab === 0) {
+      setChallenges(participatingChallenges);
+    }
+    if (clickedTab === 1) {
+      setChallenges(endChallenges);
+    }
+    if (clickedTab === 2) {
+      setChallenges([]); // 빈배열을 주는 이유: 아래 내용을 빈배열로 만들고 새로운 내용 넣음
+    }
+  }, [participatingChallenges, endChallenges, clickedTab]);
 
   return (
     <S.ProfileBoxComponent>
       <header>
-        <S.Tab
-          className={clickedTab === 0 ? 'active-tabs' : 'tabs'}
-          onClick={() => {
-            setClickedTab(0);
-          }}
-        >
-          도전 중
-        </S.Tab>
-        <S.Tab
-          className={clickedTab === 1 ? 'active-tabs' : 'tabs'}
-          onClick={() => {
-            setClickedTab(1);
-          }}
-        >
-          도전내역
-        </S.Tab>
-        {memberName === LoginName ? (
+        {[0, 1, 2].map((tab) => (
           <S.Tab
-            className={clickedTab === 2 ? 'active-tabs' : 'tabs'}
+            key={tab}
+            className={clickedTab === tab ? 'active-tabs' : 'tabs'}
+            style={{
+              display:
+                clickedTab === 2 && memberName !== LoginName ? 'none' : 'block',
+            }}
             onClick={() => {
-              setClickedTab(2);
+              setClickedTab(tab);
             }}
           >
-            결제내역
+            {tabName[tab]}
           </S.Tab>
-        ) : null}
+        ))}
       </header>
-      <section>{TabComponent[clickedTab]}</section>
+      <section>
+        {clickedTab !== 2 &&
+          challenges.map((challenge) => (
+            <ProfileBoxChallenge
+              key={challenge.challengeId}
+              challengeTitle={challenge.challengeTitle}
+              memberReward={challenge.memberReward}
+              clickedTab={clickedTab}
+            />
+          ))}
+        {clickedTab === 2 && <ProfileBoxOrderList />}
+      </section>
     </S.ProfileBoxComponent>
   );
 }
-
 export default ProfileBoxLists;
