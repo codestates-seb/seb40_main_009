@@ -13,53 +13,49 @@ function KakaoLogin() {
   const navigate = useNavigate();
   const setLoginState = useSetRecoilState(LoginState);
   const KAKAO_CODE = location.search.split('=')[1]; // 인가코드
+  console.log('hi');
   // 로그인
-  const getKakaoToken = useCallback(async () => {
+  const getKakaoToken = async () => {
     try {
-      axios
-        .get(`/oauth/kakao?code=${KAKAO_CODE}`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'none',
-          },
-        })
-        .then((response) => {
-          localStorage.setItem('refreshToken', response.data.refreshToken);
-          localStorage.setItem('authorizationToken', response.data.accessToken);
-          localStorage.setItem('LoginId', response.data.memberId);
-          localStorage.setItem('LoginName', response.data.memberName);
-          setLoginState(true);
-          navigate('/');
-        })
-        .catch(async (error) => {
-          if (error.response.data.status === 401) {
-            try {
-              const responseToken = await axios.get('/token', {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  refresh: localStorage.getItem('refreshToken'),
-                },
-              });
-              await localStorage.setItem(
-                'authorizationToken',
-                responseToken.headers.authorization
-              );
-              // await localStorage.setItem(
-              //   'test',
-              //   responseToken.headers.authorization
-              // );
-            } catch (error) {
-              console.log('재요청 실패', error);
-            }
-          }
-        });
+      const response = await axios.get(`/oauth/kakao?code=${KAKAO_CODE}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+        },
+      });
+
+      localStorage.setItem('refreshToken', response.data.refreshToken);
+      localStorage.setItem('authorizationToken', response.data.accessToken);
+      localStorage.setItem('LoginId', response.data.memberId);
+      localStorage.setItem('LoginName', response.data.memberName);
+      setLoginState(true);
+      navigate('/');
+      // .catch(async (error) => {
+      //   if (error.response.data.status === 401) {
+      //     try {
+      //       const responseToken = await axios.get('/token', {
+      //         headers: {
+      //           'ngrok-skip-browser-warning': 'none',
+      //           refresh: localStorage.getItem('refreshToken'),
+      //         },
+      //       });
+      //       await localStorage.setItem(
+      //         'authorizationToken',
+      //         responseToken.headers.authorization
+      //       );
+      //     } catch (error) {
+      //       console.log('재요청 실패', error);
+      //     }
+      //   }
+      // }
+      // );
     } catch (error) {
       console.log('error: ', error);
     }
-  }, [KAKAO_CODE]);
+  };
 
   useEffect(() => {
     getKakaoToken();
-  }, [getKakaoToken]);
+  }, []);
 
   return <div>KakaoLogin</div>;
 }

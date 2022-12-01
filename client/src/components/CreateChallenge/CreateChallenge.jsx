@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import {
   createChallengePageNumber,
   createChallengeStateNumber,
+  testData,
 } from '../../atoms/atoms';
 import { useNavigate } from 'react-router-dom';
 import FirstQuestionSet from './FirstQuestionSet';
@@ -28,8 +29,10 @@ export default function CreateChallenge() {
   const [pageStateNumber, setPageStateNumber] = useRecoilState(
     createChallengeStateNumber
   );
+  const [isTestData, setTestData] = useRecoilState(testData);
   const navigate = useNavigate();
 
+  console.log('1번 나에요', isTestData);
   /**신규 챌린지 생성 데이터 전송 */
   const { register, handleSubmit, watch, getValues } = useForm();
 
@@ -55,6 +58,8 @@ export default function CreateChallenge() {
 
     const stringData = new Blob([dataValue], { type: 'application/json' }); // 텍스트 데이터 Blob에 추가
     data.append('post', stringData); // post 데이터 추가
+    setTestData(dataBox.challengeRepImagePath);
+    console.log('2번 이에요', isTestData);
 
     try {
       await axios.post('/challenges', data, {

@@ -20,8 +20,11 @@ import {
 
 import Swal from 'sweetalert2';
 import Masonry from 'react-responsive-masonry';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { paymentData } from '../../atoms/payment';
 
 export default function ChallengeDetail({ challengeData }) {
+  const [isPaymentData, setPaymentData] = useRecoilState(paymentData);
   const parmas = useParams();
   const navigate = useNavigate();
   const [imageData, setImageData] = useState({ image: '', i: 0 });
@@ -43,9 +46,10 @@ export default function ChallengeDetail({ challengeData }) {
 
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-
+  console.log('before', isPaymentData);
   // 참여하기 클릭시 페이지 이동
   const NavigateMPaymentPage = async () => {
+    localStorage.setItem('challengeId', challengeData.challengeId);
     if (challengeData.challengeFeePerPerson !== 0) {
       const response = await Swal.fire({
         icon: 'question',
