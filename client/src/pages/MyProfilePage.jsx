@@ -60,9 +60,6 @@ function MyProfilePage() {
         .get(`/member/${name}`, {
           headers: {
             'ngrok-skip-browser-warning': 'none',
-            // utf-8?
-            // 'content-type': 'text/html; charset=utf-8',
-            // 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             Authorization: localStorage.getItem('authorizationToken'),
           },
         })
@@ -84,10 +81,6 @@ function MyProfilePage() {
                 'authorizationToken',
                 responseToken.headers.authorization
               );
-              // await localStorage.setItem(
-              //   'test',
-              //   responseToken.headers.authorization
-              // );
             } catch (error) {
               console.log('재요청 실패', error);
             }

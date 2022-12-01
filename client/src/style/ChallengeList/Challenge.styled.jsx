@@ -4,7 +4,8 @@ export const UpperCard = styled.div`
   transition: 0.5s;
 
   img {
-    max-width: 250px;
+    width: 230px;
+    height: 230px;
     border-radius: 10px;
   }
 
