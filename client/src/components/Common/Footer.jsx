@@ -14,6 +14,11 @@ import {
 } from '../../style/Common/FooterStyle';
 
 export default function Footer() {
+  const instagramUrl = 'https://www.instagram.com/';
+  const githubUrl = 'https://github.com/codestates-seb/seb40_main_009';
+  const twitterUrl = 'https://twitter.com/?lang=ko';
+  const linkedInUrl = 'https://kr.linkedin.com/';
+
   const navigate = useNavigate();
   // 챌린지 리스트페이지로 이동
   const LinkChallengePage = () => {
@@ -49,10 +54,26 @@ export default function Footer() {
         <DescriptionContainer>
           <div className="name">슬기로운 생활</div>
           <div className="icon">
-            <GithubIcon />
-            <InstagramIcon />
-            <TwitterIcon />
-            <LinkedinIcon />
+            <GithubIcon
+              onClick={() => {
+                window.open(githubUrl);
+              }}
+            />
+            <InstagramIcon
+              onClick={() => {
+                window.open(instagramUrl);
+              }}
+            />
+            <TwitterIcon
+              onClick={() => {
+                window.open(twitterUrl);
+              }}
+            />
+            <LinkedinIcon
+              onClick={() => {
+                window.open(linkedInUrl);
+              }}
+            />
           </div>
         </DescriptionContainer>
         <div className="text">

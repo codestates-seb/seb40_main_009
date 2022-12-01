@@ -11,7 +11,6 @@ export default function ChallengeDetailPage() {
   const [loading, setLoading] = useState(true);
   const [challengeData, setChallengeData] = useState([]);
 
-  const memberId = localStorage.getItem('LoginId');
   const authorizationToken = localStorage.getItem('authorizationToken');
 
   //url 파라미터값 받아오기
@@ -22,18 +21,41 @@ export default function ChallengeDetailPage() {
   const getChallenge = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/challenges/${challengeId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'none',
-          Authorization: authorizationToken,
-        },
-      });
-      // .then(() => {
-      const challengeList = response.data.data;
-      console.log('fdsfsdfschallengeList>>>', challengeList);
-      setChallengeData(challengeList);
-      setLoading(false);
-      // });
+      await axios
+        .get(`/challenges/${challengeId}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+            Authorization: authorizationToken,
+          },
+        })
+        .then(async (response) => {
+          const challengeList = await response.data.data;
+          console.log('fdsfsdfschallengeList>>>', challengeList);
+          setChallengeData(challengeList);
+          setLoading(false);
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
       console.log('error', error);
     }

@@ -44,7 +44,7 @@ function FailedPayment() {
         <div className="just-flex">
           <div></div>
           <div>
-            <h1>결제 취소{'\u00A0'}</h1>
+            <h1>결제 실패{'\u00A0'}</h1>
             <BsHouse
               size={150}
               style={{ marginLeft: '50px' }}

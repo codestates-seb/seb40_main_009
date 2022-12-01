@@ -4,7 +4,11 @@ import ProfileBoxChallenge from './ProfileBoxChallenge';
 import ProfileBoxChallengeList from './ProfileBoxChallengeList';
 import ProfileBoxOrderList from './ProfileBoxOrderList';
 
-function ProfileBoxLists({ participatingChallenges, endChallenges }) {
+function ProfileBoxLists({
+  participatingChallenges,
+  endChallenges,
+  memberName,
+}) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
   const TabComponent = {
     0: <ProfileBoxChallenge />,
@@ -12,6 +16,8 @@ function ProfileBoxLists({ participatingChallenges, endChallenges }) {
     2: <ProfileBoxOrderList />,
   };
   // console.log('99', participatingChallenges.memberChallengeId);
+  const LoginName = localStorage.getItem('LoginName');
+
   return (
     <S.ProfileBoxComponent>
       <header>
@@ -31,14 +37,16 @@ function ProfileBoxLists({ participatingChallenges, endChallenges }) {
         >
           도전내역
         </S.Tab>
-        <S.Tab
-          className={clickedTab === 2 ? 'active-tabs' : 'tabs'}
-          onClick={() => {
-            setClickedTab(2);
-          }}
-        >
-          결제내역
-        </S.Tab>
+        {memberName === LoginName ? (
+          <S.Tab
+            className={clickedTab === 2 ? 'active-tabs' : 'tabs'}
+            onClick={() => {
+              setClickedTab(2);
+            }}
+          >
+            결제내역
+          </S.Tab>
+        ) : null}
       </header>
       <section>{TabComponent[clickedTab]}</section>
     </S.ProfileBoxComponent>

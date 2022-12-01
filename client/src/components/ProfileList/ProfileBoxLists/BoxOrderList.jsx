@@ -24,11 +24,19 @@ function BoxOrderList(
   }
   return (
     <S.BoxOrderList>
-      <div className="orderId-size">{orderId}</div>
+      {/* <div className="orderId-size">{orderId}</div>
       <div className="requestuniquenumber-size">{requestuniquenumber}</div>
       <div className="itemName-size">{itemName}</div>
       <div className="approved_at-size">
         {toStringByFormatting(new Date(approved_at))}
+      </div>
+      <div className="totalAmount-size">{totalAmount}원</div> */}
+      <div className="orderId-size">aaaa</div>
+      <div className="requestuniquenumber-size">bbbb</div>
+      <div className="itemName-size">cccc</div>
+      <div className="approved_at-size">
+        {/* {toStringByFormatting(new Date(approved_at))} */}
+        2022-11-30
       </div>
       <div className="totalAmount-size">{totalAmount}원</div>
     </S.BoxOrderList>

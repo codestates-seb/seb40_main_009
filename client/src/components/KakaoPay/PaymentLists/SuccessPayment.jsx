@@ -21,11 +21,24 @@ function SuccessPayment() {
     navigate(`/`);
   };
 
-  const PG_TOKEN = location.search.split('=')[1];
+  const pgToken = location.search.split('=')[1];
+  const PG_TOKEN = pgToken.replace('&tid', '');
+
+  const TID = localStorage.getItem('TID');
+
+  const data = { PG_TOKEN, TID };
+  console.log(data);
+
+  console.log('111', PG_TOKEN);
+  console.log('222', TID);
 
   const config = {
     method: 'get',
-    url: `/order/kakaopay/success?pg_token=${PG_TOKEN}`,
+    url: `/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`,
+    // url: `/order/kakaopay/success?pg_token=${PG_TOKEN}`,
+    headers: {
+      'ngrok-skip-browser-warning': 'none',
+    },
   };
 
   axios(config)
@@ -47,7 +60,7 @@ function SuccessPayment() {
         <div className="just-flex">
           <div></div>
           <div>
-            <h1>결제 취소{'\u00A0'}</h1>
+            <h1>결제 완료</h1>
             <BsHouse
               size={150}
               style={{ marginLeft: '50px' }}

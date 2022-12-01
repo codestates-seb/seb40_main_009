@@ -28,7 +28,6 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState('');
   const [members, setMembers] = useState([]);
   const [challengeList, setChallengeList] = useState([]);
-  const [user, setUser] = useState([]);
   const [searchBox, setSearchBox] = useState(true);
   const [view, setView] = useState(false);
   const [loginState, setLoginState] = useRecoilState(LoginState);
@@ -117,28 +116,6 @@ export default function Header() {
   const inputValueChange = (name) => {
     setSearchValue(name);
   };
-
-  //로그인 유저 조회
-  const getUser = async () => {
-    try {
-      const response = await axios.get(`/member/${memberName}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'none',
-          Authorization:
-            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
-        },
-      });
-      const userInfo = response.data.data;
-      setUser(userInfo);
-    } catch (error) {
-      console.error('error', error);
-    }
-  };
-
-  //유저조회 axios 실행
-  useEffect(() => {
-    getUser();
-  }, []);
 
   const logOut = () => {
     window.localStorage.removeItem('refreshToken');
@@ -237,43 +214,43 @@ export default function Header() {
         {loginState ? (
           <div
             style={{
-              color: 'black',
+              width: '800px',
               display: 'flex',
-              marginLeft: '540px',
               alignItems: 'center',
+              // border: '1px solid red',
+              justifyContent: 'end',
+              marginRight: '5%',
             }}
           >
-            <div>반가워요, {memberName} 님!</div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                // border: '1px solid red',
+                // justifyContent: 'end',
+                color: 'black',
+              }}
+            >
+              반가워요,
+            </div>
+            <div style={{ color: '#8672FF' }}> {memberName} 님!</div>
 
             <ul
               onClick={() => {
                 setView(!view);
               }}
             >
-              {
-                <img
-                  style={{
-                    width: '30px',
-                    marginLeft: '3px',
-                    borderRadius: '50px',
-                    cursor: 'pointer',
-                  }}
-                  src={user.memberImagePath}
-                  alt="유저이미지"
-                />
-              }
               {view ? (
                 <IoIosArrowUp style={{ color: '#8673FF', cursor: 'pointer' }} />
               ) : (
-                <IoIosArrowDown
-                  style={{ color: '#8673FF', cursor: 'pointer' }}
-                />
+                <IoIosArrowDown style={{ color: 'black', cursor: 'pointer' }} />
               )}
               {view && (
                 <div
                   style={{
                     position: 'absolute',
-                    top: 52,
+                    top: '65%',
+                    right: '5%',
                     backgroundColor: '#F2F4FE',
                     padding: '20px 10px',
                     borderRadius: '10px',
@@ -306,8 +283,10 @@ export default function Header() {
             style={{
               color: 'black',
               display: 'flex',
-              marginLeft: '540px',
+              width: '800px',
               alignItems: 'center',
+              // border: '1px solid red',
+              justifyContent: 'end',
             }}
           >
             <img

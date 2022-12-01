@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import ImageGallery from 'react-image-gallery';
 
 import {
   Container,
@@ -17,7 +16,6 @@ import {
   CertifiationImageWrapper,
   CertificationImage,
   ViewMore,
-  Width,
   ReviewImageWrapper,
   ReviewImage,
   CertificationDescription,
@@ -25,80 +23,300 @@ import {
   ChallengeViewCount,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
-import Loading from '../Loading/Loading';
 import ProgressBar from './ProgressBar';
 import DdayFormatter from './DdayFormatter';
-import Modal from './Modal';
-import ImageModal from './ImageModal';
+import Masonry from 'react-responsive-masonry';
+import Swal from 'sweetalert2';
+import Loading from '../Loading/Loading';
 
 export default function ChallengeDetailProgress({ challengeData }) {
   const parmas = useParams();
   const [loading, setLoading] = useState(true);
-  const [challenge, setChallenge] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [certificationModal, setCertificationModal] = useState(false);
   const [talk, setTalk] = useState([]);
   const [isValid, setIsValid] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const memberId = localStorage.getItem('LoginId');
+  const [imageData, setImageData] = useState({ image: '', i: 0 });
+  const [certificationImages, setCertificationImages] = useState({
+    image: '',
+    i: 0,
+  });
+  const [imageDataAll, setImageDataAll] = useState(false);
+  const [certificationImageData, setCertificationImageData] = useState(false);
+  const [reviewModal, setReviewModal] = useState(false);
+  const [image, setImage] = useState();
+  const [reviewContent, setReviewContent] = useState('');
+  const [reviewTitle, setReviewTtile] = useState('');
+  const [imageTransform, setImageTransfrom] = useState('');
+
+  //로컬스토리지 값
   const memberName = localStorage.getItem('LoginName');
   const authorizationToken = localStorage.getItem('authorizationToken');
+  const loginId = localStorage.getItem('LoginId');
+
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-  console.log('dggfgdfgfddf>>>>', challengeData);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'center-center',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
 
   // 댓글보내기
   const postTalk = async () => {
     setLoading(true);
     try {
-      await axios.post(
-        `/challenge-talks`,
-        {
-          challengeTalkBody: talk,
-          challengeId: challengeData.challengeId,
-        },
-        {
-          headers: {
-            'ngrok-skip-browser-warning': 'none',
-            Authorization: authorizationToken,
+      await axios
+        .post(
+          `/challenge-talks`,
+          {
+            challengeTalkBody: talk,
+            challengeId: challengeData.challengeId,
           },
-        }
-      );
-      alert('성공');
+          {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 댓글이 추가 되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
       console.log('error', error);
     }
   };
 
   // 댓글삭제
-  const deleteTalk = async () => {
+  const deleteTalk = async (index) => {
     setLoading(true);
     try {
-      await axios.delete(`/challenge-talks/2`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'none',
-          Authorization: authorizationToken,
-        },
-      });
-      alert('삭제성공');
+      await axios
+        .delete(
+          `/challenge-talks/${challengeData.challengeTalks[index].challengeTalkId}`,
+          {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 댓글이 삭제 되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
       console.log('error', error);
     }
   };
 
-  //인증하기 모달창 띄우기
-  const showCertificationModal = () => {
-    setModalOpen(true);
+  //후기 생성
+  const uploadReview = async () => {
+    setLoading(true);
+
+    const textData = {
+      challengeId: challengeId,
+      challengeReviewTitle: reviewTitle,
+      challengeReviewContent: reviewContent,
+      challengeReviewStar: 0,
+    };
+    const dataValue = JSON.stringify(textData);
+    const stringData = new Blob([dataValue], { type: 'application/json' });
+
+    try {
+      await axios
+        .post(
+          `/challenge-reviews`,
+          {
+            post: stringData,
+            review: image,
+          },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 후기가 추가 되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
+    } catch (error) {
+      // 후기한번쓰면 못쓰게 alert띄우기
+      const errorMessage = error.response.data.error.message;
+      console.log('error>>>>>>>>>>>', errorMessage);
+
+      if ('ChallengeReview not found' === errorMessage) {
+        Swal.fire({
+          icon: 'error',
+          title: '후기작성은 한번만 가능합니다.',
+          text: `이미 후기를 작성하셨습니다.`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setReviewModal(false);
+          }
+        });
+      }
+    }
   };
 
-  //인증사진 더보기 모달창 띄우기
-  const showImageModal = () => {
-    setImageModalOpen(true);
+  //인증샷 올리기
+  const uploadCertification = async () => {
+    setLoading(true);
+
+    try {
+      await axios
+        .patch(
+          `/challenges/cert/${challengeId}`,
+          {
+            cert: image,
+          },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 인증이 완료되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
+    } catch (error) {
+      const errorMessage = error.response.data.error.message;
+      console.log('error', errorMessage);
+
+      if (
+        'Must upload certification photo at the appropriate time' ===
+        errorMessage
+      ) {
+        Swal.fire({
+          customClass: {
+            container: 'zindex',
+          },
+          icon: 'error',
+          title: '인증시간이 아닙니다.',
+          text: `인증시간에 인증사진을 올려주세요.`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setCertificationModal(false);
+          }
+        });
+      }
+    }
   };
 
-  // if (new Date() < new Date(challengeData.challengeStartDate)) {
-  //   setProgress(0);
-  // } else {
   //챌린지 진행률 계산
   const today = new Date();
   const startDate = new Date(challengeData.challengeStartDate);
@@ -112,244 +330,775 @@ export default function ChallengeDetailProgress({ challengeData }) {
   const gap = today.getTime() - startDate.getTime();
   const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
   console.log('지나온 시간>>', pastDay);
-  if (pastDay !== 0) {
-    //   setProgress(0);
-    // } else {
-    const progress = Math.ceil((pastDay / totalDay) * 100);
-    setProgress(progress);
-  }
-  // console.log('진행률>>>', progress);
-  // }
+  let progress = Math.ceil((pastDay / totalDay) * 100);
 
+  //도전시작하기전
+  if (pastDay < 0) {
+    progress = 0;
+  }
+
+  if (pastDay === 0) {
+    progress = 100;
+  }
+
+  const leftDay = Math.abs(pastDay);
+  // console.log('진행률>>>', progress);
+
+  //인증횟수 계산
   const certificationCount = challengeData.challengeCertImages?.filter(
     (member) => member.memberId === 100001
   ).length;
 
-  const images = [
-    {
-      original: 'https://picsum.photos/id/1018/1000/600/',
-      thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-      original: 'https://picsum.photos/id/1015/1000/600/',
-      thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-      original: 'https://picsum.photos/id/1019/1000/600/',
-      thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-  ];
+  //인증사진올리기 모달창
+  const showCertificationModal = () => {
+    setCertificationModal(true);
+  };
+
+  //인증사진 하나씩
+  const viewCertificationImage = (image, i) => {
+    setCertificationImages({ image, i });
+    console.log('certificationImages>>', certificationImages);
+  };
+
+  //인증사진 전체보기
+  const viewCertificationImageAll = () => {
+    setCertificationImageData(true);
+  };
+
+  const certificationImageAction = (action) => {
+    // 인증사진
+    let i = certificationImages.i;
+
+    if (action === 'next-image') {
+      setImageData({
+        image: certificationImages[i + 1],
+        i: i + 1,
+      });
+    }
+    if (action === 'previous-image') {
+      setImageData({
+        image: certificationImages[i - 1],
+        i: i - 1,
+      });
+    }
+
+    if (action === 'certification') {
+      setCertificationModal(false);
+    }
+  };
+
+  //후기사진 하나씩
+  const viewImage = (image, i) => {
+    setImageData({ image, i });
+    console.log('setImageData>>', imageData);
+  };
+
+  //후기사진 전체보기
+  const viewImageAll = () => {
+    setImageDataAll(true);
+  };
+
+  //후기올리기 모달창
+  const uploadReviewModal = () => {
+    setReviewModal(true);
+  };
+
+  const imageAction = (action) => {
+    // 후기사진
+    let i = imageData.i;
+    if (action === 'next-image') {
+      setImageData({ image: imageData[i + 1], i: i + 1 });
+    }
+    if (action === 'previous-image') {
+      setImageData({ image: imageData[i - 1], i: i - 1 });
+    }
+    if (!action) {
+      setImageData({ image: '', i: 0 });
+    }
+    if (action === 'image-all') {
+      setImageDataAll(false);
+    }
+    if (action === 'certidication-image-all') {
+      setCertificationImageData(false);
+    }
+    if (action === 'review') {
+      setReviewModal(false);
+    }
+  };
+
+  //이미지 미리보기
+  const imageUpload = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImageTransfrom(reader.result);
+        resolve();
+      };
+    });
+  };
+
+  //early return pattern
+  // if (loading) return <Loading />;
 
   return (
-    <Container>
-      <ChallengeViewCount>{`조회수 ${challengeData.challengeViewCount}`}</ChallengeViewCount>
-      <ChallengeProgress>
-        {/* 이미지 */}
-        <div className="image">
-          <ChallengeImage
-            src={challengeData.challengeRepImagePath}
-            alt="도전 할 항목의 이미지"
-          />
-        </div>
-
-        <ChallengeWrapper>
-          {/* 챌린지 이름, 디데이 */}
-          <ChallengeTitle>
-            <div className="title">{challengeData.challengeTitle}</div>
-            <div className="d_day">
-              <DdayFormatter endDate={challengeData.challengeEndDate} />
+    <>
+      {/* 인증사진 */}
+      {certificationModal && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflowY: 'auto',
+            // zIndex: 10000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#EFF1FE',
+              width: '20%',
+              height: '60%',
+              borderRadius: '20px',
+              padding: '2%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '25px',
+                  margin: '0 auto',
+                  marginBottom: '2%',
+                }}
+              >
+                인증사진
+              </div>
+              <button
+                onClick={() => certificationImageAction('certification')}
+                style={{}}
+              >
+                X
+              </button>
             </div>
-          </ChallengeTitle>
 
-          <ChallengeDescription>
-            <div className="margin_left3">챌린지 진행률:</div>
+            {imageTransform !== '' ? (
+              <img
+                src={imageTransform}
+                alt="업로드한 이미지 미리보기"
+                style={{ width: '400px', height: '400px', marginBottom: '2%' }}
+              />
+            ) : null}
+            <div>이미지</div>
+            <input
+              type={'file'}
+              onChange={(e) => {
+                imageUpload(e.target.files[0]);
+                setImage(e.target.files[0]);
+              }}
+            />
             <div>
-              {/* {new Date() <= new Date(challengeData.challengeStartDate) ? (
-                <ProgressBar percentage={0} />
-              ) : ( */}
-              <ProgressBar percentage={progress} />
-              {/* )} */}
-              {/* <ProgressBar percentage={progress} /> */}
+              <button onClick={uploadCertification}>인증사진 올리기</button>
             </div>
-          </ChallengeDescription>
+          </div>
+        </div>
+      )}
 
-          <ChallengeDescription>
-            <div className="margin_left2">참여 인원:</div>
-            <div>{`${challengeData.challengeCurrentParty}명`}</div>
-          </ChallengeDescription>
+      {/* 후기작성  */}
+      {reviewModal && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflowY: 'auto',
+            zIndex: 10000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#EFF1FE',
+              width: '30%',
+              height: '30%',
+              borderRadius: '20px',
+              padding: '2%',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div
+                style={{
+                  fontSize: '25px',
+                  margin: '0 auto',
+                  marginBottom: '2%',
+                }}
+              >
+                후기 작성
+              </div>
+              <button onClick={() => imageAction('review')} style={{}}>
+                X
+              </button>
+            </div>
 
-          <ChallengeDescription>
-            <div className="margin_left">챌린지 기간:</div>
-            <div>{`${challengeData.challengeStartDate} ~ ${challengeData.challengeEndDate}`}</div>
-          </ChallengeDescription>
+            <div style={{ display: 'flex', marginBottom: '2%' }}>
+              <div>제목:</div>
+              <input
+                onChange={(event) => {
+                  setReviewTtile(event.target.value);
+                }}
+              ></input>
+            </div>
+            <div style={{ display: 'flex', marginBottom: '2%' }}>
+              <div>내용:</div>
+              <textarea
+                onChange={(event) => {
+                  setReviewContent(event.target.value);
+                }}
+              ></textarea>
+            </div>
+            <div>이미지</div>
+            <input
+              type={'file'}
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+              }}
+            />
+            <div>
+              <button onClick={uploadReview}>후기 올리기</button>
+            </div>
+          </div>
+        </div>
+      )}
 
-          <ChallengeDescription>
-            <div className="margin_left">챌린지 금액:</div>
-            <div>{challengeData.challengeFeePerPerson}원</div>
-          </ChallengeDescription>
+      {/* 인증사진전체보기 */}
+      {certificationImageData && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            background: 'black',
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflowY: 'auto',
+            zIndex: 10000,
+          }}
+        >
+          <button
+            onClick={() => imageAction('certidication-image-all')}
+            style={{ position: 'absolute', top: '10px', right: '10px' }}
+          >
+            X
+          </button>
+          <Masonry columnsCount={3} gutter="10px">
+            {challengeData.challengeCertImages.map((image, i) => (
+              <img
+                key={i}
+                src={image.imagePath}
+                style={{ width: '100%', display: 'block', cursor: 'pointer' }}
+                alt="후기사진들"
+              />
+            ))}
+          </Masonry>
+        </div>
+      )}
 
-          <ChallengeDescription>
-            <div className="margin_left">결제한 금액:</div>
-            <div>{challengeData.challengeFeePerPerson}원</div>
-          </ChallengeDescription>
+      {/* 후기사진 전체보기 */}
+      {imageDataAll && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            background: 'black',
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflowY: 'auto',
+            zIndex: 10000,
+          }}
+        >
+          <button
+            onClick={() => imageAction('image-all')}
+            style={{ position: 'absolute', top: '10px', right: '10px' }}
+          >
+            X
+          </button>
+          <Masonry columnsCount={3} gutter="10px">
+            {challengeData.challengeReviews.map((image, i) => (
+              <img
+                key={i}
+                src={image.challengeReviewImagePath}
+                style={{ width: '100%', display: 'block', cursor: 'pointer' }}
+                alt="후기사진들"
+              />
+            ))}
+          </Masonry>
+        </div>
+      )}
 
-          <ChallengeDescription>
-            <div className="margin_left">도전중인 유저:</div>
-            {challengeData.participatingMember &&
-              challengeData.participatingMember.map((member) => {
-                return (
-                  <div key={challengeData.participatingMember.memberId}>
-                    {member.participatingMemberName}
-                  </div>
-                );
+      {/* 인증이미지 하나씩 */}
+      {certificationImages.image && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            background: 'black',
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            zIndex: 10000,
+          }}
+        >
+          <button
+            onClick={() => certificationImageAction()}
+            style={{ position: 'absolute', top: '10px', right: '10px' }}
+          >
+            X
+          </button>
+          <button onClick={() => certificationImageAction('previous-image')}>
+            이전
+          </button>
+          <img
+            src={certificationImages.image}
+            style={{ width: 'auto', maxWidth: '90%', maxHeight: '90%' }}
+            alt="이미지크게보기"
+          />
+          <button onClick={() => certificationImageAction('next-image')}>
+            다음
+          </button>
+        </div>
+      )}
+
+      {/* 후기이미지 하나씩 */}
+      {imageData.image && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            background: 'black',
+            position: 'fixed',
+            // display: 'flex',
+            // justifyContent: 'center',
+            // alignItems: 'center',
+            overflow: 'auto',
+            zIndex: 10000,
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              height: '80vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <button
+              onClick={() => imageAction()}
+              style={{ position: 'absolute', top: '10px', right: '10px' }}
+            >
+              X
+            </button>
+            <button onClick={() => imageAction('previous-image')}>이전</button>
+            <img
+              src={imageData.image}
+              style={{ width: 'auto', maxWidth: '90%', maxHeight: '90%' }}
+              alt="이미지크게보기"
+            />
+            <button onClick={() => imageAction('next-image')}>다음</button>
+          </div>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <div
+              style={{
+                width: '580px',
+                backgroundColor: '#EFF1FE',
+                padding: '1%',
+                borderRadius: '10px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  marginBottom: '2%',
+                  fontSize: '18px',
+                }}
+              >
+                <div style={{ marginRight: '2%' }}>제목:</div>
+                <div style={{}}>
+                  {
+                    challengeData.challengeReviews[imageData.i]
+                      .challengeReviewTitle
+                  }
+                </div>
+              </div>
+              <div style={{ display: 'flex' }}>
+                <div style={{ marginRight: '2.5%' }}>내용:</div>
+                <div style={{}}>
+                  {
+                    challengeData.challengeReviews[imageData.i]
+                      .challengeReviewContent
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Container>
+        <ChallengeViewCount>{`조회수 ${challengeData.challengeViewCount}`}</ChallengeViewCount>
+        <ChallengeProgress>
+          {/* 이미지 */}
+          <div className="image">
+            <ChallengeImage
+              src={challengeData.challengeRepImagePath}
+              alt="도전 할 항목의 이미지"
+            />
+          </div>
+
+          <ChallengeWrapper>
+            {/* 챌린지 이름, 디데이 */}
+            <ChallengeTitle>
+              <div className="title">{challengeData.challengeTitle}</div>
+              {pastDay < 0 ? (
+                <div className="d_day">챌린지 시작까지 {leftDay}일</div>
+              ) : (
+                <div className="d_day">
+                  <DdayFormatter endDate={challengeData.challengeEndDate} />
+                </div>
+              )}
+            </ChallengeTitle>
+
+            <ChallengeDescription>
+              <div className="margin_left3">챌린지 진행률:</div>
+              <div>
+                <ProgressBar percentage={progress} />
+              </div>
+            </ChallengeDescription>
+
+            <ChallengeDescription>
+              <div className="margin_left2">참여 인원:</div>
+              <div>{`${challengeData.challengeCurrentParty}명`}</div>
+            </ChallengeDescription>
+
+            <ChallengeDescription>
+              <div className="margin_left">챌린지 기간:</div>
+              <div>{`${challengeData.challengeStartDate} ~ ${challengeData.challengeEndDate}`}</div>
+            </ChallengeDescription>
+
+            <ChallengeDescription>
+              <div className="margin_left">챌린지 금액:</div>
+              <div>{challengeData.challengeFeePerPerson}원</div>
+            </ChallengeDescription>
+
+            <ChallengeDescription>
+              <div className="margin_left">결제한 금액:</div>
+              <div>{challengeData.challengeFeePerPerson}원</div>
+            </ChallengeDescription>
+
+            <ChallengeDescription>
+              <div className="margin_left">도전중인 유저:</div>
+              {challengeData.participatingMember &&
+                challengeData.participatingMember.map((member) => {
+                  return (
+                    <div key={challengeData.participatingMember.memberId}>
+                      {member.participatingMemberName}
+                    </div>
+                  );
+                })}
+            </ChallengeDescription>
+          </ChallengeWrapper>
+        </ChallengeProgress>
+
+        <Certification>
+          <CertificationWrapper>
+            <div className="title">챌린지 설명</div>
+            <div className="pd-5">{challengeData.challengeDescription}</div>
+          </CertificationWrapper>
+
+          {/* 인증 방법 */}
+          <CertificationDescription>
+            <div className="title">인증 방법 / 인증 예시</div>
+            <div className="pd-5">{challengeData.challengeAuthDescription}</div>
+            {/* 인증예시 */}
+            <CertificationImage>
+              {challengeData.challengeExamImagePath.map((image, index) => {
+                return <Image key={index} src={image}></Image>;
               })}
-          </ChallengeDescription>
-        </ChallengeWrapper>
-      </ChallengeProgress>
+            </CertificationImage>
+          </CertificationDescription>
+        </Certification>
 
-      <Certification>
-        <CertificationWrapper>
-          <div className="title">챌린지 설명</div>
-          <div className="pd-5">{challengeData.challengeDescription}</div>
-        </CertificationWrapper>
-
-        {/* 인증 방법 */}
-        <CertificationDescription>
-          <div className="title">인증 방법 / 인증 예시</div>
-          <div className="pd-5">{challengeData.challengeAuthDescription}</div>
-          {/* 인증예시 */}
-          <CertificationImage>
-            {challengeData.challengeExamImagePath.map((image, index) => {
-              return <Image key={index} src={image}></Image>;
-            })}
-          </CertificationImage>
-        </CertificationDescription>
-      </Certification>
-
-      <Review>
-        <div className="flex">
-          <div className="marginRight"> 인증 사진</div>
-          <div>
+        <Review>
+          <div className="flex">
+            <div className="marginRight"> 인증 사진</div>
+            {/* <div> */}
             <div
               style={{ fontSize: '20px' }}
             >{`인증 횟수:  ${certificationCount} / ${challengeData.challengeAuthCycle}`}</div>
-            {challengeData.challengeAuthAvailableTime ===
-            dayjs().format('HH:mm') ? (
-              <div className="cursur" onClick={showCertificationModal}>
-                인증 사진 올리기
-              </div>
-            ) : null}
-            {/* <div className="cursur" onClick={showCertificationModal}>
-              인증 사진 올리기
-            </div> */}
-          </div>
-          {modalOpen && (
-            <Modal
-              setModalOpen={setModalOpen}
-              // imageTransform={imageTransform}
-              // setImageTransfrom={setImageTransfrom}
-              challengeId={challengeId}
-            />
-          )}
-        </div>
-        {/* 인증사진 */}
-        <CertifiationImageWrapper>
-          {challengeData.challengeCertImages &&
-            challengeData.challengeCertImages
-              .slice(0, 8)
-              .map((image, index) => {
-                return (
-                  <CertificationImage key={index}>
-                    {index === 7 ? (
-                      <ViewMore key={index}>
-                        <div onClick={showImageModal}>더보기</div>
-                        {imageModalOpen && (
-                          <ImageModal
-                            setImageModalOpen={setImageModalOpen}
-                            image={challengeData.challengeCertImages}
-                          />
-                        )}
-                      </ViewMore>
-                    ) : (
-                      // <Width>
-                      <img src={image.imagePath} alt="인증사진들"></img>
-                      // </Width>
-                    )}
-                  </CertificationImage>
-                );
-              })}
-        </CertifiationImageWrapper>
-      </Review>
 
-      <Review>
-        <div>후기 사진</div>
-        <ReviewImageWrapper>
-          <ImageGallery items={images} />
-          {/* {challenge.challengeReviews &&
-            challenge.challengeReviews.slice(0, 8).map((image, index) => {
-              return (
-                <ReviewImage key={index}>
-                  {index === 7 ? (
-                    <ViewMore key={index}>
-                      <div onClick={showImageModal}>더보기</div>
-                      {imageModalOpen && (
-                        <ImageModal
-                          setImageModalOpen={setImageModalOpen}
-                          image={challenge.challengeReviews}
+            <button
+              style={{
+                marginLeft: '1%',
+                backgroundColor: '#8673FF',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '17px',
+                color: '#F2F4FE',
+              }}
+              className="cursur"
+              onClick={showCertificationModal}
+            >
+              인증 사진 올리기
+            </button>
+            {/* </div> */}
+          </div>
+
+          {/* 인증사진 */}
+          {challengeData.challengeCertImages.length === 0 ||
+          challengeData.challengeCertImages.length === null ? (
+            <div
+              role="img"
+              aria-label="writing hand"
+              style={{
+                border: '2px solid #eff1fe',
+                width: '100%',
+                height: '450px',
+                marginTop: '1%',
+                fontSize: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                borderRadius: '20px',
+                alignItems: 'center',
+              }}
+            >
+              인증사진을 올려주세요.😊
+            </div>
+          ) : (
+            <CertifiationImageWrapper>
+              {challengeData.challengeCertImages
+                .slice(0, 8)
+                .map((image, index) => {
+                  return (
+                    <CertificationImage key={index}>
+                      {index === 7 ? (
+                        <ViewMore key={index}>
+                          <div onClick={viewCertificationImageAll}>더보기</div>
+                        </ViewMore>
+                      ) : (
+                        <img
+                          key={index}
+                          src={image.imagePath}
+                          alt="인증사진들"
+                          style={{ width: '200px', cursor: 'pointer' }}
+                          onClick={() =>
+                            viewCertificationImage(image.imagePath, index)
+                          }
                         />
                       )}
-                    </ViewMore>
-                  ) : (
-                    // <Width>
-                    <img
-                      src={image.challengeReviewImagePath}
-                      alt=""
-                      style={{ width: '200px' }}
-                    />
-                    // </Width>
-                  )}
-                </ReviewImage>
-              );
-            })} */}
-        </ReviewImageWrapper>
-      </Review>
+                    </CertificationImage>
+                  );
+                })}
+            </CertifiationImageWrapper>
+          )}
+        </Review>
 
-      <div style={{ border: '1px solid red', marginTop: '3%' }}>
-        <div style={{ display: 'flex' }}>
-          <div>{memberName}</div>
-          <input
-            placeholder="댓글을 작성해주세요."
-            onChange={(event) => {
-              setTalk(event.target.value);
+        <Review>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginRight: 'auto' }}>후기 사진</div>
+
+            <button
+              style={{
+                width: '10%',
+                backgroundColor: '#8673FF',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '17px',
+                color: '#F2F4FE',
+              }}
+              onClick={uploadReviewModal}
+            >
+              후기 올리기
+            </button>
+          </div>
+          {challengeData.challengeReviews === null ? (
+            <div
+              role="img"
+              aria-label="writing hand"
+              style={{
+                border: '2px solid #eff1fe',
+                width: '100%',
+                height: '450px',
+                marginTop: '1%',
+                fontSize: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                borderRadius: '20px',
+                alignItems: 'center',
+              }}
+            >
+              후기를 올려주세요.😊
+            </div>
+          ) : (
+            <div
+              style={{
+                border: '2px solid #eff1fe',
+                width: '985px',
+                height: '450px',
+                marginTop: '1%',
+                fontSize: '20px',
+                borderRadius: '20px',
+                padding: '2%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+              }}
+            >
+              {challengeData.challengeReviews
+                .slice(0, 8)
+                .map((image, index) => {
+                  return (
+                    <ReviewImage key={index}>
+                      {index === 7 ? (
+                        <ViewMore key={index}>
+                          <div onClick={viewImageAll}>더보기</div>
+                        </ViewMore>
+                      ) : (
+                        <img
+                          key={index}
+                          src={image.challengeReviewImagePath}
+                          alt="후기사진들"
+                          style={{ width: '200px', cursor: 'pointer' }}
+                          onClick={() =>
+                            viewImage(image.challengeReviewImagePath, index)
+                          }
+                        />
+                      )}
+                    </ReviewImage>
+                  );
+                })}
+            </div>
+          )}
+        </Review>
+
+        <div style={{ marginTop: '8%' }}>
+          {/* <div style={{}}>댓글 {challengeData.challengeTalks?.length}</div> */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ marginRight: '5%' }}>{memberName}</div>
+            <input
+              style={{
+                width: '76%',
+                borderTop: 'none',
+                borderLeft: 'none',
+                borderRight: 'none',
+                borderBottom: '2px solid #8673FF',
+              }}
+              placeholder="댓글을 작성해주세요."
+              onChange={(event) => {
+                setTalk(event.target.value);
+              }}
+              value={talk}
+              onKeyUp={(event) => {
+                event.target.value.length > 0
+                  ? setIsValid(true)
+                  : setIsValid(false);
+              }}
+            ></input>
+            <button
+              style={{
+                marginLeft: '5%',
+                width: '5%',
+                backgroundColor: '#8673FF',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '17px',
+                color: '#F2F4FE',
+              }}
+              onClick={postTalk}
+              disabled={isValid ? false : true}
+            >
+              입력
+            </button>
+          </div>
+          <div
+            style={{
+              border: '2px solid #EFF1FE',
+              padding: '1% 1% 0 1%',
+              borderRadius: '10px',
+              marginTop: '2%',
             }}
-            value={talk}
-            onKeyUp={(event) => {
-              event.target.value.length > 0
-                ? setIsValid(true)
-                : setIsValid(false);
-            }}
-          ></input>
-          <button onClick={postTalk} disabled={isValid ? false : true}>
-            입력
-          </button>
-        </div>
-        <div style={{ border: '1px solid green' }}>
-          {challengeData.challengeTalks &&
-            challengeData.challengeTalks.map((talk) => {
+          >
+            {challengeData.challengeTalks?.map((talk, index) => {
               return (
-                <div style={{ display: 'flex' }}>
-                  <div>{talk.memberBadge}</div>
-                  <div>{talk.memberName}</div>
-                  <div>{talk.challengeTalkBody}</div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginBottom: '1%',
+                    borderBottom: '2px solid #EFF1FE',
+                  }}
+                  key={index}
+                >
+                  {/* <div>{talk.memberBadge}</div> */}
+                  <div style={{ marginRight: '5%' }}>{talk.memberName}</div>
+                  <div style={{ width: '58%' }}>{talk.challengeTalkBody}</div>
                   <div>{talk.updated_at}</div>
-                  {/* 본인이 작성한 것만 authorized,랑 id 로그인 한사람거넣기 */}
-                  <div>수정</div>
-                  <div onClick={deleteTalk}>삭제{talk.challengeReviewId}</div>
+                  {Number(loginId) === Number(talk.memberId) ? (
+                    <>
+                      {/* <button
+                        style={{
+                          marginLeft: '2%',
+                          width: '5%',
+                          backgroundColor: '#8673FF',
+                          border: 'none',
+                          borderRadius: '5px',
+                          color: '#F2F4FE',
+                        }}
+                        onClick={() => editTalk(index)}
+                      >
+                        수정
+                      </button> */}
+                      <button
+                        style={{
+                          marginLeft: '1%',
+                          width: '5%',
+                          backgroundColor: '#8673FF',
+                          border: 'none',
+                          fontSize: '17px',
+                          borderRadius: '5px',
+                          color: '#F2F4FE',
+                        }}
+                        onClick={() => deleteTalk(index)}
+                      >
+                        삭제
+                      </button>
+                    </>
+                  ) : null}
                 </div>
               );
             })}
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }

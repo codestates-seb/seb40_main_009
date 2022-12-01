@@ -102,10 +102,10 @@ export const CertificationWrapper = styled.div`
 `;
 
 export const Review = styled.div`
-  /* border: 2px solid #eff1fe; */
   margin-top: 5%;
   height: 500px;
   font-size: 25px;
+  width: 100%;
   & > .flex {
     display: flex;
     align-items: center;
@@ -120,8 +120,11 @@ export const Review = styled.div`
 
 export const CertifiationImageWrapper = styled.div`
   width: 100%;
-  margin-top: 3%;
-  border: 1px solid #eff1fe;
+  height: 450px;
+  margin-top: 1%;
+  border-radius: 20px;
+  border: 2px solid #eff1fe;
+  padding: 2%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 `;
@@ -161,31 +164,27 @@ export const CertificationImage = styled.div`
 `;
 
 export const ViewMore = styled.div`
-  background-color: grey;
+  background-color: #8673ff;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 200px;
 `;
 
-export const Width = styled.div`
-  width: 100%;
-`;
-
 export const ReviewImageWrapper = styled.div`
-  /* width: 90%; */
-  width: 70%;
-  height: 10px;
-  /* height: 180px; */
-  /* display: flex; */
-  /* margin-top: 3%; */
-  /* margin-left: 1%; */
-  /* display: grid; */
-  /* grid-template-columns: repeat(4, 1fr); */
+  width: 100%;
+  height: 450px;
+  margin-top: 1%;
+  margin-left: 1%;
+  border-radius: 20px;
+  border: 2px solid #eff1fe;
+  display: grid;
+  padding: 2%;
+  grid-template-columns: repeat(4, 1fr);
 `;
 
 export const ReviewImage = styled.div`
-  border: 2px solid red;
+  /* border: 2px solid red; */
   width: 200px;
   height: 180px;
   display: flex;

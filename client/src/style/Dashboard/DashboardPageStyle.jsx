@@ -22,13 +22,23 @@ export const FifthPage = styled.div`
 `;
 
 export const MarginTop = styled.div`
-  margin-top: 5%;
+  margin-top: 10%;
+  width: 1024px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  border: 1px solid red;
 `;
 
 export const Container = styled.div`
   width: 1024px;
-  margin: 0 auto;
-  display: flex;
+  height: 100vh;
+  /* margin: 0 auto; */
+  /* display: flex;
+  justify-content: center; */
+  /* border: 1px solid red; */
+  margin-top: 12%;
 `;
 
 export const FontSize30 = styled.div`
@@ -55,8 +65,8 @@ export const PopularChallengeWrapper = styled.div`
 `;
 
 export const PopularChallenge = styled.img`
-  width: 100%;
-  height: 350px;
+  width: 300px;
+  height: 300px;
 `;
 
 export const UserRankingWrapper = styled.div`
