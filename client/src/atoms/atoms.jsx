@@ -21,3 +21,8 @@ export const lastDateState = atom({
   key: 'lastDate',
   default: format(Date.now(), 'yyyy-MM-dd'),
 });
+
+export const testData = {
+  key: 'testData',
+  default: [],
+};
