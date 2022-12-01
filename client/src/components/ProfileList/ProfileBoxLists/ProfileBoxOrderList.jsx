@@ -19,7 +19,7 @@ function ProfileBoxChallenge() {
   // get요청;
   const getOrderLists = async () => {
     try {
-      const response = await axios
+      axios
         .get(`order/list`, {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -28,8 +28,32 @@ function ProfileBoxChallenge() {
         })
         .then((response) => {
           const order = response.data;
-          console.log('oo', order);
+          console.log('order', order);
           setOrderLists(order);
+          // setOrderLists(order.data);
+          console.log('set', setOrderLists);
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              // await localStorage.setItem(
+              //   'test',
+              //   responseToken.headers.authorization
+              // );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
         });
     } catch (error) {
       console.log(error);

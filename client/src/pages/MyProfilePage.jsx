@@ -55,8 +55,6 @@ function MyProfilePage() {
   // get요청
   const getProfile = async () => {
     try {
-      console.log('aa', name);
-
       axios
         .get(`/member/${name}`, {
           headers: {
@@ -85,10 +83,10 @@ function MyProfilePage() {
                 'authorizationToken',
                 responseToken.headers.authorization
               );
-              await localStorage.setItem(
-                'test',
-                responseToken.headers.authorization
-              );
+              // await localStorage.setItem(
+              //   'test',
+              //   responseToken.headers.authorization
+              // );
             } catch (error) {
               console.log('재요청 실패', error);
             }

@@ -45,6 +45,50 @@ function EditProfilePage() {
       });
   };
 
+  // const patchEdit = async () => {
+  //   try {
+  //     axios
+  //       .patch(`/member/${params.name}`, {
+  //         headers: {
+  //           'ngrok-skip-browser-warning': 'none',
+  //           // utf-8?
+  //           // 'content-type': 'text/html; charset=utf-8',
+  //           // 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  //           Authorization: localStorage.getItem('authorizationToken'),
+  //         },
+  //       })
+  //       .then((response) => {
+  //         const edit = response.data;
+  //         console.log('edit', edit);
+  //         setEditProfileLists(edit.data);
+  //         navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
+  //       })
+  //       .catch(async (error) => {
+  //         if (error.response.data.status === 401) {
+  //           try {
+  //             const responseToken = await axios.get('/token', {
+  //               headers: {
+  //                 'ngrok-skip-browser-warning': 'none',
+  //                 refresh: localStorage.getItem('refreshToken'),
+  //               },
+  //             });
+  //             await localStorage.setItem(
+  //               'authorizationToken',
+  //               responseToken.headers.authorization
+  //             );
+  //             // await localStorage.setItem(
+  //             //   'test',
+  //             //   responseToken.headers.authorization
+  //             // );
+  //           } catch (error) {
+  //             console.log('재요청 실패', error);
+  //           }
+  //         }
+  //       });
+  //   } catch (error) {
+  //     console.log('error: ', error);
+  //   }
+
   const onChangeEdit = (event) => {
     setEditProfileLists({
       ...editProfileLists,
@@ -53,6 +97,11 @@ function EditProfilePage() {
     console.log(editProfileLists);
   };
   // console.log(editProfileLists.memberName);
+
+  // 취소 버튼을 누르면 이전 마이페이지로 돌아감
+  const clickedCancel = () =>
+    navigate(`/profile/${editProfileLists.memberName}`);
+
   return (
     <S.EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
@@ -79,11 +128,12 @@ function EditProfilePage() {
           value={editProfileLists.memberDescription}
         />
         <div className="button">
-          <S.CancelBtn>취소</S.CancelBtn>
+          <S.CancelBtn onClick={clickedCancel}>취소</S.CancelBtn>
           <S.EditBtn onClick={patchEdit}>수정하기</S.EditBtn>
         </div>
       </S.Edit>
     </S.EditProfileComponent>
   );
 }
+
 export default EditProfilePage;

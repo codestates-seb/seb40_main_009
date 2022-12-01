@@ -14,8 +14,7 @@ function OrderSheetInfo({ price, title }) {
     url: `order/ready`,
     headers: {
       'ngrok-skip-browser-warning': 'none',
-      Authorization:
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.NDuVoTw2oLhpffs07n_f0LMCZKUXSjA9R694EQVzHCwAFkzlay3EyWeWYdazmPDRagLOsSOrjjT5SZrjoKGMnw',
+      Authorization: localStorage.getItem('authorizationToken'),
     },
     data: data,
   };
@@ -31,6 +30,50 @@ function OrderSheetInfo({ price, title }) {
         console.log(error);
       });
   };
+
+  // const postKakaoPay = async () => {
+  //   try {
+  //     console.log(data);
+  //     axios
+  //       .post(`order/ready`, {
+  //         headers: {
+  //           'ngrok-skip-browser-warning': 'none',
+  //           Authorization: localStorage.getItem('authorizationToken'),
+  //         },
+  //         data: data,
+  //       })
+  //       .then((response) => {
+  //         console.log('response', response);
+  //         const KAKAO_PAYMENT_URL = response.data.data.next_redirect_pc_url;
+  //         localStorage.setItem('TID', response.data.data.tid);
+  //         window.location.href = KAKAO_PAYMENT_URL;
+  //       })
+  //       .catch(async (error) => {
+  //         if (error.response.data.status === 401) {
+  //           try {
+  //             const responseToken = await axios.get('/token', {
+  //               headers: {
+  //                 'ngrok-skip-browser-warning': 'none',
+  //                 refresh: localStorage.getItem('refreshToken'),
+  //               },
+  //             });
+  //             await localStorage.setItem(
+  //               'authorizationToken',
+  //               responseToken.headers.authorization
+  //             );
+  //             // await localStorage.setItem(
+  //             //   'test',
+  //             //   responseToken.headers.authorization
+  //             // );
+  //           } catch (error) {
+  //             console.log('재요청 실패', error);
+  //           }
+  //         }
+  //       });
+  //   } catch (error) {
+  //     console.log('error: ', error);
+  //   }
+  // };
 
   return (
     <S.Container>
