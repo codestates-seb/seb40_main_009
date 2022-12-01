@@ -1,5 +1,6 @@
 package be.wiselife.order.controller;
 
+import be.wiselife.aop.NeedEmail;
 import be.wiselife.aop.NeedMember;
 import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challenge.entity.Challenge;
@@ -50,13 +51,13 @@ public class OrderController {
     /**
      *
      * @param postInfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
-     * @param request : 
+     * @param EmailFromToken :
      * @return
      * @throws IOException
      */
+    @NeedEmail
     @PostMapping("/ready")
-    public @ResponseBody ResponseEntity startContract(@RequestBody OrderDto.OrderPostinfo postInfo, HttpServletRequest request){
-        String EmailFromToken = jwtTokenizer.getEmailWithToken(request);
+    public @ResponseBody ResponseEntity startContract(String EmailFromToken,@RequestBody OrderDto.OrderPostinfo postInfo){
 
         Order order = orderMapper.postInfoToOrder(postInfo);
 
@@ -67,8 +68,8 @@ public class OrderController {
     }
 
     /**
-     * 
-     * @param pg_token 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값
+     *
+     * @param pg_token 챌린지 생성시 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값
      * @param tid 처음 결제요청에서 거래에대한 암호키
      * @return
      */
@@ -90,7 +91,7 @@ public class OrderController {
     }
     /**
      *
-     * @param pg_token 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값
+     * @param pg_token 챌린지 참가시 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값, 프론트에서는 참가자가 챌린지 진입시, 탈퇴만 보이게 해야함
      * @param tid 처음 결제요청에서 거래에대한 암호키
      * @return
      */

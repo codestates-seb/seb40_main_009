@@ -10,6 +10,7 @@ import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
+import be.wiselife.order.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,9 @@ public class ChallengeService {
     private final MemberChallengeService memberChallengeService;
 
 
-    public ChallengeService(ChallengeRepository challengeRepository,MemberRepository memberRepository, ImageService imageService, MemberService memberService, MemberChallengeService memberChallengeService) {
+    public ChallengeService(ChallengeRepository challengeRepository,MemberRepository memberRepository,
+                            ImageService imageService, MemberService memberService,
+                            MemberChallengeService memberChallengeService) {
         this.challengeRepository = challengeRepository;
         this.memberRepository = memberRepository;
         this.imageService = imageService;

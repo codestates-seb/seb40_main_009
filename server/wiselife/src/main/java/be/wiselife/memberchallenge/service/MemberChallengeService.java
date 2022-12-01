@@ -35,10 +35,10 @@ public class MemberChallengeService {
         MemberChallenge memberChallenge = new MemberChallenge();
 
         challenge.setChallengeCurrentParty(challengeCurrentParty+1);
-//            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
         if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
             throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
         }
+
         memberChallenge.setExpectedRefundToMember(challenge.getChallengeFeePerPerson());
         memberChallenge.setMember(member);
         memberChallenge.setChallenge(challenge);

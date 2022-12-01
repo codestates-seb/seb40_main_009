@@ -21,7 +21,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@Table(name="Member_Table")
+@Table(name="Member_Table",indexes = @Index(name = "idx__member", columnList = "memberName"))
 //Member는 생성일자만 있으면 되므로 TimeAudit만 상속 받는다.
 public class Member extends TimeAudit {
 
@@ -55,7 +55,7 @@ public class Member extends TimeAudit {
     private String memberDescription = "안녕하세요! 슬린이에요^^";
 
     //로그인 기능 추가뒤에 로그인 멤버의 토큰에서 이메일값 가져올 예정
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String memberEmail;
 
     /**
@@ -63,7 +63,7 @@ public class Member extends TimeAudit {
      * 생성시에 uuid를 통한 기본값 배정이며,
      * 멤버가 수정시 원하는 값 입력 가능하나, 중복되는 memberName 없이 유효성 동작
      */
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String memberName;
 
     @Column(nullable = false)
