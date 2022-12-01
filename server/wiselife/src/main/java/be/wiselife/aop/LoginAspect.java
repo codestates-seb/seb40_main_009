@@ -17,6 +17,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Aspect
@@ -27,22 +31,19 @@ public class LoginAspect {
     private final JwtTokenizer jwtTokenizer;
     private final MemberService memberService;
 
-    @Around("@annotation(be.wiselife.aop.NeedEmail)")  //@within(annotation)
+    @Around("@annotation(be.wiselife.aop.NeedEmail)")
     public Object getEmail(ProceedingJoinPoint joinPoint) throws  Throwable {
         // 애플리케이션에서 Request 객체를 읽어옴
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        String email = "";
+        Object[] parmeterlist = joinPoint.getArgs(); //요청 파라미터값
 
         if (request != null) {
-            email = jwtTokenizer.getEmailWithToken(request);
+            String email = jwtTokenizer.getEmailWithToken(request);
+            parmeterlist[0] = email;
         }
 
-        if ( email == null || email.equals("") ) {
-            log.error("no data");
-        }
-
-        Object resultObj = joinPoint.proceed(new Object[] { email });
+        Object resultObj = joinPoint.proceed(parmeterlist);
 
         return resultObj;
     }
@@ -52,17 +53,14 @@ public class LoginAspect {
         // 애플리케이션에서 Request 객체를 읽어옴
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        String email = "";
+        Object[] parmeterlist = joinPoint.getArgs(); //요청 파라미터값
 
         if (request != null) {
             Member loginMember = memberService.getLoginMember(request);
+            parmeterlist[0] = loginMember;
         }
 
-        if ( email == null || email.equals("") ) {
-            log.error("no data");
-        }
-
-        Object resultObj = joinPoint.proceed();
+        Object resultObj = joinPoint.proceed(parmeterlist);
 
         return resultObj;
     }
