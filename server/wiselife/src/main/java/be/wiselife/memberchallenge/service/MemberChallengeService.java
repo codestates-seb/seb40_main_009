@@ -32,6 +32,7 @@ public class MemberChallengeService {
      * 역할 4. 취소 시점의 예상 멤버가 가져갈 예상 상금 계산, 챌린지에 모인 총상금 계산
      */
     public Challenge patchMemberAndChallenge(Challenge challenge, Member member) {
+        log.info("patchMemberAndChallenge tx start");
 
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
         if (memberChallengeRepository.findByChallengeIdAndMember(challenge.getRandomIdForImage(), member) != null) {
@@ -45,7 +46,7 @@ public class MemberChallengeService {
 
             memberChallengeRepository.delete(memberChallengeFromRepository);
             memberRepository.save(member);
-
+            log.info("patchMemberAndChallenge tx end");
             return challengeRepository.save(challenge);
 
         } else {
@@ -65,12 +66,13 @@ public class MemberChallengeService {
 
             memberChallengeRepository.save(memberChallenge);
             memberRepository.save(member);
-
+            log.info("patchMemberAndChallenge tx end");
             return challengeRepository.save(challenge);
         }
     }
 
     public void updateMemberChallengeExpectedRefund(Challenge challenge, double challengeProgressRate){
+        log.info("updateMemberChallengeExpectedRefund tx start");
         List<MemberChallenge> memberChallengeList = challenge.getMemberChallenges();
         if(memberChallengeList == null) return ;
 
@@ -85,10 +87,13 @@ public class MemberChallengeService {
         }
 
         memberChallengeRepository.saveAll(memberChallengeList);
+        log.info("updateMemberChallengeExpectedRefund tx end");
     }
 
     @Transactional(readOnly = true)
     public MemberChallenge findMemberChallengeByMemberAndChallenge(Challenge challenge, Member member){
+        log.info("findMemberChallengeByMemberAndChallenge tx start");
+        log.info("findMemberChallengeByMemberAndChallenge tx end");
         return memberChallengeRepository.findByChallengeAndMember(challenge, member);
     }
 }

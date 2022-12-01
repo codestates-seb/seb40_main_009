@@ -40,6 +40,7 @@ public class ImageService {
      * 카카오톡 이미지 외에 등록한적이 있다면, 기존것을 db에서 찾아서 수정
      */
     public void patchMemberImage(Member member, MultipartFile multipartFiles) throws IOException {
+        log.info("patchMemberImage  tx start");
         MemberImage memberImageFromRepository =
                 imageRepository.findByImageTypeAndMemberId("MI", member.getMemberId());
         
@@ -48,8 +49,10 @@ public class ImageService {
         if (memberImageFromRepository == null) {
             MemberImage memberImage = new MemberImage();
             saveMemberImage(member, memberImage, ImageUrl);
+            log.info("patchMemberImage  tx end");
         } else {
             saveMemberImage(member, memberImageFromRepository, ImageUrl);
+            log.info("patchMemberImage  tx end");
         }
     }
 
@@ -63,7 +66,7 @@ public class ImageService {
 
     //ChallengeRepImage 부분 코드====================================== rep image 받아옴
     public String patchChallengeRepImage(Challenge challenge, MultipartFile repImage) throws IOException {
-
+        log.info("patchChallengeRepImage tx start");
         ChallengeRepImage challengeRepImageFromRepository =
                 imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
         String newRepImage = s3UploadService.uploadJustOne(repImage);
@@ -76,7 +79,7 @@ public class ImageService {
             challengeRepImageFromRepository.setImagePath(newRepImage);
             saveChallengeRepImage(challenge,challengeRepImageFromRepository);
         }
-
+        log.info("patchChallengeRepImage tx end");
         return newRepImage;
     }
     // ChallengeRepImage 중복코드 줄이는 용도
@@ -87,6 +90,7 @@ public class ImageService {
 
     //ChallengeExamImage 부분 코드======================================
     public List<String> postChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
+        log.info("postChallengeExamImage  tx start");
         List<String> exampleImages = s3UploadService.uploadAsList(exampleImage);
         String[] imagePaths = exampleImages.toArray(String[]::new);
 
@@ -96,10 +100,12 @@ public class ImageService {
             challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
             imageRepository.save(challengeExamImage);
         }
+        log.info("postChallengeExamImage  tx end");
         return exampleImages;
     }
 
     public String patchChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
+        log.info("patchChallengeExamImage  tx start");
         List<ChallengeExamImage> challengeExamImages
                 = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
 
@@ -143,11 +149,13 @@ public class ImageService {
         if (changeImagePath.equals("")) {
             throw new BusinessLogicException(ExceptionCode.CHALLENGE_EXAM_IMAGE_MUST_ENROLL);
         }
+        log.info("patchChallengeExamImage  tx end");
         return changeImagePath;
     }
 
     //ReviewImage 부분 코드======================================
     public String patchReviewImage(ChallengeReview review, MultipartFile image) {
+        log.info("patchReviewImage  tx start");
         ReviewImage reviewImageFromRepository =
                 imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
 
@@ -156,10 +164,12 @@ public class ImageService {
             String ImagePath = s3UploadService.uploadJustOne(image);
             reviewImage.setImagePath(ImagePath);
             saveReviewImage(review, reviewImage);
+            log.info("patchReviewImage  tx end");
             return ImagePath;
         } else {
             reviewImageFromRepository.setImagePath(review.getChallengeReviewImagePath());
             saveReviewImage(review, reviewImageFromRepository);
+            log.info("patchReviewImage  tx end");
             return reviewImageFromRepository.getImagePath();
         }
 
@@ -181,8 +191,10 @@ public class ImageService {
      * @return
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
+        log.info("patchReviewImage tx start");
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
+            log.info("patchReviewImage tx end");
             throw new BusinessLogicException(ExceptionCode.YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST);
         }
 
@@ -203,7 +215,7 @@ public class ImageService {
         plusSuccessCount(loginMember);
 
         calculateMemberChallengePercentage(loginMember);
-
+        log.info("patchReviewImage tx end");
         return challengeUpdateChallengeCertImage;
     }
     // 인증사진 등록 및 수정 메소드
@@ -281,6 +293,8 @@ public class ImageService {
      * s3서비스를 대행해주는 역할
      */
     public String getOneImagePath(MultipartFile multipartFile) throws IOException {
+        log.info("getOneImagePath tx start");
+        log.info("getOneImagePath tx end");
         return s3UploadService.uploadJustOne(multipartFile);
     }
 

@@ -94,7 +94,6 @@ public class OauthService extends DefaultOAuth2UserService {
      * @param refreshToken
      * @return
      */
-    @Transactional(readOnly = false)
     private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider, String refreshToken) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
         

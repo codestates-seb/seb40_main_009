@@ -8,6 +8,7 @@ import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = false)
+@Slf4j
 public class ChallengeTalkService {
     private final ChallengeTalkRepository challengeTalkRepository;
     private final MemberService memberService;
@@ -27,6 +29,7 @@ public class ChallengeTalkService {
     }
 
     public ChallengeTalk createChallengeTalk(ChallengeTalk challengeTalk, Long challengeId, Member loginMember){
+        log.info("createChallengeTalk  tx start");
         Challenge challenge = challengeService.getChallengeById(challengeId);
 
         challengeTalk.setChallenge(challenge);
@@ -35,19 +38,20 @@ public class ChallengeTalkService {
         challengeTalk.setMemberBadge(loginMember.getMemberBadge().toString());
 
         challenge.addChallengeTalk(challengeTalk);
-
+        log.info("createChallengeTalk  tx end");
         return saveChallengeTalk(challengeTalk);
     }
 
     public ChallengeTalk updateChallengeTalk(ChallengeTalk changedChallengeTalk, Member loginMember) {
         //사용자 권한 확인
+        log.info("updateChallengeTalk  tx start");
         ChallengeTalk savedChallengeTalk = findChallengeTalkById(changedChallengeTalk.getChallengeTalkId());
         checkUserAuthorization(savedChallengeTalk, loginMember);
 
         /*수정 로직*/
         Optional.ofNullable(changedChallengeTalk.getChallengeTalkBody())
                 .ifPresent(savedChallengeTalk::setChallengeTalkBody);
-
+        log.info("updateChallengeTalk  tx end");
         return saveChallengeTalk(savedChallengeTalk) ;
     }
 
@@ -57,8 +61,10 @@ public class ChallengeTalkService {
 
     @Transactional(readOnly = true)
     public ChallengeTalk findChallengeTalkById(Long challengeTalkId){
+        log.info("findChallengeTalkById  tx start");
         ChallengeTalk savedChallengeTalk =  challengeTalkRepository.findById(challengeTalkId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_TALK_NOT_FOUND));
+        log.info("findChallengeTalkById  tx end");
 
         return savedChallengeTalk;
     }
@@ -70,11 +76,13 @@ public class ChallengeTalkService {
 
 
     public void deleteChallengeTalk(Long challengeTalkId, Member loginMember) {
+        log.info("deleteChallengeTalk  tx start");
 
         ChallengeTalk challengeTalk = findChallengeTalkById(challengeTalkId);
         checkUserAuthorization(challengeTalk, loginMember);
 
         challengeTalkRepository.delete(challengeTalk);
+        log.info("deleteChallengeTalk  tx end");
     }
 
     /**

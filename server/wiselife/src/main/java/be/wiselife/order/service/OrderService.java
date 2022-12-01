@@ -48,6 +48,7 @@ public class OrderService {
      */
     public OrderDto.OrderReadyResponse startKakaoPay(Order order, String emailFromToken) {
 
+        log.info("startKakaoPay tx start");
         Member member = memberRepository.findByMemberEmail(emailFromToken).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         order.addMember(member); 
         orderRepository.save(order); //ORDERID 값을 지정받기 위해 값을 저장하고 주문한 맴버를 저장한다.
@@ -85,6 +86,7 @@ public class OrderService {
             log.info("결제번호와 결제링크를 발부 받음 그리고 해당데이터를 저장함.");
         }
 
+        log.info("startKakaoPay tx end");
         return ready;
     }
 
@@ -94,7 +96,7 @@ public class OrderService {
      */
 
     public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) {
-
+        log.info("approveKakaoPay tx start");
         Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG));
 
         //카카오톡에서 요청하는 기본 양식
@@ -113,7 +115,7 @@ public class OrderService {
             log.info("승인 및 결제완료 {}", approveResponse);
             int beforeTrade = (int) order.getTotalAmount();
             int afterTrade = approveResponse.getAmount().getTotal();
-
+            log.info("approveKakaoPay tx end");
             if (beforeTrade != afterTrade) { //결제요청전 금액과 결제요청 금액이 다르다면 예외를 반환한다.
                 throw new BusinessLogicException(ExceptionCode.TOTAL_AMOUNT_DIFFERENT);
             }
@@ -123,20 +125,23 @@ public class OrderService {
             order.setOrderSuccess(Boolean.TRUE);
             orderRepository.save(order);
             updateMemberMoney(order);
-
+            log.info("approveKakaoPay tx end");
             return approveResponse;
 
         } else //거래가 이상하다면 approveResponse가 안온걸로 반환.
+            log.info("approveKakaoPay tx end");
             throw new BusinessLogicException(ExceptionCode.NO_ORDER_RESOPNSE);
 
     }
 
     private void updateMemberMoney(Order order) {
+        log.info("updateMemberMoney tx start");
         Member member = order.getMember();
         double memberMoney=member.getMemberMoney();
         memberMoney+= order.getTotalAmount();
         member.setMemberMoney(memberMoney);
         memberRepository.save(member);
+        log.info("updateMemberMoney tx end");
     }
 
     /**
@@ -145,10 +150,11 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public List<Order> getOrderList(String email) {
+        log.info("getOrderList tx start");
         Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         List<Order> orders = orderRepository.findByMemberId(member); //쿼리dsl 통해서 얻어낸 order들.
-
+        log.info("getOrderList tx end");
         return orders;
     }
 
