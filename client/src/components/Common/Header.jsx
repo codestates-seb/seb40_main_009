@@ -219,6 +219,7 @@ export default function Header() {
               alignItems: 'center',
               // border: '1px solid red',
               justifyContent: 'end',
+              marginRight: '5%',
             }}
           >
             <div
@@ -226,7 +227,7 @@ export default function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 // border: '1px solid red',
-                justifyContent: 'end',
+                // justifyContent: 'end',
                 color: 'black',
               }}
             >
@@ -248,7 +249,8 @@ export default function Header() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: 52,
+                    top: '65%',
+                    right: '5%',
                     backgroundColor: '#F2F4FE',
                     padding: '20px 10px',
                     borderRadius: '10px',
