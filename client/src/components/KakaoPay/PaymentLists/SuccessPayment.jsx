@@ -13,8 +13,12 @@ import {
   DescriptionContainer,
   FooterLogo,
 } from '../../../style/KakaoPay/KakaoPayStyle';
+import { useRecoilValue } from 'recoil';
+import { paymentData } from '../../../atoms/payment';
+import { useEffect } from 'react';
 
 function SuccessPayment() {
+  const challengeId = localStorage.getItem('challengeId');
   const location = useLocation();
   const navigate = useNavigate();
   const onClickImg = () => {
@@ -41,15 +45,61 @@ function SuccessPayment() {
     },
   };
 
-  axios(config)
-    .then(function (response) {
-      console.log('success', response);
-    })
-    .then(navigate(`/successorder`))
-    .catch(function (error) {
-      console.log(error);
-    });
+  const getData = () => {
+    axios(config)
+      .then(async () => {
+        console.log('hi i`m 1');
+        try {
+          console.log('hi i`m 222222');
+          console.log('토큰토큰', localStorage.getItem('authorizationToken'));
+          await axios
+            .post(
+              `/challenges/participate/${challengeId}`,
+              {
+                data: '',
+              },
+              {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  Authorization: localStorage.getItem('authorizationToken'),
+                },
+              }
+            )
+            .catch(async (error) => {
+              if (error.response.data.status === 401) {
+                try {
+                  const responseToken = await axios.get('/token', {
+                    headers: {
+                      'ngrok-skip-browser-warning': 'none',
+                      refresh: localStorage.getItem('refreshToken'),
+                    },
+                  });
+                  await localStorage.setItem(
+                    'authorizationToken',
+                    responseToken.headers.authorization
+                  );
+                  await localStorage.setItem(
+                    'test',
+                    responseToken.headers.authorization
+                  );
+                } catch (error) {
+                  console.log('재요청 실패', error);
+                }
+              }
+            });
+          navigate(`/challengelist/bucketlist`);
+        } catch (error) {
+          console.log('error', error);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <CancellationPaymentComponent>
       <div className="font-width">
