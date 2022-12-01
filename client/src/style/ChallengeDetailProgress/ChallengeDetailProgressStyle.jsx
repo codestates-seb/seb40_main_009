@@ -106,6 +106,7 @@ export const Review = styled.div`
   margin-top: 5%;
   height: 500px;
   font-size: 25px;
+  width: 100%;
   & > .flex {
     display: flex;
     align-items: center;
@@ -120,10 +121,11 @@ export const Review = styled.div`
 
 export const CertifiationImageWrapper = styled.div`
   width: 100%;
-  margin-top: 3%;
+  margin-top: 1%;
   border: 1px solid #eff1fe;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  border-radius: 20px;
 `;
 
 export const CertificationDescription = styled.div`
@@ -161,7 +163,7 @@ export const CertificationImage = styled.div`
 `;
 
 export const ViewMore = styled.div`
-  background-color: grey;
+  background-color: #8673ff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -173,15 +175,14 @@ export const Width = styled.div`
 `;
 
 export const ReviewImageWrapper = styled.div`
-  /* width: 90%; */
-  width: 70%;
+  width: 100%;
   height: 10px;
-  /* height: 180px; */
-  /* display: flex; */
-  /* margin-top: 3%; */
-  /* margin-left: 1%; */
-  /* display: grid; */
-  /* grid-template-columns: repeat(4, 1fr); */
+  height: 180px;
+  margin-top: 3%;
+  margin-left: 1%;
+  border: 2px solid blue;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 `;
 
 export const ReviewImage = styled.div`

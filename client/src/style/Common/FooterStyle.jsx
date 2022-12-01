@@ -13,7 +13,6 @@ export const FooterContainer = styled.footer`
   width: 100%;
   color: #ffffff;
   padding: 1.5% 0;
-  margin-top: 80px;
 `;
 
 export const Container = styled.div`
