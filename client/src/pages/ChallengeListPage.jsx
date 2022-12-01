@@ -93,7 +93,6 @@ export default function ChallengeListPage() {
       if (pageNumber !== 1) {
         setChallengeList((prevMembers) => [...prevMembers, ...members]);
       }
-      console.log(challengeList.length);
       setLoading(false);
     } catch (error) {
       console.log('error: ', error);
@@ -150,6 +149,7 @@ export default function ChallengeListPage() {
                 challengeTitle,
                 challengeDescription,
                 challengeRepImagePath,
+                challengeEndDate,
               },
               index
             ) => (
@@ -162,6 +162,7 @@ export default function ChallengeListPage() {
                       title={challengeTitle}
                       description={challengeDescription}
                       image={challengeRepImagePath}
+                      endDate={challengeEndDate}
                     />
                     {challengeTotalPages !== pageNumber ? (
                       <div ref={ref} />
@@ -174,6 +175,7 @@ export default function ChallengeListPage() {
                     title={challengeTitle}
                     description={challengeDescription}
                     image={challengeRepImagePath}
+                    endDate={challengeEndDate}
                   />
                 )}
               </React.Fragment>

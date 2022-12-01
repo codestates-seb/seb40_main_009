@@ -56,7 +56,7 @@ function MyProfilePage() {
   const getProfile = async () => {
     try {
       axios
-        .get(`/member/test24`, {
+        .get(`/member/${name}`, {
           headers: {
             'ngrok-skip-browser-warning': 'none',
             // 'content-type': 'text/html; charset=utf-8',
@@ -79,10 +79,6 @@ function MyProfilePage() {
               });
               await localStorage.setItem(
                 'authorizationToken',
-                responseToken.headers.authorization
-              );
-              await localStorage.setItem(
-                'test',
                 responseToken.headers.authorization
               );
             } catch (error) {
