@@ -69,37 +69,6 @@ export const Image = styled.img`
   box-shadow: 3px 7px 12px 0 #c2c2c2;
 `;
 
-export const ReviewImageWrapper = styled.div`
-  width: 90%;
-  height: 180px;
-  display: flex;
-  margin-top: 3%;
-  margin-left: 1%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 100%;
-`;
-
-export const ReviewImage = styled.div`
-  border: 2px solid red;
-  width: 200px;
-  height: 180px;
-  display: flex;
-  margin-bottom: 3%;
-`;
-
-export const ViewMore = styled.div`
-  background-color: grey;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-`;
-
-export const FullWidth = styled.div`
-  width: 200px;
-`;
-
 export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
