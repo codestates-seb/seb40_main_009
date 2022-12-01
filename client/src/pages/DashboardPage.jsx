@@ -101,20 +101,9 @@ export default function MainPage() {
   const Spin = (cycle) => ({
     in: {
       style: {
-        // `p` is number (0~1)
-        // When just before this page appear, `p` will be 0
-        // When this page filled your screen, `p` will be 1
         transform: (p) => `rotate(${p * 360 * cycle}deg)`,
       },
     },
-    // out: {
-    //   style: {
-    // `p` is number (0~1)
-    // When this page filled your screen, `p` will be 0
-    // When just after this page disappear, `p` will be 1
-    // transform: (p) => `rotate(${p * 360 * cycle}deg)`,
-    // },
-    // },
   });
 
   //early return pattern
@@ -184,23 +173,6 @@ export default function MainPage() {
             </span>
           </div>
         </ScrollPage>
-
-        {/* <ScrollPage page={5}>
-          <FifthPage>
-            <Animator animation={MoveIn(0, -1000)}>
-              <FontSize50>지금 바로</FontSize50>
-            </Animator>
-            <Animator animation={MoveOut(0, 1600)}>
-              <FontSize50>슬기로운 생활과 함께</FontSize50>
-            </Animator>
-            <Animator animation={MoveOut(2000, 1400)}>
-              <FontSize50>목표를 향해</FontSize50>
-            </Animator>
-            <Animator animation={MoveOut(-2000, 1200)}>
-              <FontSize50>건강하게 앞서 나아가다</FontSize50>
-            </Animator>
-          </FifthPage>
-        </ScrollPage> */}
 
         {/* 신규챌린지 */}
         <ScrollPage page={6}>

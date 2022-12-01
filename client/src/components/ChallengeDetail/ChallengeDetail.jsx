@@ -14,27 +14,33 @@ import {
   CertificationDescription,
   CertificationImage,
   Image,
-  ReviewImageWrapper,
-  ReviewImage,
-  ViewMore,
-  FullWidth,
   Review,
   ButtonWrapper,
 } from '../../style/ChallengeDetail/ChallengeDetailStyle';
 
-import ImageModal from './ImageModal';
 import Swal from 'sweetalert2';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import Loading from '../Loading/Loading';
+import Masonry from 'react-responsive-masonry';
 
 export default function ChallengeDetail({ challengeData }) {
   const parmas = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [challenge, setChallenge] = useState([]);
   const [imageData, setImageData] = useState({ image: '', i: 0 });
-  const [imageModalOpen, setImageModalOpen] = useState(false);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'center-center',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
+
+  //로컬스토리지값
   const authorizationToken = localStorage.getItem('authorizationToken');
+
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
 
@@ -72,20 +78,48 @@ export default function ChallengeDetail({ challengeData }) {
       });
       if (response.isConfirmed) {
         try {
-          await axios.post(
-            `/challenges/participate/${challengeId}`,
-            {
-              data: '',
-            },
-            {
-              headers: {
-                'ngrok-skip-browser-warning': 'none',
-                Authorization: authorizationToken,
+          await axios
+            .post(
+              `/challenges/participate/${challengeId}`,
+              {
+                data: '',
               },
-            }
-          );
-          alert('성공');
-          window.location.reload();
+              {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  Authorization: authorizationToken,
+                },
+              }
+            )
+            .then(() => {
+              Toast.fire({
+                icon: 'success',
+                title: `${challengeData.challengeTitle}에 참가하셨습니다.`,
+              });
+              window.location.reload();
+            })
+            .catch(async (error) => {
+              if (error.response.data.status === 401) {
+                try {
+                  const responseToken = await axios.get('/token', {
+                    headers: {
+                      'ngrok-skip-browser-warning': 'none',
+                      refresh: localStorage.getItem('refreshToken'),
+                    },
+                  });
+                  await localStorage.setItem(
+                    'authorizationToken',
+                    responseToken.headers.authorization
+                  );
+                  await localStorage.setItem(
+                    'test',
+                    responseToken.headers.authorization
+                  );
+                } catch (error) {
+                  console.log('재요청 실패', error);
+                }
+              }
+            });
           return navigate(`/detail/${challengeData.challengeId}`);
         } catch (error) {
           console.log('error', error);
@@ -94,20 +128,6 @@ export default function ChallengeDetail({ challengeData }) {
     }
   };
 
-  //후기사진 더보기 모달창 띄우기
-  const showImageModal = () => {
-    setImageModalOpen(true);
-  };
-
-  const images = [
-    'https://picsum.photos/2000/3000',
-    'https://picsum.photos/3000/2000',
-    'https://picsum.photos/4000/3000',
-    'https://picsum.photos/3000/1500',
-    'https://picsum.photos/2000/3000',
-    'https://picsum.photos/3000/200',
-  ];
-
   const viewImage = (image, i) => {
     setImageData({ image, i });
   };
@@ -115,15 +135,21 @@ export default function ChallengeDetail({ challengeData }) {
   const imageAction = (action) => {
     let i = imageData.i;
     if (action === 'next-image') {
-      setImageData({ image: images[i + 1], i: i + 1 });
+      setImageData({ image: imageData[i + 1], i: i + 1 });
     }
     if (action === 'previous-image') {
-      setImageData({ image: images[i - 1], i: i - 1 });
+      setImageData({ image: imageData[i - 1], i: i - 1 });
     }
     if (!action) {
       setImageData({ image: '', i: 0 });
     }
   };
+
+  const now = new Date();
+  const startDate = new Date(challengeData.challengeStartDate);
+  const distance = now.getTime() - startDate.getTime();
+  const left = Math.abs(Math.floor(distance / (1000 * 60 * 60 * 24)));
+  console.log('roqsdgsdg>>', left);
 
   return (
     <>
@@ -166,8 +192,20 @@ export default function ChallengeDetail({ challengeData }) {
           <div>
             {/* 챌린지 설명 */}
             <ChallengeDescriptionWrapper>
-              <div className="challenge-name">
-                {challengeData.challengeTitle}
+              <div
+                style={{
+                  display: 'flex',
+                  marginBottom: '5%',
+                  alignItems: 'center',
+                }}
+              >
+                <div
+                  className="challenge-name"
+                  style={{ fontSize: '30px', marginRight: 'auto' }}
+                >
+                  {challengeData.challengeTitle}
+                </div>
+                {distance < 0 ? <div>챌린지 시작까지 {left}일</div> : null}
               </div>
 
               <ChallengeDescription>
@@ -192,12 +230,10 @@ export default function ChallengeDetail({ challengeData }) {
               Number(challengeData.challengeMinParty) !==
                 Number(challengeData.challengeMaxParty) &&
               authorizationToken !== null ? (
-                // {new Date() < new Date(challengeData.challengeStartDate) ? (
                 <ButtonWrapper>
                   <button className="custom-btn btn-8">
                     <span onClick={NavigateMPaymentPage}>참여하기</span>
                   </button>
-                  {/* <div>공유아이콘</div> */}
                 </ButtonWrapper>
               ) : null}
             </ChallengeDescriptionWrapper>
@@ -214,11 +250,10 @@ export default function ChallengeDetail({ challengeData }) {
           {/* 인증 방법 */}
           <CertificationDescription>
             <div className="title">인증 방법 / 인증 예시</div>
-            {/* <div style></div> */}
             <div className="pd-5">{challengeData.challengeAuthDescription}</div>
             {/* 인증예시 */}
             <CertificationImage>
-              {challengeData.challengeExamImagePath.map((image, index) => {
+              {challengeData.challengeExamImagePath?.map((image, index) => {
                 return <Image key={index} src={image}></Image>;
               })}
             </CertificationImage>
@@ -227,17 +262,38 @@ export default function ChallengeDetail({ challengeData }) {
 
         <Review>
           <div style={{ marginBottom: '1%' }}>후기 사진</div>
-          <Masonry columnsCount={3} gutter="10px">
-            {images.map((image, i) => (
-              <img
-                key={i}
-                src={image}
-                style={{ width: '100%', display: 'block', cursor: 'pointer' }}
-                alt="후기사진들"
-                onClick={() => viewImage(image, i)}
-              />
-            ))}
-          </Masonry>
+
+          {challengeData.challengeReviews === null ? (
+            <div
+              role="img"
+              aria-label="writing hand"
+              style={{
+                border: '2px solid #eff1fe',
+                width: '100%',
+                height: '450px',
+                marginTop: '1%',
+                fontSize: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                borderRadius: '20px',
+                alignItems: 'center',
+              }}
+            >
+              {challengeData.challengeTitle} 챌린지에 대한 후기가 없습니다.😥
+            </div>
+          ) : (
+            <Masonry columnsCount={3} gutter="10px">
+              {challengeData.challengeReviews?.map((image, i) => (
+                <img
+                  key={i}
+                  src={image}
+                  style={{ width: '100%', display: 'block', cursor: 'pointer' }}
+                  alt="후기사진들"
+                  onClick={() => viewImage(image, i)}
+                />
+              ))}
+            </Masonry>
+          )}
         </Review>
       </Container>
     </>

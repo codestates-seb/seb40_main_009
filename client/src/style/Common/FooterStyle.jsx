@@ -62,15 +62,19 @@ export const DescriptionContainer = styled.div`
 
 export const GithubIcon = styled(AiFillGithub)`
   margin-right: 5%;
+  cursor: pointer;
 `;
 export const TwitterIcon = styled(AiFillTwitterCircle)`
   margin-right: 5%;
+  cursor: pointer;
 `;
 
 export const LinkedinIcon = styled(AiFillLinkedin)`
   margin-right: 5%;
+  cursor: pointer;
 `;
 
 export const InstagramIcon = styled(AiFillInstagram)`
   margin-right: 5%;
+  cursor: pointer;
 `;

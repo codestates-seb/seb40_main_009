@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import ImageGallery from 'react-image-gallery';
 
 import {
   Container,
@@ -17,65 +16,105 @@ import {
   CertifiationImageWrapper,
   CertificationImage,
   ViewMore,
-  Width,
   ReviewImageWrapper,
   ReviewImage,
   CertificationDescription,
   Image,
   ChallengeViewCount,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
-import fs from 'fs';
-import Loading from '../Loading/Loading';
+
 import ProgressBar from './ProgressBar';
 import DdayFormatter from './DdayFormatter';
-import Modal from './Modal';
-import ImageModal from './ImageModal';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import Masonry from 'react-responsive-masonry';
+import Swal from 'sweetalert2';
+import Loading from '../Loading/Loading';
 
 export default function ChallengeDetailProgress({ challengeData }) {
   const parmas = useParams();
   const [loading, setLoading] = useState(true);
-  const [challenge, setChallenge] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [certificationModal, setCertificationModal] = useState(false);
   const [talk, setTalk] = useState([]);
   const [isValid, setIsValid] = useState(false);
-  // const [progress, setProgress] = useState(0);
-  const memberId = localStorage.getItem('LoginId');
-  const memberName = localStorage.getItem('LoginName');
   const [imageData, setImageData] = useState({ image: '', i: 0 });
+  const [certificationImages, setCertificationImages] = useState({
+    image: '',
+    i: 0,
+  });
   const [imageDataAll, setImageDataAll] = useState(false);
   const [certificationImageData, setCertificationImageData] = useState(false);
   const [reviewModal, setReviewModal] = useState(false);
   const [image, setImage] = useState();
   const [reviewContent, setReviewContent] = useState('');
   const [reviewTitle, setReviewTtile] = useState('');
+  const [imageTransform, setImageTransfrom] = useState('');
 
+  //로컬스토리지 값
+  const memberName = localStorage.getItem('LoginName');
   const authorizationToken = localStorage.getItem('authorizationToken');
   const loginId = localStorage.getItem('LoginId');
+
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-  console.log('dggfgdfgfddf>>>>', challengeData);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'center-center',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
 
   // 댓글보내기
   const postTalk = async () => {
     setLoading(true);
     try {
-      await axios.post(
-        `/challenge-talks`,
-        {
-          challengeTalkBody: talk,
-          challengeId: challengeData.challengeId,
-        },
-        {
-          headers: {
-            'ngrok-skip-browser-warning': 'none',
-            Authorization: authorizationToken,
+      await axios
+        .post(
+          `/challenge-talks`,
+          {
+            challengeTalkBody: talk,
+            challengeId: challengeData.challengeId,
           },
-        }
-      );
-      alert('성공');
-      window.location.reload();
+          {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 댓글이 추가 되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
       console.log('error', error);
     }
@@ -85,68 +124,199 @@ export default function ChallengeDetailProgress({ challengeData }) {
   const deleteTalk = async (index) => {
     setLoading(true);
     try {
-      await axios.delete(
-        `/challenge-talks/${challengeData.challengeTalks[index].challengeTalkId}`,
-        {
-          headers: {
-            'ngrok-skip-browser-warning': 'none',
-            Authorization: authorizationToken,
-          },
-        }
-      );
-      alert('삭제성공');
+      await axios
+        .delete(
+          `/challenge-talks/${challengeData.challengeTalks[index].challengeTalkId}`,
+          {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 댓글이 삭제 되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
       console.log('error', error);
     }
   };
 
-  //인증하기 모달창 띄우기
-  const showCertificationModal = () => {
-    setModalOpen(true);
-  };
-
+  //후기 생성
   const uploadReview = async () => {
     setLoading(true);
-    const FormData = require('form-data');
-    let data = new FormData();
-    const fs = require('fs');
 
     const textData = {
       challengeId: challengeId,
       challengeReviewTitle: reviewTitle,
       challengeReviewContent: reviewContent,
       challengeReviewStar: 0,
-      challengeReviewImagePath: image,
     };
-    const stringData = new Blob([textData], { type: 'application/json' });
+    const dataValue = JSON.stringify(textData);
+    const stringData = new Blob([dataValue], { type: 'application/json' });
 
-    data.append('post', stringData);
-    // data.append('post', '');
-    data.append('review', image);
     try {
-      await axios.post(
-        `/challenge-reviews`,
-        {
-          data,
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'ngrok-skip-browser-warning': 'none',
-            Authorization: authorizationToken,
+      await axios
+        .post(
+          `/challenge-reviews`,
+          {
+            post: stringData,
+            review: image,
           },
-        }
-      );
-      alert('성공');
-      window.location.reload();
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 후기가 추가 되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
-      console.log('error', error);
+      // 후기한번쓰면 못쓰게 alert띄우기
+      const errorMessage = error.response.data.error.message;
+      console.log('error>>>>>>>>>>>', errorMessage);
+
+      if ('ChallengeReview not found' === errorMessage) {
+        Swal.fire({
+          icon: 'error',
+          title: '후기작성은 한번만 가능합니다.',
+          text: `이미 후기를 작성하셨습니다.`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setReviewModal(false);
+          }
+        });
+      }
     }
   };
 
-  // if (new Date() < new Date(challengeData.challengeStartDate)) {
-  //   setProgress(0);
-  // } else {
+  //인증샷 올리기
+  const uploadCertification = async () => {
+    setLoading(true);
+
+    try {
+      await axios
+        .patch(
+          `/challenges/cert/${challengeId}`,
+          {
+            cert: image,
+          },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'ngrok-skip-browser-warning': 'none',
+              Authorization: authorizationToken,
+            },
+          }
+        )
+        .then(() => {
+          Toast.fire({
+            icon: 'success',
+            title: `${memberName}님의 인증이 완료되었습니다.`,
+          });
+          window.location.reload();
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
+    } catch (error) {
+      const errorMessage = error.response.data.error.message;
+      console.log('error', errorMessage);
+
+      if (
+        'Must upload certification photo at the appropriate time' ===
+        errorMessage
+      ) {
+        Swal.fire({
+          customClass: {
+            container: 'zindex',
+          },
+          icon: 'error',
+          title: '인증시간이 아닙니다.',
+          text: `인증시간에 인증사진을 올려주세요.`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setCertificationModal(false);
+          }
+        });
+      }
+    }
+  };
+
   //챌린지 진행률 계산
   const today = new Date();
   const startDate = new Date(challengeData.challengeStartDate);
@@ -161,59 +331,86 @@ export default function ChallengeDetailProgress({ challengeData }) {
   const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
   console.log('지나온 시간>>', pastDay);
   let progress = Math.ceil((pastDay / totalDay) * 100);
-  // setProgress(progress);
-  if (pastDay <= 0) {
-    //도전시작하기전
-    progress = 0;
-    //   setProgress(0);
-    // } else {
-  }
-  // console.log('진행률>>>', progress);
-  // }
 
+  //도전시작하기전
+  if (pastDay < 0) {
+    progress = 0;
+  }
+
+  if (pastDay === 0) {
+    progress = 100;
+  }
+
+  const leftDay = Math.abs(pastDay);
+  // console.log('진행률>>>', progress);
+
+  //인증횟수 계산
   const certificationCount = challengeData.challengeCertImages?.filter(
     (member) => member.memberId === 100001
   ).length;
 
-  const images = [
-    'https://picsum.photos/2000/3000',
-    'https://picsum.photos/3000/2000',
-    'https://picsum.photos/4000/3000',
-    'https://picsum.photos/3000/1500',
-    'https://picsum.photos/2000/3000',
-    'https://picsum.photos/3000/200',
-    'https://picsum.photos/2000/3000',
-    'https://picsum.photos/3000/2000',
-    'https://picsum.photos/4000/3000',
-    'https://picsum.photos/3000/1500',
-    'https://picsum.photos/2000/3000',
-    'https://picsum.photos/3000/200',
-  ];
-
-  const viewImage = (image, i) => {
-    setImageData({ image, i });
+  //인증사진올리기 모달창
+  const showCertificationModal = () => {
+    setCertificationModal(true);
   };
 
+  //인증사진 하나씩
+  const viewCertificationImage = (image, i) => {
+    setCertificationImages({ image, i });
+    console.log('certificationImages>>', certificationImages);
+  };
+
+  //인증사진 전체보기
   const viewCertificationImageAll = () => {
     setCertificationImageData(true);
   };
 
+  const certificationImageAction = (action) => {
+    // 인증사진
+    let i = certificationImages.i;
+
+    if (action === 'next-image') {
+      setImageData({
+        image: certificationImages[i + 1],
+        i: i + 1,
+      });
+    }
+    if (action === 'previous-image') {
+      setImageData({
+        image: certificationImages[i - 1],
+        i: i - 1,
+      });
+    }
+
+    if (action === 'certification') {
+      setCertificationModal(false);
+    }
+  };
+
+  //후기사진 하나씩
+  const viewImage = (image, i) => {
+    setImageData({ image, i });
+    console.log('setImageData>>', imageData);
+  };
+
+  //후기사진 전체보기
   const viewImageAll = () => {
     setImageDataAll(true);
   };
 
+  //후기올리기 모달창
   const uploadReviewModal = () => {
     setReviewModal(true);
   };
 
   const imageAction = (action) => {
+    // 후기사진
     let i = imageData.i;
     if (action === 'next-image') {
-      // images 이거 인증사진이랑 후기사진값으로 바꾸기
-      setImageData({ image: images[i + 1], i: i + 1 });
+      setImageData({ image: imageData[i + 1], i: i + 1 });
     }
     if (action === 'previous-image') {
-      setImageData({ image: images[i - 1], i: i - 1 });
+      setImageData({ image: imageData[i - 1], i: i - 1 });
     }
     if (!action) {
       setImageData({ image: '', i: 0 });
@@ -229,15 +426,98 @@ export default function ChallengeDetailProgress({ challengeData }) {
     }
   };
 
+  //이미지 미리보기
+  const imageUpload = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImageTransfrom(reader.result);
+        resolve();
+      };
+    });
+  };
+
+  //early return pattern
+  // if (loading) return <Loading />;
+
   return (
     <>
+      {/* 인증사진 */}
+      {certificationModal && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflowY: 'auto',
+            // zIndex: 10000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#EFF1FE',
+              width: '20%',
+              height: '60%',
+              borderRadius: '20px',
+              padding: '2%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '25px',
+                  margin: '0 auto',
+                  marginBottom: '2%',
+                }}
+              >
+                인증사진
+              </div>
+              <button
+                onClick={() => certificationImageAction('certification')}
+                style={{}}
+              >
+                X
+              </button>
+            </div>
+
+            {imageTransform !== '' ? (
+              <img
+                src={imageTransform}
+                alt="업로드한 이미지 미리보기"
+                style={{ width: '400px', height: '400px', marginBottom: '2%' }}
+              />
+            ) : null}
+            <div>이미지</div>
+            <input
+              type={'file'}
+              onChange={(e) => {
+                imageUpload(e.target.files[0]);
+                setImage(e.target.files[0]);
+              }}
+            />
+            <div>
+              <button onClick={uploadCertification}>인증사진 올리기</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 후기작성  */}
       {reviewModal && (
         <div
           style={{
             width: '100%',
             height: '100vh',
-            // background: 'black',
             position: 'fixed',
             display: 'flex',
             justifyContent: 'center',
@@ -255,7 +535,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
               padding: '2%',
             }}
           >
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <div
                 style={{
                   fontSize: '25px',
@@ -293,8 +573,10 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 setImage(e.target.files[0]);
               }}
             />
+            <div>
+              <button onClick={uploadReview}>후기 올리기</button>
+            </div>
           </div>
-          <button onClick={uploadReview}>후기 올리기</button>
         </div>
       )}
 
@@ -366,8 +648,8 @@ export default function ChallengeDetailProgress({ challengeData }) {
         </div>
       )}
 
-      {/* 이미지 하나씩 */}
-      {imageData.image && (
+      {/* 인증이미지 하나씩 */}
+      {certificationImages.image && (
         <div
           style={{
             width: '100%',
@@ -382,18 +664,104 @@ export default function ChallengeDetailProgress({ challengeData }) {
           }}
         >
           <button
-            onClick={() => imageAction()}
+            onClick={() => certificationImageAction()}
             style={{ position: 'absolute', top: '10px', right: '10px' }}
           >
             X
           </button>
-          <button onClick={() => imageAction('previous-image')}>이전</button>
+          <button onClick={() => certificationImageAction('previous-image')}>
+            이전
+          </button>
           <img
-            src={imageData.image}
+            src={certificationImages.image}
             style={{ width: 'auto', maxWidth: '90%', maxHeight: '90%' }}
             alt="이미지크게보기"
           />
-          <button onClick={() => imageAction('next-image')}>다음</button>
+          <button onClick={() => certificationImageAction('next-image')}>
+            다음
+          </button>
+        </div>
+      )}
+
+      {/* 후기이미지 하나씩 */}
+      {imageData.image && (
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+            background: 'black',
+            position: 'fixed',
+            // display: 'flex',
+            // justifyContent: 'center',
+            // alignItems: 'center',
+            overflow: 'auto',
+            zIndex: 10000,
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              height: '80vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <button
+              onClick={() => imageAction()}
+              style={{ position: 'absolute', top: '10px', right: '10px' }}
+            >
+              X
+            </button>
+            <button onClick={() => imageAction('previous-image')}>이전</button>
+            <img
+              src={imageData.image}
+              style={{ width: 'auto', maxWidth: '90%', maxHeight: '90%' }}
+              alt="이미지크게보기"
+            />
+            <button onClick={() => imageAction('next-image')}>다음</button>
+          </div>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <div
+              style={{
+                width: '580px',
+                backgroundColor: '#EFF1FE',
+                padding: '1%',
+                borderRadius: '10px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  marginBottom: '2%',
+                  fontSize: '18px',
+                }}
+              >
+                <div style={{ marginRight: '2%' }}>제목:</div>
+                <div style={{}}>
+                  {
+                    challengeData.challengeReviews[imageData.i]
+                      .challengeReviewTitle
+                  }
+                </div>
+              </div>
+              <div style={{ display: 'flex' }}>
+                <div style={{ marginRight: '2.5%' }}>내용:</div>
+                <div style={{}}>
+                  {
+                    challengeData.challengeReviews[imageData.i]
+                      .challengeReviewContent
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -412,9 +780,13 @@ export default function ChallengeDetailProgress({ challengeData }) {
             {/* 챌린지 이름, 디데이 */}
             <ChallengeTitle>
               <div className="title">{challengeData.challengeTitle}</div>
-              <div className="d_day">
-                <DdayFormatter endDate={challengeData.challengeEndDate} />
-              </div>
+              {pastDay < 0 ? (
+                <div className="d_day">챌린지 시작까지 {leftDay}일</div>
+              ) : (
+                <div className="d_day">
+                  <DdayFormatter endDate={challengeData.challengeEndDate} />
+                </div>
+              )}
             </ChallengeTitle>
 
             <ChallengeDescription>
@@ -480,21 +852,28 @@ export default function ChallengeDetailProgress({ challengeData }) {
         <Review>
           <div className="flex">
             <div className="marginRight"> 인증 사진</div>
-            <div>
-              <div
-                style={{ fontSize: '20px' }}
-              >{`인증 횟수:  ${certificationCount} / ${challengeData.challengeAuthCycle}`}</div>
-              {challengeData.challengeAuthAvailableTime ===
-              dayjs().format('HH:mm') ? (
-                <div className="cursur" onClick={showCertificationModal}>
-                  인증 사진 올리기
-                </div>
-              ) : null}
-            </div>
-            {modalOpen && (
-              <Modal setModalOpen={setModalOpen} challengeId={challengeId} />
-            )}
+            {/* <div> */}
+            <div
+              style={{ fontSize: '20px' }}
+            >{`인증 횟수:  ${certificationCount} / ${challengeData.challengeAuthCycle}`}</div>
+
+            <button
+              style={{
+                marginLeft: '1%',
+                backgroundColor: '#8673FF',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '17px',
+                color: '#F2F4FE',
+              }}
+              className="cursur"
+              onClick={showCertificationModal}
+            >
+              인증 사진 올리기
+            </button>
+            {/* </div> */}
           </div>
+
           {/* 인증사진 */}
           {challengeData.challengeCertImages.length === 0 ||
           challengeData.challengeCertImages.length === null ? (
@@ -532,7 +911,9 @@ export default function ChallengeDetailProgress({ challengeData }) {
                           src={image.imagePath}
                           alt="인증사진들"
                           style={{ width: '200px', cursor: 'pointer' }}
-                          onClick={() => viewImage(image, index)}
+                          onClick={() =>
+                            viewCertificationImage(image.imagePath, index)
+                          }
                         />
                       )}
                     </CertificationImage>
@@ -546,7 +927,17 @@ export default function ChallengeDetailProgress({ challengeData }) {
           <div style={{ display: 'flex' }}>
             <div style={{ marginRight: 'auto' }}>후기 사진</div>
 
-            <button style={{ fontSize: '15px' }} onClick={uploadReviewModal}>
+            <button
+              style={{
+                width: '10%',
+                backgroundColor: '#8673FF',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '17px',
+                color: '#F2F4FE',
+              }}
+              onClick={uploadReviewModal}
+            >
               후기 올리기
             </button>
           </div>
@@ -566,10 +957,22 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 alignItems: 'center',
               }}
             >
-              인증사진을 올려주세요.😊
+              후기를 올려주세요.😊
             </div>
           ) : (
-            <ReviewImageWrapper>
+            <div
+              style={{
+                border: '2px solid #eff1fe',
+                width: '985px',
+                height: '450px',
+                marginTop: '1%',
+                fontSize: '20px',
+                borderRadius: '20px',
+                padding: '2%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+              }}
+            >
               {challengeData.challengeReviews
                 .slice(0, 8)
                 .map((image, index) => {
@@ -585,17 +988,19 @@ export default function ChallengeDetailProgress({ challengeData }) {
                           src={image.challengeReviewImagePath}
                           alt="후기사진들"
                           style={{ width: '200px', cursor: 'pointer' }}
-                          onClick={() => viewImage(image, index)}
+                          onClick={() =>
+                            viewImage(image.challengeReviewImagePath, index)
+                          }
                         />
                       )}
                     </ReviewImage>
                   );
                 })}
-            </ReviewImageWrapper>
+            </div>
           )}
         </Review>
 
-        <div style={{ marginTop: '3%' }}>
+        <div style={{ marginTop: '8%' }}>
           {/* <div style={{}}>댓글 {challengeData.challengeTalks?.length}</div> */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{ marginRight: '5%' }}>{memberName}</div>
@@ -625,6 +1030,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 backgroundColor: '#8673FF',
                 border: 'none',
                 borderRadius: '5px',
+                fontSize: '17px',
                 color: '#F2F4FE',
               }}
               onClick={postTalk}
@@ -677,6 +1083,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
                           width: '5%',
                           backgroundColor: '#8673FF',
                           border: 'none',
+                          fontSize: '17px',
                           borderRadius: '5px',
                           color: '#F2F4FE',
                         }}
