@@ -8,9 +8,11 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,6 +24,8 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = false)
+@Slf4j
 public class S3UploadService {
 
     @Value("${cloud.aws.s3.bucket}")
@@ -31,7 +35,7 @@ public class S3UploadService {
 
 
     public String uploadJustOne(MultipartFile multipartFile) {
-
+        log.info("uploadJustOne tx start");
         String s3FileName = createFileName(multipartFile.getOriginalFilename());
 
         ObjectMetadata objMeta = new ObjectMetadata();
@@ -39,8 +43,10 @@ public class S3UploadService {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             objMeta.setContentLength(inputStream.available());
             s3.putObject(bucket, s3FileName, inputStream, objMeta);
+            log.info("uploadJustOne tx end");
             return s3.getUrl(bucket, s3FileName).toString();
         } catch (IOException e) {
+            log.info("uploadJustOne tx end");
             throw new BusinessLogicException(ExceptionCode.NEED_IMAGE);
         }
 
@@ -53,6 +59,7 @@ public class S3UploadService {
      * @return
      */
     public List<String> uploadAsList(List<MultipartFile> multipartFile) {
+        log.info("uploadAsList tx start");
         List<String> fileNameList = new ArrayList<>();
 
         multipartFile.forEach(file -> {
@@ -70,7 +77,7 @@ public class S3UploadService {
 
             fileNameList.add(s3.getUrl(bucket, fileName).toString());
         });
-
+        log.info("uploadAsList tx end");
         return fileNameList;
     }
 
@@ -79,7 +86,9 @@ public class S3UploadService {
      * @param imageName 삭제할 이미지 이름
      */
     public void deleteFile(String imageName) {
+        log.info("deleteFile tx start");
         s3.deleteObject(new DeleteObjectRequest(bucket, imageName));
+        log.info("deleteFile tx end");
     }
 
     //파일이름 중복방지를 위한 난수화

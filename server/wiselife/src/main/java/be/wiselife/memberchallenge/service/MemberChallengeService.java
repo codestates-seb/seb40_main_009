@@ -11,12 +11,14 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = false)
 public class MemberChallengeService {
     private final MemberChallengeRepository memberChallengeRepository;
     private final MemberRepository memberRepository;
@@ -30,6 +32,7 @@ public class MemberChallengeService {
      * 역할 4. 취소 시점의 예상 멤버가 가져갈 예상 상금 계산, 챌린지에 모인 총상금 계산
      */
     public Challenge patchMemberAndChallenge(Challenge challenge, Member member) {
+        log.info("patchMemberAndChallenge tx start");
 
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
         if (memberChallengeRepository.findByChallengeIdAndMember(challenge.getRandomIdForImage(), member) != null) {
@@ -43,7 +46,7 @@ public class MemberChallengeService {
 
             memberChallengeRepository.delete(memberChallengeFromRepository);
             memberRepository.save(member);
-
+            log.info("patchMemberAndChallenge tx end");
             return challengeRepository.save(challenge);
 
         } else {
@@ -60,20 +63,16 @@ public class MemberChallengeService {
 
             challenge.getMemberChallenges().add(memberChallenge);
             member.getMemberChallenges().add(memberChallenge);
-            double memberMoney = member.getMemberMoney();
-            if (memberMoney < challenge.getChallengeFeePerPerson()) {
-                throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_CHARGE_MONEY);
-            }
-            member.setMemberMoney(memberMoney-challenge.getChallengeFeePerPerson());
 
             memberChallengeRepository.save(memberChallenge);
             memberRepository.save(member);
-
+            log.info("patchMemberAndChallenge tx end");
             return challengeRepository.save(challenge);
         }
     }
 
     public void updateMemberChallengeExpectedRefund(Challenge challenge, double challengeProgressRate){
+        log.info("updateMemberChallengeExpectedRefund tx start");
         List<MemberChallenge> memberChallengeList = challenge.getMemberChallenges();
         if(memberChallengeList == null) return ;
 
@@ -88,9 +87,13 @@ public class MemberChallengeService {
         }
 
         memberChallengeRepository.saveAll(memberChallengeList);
+        log.info("updateMemberChallengeExpectedRefund tx end");
     }
 
+    @Transactional(readOnly = true)
     public MemberChallenge findMemberChallengeByMemberAndChallenge(Challenge challenge, Member member){
+        log.info("findMemberChallengeByMemberAndChallenge tx start");
+        log.info("findMemberChallengeByMemberAndChallenge tx end");
         return memberChallengeRepository.findByChallengeAndMember(challenge, member);
     }
 }
