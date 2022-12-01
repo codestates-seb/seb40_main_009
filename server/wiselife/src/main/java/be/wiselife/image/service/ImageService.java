@@ -243,12 +243,17 @@ public class ImageService {
      * @return
      */
     private boolean isAuthAvailableTime(Challenge challenge, List<ChallengeCertImage> challengeCertImages){
-        int todayAuthenticationsCnt = challengeCertImages.size();
-        List<String> challengeAuthAvailableTime = challenge.getChallengeAuthAvailableTime();
-        LocalTime authAvailableTime = LocalTime.parse(challengeAuthAvailableTime.get(todayAuthenticationsCnt));
         LocalTime now = LocalTime.now();
+        List<String> challengeAuthAvailableTime = challenge.getChallengeAuthAvailableTime();
+        LocalTime authAvailableTime;
 
-        return authAvailableTime.equals(now) || now.isAfter(authAvailableTime) && now.isBefore(authAvailableTime.plusMinutes(10));
+        for(String time : challengeAuthAvailableTime){
+            authAvailableTime = LocalTime.parse(time);
+            if(authAvailableTime.equals(now) || now.isAfter(authAvailableTime) && now.isBefore(authAvailableTime.plusMinutes(10)))
+                return true;
+        }
+
+        return false;
     }
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직

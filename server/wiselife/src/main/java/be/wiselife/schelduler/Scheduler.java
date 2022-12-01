@@ -20,23 +20,24 @@ public class Scheduler {
      * 매 00시 00분마다 챌린지 종료 status update
      */
 
-    @Scheduled(cron = "0/30 * * * * *")
-    public void checkChallengeIsClosed(){
+    @Scheduled(cron = "0 0 3 * * *")
+    public void scheduleCheckChallengeIsClosed(){
+        log.info("==================CHECK IF CHALLENGE IS CLOSED START==================");
+        log.info("==================Current Thread: {}==================", Thread.currentThread().getName());
         challengeService.updateChallengeIsClosedStatus();
-        log.trace("Hi I'm {} log", "TRACE");
-        log.debug("Hi I'm {} log", "DEBUG");
-        log.info("Hi I'm {} log", "INFO");
-        log.warn("Hi I'm {} log", "WARN");
-        log.error("Hi I'm {} log", "ERROR");
-        log.info("Current Thread: {}", Thread.currentThread().getName());
+
+        log.info("==================CHECK IF CHALLENGE IS CLOSED END==================");
     }
 
     /**
      * 매 03시 00분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
      */
     @Scheduled(cron = "0 0 3 * * *")
-    public void updateChallengeReward(){
+    public void scheduleUpdateChallengeReward(){
+        log.info("==================UPDATE CHALLENGE REWARD START==================");
+        log.info("==================Current Thread: {}==================", Thread.currentThread().getName());
         challengeService.updateChallengeSuccessRate();
         challengeService.updateChallengeTotalRewardAndMemberChallengeToBeRefunded();
+        log.info("==================UPDATE CHALLENGE REWARD END==================");
     }
 }
