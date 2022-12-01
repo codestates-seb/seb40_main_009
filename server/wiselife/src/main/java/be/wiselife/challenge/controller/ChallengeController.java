@@ -1,5 +1,7 @@
 package be.wiselife.challenge.controller;
 
+import be.wiselife.aop.NeedEmail;
+import be.wiselife.aop.NeedMember;
 import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.mapper.ChallengeMapper;
@@ -9,7 +11,6 @@ import be.wiselife.challengetalk.mapper.ChallengeTalkMapper;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.image.service.ImageService;
-import be.wiselife.member.entity.Member;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
@@ -62,6 +63,7 @@ public class ChallengeController {
      * @param exampleImage     예시사진들
      * @return
      */
+
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity postChallenge(@Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
                                         @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,

@@ -94,7 +94,7 @@ public class SecurityConfiguration{
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); //TODO: EC2로 간뒤에 바뀔예정
+        configuration.addAllowedOrigin("https://wiselife.click");
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
 
@@ -105,7 +105,6 @@ public class SecurityConfiguration{
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        
         
         return source;
     }
