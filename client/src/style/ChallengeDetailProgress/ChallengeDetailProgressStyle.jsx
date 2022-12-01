@@ -157,7 +157,8 @@ export const Image = styled.img`
 `;
 
 export const CertificationImage = styled.div`
-  width: 623px;
+  width: 600px;
+  border: 1px solid red;
   height: 180px;
   display: flex;
   margin-bottom: 3%;

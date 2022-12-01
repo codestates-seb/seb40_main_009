@@ -203,29 +203,29 @@ export default function ChallengeDetailProgress({ challengeData }) {
             title: `${memberName}님의 후기가 추가 되었습니다.`,
           });
           window.location.reload();
-        })
-        .catch(async (error) => {
-          if (error.response.data.status === 401) {
-            try {
-              const responseToken = await axios.get('/token', {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  refresh: localStorage.getItem('refreshToken'),
-                },
-              });
-              await localStorage.setItem(
-                'authorizationToken',
-                responseToken.headers.authorization
-              );
-              await localStorage.setItem(
-                'test',
-                responseToken.headers.authorization
-              );
-            } catch (error) {
-              console.log('재요청 실패', error);
-            }
-          }
         });
+      // .catch(async (error) => {
+      //   if (error.response.data.status === 401) {
+      //     try {
+      //       const responseToken = await axios.get('/token', {
+      //         headers: {
+      //           'ngrok-skip-browser-warning': 'none',
+      //           refresh: localStorage.getItem('refreshToken'),
+      //         },
+      //       });
+      //       await localStorage.setItem(
+      //         'authorizationToken',
+      //         responseToken.headers.authorization
+      //       );
+      //       await localStorage.setItem(
+      //         'test',
+      //         responseToken.headers.authorization
+      //       );
+      //     } catch (error) {
+      //       console.log('재요청 실패', error);
+      //     }
+      //   }
+      // });
     } catch (error) {
       // 후기한번쓰면 못쓰게 alert띄우기
       const errorMessage = error.response.data.error.message;
@@ -270,32 +270,33 @@ export default function ChallengeDetailProgress({ challengeData }) {
             title: `${memberName}님의 인증이 완료되었습니다.`,
           });
           window.location.reload();
-        })
-        .catch(async (error) => {
-          if (error.response.data.status === 401) {
-            try {
-              const responseToken = await axios.get('/token', {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  refresh: localStorage.getItem('refreshToken'),
-                },
-              });
-              await localStorage.setItem(
-                'authorizationToken',
-                responseToken.headers.authorization
-              );
-              await localStorage.setItem(
-                'test',
-                responseToken.headers.authorization
-              );
-            } catch (error) {
-              console.log('재요청 실패', error);
-            }
-          }
         });
+      // .catch(async (error) => {
+      //   if (error.response.data.status === 401) {
+      //     try {
+      //       const responseToken = await axios.get('/token', {
+      //         headers: {
+      //           'ngrok-skip-browser-warning': 'none',
+      //           refresh: localStorage.getItem('refreshToken'),
+      //         },
+      //       });
+      //       await localStorage.setItem(
+      //         'authorizationToken',
+      //         responseToken.headers.authorization
+      //       );
+      //       await localStorage.setItem(
+      //         'test',
+      //         responseToken.headers.authorization
+      //       );
+      //     } catch (error) {
+      //       console.log('재요청 실패', error);
+      //     }
+      //   }
+      // });
     } catch (error) {
       const errorMessage = error.response.data.error.message;
-      console.log('error', errorMessage);
+      // const errorMessage = error.response.data;
+      // console.log('error', errorMessage);
 
       if (
         'Must upload certification photo at the appropriate time' ===
@@ -313,6 +314,27 @@ export default function ChallengeDetailProgress({ challengeData }) {
             setCertificationModal(false);
           }
         });
+      }
+      // 토큰값 없을때
+      if (error.response.data.status === 401) {
+        try {
+          const responseToken = await axios.get('/token', {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              refresh: localStorage.getItem('refreshToken'),
+            },
+          });
+          await localStorage.setItem(
+            'authorizationToken',
+            responseToken.headers.authorization
+          );
+          await localStorage.setItem(
+            'test',
+            responseToken.headers.authorization
+          );
+        } catch (error) {
+          console.log('재요청 실패', error);
+        }
       }
     }
   };
@@ -369,21 +391,18 @@ export default function ChallengeDetailProgress({ challengeData }) {
     // 인증사진
     let i = certificationImages.i;
 
-    if (action === 'next-image') {
-      setImageData({
-        image: certificationImages[i + 1],
-        i: i + 1,
-      });
-    }
-    if (action === 'previous-image') {
-      setImageData({
-        image: certificationImages[i - 1],
-        i: i - 1,
-      });
-    }
-
     if (action === 'certification') {
       setCertificationModal(false);
+    }
+
+    if (action === 'next-image') {
+      setCertificationImages({ image: certificationImages[i + 1], i: i + 1 });
+    }
+    if (action === 'previous-image') {
+      setCertificationImages({ image: certificationImages[i - 1], i: i - 1 });
+    }
+    if (!action) {
+      setCertificationImages({ image: '', i: 0 });
     }
   };
 
@@ -443,7 +462,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
 
   return (
     <>
-      {/* 인증사진 */}
+      {/* 인증사진 모달*/}
       {certificationModal && (
         <div
           style={{
@@ -512,7 +531,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
         </div>
       )}
 
-      {/* 후기작성  */}
+      {/* 후기작성 모달 */}
       {reviewModal && (
         <div
           style={{
@@ -523,7 +542,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
             justifyContent: 'center',
             alignItems: 'center',
             overflowY: 'auto',
-            zIndex: 10000,
+            // zIndex: 10000,
           }}
         >
           <div
@@ -895,12 +914,24 @@ export default function ChallengeDetailProgress({ challengeData }) {
               인증사진을 올려주세요.😊
             </div>
           ) : (
-            <CertifiationImageWrapper>
+            <div
+              style={{
+                border: '2px solid #eff1fe',
+                width: '985px',
+                height: '450px',
+                marginTop: '1%',
+                fontSize: '20px',
+                borderRadius: '20px',
+                padding: '2%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+              }}
+            >
               {challengeData.challengeCertImages
                 .slice(0, 8)
                 .map((image, index) => {
                   return (
-                    <CertificationImage key={index}>
+                    <ReviewImage key={index}>
                       {index === 7 ? (
                         <ViewMore key={index}>
                           <div onClick={viewCertificationImageAll}>더보기</div>
@@ -910,16 +941,20 @@ export default function ChallengeDetailProgress({ challengeData }) {
                           key={index}
                           src={image.imagePath}
                           alt="인증사진들"
-                          style={{ width: '200px', cursor: 'pointer' }}
+                          style={{
+                            width: '220px',
+                            height: '220px',
+                            cursor: 'pointer',
+                          }}
                           onClick={() =>
                             viewCertificationImage(image.imagePath, index)
                           }
                         />
                       )}
-                    </CertificationImage>
+                    </ReviewImage>
                   );
                 })}
-            </CertifiationImageWrapper>
+            </div>
           )}
         </Review>
 
