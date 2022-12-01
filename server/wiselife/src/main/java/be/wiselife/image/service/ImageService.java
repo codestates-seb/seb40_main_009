@@ -249,7 +249,7 @@ public class ImageService {
 
         for(String time : challengeAuthAvailableTime){
             authAvailableTime = LocalTime.parse(time);
-            if(authAvailableTime.equals(now) || now.isAfter(authAvailableTime) && now.isBefore(authAvailableTime.plusMinutes(10)))
+            if(authAvailableTime.equals(now) || now.isAfter(authAvailableTime) && now.isBefore(authAvailableTime.plusMinutes(11)))
                 return true;
         }
 
