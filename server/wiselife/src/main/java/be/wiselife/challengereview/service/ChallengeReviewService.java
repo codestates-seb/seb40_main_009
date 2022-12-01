@@ -12,6 +12,7 @@ import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Transactional(readOnly = false)
 public class ChallengeReviewService {
     private final ChallengeReviewRepository challengeReviewRepository;
     private final ImageService imageService;
@@ -40,6 +42,7 @@ public class ChallengeReviewService {
      */
     public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge, MultipartFile image) throws IOException {
         //해당 챌린지에 참여한 유저인지 검증
+        log.info("createChallengeReview  tx start");
         memberChallengeRepository.findMemberChallengeByChallengeChallengeIdAndMemberMemberId(challenge.getChallengeId(), loginMember.getMemberId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_PARTICIPATING_THIS_CHALLENGE));
 
@@ -60,12 +63,14 @@ public class ChallengeReviewService {
         String imageUrl = imageService.patchReviewImage(challengeReview, image);
         challengeReview.setChallengeReviewImagePath(imageUrl);
 
+        log.info("createChallengeReview  tx end");
 
         return saveChallengeReview(challengeReview);
     }
 
     public ChallengeReview updateChallengeReview(ChallengeReview changedChallengeReview, Member loginMember, MultipartFile multipartFile)  {
 
+        log.info("updateChallengeReview  tx start");
         ChallengeReview savedChallengeReview = getChallengeReview(changedChallengeReview.getChallengeReviewId());
 
         //수정하려는 유저의 권한 확인
@@ -88,6 +93,7 @@ public class ChallengeReviewService {
         String ImagePath = imageService.patchReviewImage(savedChallengeReview, multipartFile);
         savedChallengeReview.setChallengeReviewImagePath(ImagePath);
 
+        log.info("updateChallengeReview  tx end");
 
         return saveChallengeReview(savedChallengeReview);
     }
@@ -98,10 +104,12 @@ public class ChallengeReviewService {
      * @param loginMember 삭제 시도하는 멤버
      */
     public void deleteChallengeReview(Long challengeReviewId, Member loginMember){
+        log.info("deleteChallengeReview  tx start");
         ChallengeReview challengeReview = getChallengeReview(challengeReviewId);
         checkMemberAuthorization(challengeReview, loginMember);
 
         challengeReviewRepository.delete(challengeReview);
+        log.info("deleteChallengeReview  tx end");
     }
 
     /**
@@ -109,10 +117,12 @@ public class ChallengeReviewService {
      * @param challengeId 조회하고자 하는 챌린지 id
      * @return
      */
+    @Transactional(readOnly = true)
     public List<ChallengeReview> getChallengeReviewsInChallenge(Long challengeId){
+        log.info("getChallengeReviewsInChallenge  tx start");
         List<ChallengeReview> challengeReviewList = challengeReviewRepository.findChallengeReviewsByChallenge_ChallengeId(challengeId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND));
-
+        log.info("getChallengeReviewsInChallenge  tx end");
         return challengeReviewList;
     }
 
@@ -121,7 +131,10 @@ public class ChallengeReviewService {
      * @param challengeReviewId 찾고 싶은 챌린지 리뷰 id
      * @return 찾은 챌린지 리뷰
      */
+    @Transactional(readOnly = true)
     public ChallengeReview getChallengeReview(Long challengeReviewId) {
+        log.info("getChallengeReview  tx start");
+        log.info("getChallengeReview  tx end");
         return findVerifiedChallengeReviewById(challengeReviewId);
     }
 

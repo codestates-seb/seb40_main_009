@@ -9,12 +9,14 @@ import be.wiselife.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = false)
 public class FollowService {
 
     private final FollowRepository followRepository;
@@ -25,6 +27,7 @@ public class FollowService {
      * 나를 팔로워한 사람을 setFollower에 넣어둔다.
      */
     public void updateFollow(Member follower, Member following) {
+        log.info("updateFollow  tx start");
 
         if (following.getMemberId() == follower.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_FOLLOW_YOURSELF);
@@ -40,6 +43,7 @@ public class FollowService {
             int followerCount = following.getFollowerCount() + 1;
 
             saveUpdateFollow(following, follow, followerCount);
+            log.info("updateFollow  tx end");
         } else {
             if (findFollow.isFollow()) {
                 findFollow.setFollow(false);
@@ -47,14 +51,17 @@ public class FollowService {
                 int followerCount = following.getFollowerCount() - 1;
 
                 saveUpdateFollow(following, findFollow, followerCount);
+                log.info("updateFollow  tx end");
             } else {
                 findFollow.setFollow(true);
                 findFollow.setFollowerName(follower.getMemberName());
                 int followerCount = following.getFollowerCount() + 1;
 
                 saveUpdateFollow(following, findFollow, followerCount);
+                log.info("updateFollow  tx end");
             }
         }
+
     }
 
     private void saveUpdateFollow(Member following, Follow follow, int followerCount) {

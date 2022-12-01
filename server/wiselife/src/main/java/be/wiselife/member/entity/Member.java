@@ -199,7 +199,7 @@ public class Member extends TimeAudit {
     // 랜덤 아이디 생성기
     public String createRandomId() {
         String random = UUID.randomUUID().toString().substring(0, 6);
-        return "챌린저" + random;
+        return "Challenger" + random;
     }
 
 }

@@ -108,13 +108,6 @@ public class MemberController {
                 new SingleResponseDto<>(mapper.memberToDetailResponse(updateMember)), HttpStatus.OK);
     }
 
-
-    //Badge 기준 sort 동작 확인용 추후 삭제 예정
-    @GetMapping("/testbadge/{memberId}")
-    public void patchBadge(@PathVariable("memberId") Long memberId) {
-        memberService.changeBadge(memberId);
-    }
-
     /**
      * 맴버이름 검색 컨트롤러
      * @param name 검색하고자 하는 이름
