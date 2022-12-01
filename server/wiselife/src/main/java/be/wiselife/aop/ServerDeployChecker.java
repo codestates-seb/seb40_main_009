@@ -7,8 +7,7 @@ import org.springframework.context.event.EventListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 
 @Configuration
 public class ServerDeployChecker{
@@ -22,13 +21,10 @@ public class ServerDeployChecker{
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();
 
-            LocalDate now = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH시mm분ss초");
-
-            String formatedNow = now.format(formatter);
             webhook.setTts(true);
-            webhook.setContent(formatedNow +"에 computer "+ ip + " 의 서버가 구동되었습니다.");
+            webhook.setContent("computer "+ ip + " 의 서버가 구동되었습니다.");
             webhook.execute();
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
