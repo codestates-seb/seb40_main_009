@@ -14,6 +14,7 @@ import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,10 +26,10 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = false)
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberChallengeRepository memberChallengeRepository;
-    private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
     private final S3UploadService s3UploadService;
 
@@ -39,6 +40,7 @@ public class ImageService {
      * 카카오톡 이미지 외에 등록한적이 있다면, 기존것을 db에서 찾아서 수정
      */
     public void patchMemberImage(Member member, MultipartFile multipartFiles) throws IOException {
+        log.info("patchMemberImage  tx start");
         MemberImage memberImageFromRepository =
                 imageRepository.findByImageTypeAndMemberId("MI", member.getMemberId());
         
@@ -47,8 +49,10 @@ public class ImageService {
         if (memberImageFromRepository == null) {
             MemberImage memberImage = new MemberImage();
             saveMemberImage(member, memberImage, ImageUrl);
+            log.info("patchMemberImage  tx end");
         } else {
             saveMemberImage(member, memberImageFromRepository, ImageUrl);
+            log.info("patchMemberImage  tx end");
         }
     }
 
@@ -62,7 +66,7 @@ public class ImageService {
 
     //ChallengeRepImage 부분 코드====================================== rep image 받아옴
     public String patchChallengeRepImage(Challenge challenge, MultipartFile repImage) throws IOException {
-
+        log.info("patchChallengeRepImage tx start");
         ChallengeRepImage challengeRepImageFromRepository =
                 imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
         String newRepImage = s3UploadService.uploadJustOne(repImage);
@@ -75,7 +79,7 @@ public class ImageService {
             challengeRepImageFromRepository.setImagePath(newRepImage);
             saveChallengeRepImage(challenge,challengeRepImageFromRepository);
         }
-
+        log.info("patchChallengeRepImage tx end");
         return newRepImage;
     }
     // ChallengeRepImage 중복코드 줄이는 용도
@@ -86,6 +90,7 @@ public class ImageService {
 
     //ChallengeExamImage 부분 코드======================================
     public List<String> postChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
+        log.info("postChallengeExamImage  tx start");
         List<String> exampleImages = s3UploadService.uploadAsList(exampleImage);
         String[] imagePaths = exampleImages.toArray(String[]::new);
 
@@ -95,10 +100,12 @@ public class ImageService {
             challengeExamImage.setRandomIdForImage(challenge.getRandomIdForImage());
             imageRepository.save(challengeExamImage);
         }
+        log.info("postChallengeExamImage  tx end");
         return exampleImages;
     }
 
     public String patchChallengeExamImage(Challenge challenge, List<MultipartFile> exampleImage) {
+        log.info("patchChallengeExamImage  tx start");
         List<ChallengeExamImage> challengeExamImages
                 = imageRepository.findByImageTypeAndChallengeExam("CEI", challenge.getRandomIdForImage());
 
@@ -142,11 +149,13 @@ public class ImageService {
         if (changeImagePath.equals("")) {
             throw new BusinessLogicException(ExceptionCode.CHALLENGE_EXAM_IMAGE_MUST_ENROLL);
         }
+        log.info("patchChallengeExamImage  tx end");
         return changeImagePath;
     }
 
     //ReviewImage 부분 코드======================================
     public String patchReviewImage(ChallengeReview review, MultipartFile image) {
+        log.info("patchReviewImage  tx start");
         ReviewImage reviewImageFromRepository =
                 imageRepository.findByImageTypeAndReviewImageId("RI", review.getReviewRandomId());
 
@@ -155,10 +164,12 @@ public class ImageService {
             String ImagePath = s3UploadService.uploadJustOne(image);
             reviewImage.setImagePath(ImagePath);
             saveReviewImage(review, reviewImage);
+            log.info("patchReviewImage  tx end");
             return ImagePath;
         } else {
             reviewImageFromRepository.setImagePath(review.getChallengeReviewImagePath());
             saveReviewImage(review, reviewImageFromRepository);
+            log.info("patchReviewImage  tx end");
             return reviewImageFromRepository.getImagePath();
         }
 
@@ -180,20 +191,16 @@ public class ImageService {
      * @return
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
+        log.info("patchReviewImage tx start");
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
+            log.info("patchReviewImage tx end");
             throw new BusinessLogicException(ExceptionCode.YOU_MUST_PARTICIPATE_TO_CHALLENGE_FIRST);
         }
 
         ChallengeCertImage challengeCertImage =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
-
-//        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
-//
-//        List<ChallengeCertImage> challengeCertImages =
-//                imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
-//                        loginMember.getMemberId(), challenge.getRandomIdForImage());
 
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
@@ -208,7 +215,7 @@ public class ImageService {
         plusSuccessCount(loginMember);
 
         calculateMemberChallengePercentage(loginMember);
-
+        log.info("patchReviewImage tx end");
         return challengeUpdateChallengeCertImage;
     }
     // 인증사진 등록 및 수정 메소드
@@ -219,15 +226,10 @@ public class ImageService {
 
         if (challengeCertImage == null) {
             challengeCertImage = new ChallengeCertImage();
-            log.info("cerImage1={}",challenge.getChallengeCertImagePath());
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
             challengeCertImage.setChallenge(challenge);
-//            중복되니까 지워도 될듯합니다 - 영운
-//            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
-//            imageRepository.save(challengeCertImage);
-//            return challenge;
         }
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
         imageRepository.save(challengeCertImage);
@@ -264,7 +266,7 @@ public class ImageService {
     /**
      * 멤버가 사진을 올릴때 마다 successCount 증가(회의에서 합의된 부분)
      * 여기서 레벨업 로직 구현
-      */
+     */
     private void plusSuccessCount(Member loginMember) {
         int successCount =imageRepository.findCertImageByImageTypeAndMemberId("CCI", loginMember.getMemberId()).size();
         if (loginMember.getMemberExp() >= loginMember.getMemberBadge().getObjExperience()) {
@@ -286,27 +288,13 @@ public class ImageService {
         loginMember.setMemberChallengePercentage(memberChallengeSuccessRate/memberChallengeList.size());
         memberRepository.save(loginMember);
     }
-    
-    
-    //TODO 안쓸꺼면 삭제
-    public String getRepImagePath(String randomIdForImage) {
-        ChallengeRepImage cri = imageRepository.findByImageTypeAndChallengeRep("CRI", randomIdForImage);
-        return cri.getImagePath();
-    }
-    //TODO 안쓸꺼면 삭제
-    public List<String> getExamImagePath(String randomIdForImage) {
-        List<ChallengeExamImage> cei = imageRepository.findByImageTypeAndChallengeExam("CEI", randomIdForImage);
-        List<String> urls = new ArrayList<>();
-        for (ChallengeExamImage image : cei) {
-            urls.add(image.getImagePath());
-        }
 
-        return urls;
-    }
     /*
      * s3서비스를 대행해주는 역할
      */
     public String getOneImagePath(MultipartFile multipartFile) throws IOException {
+        log.info("getOneImagePath tx start");
+        log.info("getOneImagePath tx end");
         return s3UploadService.uploadJustOne(multipartFile);
     }
 

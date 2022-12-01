@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MemberService {
 
     /**
@@ -41,7 +43,9 @@ public class MemberService {
      * 자신이 접근하게 되면 followStatus self, 타인이 접근하면 follow 유무에 따라 follow/unfollow로 나타난다.
      * 참여한 챌린지의 인증일자를 70% 초과하면 성공으로 간주 한다.
      */
+    @Transactional(readOnly = false)
     public Member findMember(Member follower,Member following) {
+        log.info("findMember tx start");
         Follow follow = memberRepository.findByFollowerIdAndFollowing(follower.getMemberId(), following);
 
         //팔로우인지 아닌지 판단하는 부분
@@ -58,7 +62,7 @@ public class MemberService {
         } else {
             following.setFollowStatus(Member.FollowStatus.UNFOLLOW);
         }
-
+        log.info("findMember tx end");
         return memberRepository.save(following);
     }
 
@@ -66,10 +70,14 @@ public class MemberService {
 
     //follower 검색용
     public Member findMemberByEmail(String memberEmail) {
+        log.info("findMemberByEmail tx start");
+        log.info("findMemberByEmail tx end");
         return verifiedMemberByEmail(memberEmail);
     }
     //following 검색용
     public Member findMemberByMemberName(String memberName) {
+        log.info("findMemberByMemberName tx start");
+        log.info("findMemberByMemberName tx end");
         return verifiedMemberByName(memberName);
     }
 
@@ -81,6 +89,7 @@ public class MemberService {
      * @return
      */
     public Page<Member> findAllMember(int page, int size,String sort) {
+        log.info("findAllMember tx start");
 
         switch (sort) {
             case "memberBadge":
@@ -93,10 +102,13 @@ public class MemberService {
                 sort = "memberId";
                 break;
         }
+        log.info("findAllMember tx end");
         return memberRepository.findAll(PageRequest.of(page, size, Sort.by(sort).descending()));
     }
 
+    @Transactional(readOnly = false)
     public Member updateMemberInfo(String memberName, Member member, Member loginMember, MultipartFile multipartFiles) throws IOException {
+        log.info("updateMemberInfo tx start");
         Member memberFromRepository = findMemberByMemberName(memberName);
 
         if (!loginMember.getMemberName().equals(memberName)) {
@@ -115,7 +127,7 @@ public class MemberService {
             imageService.patchMemberImage(member,multipartFiles);
             memberFromRepository.setMemberImagePath(member.getMemberImagePath());
         }
-
+        log.info("updateMemberInfo tx end");
         return memberRepository.save(memberFromRepository);
     }
 
@@ -136,7 +148,6 @@ public class MemberService {
     private Member verifiedMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member foundMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        log.info("follower size={}",foundMember.getFollows().size());
         return foundMember;
     }
 
@@ -146,26 +157,13 @@ public class MemberService {
         return foundMember;
     }
 
-    //Badge 기준 sort 동작 확인용 추후 삭제 예정
-    public void changeBadge(Long memberId) {
-        Member member = verifiedMemberById(memberId);
-        int memberLevel = member.getMemberBadge().getLevel()+1;
-        member.setMemberLevel(memberLevel);
-        member.setMemberBadge(Member.MemberBadge.badgeOfLevel(memberLevel));
-        memberRepository.save(member);
-    }
-
-    /**
-     * email 비교를 통해 권한이 있는 유저인지 확인
-     * */
-    public boolean isVerifiedMember(String authorizedMemberEmail, String tryingMemberEmail){
-        return Objects.equals(authorizedMemberEmail, tryingMemberEmail);
-    }
-
     /**
      * member ID 비교를 통해 권한이 있는 유저인지 확인
-     * */
+     *
+     */
     public boolean isVerifiedMember(Long authorizedMemberId, Long tryingMemberId){
+        log.info("isVerifiedMember tx start");
+        log.info("isVerifiedMember tx end");
         return Objects.equals(authorizedMemberId, tryingMemberId);
     }
 
@@ -174,16 +172,24 @@ public class MemberService {
      * 시도하려는 유저에게 권한이 있는지 확인하기 위해 사용한다.
      */
     public Member getLoginMember(HttpServletRequest request) {
+        log.info("getLoginMember tx start");
         String loginEmail = jwtTokenizer.getEmailWithToken(request);
+        log.info("getLoginMember tx end");
         return findMemberByEmail(loginEmail);
     }
 
-    public Member findMemberById(Long memberId){
+    public Member findMemberById(Long memberId) {
+        log.info("findMemberById tx start");
+        log.info("findMemberById tx end");
+
         return verifiedMemberById(memberId);
     }
 
     public Member findByRefreshToken(String refreshToken) {
+        log.info("findByRefreshToken tx start");
+
         Optional<Member> token = memberRepository.findByRefreshToken(refreshToken);
+        log.info("findByRefreshToken tx end");
         return token.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_IS_NOT_VALIDED));
     }
 
@@ -191,12 +197,14 @@ public class MemberService {
      * 모든 맴버의 이름만을 반환한다.
      */
     public List<String> getAllMembersName() {
+        log.info("getAllMembersName tx start");
         List<Member> members = memberRepository.findAll();
         List<String> result = new ArrayList<>();
 
         for(Member name : members){
             result.add(name.getMemberName());
         }
+        log.info("getAllMembersName tx end");
 
         return result;
     }
@@ -206,6 +214,8 @@ public class MemberService {
      * @param name 검색된 데이터
      */
     public Page<Member> searchMember(String name, int page, int size) {
+        log.info("searchMember tx start");
+        log.info("searchMember tx end");
 
         return memberRepository.findAllByMemberNameContaining(name, PageRequest.of(page, size, Sort.by("createdAt")))
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));

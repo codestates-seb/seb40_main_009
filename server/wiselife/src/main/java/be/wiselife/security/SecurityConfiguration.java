@@ -94,7 +94,7 @@ public class SecurityConfiguration{
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://wiselife-client.s3-website.ap-northeast-2.amazonaws.com"); 
+        configuration.addAllowedOrigin("https://wiselife.click");
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
 

@@ -1,5 +1,7 @@
 package be.wiselife.challenge.controller;
 
+import be.wiselife.aop.NeedEmail;
+import be.wiselife.aop.NeedMember;
 import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challenge.entity.Challenge;
 import be.wiselife.challenge.mapper.ChallengeMapper;
@@ -58,18 +60,19 @@ public class ChallengeController {
      * 챌린지 생성
      *
      * @param challengePostDto 생성할 챌린지 관련 정보
-     * @param request          챌린지 생성하려는 멤버의 token 값 받기 위해 필요
+     * @param member         챌린지 생성하려는 멤버의 token 값 받기 위해 필요
      * @param exampleImage     예시사진들
      * @return
      */
+    @NeedMember
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity postChallenge(@Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
+    public ResponseEntity postChallenge(Member member,
+                                        @Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
                                         @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
-                                        @RequestPart(value = "rep", required = false) MultipartFile repImage,
-                                        HttpServletRequest request) throws IOException {
+                                        @RequestPart(value = "rep", required = false) MultipartFile repImage) throws IOException {
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
-        challenge = challengeService.createChallenge(challenge, memberService.getLoginMember(request), repImage, exampleImage);
+        challenge = challengeService.createChallenge(challenge, member, repImage, exampleImage);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
@@ -81,11 +84,13 @@ public class ChallengeController {
      *
      * @param challengeId       CHALLENGE 테이블 PK
      * @param challengePatchDto 수정할 챌린지 관련 정보
-     * @param request           챌린지 수정하려는 멤버의 token 값 받기 위해 필요
+     * @param member           챌린지 수정하려는 멤버의 token 값 받기 위해 필요
      * @return
      */
+    @NeedMember
     @PatchMapping(value = "/{challenge-id}", consumes = {"multipart/form-data"})
-    public ResponseEntity patchChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
+    public ResponseEntity patchChallenge(Member member,
+                                         @PathVariable("challenge-id") @Positive Long challengeId,
                                          @Valid @RequestPart(value = "patch") ChallengeDto.Patch challengePatchDto,
                                          @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
                                          @RequestPart(value = "rep", required = false) MultipartFile repImage,
@@ -93,7 +98,7 @@ public class ChallengeController {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
 
-        challenge = challengeService.updateChallenge(challenge, memberService.getLoginMember(request), challengeId, exampleImage, repImage);
+        challenge = challengeService.updateChallenge(challenge, member, challengeId, exampleImage, repImage);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
@@ -105,18 +110,19 @@ public class ChallengeController {
      * 멤버가 챌린지 참가하면 만들어지는 MEMBER와 CHALLENGE의 중간테이블
      *
      * @param challengeId CHALLENGE 테이블 PK
-     * @param request
+     * @param member login member
      * @return
      */
+    @NeedMember
     @PostMapping("/participate/{challengeId}")
-    public ResponseEntity postMemberAndChallenge(@PathVariable("challengeId") @Positive Long challengeId,
-                                                 HttpServletRequest request) {
+    public ResponseEntity postMemberAndChallenge(Member member,
+                                                 @PathVariable("challengeId") @Positive Long challengeId) {
 
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
-        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, memberService.getLoginMember(request));
+        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, member);
 
-        MemberChallenge memberChallenge = memberChallengeRepository.findByChallengeAndMember(challenge, memberService.getLoginMember(request));
+        MemberChallenge memberChallenge = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 
         if (memberChallenge==null) {
             log.info("unparti");
@@ -126,7 +132,7 @@ public class ChallengeController {
         log.info("parti");
         return new ResponseEntity<>(
                 new SingleResponseDto<>(challengeMapper.
-                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, memberService.getLoginMember(request), memberChallengeService))
+                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, member, memberChallengeService))
                 , HttpStatus.CREATED);
     }
 
@@ -137,7 +143,7 @@ public class ChallengeController {
      *
      * @param challengeId   기존 Dto 삭제후, id를 받아오는걸로 변경
      * @param multipartFile 인증할 사진 받아오기
-     * @param request       로그인한 사람의 이메일 정보를 가져오기위한 인자값
+     * @param member       로그인한 사람의 이메일 정보를 가져오기위한 인자값
      *                                                                   TODO :
      *                                                                    챌린지 참여인원인지 판단하는 로직 추가
      *                                                                    응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
@@ -147,15 +153,17 @@ public class ChallengeController {
      *                사진을 줄이는 리사이징에 대한 고민
 
      */
+    @NeedMember
     @PatchMapping(value = "/cert/{challenge-id}", consumes = {"multipart/form-data"})
-    public ResponseEntity patchMemberCertification(@Valid @PathVariable("challenge-id") @Positive Long challengeId,
-                                                   @RequestPart(value = "cert", required = false) MultipartFile multipartFile,
-                                                   HttpServletRequest request) throws IOException {
-        //메서드의 호출을 줄인다.AOP, ArgumentResolver 고민 횡단관심사로 빼서 역할 위임하기/접근권한을 두기(멘토님 조언)
-        Challenge challenge = challengeService.updateCertImage(challengeId, memberService.getLoginMember(request), multipartFile);
+    public ResponseEntity patchMemberCertification(Member member,
+                                                   @Valid @PathVariable("challenge-id") @Positive Long challengeId,
+                                                   @RequestPart(value = "cert", required = false) MultipartFile multipartFile) throws IOException {
+
+        Challenge challenge = challengeService.updateCertImage(challengeId, member, multipartFile);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, memberService.getLoginMember(request), memberChallengeService))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeDetailResponseDto(challenge,
+                        challengeTalkMapper, memberService, challengeReviewMapper, member, memberChallengeService))
                 , HttpStatus.CREATED);
     }
 
@@ -169,14 +177,16 @@ public class ChallengeController {
      *     2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
      *     3) 동일한 사용자의 조회수 중복 증가 방지 기능
      */
+    @NeedMember
     @GetMapping("/{challenge-id}")
-    public ResponseEntity getChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
+    public ResponseEntity getChallenge(Member member,
+                                       @PathVariable("challenge-id") @Positive Long challengeId,
                                        HttpServletRequest request) {
         Challenge challenge = challengeService.findChallengeById(challengeId); // 찾아왔는데 왜 패스값이 없냐? DB상에는있는데...
         challenge = challengeService.updateViewCount(challenge);
 
-        if (request.getHeader("Authorization") == null ||
-                memberChallengeService.findMemberChallengeByMemberAndChallenge(challenge, memberService.getLoginMember(request)) == null) {
+        if (request.getHeader("Authorization") == null || //TODO 삭제해도 되지않을까?
+                memberChallengeService.findMemberChallengeByMemberAndChallenge(challenge, member) == null) {
 
             ChallengeDto.SimpleResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper);
@@ -197,14 +207,14 @@ public class ChallengeController {
      * 챌린지 삭제
      *
      * @param challengeId
-     * @param request
+     * @param member
      * @return TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능하게
      */
+    @NeedMember
     @DeleteMapping({"/{challenge-id}"})
-    public ResponseEntity deleteChallenge(@PathVariable("challenge-id") @Positive Long challengeId,
-                                          HttpServletRequest request) {
+    public ResponseEntity deleteChallenge(Member member,@PathVariable("challenge-id") @Positive Long challengeId) {
 
-        challengeService.deleteChallenge(challengeId, memberService.getLoginMember(request));
+        challengeService.deleteChallenge(challengeId, member);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

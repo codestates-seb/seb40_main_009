@@ -32,6 +32,4 @@ done
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/deploy.log
-sudo nohup java -jar $DEPLOY_JAR --spring.profiles.active=prod >> /home/ec2-user/deploy.log 2>/home/ec2-user/deploy_err.log &
-echo >> /home/ec2-user/deploy.log
-
+sudo nohup java -jar $DEPLOY_JAR > home/ec2-user/nohup.out 2>&1 &

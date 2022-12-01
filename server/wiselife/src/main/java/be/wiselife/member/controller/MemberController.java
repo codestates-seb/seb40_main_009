@@ -1,5 +1,7 @@
 package be.wiselife.member.controller;
 
+import be.wiselife.aop.NeedEmail;
+import be.wiselife.aop.NeedMember;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.exception.BusinessLogicException;
@@ -49,13 +51,13 @@ public class MemberController {
      * 회원 단건조회(memberName)
      * 챌린지나, 회원 랭킹, 회원 리스트로 조회시 회원을 클릭하면 회원 상세페이지가 나타날수 있게 하는 메소드
      */
+    @NeedEmail
     @GetMapping("/{followingName}")
-    public ResponseEntity getMember(@PathVariable("followingName") String followingName,
-                                                HttpServletRequest request) {
-        String followerEmail = jwtTokenizer.getEmailWithToken(request);
+    public ResponseEntity getMember(String email,
+                                    @PathVariable("followingName") String followingName) {
 
         Member following = memberService.findMember(
-                memberService.findMemberByEmail(followerEmail),
+                memberService.findMemberByEmail(email),
                 memberService.findMemberByMemberName(followingName));
 
         return new ResponseEntity(
@@ -93,26 +95,17 @@ public class MemberController {
      * 회원이 본인의 정보를 수정할때,
      * DTO와 함께받기위해선 RequestPart를 사용해야함.
      */
+    @NeedMember
     @PatchMapping(value = "/{memberName}",consumes = {"multipart/form-data"})
-    public ResponseEntity patchMember(@PathVariable("memberName") String memberName,
+    public ResponseEntity patchMember(Member member,@PathVariable("memberName") String memberName,
                                       @Valid @RequestPart("patch") MemberDto.Patch patchData,
-                                      @RequestPart(value = "image",required = false) MultipartFile multipartFiles,
-                                      HttpServletRequest request) throws IOException {
+                                      @RequestPart(value = "image",required = false) MultipartFile multipartFiles
+                                      ) throws IOException {
 
-        String followerEmail = jwtTokenizer.getEmailWithToken(request);
-        Member loginMember = memberService.findMemberByEmail(followerEmail);
-
-        Member updateMember = memberService.updateMemberInfo(memberName,mapper.memberPatchToMember(patchData),loginMember,multipartFiles);
+        Member updateMember = memberService.updateMemberInfo(memberName, mapper.memberPatchToMember(patchData), member, multipartFiles);
 
         return new ResponseEntity(
-                new SingleResponseDto<>(mapper.memberToDetailResponse(updateMember)),HttpStatus.OK);
-    }
-
-
-    //Badge 기준 sort 동작 확인용 추후 삭제 예정
-    @GetMapping("/testbadge/{memberId}")
-    public void patchBadge(@PathVariable("memberId") Long memberId) {
-        memberService.changeBadge(memberId);
+                new SingleResponseDto<>(mapper.memberToDetailResponse(updateMember)), HttpStatus.OK);
     }
 
     /**
