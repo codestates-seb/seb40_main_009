@@ -23,6 +23,7 @@ function MyProfile({
     // memberBadge,
   };
   const location = useLocation();
+  const LoginName = localStorage.getItem('LoginName');
 
   return (
     <S.MyProfileComponent>
@@ -83,17 +84,20 @@ function MyProfile({
           />
         </div>
         <S.ProfileBar>
-          <div className="buttonLists">
-            <S.ProfileEditButton>환급받기</S.ProfileEditButton>
-            <Link
-              to={`/profile/edit/${memberName}`}
-              state={{
-                data: profileData,
-              }}
-            >
-              <S.ProfileEditButton>edit</S.ProfileEditButton>
-            </Link>
-          </div>
+          {memberName === LoginName ? (
+            <div className="buttonLists">
+              <S.ProfileEditButton>환급받기</S.ProfileEditButton>
+              <Link
+                to={`/profile/edit/${memberName}`}
+                state={{
+                  data: profileData,
+                }}
+              >
+                <S.ProfileEditButton>edit</S.ProfileEditButton>
+              </Link>
+            </div>
+          ) : null}
+
           <ChartBar percentage={memberExpObjRate} />
         </S.ProfileBar>
       </header>

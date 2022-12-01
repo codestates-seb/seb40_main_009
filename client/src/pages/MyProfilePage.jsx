@@ -6,11 +6,11 @@ import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
 import MyProfile from '../components/ProfileList/MyProfile';
 import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
-import { useRecoilState } from 'recoil';
-import { LoginState } from '../components/Login/KakaoLoginData';
+// import { useRecoilState } from 'recoil';
+// import { LoginState } from '../components/Login/KakaoLoginData';
 
 function MyProfilePage() {
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+  // const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
 
   const [myProfileLists, setMyProfileLists] = useState([
     {
@@ -55,18 +55,44 @@ function MyProfilePage() {
   // get요청
   const getProfile = async () => {
     try {
+      console.log('aa', name);
+
       axios
         .get(`/member/${name}`, {
           headers: {
             'ngrok-skip-browser-warning': 'none',
-            Authorization:
-              'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.FlS9lUOnWzAi9UFkZOT2UqT4FYmGiiRsST2wfPJErEiQLYYsJw9jSMwYaEwrM1DceWXltVQ5r8o0_OWjFGJa8w',
+            // utf-8?
+            // 'content-type': 'text/html; charset=utf-8',
+            // 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            Authorization: localStorage.getItem('authorizationToken'),
           },
         })
         .then((response) => {
           const myProfile = response.data;
           console.log('my', myProfile);
           setMyProfileLists(myProfile.data);
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
         });
     } catch (error) {
       console.log('error: ', error);
@@ -89,10 +115,9 @@ function MyProfilePage() {
         followStatus={myProfileLists.followStatus}
       />
       <ProfileBoxLists
-        // participatingChallenges={myProfileLists.map((data) => {
-        //   return data.participatingChallenges;
-        // })}
         endChallenges={myProfileLists.endChallenges}
+        participatingChallenges={myProfileLists.participatingChallenges}
+        memberName={myProfileLists.memberName}
       />
     </S.MyProfilePageComponent>
   );

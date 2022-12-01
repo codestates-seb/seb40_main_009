@@ -24,6 +24,10 @@ import SuccessPayment from './components/KakaoPay/PaymentLists/SuccessPayment';
 import FailedPayment from './components/KakaoPay/PaymentLists/FailedPayment';
 import CancellationPayment from './components/KakaoPay/PaymentLists/CancellationPayment';
 
+import ProfileBoxChallenge from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
+import ProfileBoxChallengeList from './components/ProfileList/ProfileBoxLists/ProfileBoxChallengeList';
+import ProfileBoxOrderList from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
+
 export default function App() {
   return (
     <>
@@ -51,6 +55,18 @@ export default function App() {
           <Route path="/order/success" element={<SuccessPayment />} />
           <Route path="/order/fail" element={<FailedPayment />} />
           <Route path="/order/cancel" element={<CancellationPayment />} />
+          <Route
+            path="/profile/:name/chellenge"
+            element={<ProfileBoxChallenge />}
+          />
+          <Route
+            path="/profile/:name/challengelist"
+            element={<ProfileBoxChallengeList />}
+          />
+          <Route
+            path="/profile/:name/orderlist"
+            element={<ProfileBoxOrderList />}
+          />
         </Routes>
         <Footer />
       </BrowserRouter>
