@@ -93,8 +93,7 @@ public class ChallengeController {
                                          @PathVariable("challenge-id") @Positive Long challengeId,
                                          @Valid @RequestPart(value = "patch") ChallengeDto.Patch challengePatchDto,
                                          @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
-                                         @RequestPart(value = "rep", required = false) MultipartFile repImage,
-                                         HttpServletRequest request) throws IOException {
+                                         @RequestPart(value = "rep", required = false) MultipartFile repImage) throws IOException {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
 
@@ -196,7 +195,7 @@ public class ChallengeController {
         } else {
 
             ChallengeDto.DetailResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, memberService.getLoginMember(request), memberChallengeService);
+                    = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, member, memberChallengeService);
 
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
