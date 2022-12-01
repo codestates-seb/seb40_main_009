@@ -1,9 +1,11 @@
 package be.wiselife.schelduler;
 
 import be.wiselife.challenge.service.ChallengeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class Scheduler {
     private final ChallengeService challengeService;
@@ -17,9 +19,15 @@ public class Scheduler {
     /**
      * 매 00시 00분마다 챌린지 종료 status update
      */
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0/30 * * * * *")
     public void checkChallengeIsClosed(){
         challengeService.updateChallengeIsClosedStatus();
+        log.trace("Hi I'm {} log", "TRACE");
+        log.debug("Hi I'm {} log", "DEBUG");
+        log.info("Hi I'm {} log", "INFO");
+        log.warn("Hi I'm {} log", "WARN");
+        log.error("Hi I'm {} log", "ERROR");
+        log.info("Current Thread: {}", Thread.currentThread().getName());
     }
 
     /**
