@@ -82,8 +82,7 @@ public class OrderController {
         OrderDto.ApproveResponse approveResponse = orderService.approveKakaoPay(pg_token, tid);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
-                , HttpStatus.CREATED);
+                new SingleResponseDto<>(approveResponse), HttpStatus.CREATED);
     }
    
 //    /**
