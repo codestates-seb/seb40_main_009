@@ -91,12 +91,11 @@ public class ChallengeController {
     @PatchMapping(value = "/{challenge-id}", consumes = {"multipart/form-data"})
     public ResponseEntity patchChallenge(Member member,
                                          @PathVariable("challenge-id") @Positive Long challengeId,
-                                         @Valid @RequestPart(value = "patch") ChallengeDto.Patch challengePatchDto,
+                                         @Valid @RequestPart(value = "patch", required = false) ChallengeDto.Patch challengePatchDto,
                                          @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
                                          @RequestPart(value = "rep", required = false) MultipartFile repImage) throws IOException {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
-
         challenge = challengeService.updateChallenge(challenge, member, challengeId, exampleImage, repImage);
 
         return new ResponseEntity<>(
