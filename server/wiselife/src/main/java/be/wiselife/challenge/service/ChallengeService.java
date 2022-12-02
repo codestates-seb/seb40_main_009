@@ -265,11 +265,12 @@ public class ChallengeService {
      * 챌린지에 참여한 멤버들의 성공률의 평균을 저장한다.
      * Scheduler 사용해서 실행한다.
      */
-    public void updateChallengeSuccessRate(){
+    public void updateChallengeSuccessRate(int totalThreadNum, int currentThreadOrder){
         //진행중인 챌린지 전체 조회
         log.info("updateChallengeSuccessRate tx start");
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+        challengeList = challengeList.subList(challengeList.size()/totalThreadNum * (currentThreadOrder-1), challengeList.size()/totalThreadNum * currentThreadOrder);
 
         //챌린지에 참여중인 유저의 성공률의 평균을 계산하여 챌린지에 넣는다
         double challengeSuccessRate;
@@ -281,7 +282,6 @@ public class ChallengeService {
             }
             challengeSuccessRate /= challenge.getMemberChallenges().size() ;
             challenge.setChallengeSuccessRate(challengeSuccessRate);
-
         }
 
         challengeRepository.saveAll(challengeList);
@@ -413,11 +413,12 @@ public class ChallengeService {
      * 챌린지 상금과 개인당 환급 받을 금액이 연결되어 있어 함께 계산
      * 주의할 점은 챌린지 상금을 기반으로 개인당 환급 받을 금액을 계산하기에 추후 수정한다면 순서에 유의
      */
-    public void updateChallengeTotalRewardAndMemberChallengeToBeRefunded() {
+    public void updateChallengeTotalRewardAndMemberChallengeToBeRefunded(int totalThreadNum, int currentThreadOrder) {
         //진행중인 챌린지 전체 조회
         log.info("updateChallengeTotalRewardAndMemberChallengeToBeRefunded tx start");
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
+        challengeList = challengeList.subList(challengeList.size()/totalThreadNum * (currentThreadOrder-1), challengeList.size()/totalThreadNum * currentThreadOrder);
 
         double progressRate;
         double challengeSuccessRate;
