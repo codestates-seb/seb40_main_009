@@ -2,7 +2,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none  # (1) 스키마 자동 생성
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${ENDPOINT}:${PORT}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -14,10 +13,10 @@ spring:
       client:
         registration:
           kakao:
-            client-id: e9cbf2e31aa946c52e55e753135126c3
+            client-id: ${KAKAO_CILENT_ID}
             redirect-uri: https://wiselife.click/oauth/callback/kakao
             client-authentication-method: POST
-            client-secret: 3upB7uLbKjqRB2OnXrkDQNWPLbqwH5fr # ${KAKAO_CLIENT_SECRET}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
@@ -74,18 +73,21 @@ mail:
 cloud:
   aws:
       credentials:
-        access-key: ${AWS_ACCESS_KEY_ID} # 디코에있는거
-        secret-key: ${AWS_SECRET_ACCESS_KEY} # 디코에있는거
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
       s3:
         bucket: wiselife-image
       region:
         static: ap-northeast-2
       stack:
         auto: false
-        
+
+
 common:
-  data:
-    kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463 # ${KAKAO_AUTH_ORDER_KEY}
-    success: https://wiselife.click/order/success
-    cancel: https://wiselife.click/order/cancel
-    fail: https://wiselife.click/order/fail
+    data:
+      kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463 #${KAKAO_AUTH_ORDER_KEY}
+      success: https://wiselife.click/order/success
+      cancel: https://wiselife.click/order/cancel
+      fail: https://wiselife.click/order/fail
+
+

@@ -136,14 +136,6 @@ public class ChallengeController {
      * @param challengeId   기존 Dto 삭제후, id를 받아오는걸로 변경
      * @param multipartFile 인증할 사진 받아오기
      * @param member       로그인한 사람의 이메일 정보를 가져오기위한 인자값
-     *                                                                   TODO :
-     *                                                                    챌린지 참여인원인지 판단하는 로직 추가
-     *                                                                    응답값을 "/challenges/{challenge-id}으로 리다이렉션되게 개선 필요
-     *                멘토님 조언
-     *                서버에서도 인증사진을 등록하는 것에 대한 유효성 검사가 필요하다.
-     *                사진을 동시에 등록하는 것에 대한 대책 마련
-     *                사진을 줄이는 리사이징에 대한 고민
-
      */
     @NeedMember
     @PatchMapping(value = "/cert/{challenge-id}", consumes = {"multipart/form-data"})
@@ -161,13 +153,9 @@ public class ChallengeController {
 
     /**
      * 작성자 : 유현
-     * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
+     * 챌린지 상세페이지 조회
      * 로그인 된 유저가 아닐시 인증사진은 안나오게 simpleResponse로 응답을 준다.
      * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게 detailResponse를 응답해 준다.
-     *    TODO
-     *     1) 만약 유저가 해당 챌린지 참여중이라면 별도로 유저의 해당 챌린지 성공률도 표시함
-     *     2) 챌린지 참여중인 유저들의 평균 챌린지 성공률
-     *     3) 동일한 사용자의 조회수 중복 증가 방지 기능
      */
     @NeedMember
     @GetMapping("/{challenge-id}")
@@ -177,8 +165,7 @@ public class ChallengeController {
         Challenge challenge = challengeService.findChallengeById(challengeId); // 찾아왔는데 왜 패스값이 없냐? DB상에는있는데...
         challenge = challengeService.updateViewCount(challenge);
 
-        if (request.getHeader("Authorization") == null || //TODO 삭제해도 되지않을까?
-                memberChallengeService.findMemberChallengeByMemberAndChallenge(challenge, member) == null) {
+        if (request.getHeader("Authorization") == null || memberChallengeService.findMemberChallengeByMemberAndChallenge(challenge, member) == null) {
 
             ChallengeDto.SimpleResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper);

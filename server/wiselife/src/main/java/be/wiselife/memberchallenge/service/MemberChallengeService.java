@@ -44,7 +44,9 @@ public class MemberChallengeService {
         memberChallenge.setChallenge(challenge);
 
         challenge.getMemberChallenges().add(memberChallenge);
+        challenge.setChallengeTotalReward(challenge.getChallengeTotalReward()+challenge.getChallengeFeePerPerson());
         member.getMemberChallenges().add(memberChallenge);
+        member.setMemberMoney(member.getMemberMoney()-challenge.getChallengeFeePerPerson());
 
         memberChallengeRepository.save(memberChallenge);
         memberRepository.save(member);
@@ -66,7 +68,7 @@ public class MemberChallengeService {
             MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 
             challenge.setChallengeCurrentParty(challengeCurrentParty-1);
-            challenge.setChallengeTotalReward((int)Math.round(challengeCurrentParty*challenge.getChallengeFeePerPerson()));
+            challenge.setChallengeTotalReward((int)Math.round(challenge.getChallengeCurrentParty()*challenge.getChallengeFeePerPerson()));
             member.setMemberMoney(member.getMemberMoney()+challenge.getChallengeFeePerPerson());
             challenge.getMemberChallenges().remove(memberChallengeFromRepository);
             member.getMemberChallenges().remove(memberChallengeFromRepository);
