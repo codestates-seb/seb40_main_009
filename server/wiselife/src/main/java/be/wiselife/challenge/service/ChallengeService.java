@@ -222,7 +222,6 @@ public class ChallengeService {
 
     /**
     * 조회수 증가 함수
-    * TODO: cookie를 이용한 중복 조회 기능
     * */
     public Challenge updateViewCount(Challenge challenge){
         log.info("updateViewCount tx start");
