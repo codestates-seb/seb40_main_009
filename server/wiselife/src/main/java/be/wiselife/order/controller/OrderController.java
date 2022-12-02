@@ -75,7 +75,7 @@ public class OrderController {
      * @return
      */
     @NeedMember
-    @PostMapping(value = "/kakaopay/success")
+    @GetMapping(value = "/kakaopay/success")
     public ResponseEntity afterQR(Member member,
                                   @RequestParam("pg_token") String pg_token,
                                   @RequestParam("tid") String tid) throws IOException {
