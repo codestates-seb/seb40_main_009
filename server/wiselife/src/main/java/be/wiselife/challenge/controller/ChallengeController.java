@@ -153,7 +153,7 @@ public class ChallengeController {
 
     /**
      * 작성자 : 유현
-     * 챌린지 상세페이지 조회(팀원들하고 상의해야하는 부분)
+     * 챌린지 상세페이지 조회
      * 로그인 된 유저가 아닐시 인증사진은 안나오게 simpleResponse로 응답을 준다.
      * 로그인 된 유저면 자신이 인증한 사진만 볼 수 있게 detailResponse를 응답해 준다.
      */

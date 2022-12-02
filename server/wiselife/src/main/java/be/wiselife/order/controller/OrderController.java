@@ -53,7 +53,6 @@ public class OrderController {
      *
      * @param postInfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
      * @param email :
-     * @param EmailFromToken :
      * @return
      * @throws IOException
      */
