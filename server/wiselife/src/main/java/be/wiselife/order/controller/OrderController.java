@@ -74,7 +74,7 @@ public class OrderController {
      * @return
      */
     @NeedMember
-    @GetMapping(value = "/kakaopay/success",consumes = {"multipart/form-data"})
+    @PostMapping(value = "/kakaopay/success",consumes = {"multipart/form-data"})
     public ResponseEntity afterCreateChallengeQR(Member member,
                                   @RequestParam("pg_token") String pg_token,
                                   @RequestParam("tid") String tid,
