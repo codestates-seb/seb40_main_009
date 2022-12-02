@@ -27,10 +27,17 @@ function MyProfile({
   };
   const location = useLocation();
   const LoginName = localStorage.getItem('LoginName');
-  const color = {
-    새내기: 'red',
-    좀치는도전자: 'orange',
+  const badgeLevelColor = {
+    새내기: '#EEF1FF',
+    좀치는도전자: '#D2DAFF',
+    열정도전자: '#AAC4FF',
+    모범도전자: '#B1B2FF',
+    우수도전자: '#9C9EFE',
+    챌린지장인: '#A294FF',
+    시간의지배자: '#A66CFF',
+    챌린지신: '#8673ff',
   };
+
   return (
     <S.MyProfileComponent>
       <header className="profile-info">
@@ -50,8 +57,11 @@ function MyProfile({
           </S.ProfileList>
           <div className="profile-list">
             <div>
+              {memberBadge}
               <GiMedallist style={{ color: [memberBadge] }} />
-
+              {/* {badgeLevelColor.map(
+                <GiMedallist style={{ color: [memberBadge] }} />
+              )} */}
               {/* <Badge memberBadge={memberBadge} /> */}
             </div>
             <p>

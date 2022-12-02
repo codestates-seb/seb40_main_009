@@ -11,13 +11,14 @@ function ProfileBoxLists({
 }) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
   const [challenges, setChallenges] = useState(participatingChallenges);
-  // console.log('99', participatingChallenges.memberChallengeId);
   const LoginName = localStorage.getItem('LoginName');
   const tabName = {
     0: '도전 중',
     1: '도전 내역',
     2: '결제 내역',
   };
+
+  // const data = {p}
 
   useEffect(() => {
     if (clickedTab === 0) {
@@ -38,10 +39,10 @@ function ProfileBoxLists({
           <S.Tab
             key={tab}
             className={clickedTab === tab ? 'active-tabs' : 'tabs'}
-            style={{
-              display:
-                clickedTab === 2 && memberName !== LoginName ? 'none' : 'block',
-            }}
+            // style={{
+            //   display:
+            //     clickedTab === 2 && memberName !== LoginName ? 'none' : 'block',
+            // }}
             onClick={() => {
               setClickedTab(tab);
             }}
@@ -57,6 +58,11 @@ function ProfileBoxLists({
               key={challenge.challengeId}
               challengeTitle={challenge.challengeTitle}
               memberReward={challenge.memberReward}
+              memberSuccessDay={challenge.memberSuccessDay}
+              challengeRepImage={challenge.challengeRepImage}
+              objectPeriod={challenge.objectPeriod}
+              objDay={challenge.objDay}
+              memberChallengeSuccessRate={challenge.memberChallengeSuccessRate}
               clickedTab={clickedTab}
             />
           ))}
