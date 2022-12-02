@@ -206,9 +206,18 @@ public class ChallengeService {
         Challenge savedChallenge = findChallengeById(challengeId);
         //유저 권한 확인
         checkMemberAuthorization(savedChallenge, loginMember);
+        //챌린지가 시작됐는지 여부 확인
+        checkTimeAuthorization(savedChallenge);
         //삭제
         challengeRepository.delete(savedChallenge);
         log.info("deleteChallengeById tx end");
+    }
+
+    //챌린지가 시작한 후인지 확인하는 함수
+    private void checkTimeAuthorization(Challenge savedChallenge) {
+        LocalDate now = LocalDate.now();
+        if(now.isAfter(savedChallenge.getChallengeStartDate()))
+            throw new BusinessLogicException(ExceptionCode.CHALLENGE_ALREADY_STARTED);
     }
 
     /**

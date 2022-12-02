@@ -108,5 +108,4 @@ public class Scheduler {
         log.info("==================UPDATE CHALLENGE REWARD END==================");
         log.info("==================걸린 시간: {}==================", duration.toSeconds());
     }
-
 }
