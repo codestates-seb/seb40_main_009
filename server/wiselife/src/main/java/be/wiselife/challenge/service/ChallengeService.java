@@ -228,6 +228,7 @@ public class ChallengeService {
         log.info("updateViewCount tx start");
         challenge.setChallengeViewCount(challenge.getChallengeViewCount() + 1);
         log.info("updateViewCount tx end");
+
         return saveChallenge(challenge);
     }
 
@@ -235,6 +236,7 @@ public class ChallengeService {
     public Challenge findChallengeById(Long challengeId){
         log.info("findChallengeById tx start");
         log.info("findChallengeById tx end");
+
         return verifyChallengeById(challengeId);
     }
 
