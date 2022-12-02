@@ -71,6 +71,9 @@ export const ChallengeDescription = styled.div`
   & .margin_right3 {
     margin-right: 7.7%;
   }
+  & .margin_right4 {
+    margin-right: 12%;
+  }
 `;
 
 export const Certification = styled.div`
@@ -164,7 +167,7 @@ export const ViewMore = styled.div`
 
 export const ReviewImage = styled.div`
   /* border: 2px solid red; */
-  width: 200px;
+  width: 220px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;
