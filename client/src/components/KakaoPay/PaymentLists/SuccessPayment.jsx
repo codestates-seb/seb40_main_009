@@ -32,9 +32,7 @@ function SuccessPayment() {
   const TID = localStorage.getItem('TID');
   const data = { PG_TOKEN, TID };
 
-  console.log(data);
-  console.log('111', PG_TOKEN);
-  console.log('222', TID);
+  console.log(createChallengeData);
 
   // const config = {
   //   method: 'get',
@@ -63,7 +61,7 @@ function SuccessPayment() {
 
   const createChallenge = async () => {
     try {
-      await axios.get(
+      await axios.post(
         `order/kakaopay/success/pg_token=${PG_TOKEN}&tid=${TID}`,
         {
           headers: {
