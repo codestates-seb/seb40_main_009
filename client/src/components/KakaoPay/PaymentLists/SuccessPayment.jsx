@@ -30,7 +30,6 @@ function SuccessPayment() {
   const PG_TOKEN = pgToken.replace('&tid', '');
 
   const TID = localStorage.getItem('TID');
-  const data = { PG_TOKEN, TID };
 
   console.log(createChallengeData);
 
