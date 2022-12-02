@@ -61,7 +61,7 @@ jobs:
         RDS_PORT: ${{ secrets.PORT }}
         DB_ID: ${{ secrets.DB_ID }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        KAKAO_CILENT_ID: ${{ secrets.KAKAO_CILENT_ID }}
+        KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
         KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
