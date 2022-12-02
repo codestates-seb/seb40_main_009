@@ -10,6 +10,7 @@ import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.member.service.MemberService;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.service.MemberChallengeService;
+import be.wiselife.order.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,9 @@ public class ChallengeService {
     private final MemberChallengeService memberChallengeService;
 
 
-    public ChallengeService(ChallengeRepository challengeRepository,MemberRepository memberRepository, ImageService imageService, MemberService memberService, MemberChallengeService memberChallengeService) {
+    public ChallengeService(ChallengeRepository challengeRepository,MemberRepository memberRepository,
+                            ImageService imageService, MemberService memberService,
+                            MemberChallengeService memberChallengeService) {
         this.challengeRepository = challengeRepository;
         this.memberRepository = memberRepository;
         this.imageService = imageService;
@@ -75,6 +78,11 @@ public class ChallengeService {
         return saveChallenge(challenge);
     }
 
+    public Challenge participateChallenge(Challenge challenge, Member loginMember) {
+        log.info("participateChallenge tx start");
+        log.info("participateChallenge tx end");
+        return memberChallengeService.plusMemberAndChallenge(challenge,loginMember);
+    }
 
 
     /**
@@ -150,10 +158,10 @@ public class ChallengeService {
      * @param challenge 현재 참여하고자 하는 챌린지
      * @return challenge 참가했을때 잘 참여됐는지 즉시 확인가능
      */
-    public Challenge participateChallenge(Challenge challenge, Member loginMember) {
-        log.info("participateChallenge tx start");
-        log.info("participateChallenge tx end");
-        return memberChallengeService.patchMemberAndChallenge(challenge,loginMember);
+    public Challenge minusParticipateChallenge(Challenge challenge, Member loginMember) {
+        log.info("minusParticipateChallenge tx start");
+        log.info("minusParticipateChallenge tx end");
+        return memberChallengeService.minusMemberAndChallenge(challenge,loginMember);
     }
 
     /**
