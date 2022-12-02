@@ -284,6 +284,7 @@ export default function Header() {
               width: '800px',
               alignItems: 'center',
               justifyContent: 'end',
+              marginRight: '15%',
             }}
           >
             <img
