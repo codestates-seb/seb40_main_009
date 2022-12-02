@@ -31,6 +31,20 @@ export const Tab = styled.button`
 // ProfileBoxChallenge.jsx
 export const ProfileBoxChallengeComponent = styled.div`
   margin: 2.5rem;
+  border-bottom: 0.1rem solid #d9d9d9;
+  padding-bottom: 2rem;
+  .title {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 5rem;
+  }
+  .percentage {
+    color: #8673ff;
+    font-size: 1.5rem;
+    border: 2px solid #8673ff;
+    border-radius: 10%;
+    padding: 0.3rem;
+  }
   .challenge-box {
     display: flex;
     margin-top: 2.5rem;
@@ -57,7 +71,7 @@ export const ProfileBoxChallengeComponent = styled.div`
     font-size: 16px;
     color: #d9d9d9;
   }
-  tag {
+  .tag {
     font-size: 16px;
     background-color: #aec4fa;
     padding: 0.2rem;

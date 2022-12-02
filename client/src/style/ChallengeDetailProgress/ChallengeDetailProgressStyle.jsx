@@ -118,17 +118,6 @@ export const Review = styled.div`
   }
 `;
 
-export const CertifiationImageWrapper = styled.div`
-  width: 100%;
-  height: 450px;
-  margin-top: 1%;
-  border-radius: 20px;
-  border: 2px solid #eff1fe;
-  padding: 2%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-`;
-
 export const CertificationDescription = styled.div`
   border: 2px solid #eff1fe;
   width: 60%;
@@ -157,7 +146,7 @@ export const Image = styled.img`
 `;
 
 export const CertificationImage = styled.div`
-  width: 623px;
+  width: 600px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;
@@ -169,18 +158,6 @@ export const ViewMore = styled.div`
   justify-content: center;
   align-items: center;
   width: 200px;
-`;
-
-export const ReviewImageWrapper = styled.div`
-  width: 100%;
-  height: 450px;
-  margin-top: 1%;
-  margin-left: 1%;
-  border-radius: 20px;
-  border: 2px solid #eff1fe;
-  display: grid;
-  padding: 2%;
-  grid-template-columns: repeat(4, 1fr);
 `;
 
 export const ReviewImage = styled.div`

@@ -58,7 +58,6 @@ export default function Header() {
   //검색클릭시 검색결과창으로 이동
   const moveSearchResultPage = () => {
     setSearchBox(false);
-    // window.location.reload();
     navigate(`/search/${searchFilterValue}/${searchValue}`);
   };
 
@@ -133,7 +132,7 @@ export default function Header() {
         <FaRunning
           style={{ color: '#8673ff', fontSize: '25px', marginLeft: '5%' }}
         />
-        <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo>
+        <Logo onClick={NavigateMainPage}>슬기로운 생활1</Logo>
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
@@ -219,7 +218,6 @@ export default function Header() {
               width: '800px',
               display: 'flex',
               alignItems: 'center',
-              // border: '1px solid red',
               justifyContent: 'end',
               marginRight: '5%',
             }}
@@ -228,8 +226,6 @@ export default function Header() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                // border: '1px solid red',
-                // justifyContent: 'end',
                 color: 'black',
               }}
             >
@@ -287,7 +283,6 @@ export default function Header() {
               display: 'flex',
               width: '800px',
               alignItems: 'center',
-              // border: '1px solid red',
               justifyContent: 'end',
             }}
           >

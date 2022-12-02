@@ -28,16 +28,11 @@ export const MarginTop = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
-  border: 1px solid red;
 `;
 
 export const Container = styled.div`
   width: 1024px;
   height: 100vh;
-  /* margin: 0 auto; */
-  /* display: flex;
-  justify-content: center; */
-  /* border: 1px solid red; */
   margin-top: 12%;
 `;
 
