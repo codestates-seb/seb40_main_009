@@ -26,19 +26,16 @@ export const HeaderContainer = styled.header`
 `;
 
 export const Container = styled.div`
-  /* width: 1024px; */
   margin: 0 auto;
   display: flex;
   align-items: center;
-  /* border: 1px solid red; */
 `;
 
-export const Logo = styled.div`
+export const Logo = styled.img`
   color: #8673ff;
   cursor: pointer;
   font-size: 25px;
-  width: 10%;
-  /* border: 1px solid red; */
+  width: 17%;
 `;
 
 export const ChallengeButton = styled.button`

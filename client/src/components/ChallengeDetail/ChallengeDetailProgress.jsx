@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import {
   Container,
@@ -13,10 +12,8 @@ import {
   Certification,
   CertificationWrapper,
   Review,
-  CertifiationImageWrapper,
   CertificationImage,
   ViewMore,
-  ReviewImageWrapper,
   ReviewImage,
   CertificationDescription,
   Image,
@@ -27,10 +24,12 @@ import ProgressBar from './ProgressBar';
 import DdayFormatter from './DdayFormatter';
 import Masonry from 'react-responsive-masonry';
 import Swal from 'sweetalert2';
-import Loading from '../Loading/Loading';
+import exampleImage from '../../image/example.png';
+// import Loading from '../Loading/Loading';
 
 export default function ChallengeDetailProgress({ challengeData }) {
   const parmas = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [certificationModal, setCertificationModal] = useState(false);
   const [talk, setTalk] = useState([]);
@@ -46,7 +45,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
   const [image, setImage] = useState();
   const [reviewContent, setReviewContent] = useState('');
   const [reviewTitle, setReviewTtile] = useState('');
-  const [imageTransform, setImageTransfrom] = useState('');
+  const [imageTransform, setImageTransfrom] = useState(exampleImage);
 
   //로컬스토리지 값
   const memberName = localStorage.getItem('LoginName');
@@ -229,7 +228,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
     } catch (error) {
       // 후기한번쓰면 못쓰게 alert띄우기
       const errorMessage = error.response.data.error.message;
-      console.log('error>>>>>>>>>>>', errorMessage);
+      // console.log('error>>>>>>>>>>>', errorMessage);
 
       if ('ChallengeReview not found' === errorMessage) {
         Swal.fire({
@@ -297,15 +296,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
       const errorMessage = error.response.data.error.message;
       // const errorMessage = error.response.data;
       // console.log('error', errorMessage);
-
       if (
         'Must upload certification photo at the appropriate time' ===
         errorMessage
       ) {
         Swal.fire({
-          customClass: {
-            container: 'zindex',
-          },
           icon: 'error',
           title: '인증시간이 아닙니다.',
           text: `인증시간에 인증사진을 올려주세요.`,
@@ -351,7 +346,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
   //챌린지 해온 시간
   const gap = today.getTime() - startDate.getTime();
   const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
-  console.log('지나온 시간>>', pastDay);
+  // console.log('지나온 시간>>', pastDay);
   let progress = Math.ceil((pastDay / totalDay) * 100);
 
   //도전시작하기전
@@ -379,7 +374,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
   //인증사진 하나씩
   const viewCertificationImage = (image, i) => {
     setCertificationImages({ image, i });
-    console.log('certificationImages>>', certificationImages);
   };
 
   //인증사진 전체보기
@@ -389,18 +383,12 @@ export default function ChallengeDetailProgress({ challengeData }) {
 
   const certificationImageAction = (action) => {
     // 인증사진
-    let i = certificationImages.i;
+    // let i = certificationImages.i;
 
     if (action === 'certification') {
       setCertificationModal(false);
     }
 
-    if (action === 'next-image') {
-      setCertificationImages({ image: certificationImages[i + 1], i: i + 1 });
-    }
-    if (action === 'previous-image') {
-      setCertificationImages({ image: certificationImages[i - 1], i: i - 1 });
-    }
     if (!action) {
       setCertificationImages({ image: '', i: 0 });
     }
@@ -409,7 +397,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
   //후기사진 하나씩
   const viewImage = (image, i) => {
     setImageData({ image, i });
-    console.log('setImageData>>', imageData);
   };
 
   //후기사진 전체보기
@@ -424,13 +411,8 @@ export default function ChallengeDetailProgress({ challengeData }) {
 
   const imageAction = (action) => {
     // 후기사진
-    let i = imageData.i;
-    if (action === 'next-image') {
-      setImageData({ image: imageData[i + 1], i: i + 1 });
-    }
-    if (action === 'previous-image') {
-      setImageData({ image: imageData[i - 1], i: i - 1 });
-    }
+    // let i = imageData.i;
+
     if (!action) {
       setImageData({ image: '', i: 0 });
     }
@@ -457,8 +439,67 @@ export default function ChallengeDetailProgress({ challengeData }) {
     });
   };
 
-  //early return pattern
-  // if (loading) return <Loading />;
+  //도전 취소
+  const challengeDrop = async () => {
+    const response = await Swal.fire({
+      icon: 'question',
+      title: '재확인',
+      text: `${challengeData.challengeTitle}도전을 취소하시겠습니까?`,
+      showCancelButton: true,
+      confirmButtonText: '네',
+      cancelButtonText: '아니요!',
+    });
+    if (response.isConfirmed) {
+      try {
+        console.log('22222222');
+        await axios
+          .post(
+            `/challenges/participate/${challengeId}`,
+            {
+              data: '',
+            },
+            {
+              headers: {
+                'ngrok-skip-browser-warning': 'none',
+                Authorization: authorizationToken,
+              },
+            }
+          )
+          .then(() => {
+            Toast.fire({
+              icon: 'success',
+              title: `${challengeData.challengeTitle}도전이 취소 되었습니다.`,
+            });
+            // return navigate(`/detail/${challengeId}`);
+            window.location.reload();
+          });
+        // .catch(async (error) => {
+        //   if (error.response.data.status === 401) {
+        //     try {
+        //       const responseToken = await axios.get('/token', {
+        //         headers: {
+        //           'ngrok-skip-browser-warning': 'none',
+        //           refresh: localStorage.getItem('refreshToken'),
+        //         },
+        //       });
+        //       await localStorage.setItem(
+        //         'authorizationToken',
+        //         responseToken.headers.authorization
+        //       );
+        //       await localStorage.setItem(
+        //         'test',
+        //         responseToken.headers.authorization
+        //       );
+        //     } catch (error) {
+        //       console.log('재요청 실패', error);
+        //     }
+        //   }
+        // });
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+  };
 
   return (
     <>
@@ -473,7 +514,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
             justifyContent: 'center',
             alignItems: 'center',
             overflowY: 'auto',
-            // zIndex: 10000,
           }}
         >
           <div
@@ -503,7 +543,13 @@ export default function ChallengeDetailProgress({ challengeData }) {
               </div>
               <button
                 onClick={() => certificationImageAction('certification')}
-                style={{}}
+                style={{
+                  backgroundColor: '#8673FF',
+                  border: '#8673FF',
+                  color: '#ffff',
+                  borderRadius: '5px',
+                  fontSize: '17px',
+                }}
               >
                 X
               </button>
@@ -516,16 +562,34 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 style={{ width: '400px', height: '400px', marginBottom: '2%' }}
               />
             ) : null}
-            <div>이미지</div>
             <input
               type={'file'}
               onChange={(e) => {
                 imageUpload(e.target.files[0]);
                 setImage(e.target.files[0]);
               }}
+              style={{ marginBottom: '4%', color: '#8673FF' }}
             />
-            <div>
-              <button onClick={uploadCertification}>인증사진 올리기</button>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <button
+                onClick={uploadCertification}
+                style={{
+                  marginLeft: '1%',
+                  backgroundColor: '#8673FF',
+                  border: 'none',
+                  borderRadius: '5px',
+                  fontSize: '17px',
+                  color: '#F2F4FE',
+                }}
+              >
+                인증사진 올리기
+              </button>
             </div>
           </div>
         </div>
@@ -542,7 +606,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
             justifyContent: 'center',
             alignItems: 'center',
             overflowY: 'auto',
-            // zIndex: 10000,
           }}
         >
           <div
@@ -564,22 +627,47 @@ export default function ChallengeDetailProgress({ challengeData }) {
               >
                 후기 작성
               </div>
-              <button onClick={() => imageAction('review')} style={{}}>
+              <button
+                onClick={() => imageAction('review')}
+                style={{
+                  backgroundColor: '#8673FF',
+                  border: '#8673FF',
+                  color: '#ffff',
+                  borderRadius: '5px',
+                  fontSize: '17px',
+                }}
+              >
                 X
               </button>
             </div>
 
             <div style={{ display: 'flex', marginBottom: '2%' }}>
-              <div>제목:</div>
+              <div>제목</div>
               <input
+                style={{
+                  margin: '0 2%',
+                  width: '80%',
+                  border: 'none',
+                  fontSize: '17px',
+                  borderRadius: '5px',
+                }}
                 onChange={(event) => {
                   setReviewTtile(event.target.value);
                 }}
               ></input>
             </div>
             <div style={{ display: 'flex', marginBottom: '2%' }}>
-              <div>내용:</div>
+              <div>내용</div>
               <textarea
+                style={{
+                  margin: '0 2%',
+                  width: '80%',
+                  border: 'none',
+                  fontSize: '17px',
+                  borderRadius: '5px',
+                  resize: 'none',
+                  height: '100px',
+                }}
                 onChange={(event) => {
                   setReviewContent(event.target.value);
                 }}
@@ -587,13 +675,32 @@ export default function ChallengeDetailProgress({ challengeData }) {
             </div>
             <div>이미지</div>
             <input
+              style={{ marginTop: '1%', marginBottom: '3%', color: '#8673FF' }}
               type={'file'}
               onChange={(e) => {
                 setImage(e.target.files[0]);
               }}
             />
-            <div>
-              <button onClick={uploadReview}>후기 올리기</button>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <button
+                onClick={uploadReview}
+                style={{
+                  marginLeft: '1%',
+                  backgroundColor: '#8673FF',
+                  border: 'none',
+                  borderRadius: '5px',
+                  fontSize: '17px',
+                  color: '#F2F4FE',
+                }}
+              >
+                후기 올리기
+              </button>
             </div>
           </div>
         </div>
@@ -620,16 +727,18 @@ export default function ChallengeDetailProgress({ challengeData }) {
           >
             X
           </button>
-          <Masonry columnsCount={3} gutter="10px">
-            {challengeData.challengeCertImages.map((image, i) => (
-              <img
-                key={i}
-                src={image.imagePath}
-                style={{ width: '100%', display: 'block', cursor: 'pointer' }}
-                alt="후기사진들"
-              />
-            ))}
-          </Masonry>
+          <div style={{ width: '80%', marginTop: '60%', marginBottom: '1.5%' }}>
+            <Masonry columnsCount={3} gutter="10px">
+              {challengeData.challengeCertImages.map((image, i) => (
+                <img
+                  key={i}
+                  src={image.imagePath}
+                  style={{ width: '100%', display: 'block', cursor: 'pointer' }}
+                  alt="후기사진들"
+                />
+              ))}
+            </Masonry>
+          </div>
         </div>
       )}
 
@@ -654,16 +763,22 @@ export default function ChallengeDetailProgress({ challengeData }) {
           >
             X
           </button>
-          <Masonry columnsCount={3} gutter="10px">
-            {challengeData.challengeReviews.map((image, i) => (
-              <img
-                key={i}
-                src={image.challengeReviewImagePath}
-                style={{ width: '100%', display: 'block', cursor: 'pointer' }}
-                alt="후기사진들"
-              />
-            ))}
-          </Masonry>
+          <div style={{ width: '80%', marginTop: '60%', marginBottom: '1.5%' }}>
+            <Masonry
+              columnsCount={3}
+              gutter="10px"
+              style={{ marginTop: '109.5%', marginBottom: '1.5%' }}
+            >
+              {challengeData.challengeReviews.map((image, i) => (
+                <img
+                  key={i}
+                  src={image.challengeReviewImagePath}
+                  style={{ width: '100%', display: 'block', cursor: 'pointer' }}
+                  alt="후기사진들"
+                />
+              ))}
+            </Masonry>
+          </div>
         </div>
       )}
 
@@ -688,17 +803,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
           >
             X
           </button>
-          <button onClick={() => certificationImageAction('previous-image')}>
-            이전
-          </button>
           <img
             src={certificationImages.image}
             style={{ width: 'auto', maxWidth: '90%', maxHeight: '90%' }}
             alt="이미지크게보기"
           />
-          <button onClick={() => certificationImageAction('next-image')}>
-            다음
-          </button>
         </div>
       )}
 
@@ -710,9 +819,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
             height: '100vh',
             background: 'black',
             position: 'fixed',
-            // display: 'flex',
-            // justifyContent: 'center',
-            // alignItems: 'center',
             overflow: 'auto',
             zIndex: 10000,
           }}
@@ -732,13 +838,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
             >
               X
             </button>
-            <button onClick={() => imageAction('previous-image')}>이전</button>
             <img
               src={imageData.image}
               style={{ width: 'auto', maxWidth: '90%', maxHeight: '90%' }}
               alt="이미지크게보기"
             />
-            <button onClick={() => imageAction('next-image')}>다음</button>
           </div>
           <div
             style={{
@@ -809,43 +913,76 @@ export default function ChallengeDetailProgress({ challengeData }) {
             </ChallengeTitle>
 
             <ChallengeDescription>
-              <div className="margin_left3">챌린지 진행률:</div>
+              <div className="margin_right3">챌린지 진행률:</div>
               <div>
                 <ProgressBar percentage={progress} />
               </div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left2">참여 인원:</div>
+              <div className="margin_right4">참여 인원:</div>
               <div>{`${challengeData.challengeCurrentParty}명`}</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">챌린지 기간:</div>
+              <div className="margin_right">챌린지 기간:</div>
               <div>{`${challengeData.challengeStartDate} ~ ${challengeData.challengeEndDate}`}</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">챌린지 금액:</div>
+              <div className="margin_right">챌린지 금액:</div>
               <div>{challengeData.challengeFeePerPerson}원</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">결제한 금액:</div>
+              <div className="margin_right">결제한 금액:</div>
               <div>{challengeData.challengeFeePerPerson}원</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">도전중인 유저:</div>
+              <div className="margin_right3">도전중인 유저:</div>
               {challengeData.participatingMember &&
                 challengeData.participatingMember.map((member) => {
                   return (
-                    <div key={challengeData.participatingMember.memberId}>
+                    <div
+                      key={challengeData.participatingMember.memberId}
+                      style={{
+                        marginRight: '2%',
+                        border: '2px solid #EFF1FE',
+                        borderRadius: '20px',
+                        padding: '0.3%',
+                      }}
+                    >
                       {member.participatingMemberName}
                     </div>
                   );
                 })}
             </ChallengeDescription>
+
+            <div
+              style={{
+                width: '100%',
+                fontSize: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              {pastDay < 0 ? (
+                <button
+                  style={{
+                    marginLeft: '1%',
+                    backgroundColor: '#8673FF',
+                    border: 'none',
+                    borderRadius: '5px',
+                    fontSize: '20px',
+                    color: '#F2F4FE',
+                  }}
+                  onClick={challengeDrop}
+                >
+                  다음에 도전
+                </button>
+              ) : null}
+            </div>
           </ChallengeWrapper>
         </ChallengeProgress>
 
@@ -890,7 +1027,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
             >
               인증 사진 올리기
             </button>
-            {/* </div> */}
           </div>
 
           {/* 인증사진 */}
@@ -922,7 +1058,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 marginTop: '1%',
                 fontSize: '20px',
                 borderRadius: '20px',
-                padding: '2%',
+                padding: '2% 0 2% 2%',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(4, 1fr)',
               }}
@@ -933,8 +1069,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
                   return (
                     <ReviewImage key={index}>
                       {index === 7 ? (
-                        <ViewMore key={index}>
-                          <div onClick={viewCertificationImageAll}>더보기</div>
+                        <ViewMore
+                          key={index}
+                          onClick={viewCertificationImageAll}
+                        >
+                          <div style={{ color: '#ffff' }}>더보기</div>
                         </ViewMore>
                       ) : (
                         <img
@@ -970,6 +1109,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 borderRadius: '5px',
                 fontSize: '17px',
                 color: '#F2F4FE',
+                cursor: 'pointer',
               }}
               onClick={uploadReviewModal}
             >
@@ -1003,7 +1143,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 marginTop: '1%',
                 fontSize: '20px',
                 borderRadius: '20px',
-                padding: '2%',
+                padding: '2% 0 2% 2%',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(4, 1fr)',
               }}
@@ -1014,8 +1154,8 @@ export default function ChallengeDetailProgress({ challengeData }) {
                   return (
                     <ReviewImage key={index}>
                       {index === 7 ? (
-                        <ViewMore key={index}>
-                          <div onClick={viewImageAll}>더보기</div>
+                        <ViewMore key={index} onClick={viewImageAll}>
+                          <div style={{ color: '#ffff' }}>더보기</div>
                         </ViewMore>
                       ) : (
                         <img
@@ -1099,19 +1239,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
                   <div>{talk.updated_at}</div>
                   {Number(loginId) === Number(talk.memberId) ? (
                     <>
-                      {/* <button
-                        style={{
-                          marginLeft: '2%',
-                          width: '5%',
-                          backgroundColor: '#8673FF',
-                          border: 'none',
-                          borderRadius: '5px',
-                          color: '#F2F4FE',
-                        }}
-                        onClick={() => editTalk(index)}
-                      >
-                        수정
-                      </button> */}
                       <button
                         style={{
                           marginLeft: '1%',

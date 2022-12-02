@@ -16,6 +16,7 @@ import {
 } from '../../style/Common/HeaderStyle';
 
 import KakaoLoginButton from '../../image/kakaoIcon.png';
+import LogoImage from '../../image/logo.jpg';
 import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
 import { LoginState } from '../Login/KakaoLoginData';
 import { FaRunning } from 'react-icons/fa';
@@ -58,7 +59,6 @@ export default function Header() {
   //검색클릭시 검색결과창으로 이동
   const moveSearchResultPage = () => {
     setSearchBox(false);
-    window.location.reload();
     navigate(`/search/${searchFilterValue}/${searchValue}`);
   };
 
@@ -122,16 +122,30 @@ export default function Header() {
     window.localStorage.removeItem('authorizationToken');
     window.localStorage.removeItem('LoginId');
     window.localStorage.removeItem('LoginName');
+    window.localStorage.removeItem('createChallengeData');
+    window.localStorage.removeItem('challengeId');
     setLoginState(false);
   };
 
   return (
     <HeaderContainer>
       <Container>
-        <FaRunning
+        {/* <FaRunning
           style={{ color: '#8673ff', fontSize: '25px', marginLeft: '5%' }}
+        /> */}
+        {/* <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo> */}
+        <img
+          style={{
+            width: '7%',
+            cursor: 'pointer',
+            marginLeft: '5%',
+            marginRight: '10%',
+          }}
+          onClick={NavigateMainPage}
+          src={LogoImage}
+          alt="슬기로운생활로고 사진"
         />
-        <Logo onClick={NavigateMainPage}>슬기로운 생활바뀜</Logo>
+
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
@@ -217,7 +231,6 @@ export default function Header() {
               width: '800px',
               display: 'flex',
               alignItems: 'center',
-              // border: '1px solid red',
               justifyContent: 'end',
               marginRight: '5%',
             }}
@@ -226,8 +239,6 @@ export default function Header() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                // border: '1px solid red',
-                // justifyContent: 'end',
                 color: 'black',
               }}
             >
@@ -285,8 +296,8 @@ export default function Header() {
               display: 'flex',
               width: '800px',
               alignItems: 'center',
-              // border: '1px solid red',
               justifyContent: 'end',
+              marginRight: '8%',
             }}
           >
             <img

@@ -15,7 +15,7 @@ export default function ChallengeDetailPage() {
 
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-  console.log('challengeId>>>', challengeId);
+  // console.log('challengeId>>>', challengeId);
 
   // 챌린지조회
   const getChallenge = async () => {
@@ -30,7 +30,7 @@ export default function ChallengeDetailPage() {
         })
         .then(async (response) => {
           const challengeList = await response.data.data;
-          console.log('fdsfsdfschallengeList>>>', challengeList);
+          // console.log('fdsfsdfschallengeList>>>', challengeList);
           setChallengeData(challengeList);
           setLoading(false);
         })
