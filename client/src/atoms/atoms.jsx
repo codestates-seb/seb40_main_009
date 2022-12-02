@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { format } from 'date-fns';
+import exampleImg from '../image/example.png';
 
 export const createChallengeStateNumber = atom({
   key: 'createChallengeStateNumber',
@@ -22,7 +23,7 @@ export const lastDateState = atom({
   default: format(Date.now(), 'yyyy-MM-dd'),
 });
 
-export const testData = atom({
-  key: 'testData',
-  default: [],
+export const createChllangeRepresentationImage = atom({
+  key: 'createChllangeRepresentationImage',
+  default: exampleImg,
 });

@@ -46,10 +46,6 @@ function ProfileBoxChallenge() {
                 'authorizationToken',
                 responseToken.headers.authorization
               );
-              // await localStorage.setItem(
-              //   'test',
-              //   responseToken.headers.authorization
-              // );
             } catch (error) {
               console.log('재요청 실패', error);
             }
