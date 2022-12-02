@@ -10,31 +10,85 @@
 %m : 로깅 메세지
 -->
 
-<configuration>
-    <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
-    <property name="LOG_PATTERN"
-              value="%yellow([%d{yyyy-MM-dd HH:mm:ss}:%-4relative]) %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+<!--<configuration>-->
+<!--    <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>-->
+<!--    <property name="LOG_PATTERN"-->
+<!--              value="%yellow([%d{yyyy-MM-dd HH:mm:ss}:%-4relative]) %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>-->
 <!-- 시간 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
 
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <property name="LOG_PATTERN"
+              value="${LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){blue} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
-<!-- 로깅을 저장하고 싶으면 profile을 prod 상태로 바꾼다. 3개의 공통사항을 지정한 console appender.xml-->
-    <springProfile name="!prod">
-        <include resource="console-appender.xml"/>
-        <root level="INFO">
+    <springProperty name="AWS_ACCESS_KEY" source="cloud.aws.credentials.accessKey"/>
+    <springProperty name="AWS_SECRET_KEY" source="cloud.aws.credentials.secretKey"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${LOG_PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+<!--aws 관련 로그 세팅-->
+    <appender name="aws_cloud_watch_error_log" class="ca.pjer.logback.AwsLogsAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <layout>
+            <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
+        </layout>
+        <logGroupName>wiselifeError-log</logGroupName> <!--CloudWatch log Group Name-->
+        <logStreamUuidPrefix>wiselife-Elog-</logStreamUuidPrefix> <!--로그스트림 UUID-->
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents> <!--배치의 최대 이벤트 갯수-->
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis> <!--마지막 처리를 하고 시간이 지나면 cloud watch로 로그를 쏨-->
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis> <!--로그가 전송되는 동안 코드가 계속 실행되는 것을 차단하고 값을 0으로 세팅하면 전송중에 발생되는 모든 로그를 버립니다.-->
+        <retentionTimeDays>0</retentionTimeDays> <!--로그보존기간 0 = 무제한-->
+        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
+        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
+    </appender>
+
+    <springProfile name="local">
+        <root level="info">
             <appender-ref ref="CONSOLE"/>
         </root>
+
+        <logger name="com.amazonaws.util.EC2MetadataUtils" level="error" additivity="false">
+        </logger>
+
+        <logger name="mashup.spring.jsmr" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <logger name="mashup.spring.jsmr" level="error" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="aws_cloud_watch_error_log"/>
+        </logger>
+
+        <logger name="mashup.spring.jsmr" level="Info" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="aws_cloud_watch_error_log"/>
+        </logger>
     </springProfile>
 
-<!--    prod 프로파일일떄는 아래와 같이 실행하겠다.-->
-    <springProfile name="prod">
-        <include resource="file-info-appender.xml"/>
-        <include resource="file-warn-appender.xml"/>
-        <include resource="file-error-appender.xml"/>
 
-        <root level="INFO">
-            <appender-ref ref="FILE-INFO"/>
-            <appender-ref ref="FILE-WARN"/>
-            <appender-ref ref="FILE-ERROR"/>
+    <!--    prod 프로파일일떄는 아래와 같이 실행하겠다.-->
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="CONSOLE"/>
         </root>
+
+        <logger name="com.amazonaws.util.EC2MetadataUtils" level="error" additivity="false">
+        </logger>
+
+        <logger name="mashup.spring.jsmr" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
     </springProfile>
 </configuration>

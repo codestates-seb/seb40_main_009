@@ -101,7 +101,7 @@ public class OrderController {
                                   @PathVariable("challengeId") Long challengeId,
                                   @RequestParam("pg_token") String pg_token,
                                   @RequestParam("tid") String tid) throws IOException {
-            log.info("participate");
+
             Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
             challengeFromRepository = orderService.approveKakaoPay(pg_token,tid,challengeFromRepository, member);
             return new ResponseEntity<>(

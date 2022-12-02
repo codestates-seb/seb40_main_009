@@ -2,7 +2,7 @@ spring:
   application:
     name:
   profiles:
-    active:
+    active: prod
   config:
-    import: classpath:/application-local.yml
+    import: classpath:/application-aws.yml
 
