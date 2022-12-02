@@ -1,14 +1,18 @@
 import { useState, useRef } from 'react';
+import { useRecoilSnapshot, useRecoilState, useSetRecoilState } from 'recoil';
+import { editImage } from '../../atoms/Profile';
 // import ProfilePicture from '../../image/ProfilePicture.png';
 import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 
-function ProfileImage({ profileimage }) {
-  const [Image, setImage] = useState({ profileimage });
+function ProfileImage({ memberImagePath }) {
+  const [Image, setImage] = useState(memberImagePath);
   const fileInput = useRef(null);
-
+  // const setEditImage = useSetRecoilState(editImage);
+  console.log('qqq', Image);
   const onChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
+      // setEditImage(e.target.files[0]);
     } else {
       //업로드 취소할 시
       setImage();
@@ -28,7 +32,8 @@ function ProfileImage({ profileimage }) {
       <img
         className="profilePicture"
         alt="profile img"
-        src={profileimage}
+        src={Image}
+        // value={memberImagePath}
         onClick={() => {
           fileInput.current.click();
         }}

@@ -3,42 +3,54 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as S from '../style/MyProfilePageStyle/EditProfileStyle';
 import ProfileImage from '../components/ProfileList/ProfileImage';
+import { text } from '@fortawesome/fontawesome-svg-core';
+import { useRecoilValue } from 'recoil';
+import { editImage } from '../atoms/Profile';
 function EditProfilePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
+  const isEditImage = useRecoilValue(editImage);
 
   //   console.log(editProfileLists);
   const [editProfileLists, setEditProfileLists] = useState(location.state.data);
 
-  const name = editProfileLists.memberName;
-  // const name = params.memberName;
-  // console.log(location.state.data);
+  const memberName = editProfileLists.memberName;
+  const memberDescription = editProfileLists.memberDescription;
+  const memberImagePath = editProfileLists.memberImagePath;
+  console.log('aa', memberImagePath);
+  const textData = {
+    memberName: memberName,
+    memberDescription: memberDescription,
+  };
 
-  // const data = location.state.data;
-  // console.log('ㅇㅁㅅㅁ', data);
-  // 왜 안받아도 있는거지
+  const dataValue = JSON.stringify(textData);
+  const stringData = new Blob([dataValue], { type: 'application/json' });
 
-  // console.log('aaaa', name);
-  // console.log(params.name);
+  const data = {
+    patch: stringData,
+    image: memberImagePath,
+  };
+  console.log('xxxx', data);
 
-  // try catch로 하면 500이 나오는 이유는? Authorization을 못 받는듯!
   const config = {
     method: 'patch',
     url: `/member/${params.name}`, // ${name}을 했을 떄 왜 안되는 걸까ㅜ
     headers: {
+      'Content-Type': 'multipart/form-data',
       'ngrok-skip-browser-warning': 'none',
-      Authorization:
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.NDuVoTw2oLhpffs07n_f0LMCZKUXSjA9R694EQVzHCwAFkzlay3EyWeWYdazmPDRagLOsSOrjjT5SZrjoKGMnw',
+      Authorization: localStorage.getItem('authorizationToken'),
     },
-    data: editProfileLists,
+    data,
   };
   const patchEdit = () => {
     axios(config)
       .then((response) => {
         console.log(response);
+        localStorage.setItem('LoginName', editProfileLists.memberName);
         navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
       })
+
       .catch(function (error) {
         console.log(error);
         alert('닉네임은 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.');
@@ -96,7 +108,7 @@ function EditProfilePage() {
     });
     console.log(editProfileLists);
   };
-  // console.log(editProfileLists.memberName);
+  console.log('1111', editProfileLists);
 
   // 취소 버튼을 누르면 이전 마이페이지로 돌아감
   const clickedCancel = () =>
@@ -106,10 +118,10 @@ function EditProfilePage() {
     <S.EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
       <ProfileImage
-        profileimage={editProfileLists.profileimage}
-        // name="profileimage"
-        // // onClick={onChangeEdit}
-        // value={editProfileLists.profileimage}
+        memberImagePath={memberImagePath}
+        name="profileimage"
+        // onClick={onChangeEdit}
+        value={editProfileLists.memberImagePath}
       />
       <S.Edit>
         <div>닉네임</div>

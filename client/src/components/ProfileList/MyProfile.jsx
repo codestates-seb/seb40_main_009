@@ -20,10 +20,11 @@ function MyProfile({
     memberImagePath,
     memberName,
     memberDescription,
-    // memberBadge,
+    memberBadge,
     challengeTitle: '',
     memberSuccessDay: '',
     objectPeriod: '',
+    followerCount: '',
   };
   const location = useLocation();
   const LoginName = localStorage.getItem('LoginName');
@@ -58,7 +59,8 @@ function MyProfile({
           <div className="profile-list">
             <div>
               {memberBadge}
-              <GiMedallist style={{ color: [memberBadge] }} />
+              <GiMedallist style={{ color: badgeLevelColor[memberBadge] }} />
+
               {/* {badgeLevelColor.map(
                 <GiMedallist style={{ color: [memberBadge] }} />
               )} */}

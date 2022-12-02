@@ -39,10 +39,9 @@ function ProfileBoxLists({
           <S.Tab
             key={tab}
             className={clickedTab === tab ? 'active-tabs' : 'tabs'}
-            // style={{
-            //   display:
-            //     clickedTab === 2 && memberName !== LoginName ? 'none' : 'block',
-            // }}
+            style={{
+              display: tab === 2 && memberName !== LoginName ? 'none' : 'block',
+            }}
             onClick={() => {
               setClickedTab(tab);
             }}
@@ -66,7 +65,9 @@ function ProfileBoxLists({
               clickedTab={clickedTab}
             />
           ))}
-        {clickedTab === 2 && <ProfileBoxOrderList />}
+        {clickedTab === 2 && memberName === LoginName && (
+          <ProfileBoxOrderList />
+        )}
       </section>
     </S.ProfileBoxComponent>
   );
