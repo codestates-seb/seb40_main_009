@@ -38,7 +38,6 @@ public class ChallengeReviewService {
 
     /**
      * 챌린지 후기 생성
-     * TODO: MemberChallnge 테이블 만들어 지면 후기 작성하려는 사용자가 실제 참가했는지 확인하는 로직
      */
     public ChallengeReview createChallengeReview(ChallengeReview challengeReview, Member loginMember, Challenge challenge, MultipartFile image) throws IOException {
         //해당 챌린지에 참여한 유저인지 검증

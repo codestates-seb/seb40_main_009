@@ -2,7 +2,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none  # (1) 스키마 자동 생성
-#    show-sql: true      # (2) SQL 쿼리 출력
+    show-sql: true      # (2) SQL 쿼리 출력
 #    properties:
 #      hibernate:
 #        format_sql: true  # (3) SQL pretty print
@@ -17,10 +17,10 @@ spring:
       client:
         registration:
           kakao:
-            client-id: e9cbf2e31aa946c52e55e753135126c3
+            client-id: ${KAKAO_CILENT_ID}
             redirect-uri: https://wiselife.click/oauth/callback/kakao
             client-authentication-method: POST
-            client-secret: 3upB7uLbKjqRB2OnXrkDQNWPLbqwH5fr # ${KAKAO_CLIENT_SECRET}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
@@ -89,7 +89,7 @@ cloud:
         
 common:
   data:
-    kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463 # ${KAKAO_AUTH_ORDER_KEY}
+    kakaoAK: ${KAKAO_AUTH_ORDER_KEY}
     success: https://wiselife.click/order/success
     cancel: https://wiselife.click/order/cancel
     fail: https://wiselife.click/order/fail
