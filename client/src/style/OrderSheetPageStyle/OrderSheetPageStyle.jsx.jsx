@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 // OrderSheetPage.jsx
-export const OrderSheetInfoPageComponent = styled.div`
+export const OrderSheetInfoPageComponent = styled.form`
   width: 1024px;
   font-size: 18px;
   color: #595959;
@@ -10,11 +10,6 @@ export const OrderSheetInfoPageComponent = styled.div`
   .challenge-title {
     margin: 1rem 0;
   }
-`;
-
-export const Header = styled.div`
-  border-top: 0.2rem solid #595959;
-  border-bottom: 0.12rem solid #595959;
 `;
 
 export const OrderLists = styled.div`
@@ -39,16 +34,20 @@ export const OrderList = styled.div`
   }
 `;
 
-export const PayButton = styled.button`
+export const PayButton = styled.div`
   width: 200px;
   height: 60px;
   background-color: #fbe34d;
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  text-align: center;
 `;
 
 export const Main = styled.div`
+  border-top: 0.2rem solid #595959;
+  border-bottom: 0.12rem solid #595959;
+
   display: flex;
   margin-top: 1rem;
 `;
@@ -66,7 +65,6 @@ export const OrderInfoBottom = styled.div`
   line-height: 3rem;
   border-top: 0.12rem solid #595959;
   padding-top: 1rem;
-  padding-bottom: 4rem;
 `;
 
 export const OrderRight = styled.div`
