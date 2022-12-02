@@ -35,7 +35,7 @@ export const Logo = styled.div`
   color: #8673ff;
   cursor: pointer;
   font-size: 25px;
-  width: 8%;
+  width: 17%;
 `;
 
 export const ChallengeButton = styled.button`
