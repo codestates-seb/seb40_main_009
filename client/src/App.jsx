@@ -59,10 +59,10 @@ export default function App() {
             path="/profile/:name/chellenge"
             element={<ProfileBoxChallenge />}
           />
-          <Route
+          {/* <Route
             path="/profile/:name/challengelist"
             element={<ProfileBoxChallengeList />}
-          />
+          /> */}
           <Route
             path="/profile/:name/orderlist"
             element={<ProfileBoxOrderList />}
