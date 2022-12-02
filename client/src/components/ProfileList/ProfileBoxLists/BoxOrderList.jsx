@@ -1,4 +1,4 @@
-import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
+import { BoxOrderListComponent } from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
 
 function BoxOrderList(
   orderId,
@@ -21,6 +21,8 @@ function BoxOrderList(
     itemName,
     totalAmount,
   };
+
+  // Todo 날짜 방식 통일하기
   console.log('111', data);
   function toStringByFormatting(source, delimiter = '-') {
     const year = source.getFullYear();
@@ -30,7 +32,7 @@ function BoxOrderList(
     return [year, month, day].join(delimiter);
   }
   return (
-    <S.BoxOrderList>
+    <BoxOrderListComponent>
       {/* <div className="orderId-size">{orderId}</div>
       <div className="requestuniquenumber-size">{requestuniquenumber}</div>
       <div className="itemName-size">{itemName}</div>
@@ -46,7 +48,7 @@ function BoxOrderList(
         2022-11-30
       </div>
       <div className="totalAmount-size">{totalAmount}원</div>
-    </S.BoxOrderList>
+    </BoxOrderListComponent>
   );
 }
 

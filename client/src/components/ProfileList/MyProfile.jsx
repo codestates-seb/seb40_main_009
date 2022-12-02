@@ -1,10 +1,15 @@
-import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
-import ChartBar from './ChartBar';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
+import {
+  MyProfileComponent,
+  ProfileList,
+  ProfileBar,
+  ProfileEditButton,
+} from '../../style/MyProfilePageStyle/MyProfilePageStyle';
 import { GiMedallist } from 'react-icons/gi';
-import Badge from './MyProfileBox/Badge';
+
 import Follower from './Follower';
+import ChartBar from './ChartBar';
 
 function MyProfile({
   memberDescription,
@@ -26,7 +31,6 @@ function MyProfile({
     objectPeriod: '',
     followerCount: '',
   };
-  const location = useLocation();
   const LoginName = localStorage.getItem('LoginName');
   const badgeLevelColor = {
     새내기: '#EEF1FF',
@@ -40,31 +44,23 @@ function MyProfile({
   };
 
   return (
-    <S.MyProfileComponent>
+    <MyProfileComponent>
       <header className="profile-info">
-        <img
-          src={memberImagePath} //요청
-          className="image-size"
-          alt="profile-img"
-        />
+        <img src={memberImagePath} className="image-size" alt="profile-img" />
         <div>
-          <S.ProfileList>
+          <ProfileList>
             <p>{memberName}</p>
-            {/* Todo */}
+            {/* Todo 좋아요 기능 구현*/}
             <Follower
               followStatus={followStatus}
               followerCount={followerCount}
             />
-          </S.ProfileList>
+          </ProfileList>
           <div className="profile-list">
             <div>
               {memberBadge}
+              {/* Todo 색 다른걸로 바꾸기 */}
               <GiMedallist style={{ color: badgeLevelColor[memberBadge] }} />
-
-              {/* {badgeLevelColor.map(
-                <GiMedallist style={{ color: [memberBadge] }} />
-              )} */}
-              {/* <Badge memberBadge={memberBadge} /> */}
             </div>
             <p>
               챌린지성공률:
@@ -77,25 +73,25 @@ function MyProfile({
             readOnly
           />
         </div>
-        <S.ProfileBar>
+        <ProfileBar>
           {memberName === LoginName ? (
             <div className="buttonLists">
-              <S.ProfileEditButton>환급받기</S.ProfileEditButton>
+              <ProfileEditButton>환급받기</ProfileEditButton>
               <Link
                 to={`/profile/edit/${memberName}`}
                 state={{
+                  // edit로 data를 보냄
                   data: profileData,
                 }}
               >
-                <S.ProfileEditButton>edit</S.ProfileEditButton>
+                <ProfileEditButton>edit</ProfileEditButton>
               </Link>
             </div>
           ) : null}
-
           <ChartBar percentage={memberExpObjRate} />
-        </S.ProfileBar>
+        </ProfileBar>
       </header>
-    </S.MyProfileComponent>
+    </MyProfileComponent>
   );
 }
 

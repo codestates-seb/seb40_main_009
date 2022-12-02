@@ -1,24 +1,28 @@
-import { useState, useEffect } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import * as S from '../style/MyProfilePageStyle/EditProfileStyle';
+import { useState } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+
+import {
+  EditProfileComponent,
+  Edit,
+  CancelBtn,
+  EditBtn,
+} from '../style/MyProfilePageStyle/EditProfileStyle';
+
 import ProfileImage from '../components/ProfileList/ProfileImage';
-import { text } from '@fortawesome/fontawesome-svg-core';
-import { useRecoilValue } from 'recoil';
-import { editImage } from '../atoms/Profile';
+
 function EditProfilePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
-  const isEditImage = useRecoilValue(editImage);
 
-  //   console.log(editProfileLists);
   const [editProfileLists, setEditProfileLists] = useState(location.state.data);
 
   const memberName = editProfileLists.memberName;
   const memberDescription = editProfileLists.memberDescription;
   const memberImagePath = editProfileLists.memberImagePath;
   console.log('aa', memberImagePath);
+
   const textData = {
     memberName: memberName,
     memberDescription: memberDescription,
@@ -33,9 +37,10 @@ function EditProfilePage() {
   };
   console.log('xxxx', data);
 
+  // Todo async await으로 바꾸기, 리프레쉬 토큰
   const config = {
     method: 'patch',
-    url: `/member/${params.name}`, // ${name}을 했을 떄 왜 안되는 걸까ㅜ
+    url: `/member/${params.name}`,
     headers: {
       'Content-Type': 'multipart/form-data',
       'ngrok-skip-browser-warning': 'none',
@@ -115,15 +120,14 @@ function EditProfilePage() {
     navigate(`/profile/${editProfileLists.memberName}`);
 
   return (
-    <S.EditProfileComponent>
+    <EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
       <ProfileImage
         memberImagePath={memberImagePath}
         name="profileimage"
-        // onClick={onChangeEdit}
         value={editProfileLists.memberImagePath}
       />
-      <S.Edit>
+      <Edit>
         <div>닉네임</div>
         <input
           className="name"
@@ -140,11 +144,11 @@ function EditProfilePage() {
           value={editProfileLists.memberDescription}
         />
         <div className="button">
-          <S.CancelBtn onClick={clickedCancel}>취소</S.CancelBtn>
-          <S.EditBtn onClick={patchEdit}>수정하기</S.EditBtn>
+          <CancelBtn onClick={clickedCancel}>취소</CancelBtn>
+          <EditBtn onClick={patchEdit}>수정하기</EditBtn>
         </div>
-      </S.Edit>
-    </S.EditProfileComponent>
+      </Edit>
+    </EditProfileComponent>
   );
 }
 

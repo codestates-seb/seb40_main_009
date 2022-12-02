@@ -1,17 +1,13 @@
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
-import * as S from '../style/MyProfilePageStyle/MyProfilePageStyle';
+import { MyProfilePageComponent } from '../style/MyProfilePageStyle/MyProfilePageStyle';
 
 import MyProfile from '../components/ProfileList/MyProfile';
 import ProfileBoxLists from '../components/ProfileList/ProfileBoxLists/ProfileBoxLists';
-// import { useRecoilState } from 'recoil';
-// import { LoginState } from '../components/Login/KakaoLoginData';
 
 function MyProfilePage() {
-  // const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
-
   const [myProfileLists, setMyProfileLists] = useState([
     {
       memberDescription: '',
@@ -95,7 +91,7 @@ function MyProfilePage() {
   }, []);
 
   return (
-    <S.MyProfilePageComponent>
+    <MyProfilePageComponent>
       <MyProfile
         memberImagePath={myProfileLists.memberImagePath}
         memberName={myProfileLists.memberName}
@@ -110,9 +106,8 @@ function MyProfilePage() {
         participatingChallenges={myProfileLists.participatingChallenges}
         memberName={myProfileLists.memberName}
       />
-    </S.MyProfilePageComponent>
+    </MyProfilePageComponent>
   );
 }
 
 export default MyProfilePage;
-//axios.get => async await로 바꿔오기 숙제

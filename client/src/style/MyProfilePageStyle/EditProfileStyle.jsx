@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+// EditProfilePage
 export const EditProfileComponent = styled.div`
   width: 1024px;
   font-size: 18px;
@@ -46,4 +47,13 @@ export const EditBtn = styled.button`
   background-color: #8673ff;
   color: #ffffff;
   border: none;
+`;
+
+// ProfileImage.jsx
+export const ImageUploadComponent = styled.div`
+  .profilePicture {
+    width: 180px;
+    height: 180px;
+    border-radius: 30px;
+  }
 `;

@@ -106,8 +106,13 @@ export const OrderButton = styled.button`
   width: 250px;
   height: 80px;
   margin-top: 1rem;
-  background-color: #8673ff;
+  background-color: #a294ff;
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  :active {
+    height: 80px;
+    background: #8673ff;
+    /* color: #fff; */
+  }
 `;

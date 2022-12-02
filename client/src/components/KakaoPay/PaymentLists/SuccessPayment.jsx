@@ -1,5 +1,9 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { paymentData } from '../../../atoms/payment';
+
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BsHouse } from 'react-icons/bs';
 import {
   AiFillGithub,
@@ -13,9 +17,6 @@ import {
   DescriptionContainer,
   FooterLogo,
 } from '../../../style/KakaoPay/KakaoPayStyle';
-import { useRecoilValue } from 'recoil';
-import { paymentData } from '../../../atoms/payment';
-import { useEffect } from 'react';
 
 function SuccessPayment() {
   const challengeId = localStorage.getItem('challengeId');
@@ -32,15 +33,6 @@ function SuccessPayment() {
   const TID = localStorage.getItem('TID');
 
   console.log(createChallengeData);
-
-  // const config = {
-  //   method: 'get',
-  //   url: `/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`,
-  //   // url: `/order/kakaopay/success?pg_token=${PG_TOKEN}`,
-  //   headers: {
-  //     'ngrok-skip-browser-warning': 'none',
-  //   },
-  // };
 
   const participateChallenge = async () => {
     try {

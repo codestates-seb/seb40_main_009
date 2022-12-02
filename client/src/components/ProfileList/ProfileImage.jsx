@@ -1,14 +1,12 @@
 import { useState, useRef } from 'react';
-import { useRecoilSnapshot, useRecoilState, useSetRecoilState } from 'recoil';
-import { editImage } from '../../atoms/Profile';
-// import ProfilePicture from '../../image/ProfilePicture.png';
-import * as S from '../../style/MyProfilePageStyle/MyProfilePageStyle';
+
+import { ImageUploadComponent } from '../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
 
 function ProfileImage({ memberImagePath }) {
   const [Image, setImage] = useState(memberImagePath);
   const fileInput = useRef(null);
-  // const setEditImage = useSetRecoilState(editImage);
   console.log('qqq', Image);
+
   const onChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -27,8 +25,9 @@ function ProfileImage({ memberImagePath }) {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+
   return (
-    <S.ImageUploadComponent>
+    <ImageUploadComponent>
       <img
         className="profilePicture"
         alt="profile img"
@@ -46,7 +45,7 @@ function ProfileImage({ memberImagePath }) {
         onChange={onChange}
         ref={fileInput}
       />
-    </S.ImageUploadComponent>
+    </ImageUploadComponent>
   );
 }
 

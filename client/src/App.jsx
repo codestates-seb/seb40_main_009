@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import Kakao from 'kakaojs';
 
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
@@ -7,7 +6,6 @@ import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
 import DashboardPage from './pages/DashboardPage';
 import ChallengeDetailPage from './pages/challengeDetailPage';
-// import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail';
 import ChallengeDetailProgress from './components/ChallengeDetail/ChallengeDetailProgress';
 import CreateChallengePage from './pages/CreateChallengePage';
 import EditProfilePage from './pages/EditProfilePage';
@@ -25,7 +23,6 @@ import FailedPayment from './components/KakaoPay/PaymentLists/FailedPayment';
 import CancellationPayment from './components/KakaoPay/PaymentLists/CancellationPayment';
 
 import ProfileBoxChallenge from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
-import ProfileBoxChallengeList from './components/ProfileList/ProfileBoxLists/ProfileBoxChallengeList';
 import ProfileBoxOrderList from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
 
 export default function App() {
