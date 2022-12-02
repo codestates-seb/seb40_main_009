@@ -21,9 +21,22 @@ function MyProfile({
     memberName,
     memberDescription,
     // memberBadge,
+    challengeTitle: '',
+    memberSuccessDay: '',
+    objectPeriod: '',
   };
   const location = useLocation();
   const LoginName = localStorage.getItem('LoginName');
+  const badgeLevelColor = {
+    새내기: '#EEF1FF',
+    좀치는도전자: '#D2DAFF',
+    열정도전자: '#AAC4FF',
+    모범도전자: '#B1B2FF',
+    우수도전자: '#9C9EFE',
+    챌린지장인: '#A294FF',
+    시간의지배자: '#A66CFF',
+    챌린지신: '#8673ff',
+  };
 
   return (
     <S.MyProfileComponent>
@@ -45,31 +58,10 @@ function MyProfile({
           <div className="profile-list">
             <div>
               {memberBadge}
-              {/* {{ memberBadge } === '새내기' ? (
-                <GiMedallist style={{ color: 'red' }} />
-              ) : null}
-              {{ memberBadge } === '좀치는도전자' ? (
-                <GiMedallist style={{ color: 'orange' }} />
-              ) : null}
-              {{ memberBadge } === '열정도전자' ? (
-                <GiMedallist style={{ color: 'yellow' }} />
-              ) : null}
-              {{ memberBadge } === '모범도전자' ? (
-                <GiMedallist style={{ color: 'green' }} />
-              ) : null}
-              {{ memberBadge } === '우수도전자' ? (
-                <GiMedallist style={{ color: 'blue' }} />
-              ) : null}
-              {{ memberBadge } === '챌린지장인' ? (
-                <GiMedallist style={{ color: 'navy' }} />
-              ) : null}
-              {{ memberBadge } === '시간의지배자' ? (
-                <GiMedallist style={{ color: 'violet' }} />
-              ) : null}
-              {{ memberBadge } === '챌린지신' ? (
-                <GiMedallist style={{ color: 'purple' }} />
-              ) : null} */}
-
+              <GiMedallist style={{ color: [memberBadge] }} />
+              {/* {badgeLevelColor.map(
+                <GiMedallist style={{ color: [memberBadge] }} />
+              )} */}
               {/* <Badge memberBadge={memberBadge} /> */}
             </div>
             <p>
