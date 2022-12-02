@@ -89,7 +89,7 @@ cloud:
         
 common:
     data:
-      kakaoAK: ${KAKAO_AUTH_ORDER_KEY} #KakaoAK 79fd132c770be75df16bbafdcfe48463
+      kakao-ak: ${KAKAO_AUTH_ORDER_KEY} #KakaoAK 79fd132c770be75df16bbafdcfe48463
       success: https://wiselife.click/order/success
       cancel: https://wiselife.click/order/cancel
       fail: https://wiselife.click/order/fail

@@ -32,7 +32,7 @@ import java.util.List;
 public class OrderService {
     static final String cid = "TC0ONETIME"; //가맹점 테스트 코드
     @Getter
-    @Value("${common.data.kakaoAK}")
+    @Value("${common.data.kakao-ak}")
     private String authorization;
 
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";
