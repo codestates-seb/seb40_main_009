@@ -4,5 +4,5 @@ spring:
   profiles:
     active:
   config:
-    import: classpath:/application-aws.yml
+    import: classpath:/application-local.yml
 
