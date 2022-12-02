@@ -7,10 +7,6 @@ import styled from 'styled-components';
 import {
   createChallengePageNumber,
   createChallengeStateNumber,
-  createChallangeRepresentationImage,
-  createChallengeData,
-  represantationImage,
-  exampleImage,
 } from '../../atoms/atoms';
 import { useNavigate } from 'react-router-dom';
 import FirstQuestionSet from './FirstQuestionSet';
@@ -32,12 +28,7 @@ export default function CreateChallenge() {
   const [pageStateNumber, setPageStateNumber] = useRecoilState(
     createChallengeStateNumber
   );
-  const representationImage = useRecoilValue(
-    createChallangeRepresentationImage
-  );
-  const setCreateChallengeData = useSetRecoilState(createChallengeData);
-  const setRepresantationImage = useSetRecoilState(represantationImage);
-  const setExampleImage = useSetRecoilState(exampleImage);
+
   const navigate = useNavigate();
 
   /**신규 챌린지 생성 데이터 전송 */
@@ -46,11 +37,8 @@ export default function CreateChallenge() {
   /**유효성 검사 & 데이터 전송 */
   const onValid = async (setData) => {
     const dataBox = setData; // 전체 데이터
-    console.log('나우', setData.challengeRepImagePath[0]);
     const representImage = setData.challengeRepImagePath[0]; // 챌린지 대표 이미지
-    setRepresantationImage(representImage);
     const exampleImage = setData.challengeExamImagePath; // 챌린지 인증 이미지
-    setExampleImage(exampleImage);
 
     const data = new FormData(); // 폼 데이터 생성
     data.append('rep', representImage); // 대표 이미지 추가
@@ -68,32 +56,20 @@ export default function CreateChallenge() {
     const stringData = new Blob([dataValue], { type: 'application/json' }); // 텍스트 데이터 Blob에 추가
     data.append('post', stringData); // post 데이터 추가
 
-    setCreateChallengeData(setData);
-
-    navigate('/ordersheet', {
-      state: {
-        title: dataBox.challengeTitle,
-        startDate: dataBox.challengeStartDate,
-        endDate: dataBox.challengeEndDate,
-        price: dataBox.challengeFeePerPerson,
-        image: representationImage,
-      },
-    });
-
-    // try {
-    //   await axios.post('/challenges', data, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data', // 전송 타입 설정
-    //       'ngrok-skip-browser-warning': 'none',
-    //       Authorization: localStorage.getItem('authorizationToken'),
-    //     },
-    //   });
-    //   await setPageStateNumber(1);
-    //   await setPageNumber(1);
-    //   await navigate('/');
-    // } catch (error) {
-    //   console.log('error : ', error);
-    // }
+    try {
+      await axios.post('/challenges', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // 전송 타입 설정
+          'ngrok-skip-browser-warning': 'none',
+          Authorization: localStorage.getItem('authorizationToken'),
+        },
+      });
+      await setPageStateNumber(1);
+      await setPageNumber(1);
+      await navigate('/');
+    } catch (error) {
+      console.log('error : ', error);
+    }
   };
 
   const challengeComponents = [

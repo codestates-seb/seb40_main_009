@@ -31,21 +31,3 @@ export const createChallangeRepresentationImage = atom({
   key: 'createChallangeRepresentationImage',
   default: exampleImg,
 });
-
-export const createChallengeData = atom({
-  key: 'createChallengeData',
-  default: new FormData(),
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const represantationImage = atom({
-  key: 'represantationImage',
-  default: exampleImg,
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const exampleImage = atom({
-  key: 'exampleImage',
-  default: exampleImg,
-  effects_UNSTABLE: [persistAtom],
-});

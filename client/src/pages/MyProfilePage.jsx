@@ -69,6 +69,7 @@ function MyProfilePage() {
           const myProfile = response.data;
           console.log('my', myProfile);
           setMyProfileLists(myProfile.data);
+          localStorage.setItem('memberMoney', myProfileLists.memberMoney);
         })
         .catch(async (error) => {
           if (error.response.data.status === 401) {
@@ -107,6 +108,7 @@ function MyProfilePage() {
         memberExpObjRate={myProfileLists.memberExpObjRate}
         followerCount={myProfileLists.followerCount}
         followStatus={myProfileLists.followStatus}
+        memberMoney={myProfileLists.memberMoney}
       />
       <ProfileBoxLists
         endChallenges={myProfileLists.endChallenges}

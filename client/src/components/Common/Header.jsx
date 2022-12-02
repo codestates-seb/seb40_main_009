@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import {
@@ -34,6 +34,7 @@ export default function Header() {
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
   // 카카오로그인 api로 이동
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
@@ -124,6 +125,7 @@ export default function Header() {
     window.localStorage.removeItem('LoginName');
     window.localStorage.removeItem('createChallengeData');
     window.localStorage.removeItem('challengeId');
+    window.localStorage.removeItem('memberMoney');
     setLoginState(false);
   };
 
@@ -243,6 +245,7 @@ export default function Header() {
             >
               반가워요,
             </div>
+
             <div style={{ color: '#8672FF' }}> {memberName} 님!</div>
 
             <ul
@@ -306,6 +309,16 @@ export default function Header() {
             />
           </div>
         )}
+        <Link to={'/ordersheet'}>
+          <div
+            style={{
+              width: '100px',
+              color: 'black',
+            }}
+          >
+            {localStorage.getItem('memberMoney')} 포인트
+          </div>
+        </Link>
       </Container>
     </HeaderContainer>
   );

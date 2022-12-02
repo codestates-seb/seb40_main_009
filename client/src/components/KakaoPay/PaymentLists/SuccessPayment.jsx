@@ -13,83 +13,41 @@ import {
   DescriptionContainer,
   FooterLogo,
 } from '../../../style/KakaoPay/KakaoPayStyle';
-import { useRecoilValue } from 'recoil';
-import { paymentData } from '../../../atoms/payment';
 import { useEffect } from 'react';
-import {
-  createChallengeData,
-  exampleImage,
-  represantationImage,
-} from '../../../atoms/atoms';
 
 function SuccessPayment() {
   const challengeId = localStorage.getItem('challengeId');
-  const checkCreateData = localStorage.getItem('createChallengeData');
-  const isCreateChallengeData = useRecoilValue(createChallengeData);
-  const isRepresantationImage = useRecoilValue(represantationImage);
-  const isExampleImage = useRecoilValue(exampleImage);
   const location = useLocation();
   const navigate = useNavigate();
+
   const onClickImg = () => {
     navigate(`/`);
   };
 
   const pgToken = location.search.split('=')[1];
   const PG_TOKEN = pgToken.replace('&tid', '');
-
   const TID = localStorage.getItem('TID');
 
-  console.log(isCreateChallengeData);
-  console.log(isRepresantationImage);
-  console.log(isExampleImage);
-
-  // const config = {
-  //   method: 'get',
-  //   url: `/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`,
-  //   // url: `/order/kakaopay/success?pg_token=${PG_TOKEN}`,
-  //   headers: {
-  //     'ngrok-skip-browser-warning': 'none',
-  //   },
-  // };
-
-  const participateChallenge = async () => {
+  const getData = async () => {
     try {
-      await axios.get(
-        `order/kakaopay/success/${challengeId}?pg_token=${PG_TOKEN}&tid=${TID}`,
+      const response = await axios.get(
+        `/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`,
         {
           headers: {
+            'ngrok-skip-browser-warning': 'none',
             Authorization: localStorage.getItem('authorizationToken'),
           },
         }
       );
-    } catch (error) {
-      console.log('error : ', error);
-    }
-  };
-
-  const createChallenge = async () => {
-    try {
-      await axios.post(
-        `order/kakaopay/success/pg_token=${PG_TOKEN}&tid=${TID}`,
-        { data: isCreateChallengeData },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: localStorage.getItem('authorizationToken'),
-          },
-        }
-      );
+      localStorage.setItem('memberMoney', response.data.data.memberMoney);
+      navigate(`/`);
     } catch (error) {
       console.log('error : ', error);
     }
   };
 
   useEffect(() => {
-    if (checkCreateData) {
-      createChallenge();
-    } else {
-      participateChallenge();
-    }
+    getData();
   }, []);
 
   return (

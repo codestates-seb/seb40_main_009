@@ -22,11 +22,12 @@ function KakaoLogin() {
           'ngrok-skip-browser-warning': 'none',
         },
       });
-
+      console.log('login data : ', response);
       localStorage.setItem('refreshToken', response.data.refreshToken);
       localStorage.setItem('authorizationToken', response.data.accessToken);
       localStorage.setItem('LoginId', response.data.memberId);
       localStorage.setItem('LoginName', response.data.memberName);
+      localStorage.setItem('memberMoney', response.data.memberMoney);
       setLoginState(true);
       navigate('/');
       // .catch(async (error) => {
