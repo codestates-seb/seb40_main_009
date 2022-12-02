@@ -132,7 +132,7 @@ export default function Header() {
         <FaRunning
           style={{ color: '#8673ff', fontSize: '25px', marginLeft: '5%' }}
         />
-        <Logo onClick={NavigateMainPage}>슬기로운 생활1215</Logo>
+        <Logo onClick={NavigateMainPage}>슬기로운 생활1424</Logo>
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>

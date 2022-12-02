@@ -1,6 +1,10 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
 import { format } from 'date-fns';
 import exampleImg from '../image/example.png';
+
+const { persistAtom } = recoilPersist();
 
 export const createChallengeStateNumber = atom({
   key: 'createChallengeStateNumber',
@@ -23,7 +27,25 @@ export const lastDateState = atom({
   default: format(Date.now(), 'yyyy-MM-dd'),
 });
 
-export const createChllangeRepresentationImage = atom({
-  key: 'createChllangeRepresentationImage',
+export const createChallangeRepresentationImage = atom({
+  key: 'createChallangeRepresentationImage',
   default: exampleImg,
+});
+
+export const createChallengeData = atom({
+  key: 'createChallengeData',
+  default: new FormData(),
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const represantationImage = atom({
+  key: 'represantationImage',
+  default: exampleImg,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const exampleImage = atom({
+  key: 'exampleImage',
+  default: exampleImg,
+  effects_UNSTABLE: [persistAtom],
 });

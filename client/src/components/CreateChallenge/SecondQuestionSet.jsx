@@ -1,7 +1,7 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
+  createChallangeRepresentationImage,
   createChallengeStateNumber,
-  createChllangeRepresentationImage,
 } from '../../atoms/atoms';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
@@ -9,7 +9,7 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 export default function SecondQuestionSet({ register, watch }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
   const [imageTransform, setImageTransfrom] = useRecoilState(
-    createChllangeRepresentationImage
+    createChallangeRepresentationImage
   );
 
   /**이미지 미리보기 세팅 */

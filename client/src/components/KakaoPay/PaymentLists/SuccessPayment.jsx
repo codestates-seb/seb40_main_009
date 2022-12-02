@@ -16,10 +16,18 @@ import {
 import { useRecoilValue } from 'recoil';
 import { paymentData } from '../../../atoms/payment';
 import { useEffect } from 'react';
+import {
+  createChallengeData,
+  exampleImage,
+  represantationImage,
+} from '../../../atoms/atoms';
 
 function SuccessPayment() {
   const challengeId = localStorage.getItem('challengeId');
-  const createChallengeData = localStorage.getItem('createChallengeData');
+  const checkCreateData = localStorage.getItem('createChallengeData');
+  const isCreateChallengeData = useRecoilValue(createChallengeData);
+  const isRepresantationImage = useRecoilValue(represantationImage);
+  const isExampleImage = useRecoilValue(exampleImage);
   const location = useLocation();
   const navigate = useNavigate();
   const onClickImg = () => {
@@ -31,7 +39,9 @@ function SuccessPayment() {
 
   const TID = localStorage.getItem('TID');
 
-  console.log(createChallengeData);
+  console.log(isCreateChallengeData);
+  console.log(isRepresantationImage);
+  console.log(isExampleImage);
 
   // const config = {
   //   method: 'get',
@@ -45,14 +55,13 @@ function SuccessPayment() {
   const participateChallenge = async () => {
     try {
       await axios.get(
-        `order/kakaopay/success/1?pg_token=${PG_TOKEN}&tid=${TID}`,
+        `order/kakaopay/success/${challengeId}?pg_token=${PG_TOKEN}&tid=${TID}`,
         {
           headers: {
             Authorization: localStorage.getItem('authorizationToken'),
           },
         }
       );
-      navigate('/');
     } catch (error) {
       console.log('error : ', error);
     }
@@ -62,11 +71,12 @@ function SuccessPayment() {
     try {
       await axios.post(
         `order/kakaopay/success/pg_token=${PG_TOKEN}&tid=${TID}`,
+        { data: isCreateChallengeData },
         {
           headers: {
+            'Content-Type': 'multipart/form-data',
             Authorization: localStorage.getItem('authorizationToken'),
           },
-          data: createChallengeData,
         }
       );
     } catch (error) {
@@ -75,7 +85,7 @@ function SuccessPayment() {
   };
 
   useEffect(() => {
-    if (createChallengeData) {
+    if (checkCreateData) {
       createChallenge();
     } else {
       participateChallenge();

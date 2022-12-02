@@ -17,6 +17,7 @@ function OrderSheetInfo({ price, title }) {
     },
     data: data,
   };
+
   const postKakaoPay = () => {
     axios(config)
       .then((response) => {
