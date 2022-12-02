@@ -105,8 +105,7 @@ public class ChallengeController {
     }
 
     /**
-     * MemberChallenge 생성
-     * 멤버가 챌린지 참가하면 만들어지는 MEMBER와 CHALLENGE의 중간테이블
+     * 탈퇴에 사용될 url 프론트에서는 참가자가 챌린지에 접근하면 이 유알엘로 가는 버튼만 활성화 해야함
      *
      * @param challengeId CHALLENGE 테이블 PK
      * @param member login member
@@ -119,20 +118,14 @@ public class ChallengeController {
 
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
-        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, member);
+        Challenge challenge = challengeService.minusParticipateChallenge(challengeFromRepository, member);
 
         MemberChallenge memberChallenge = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 
-        if (memberChallenge==null) {
             log.info("unparti");
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper)),HttpStatus.OK);
-        }
-        log.info("parti");
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.
-                        challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, member, memberChallengeService))
-                , HttpStatus.CREATED);
+
     }
 
     /**

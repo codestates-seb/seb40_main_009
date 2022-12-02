@@ -99,7 +99,6 @@ public class SecurityConfiguration{
         configuration.addAllowedOrigin("https://just.wiselife.click");
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
-
         configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");

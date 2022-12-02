@@ -54,9 +54,19 @@ dependencies {
 	//이미지 리사이징
 //	implementation 'com.github.downgoon:marvin:1.5.5'
 //	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+
+	//로그 관련
+//	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+//	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
 }
 
 
+
+configurations {
+	    all {
+		       exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		   }
+	}
 
 tasks.named('test') {
 	useJUnitPlatform()

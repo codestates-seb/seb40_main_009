@@ -1,5 +1,7 @@
 package be.wiselife.order.service;
 
+import be.wiselife.challenge.entity.Challenge;
+import be.wiselife.challenge.service.ChallengeService;
 import be.wiselife.exception.BusinessLogicException;
 import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.entity.Member;
@@ -18,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -45,6 +49,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
+    private final ChallengeService challengeService;
 
     /**
      * @return 카톡측으로 결제번호, URL 수령
@@ -53,7 +58,7 @@ public class OrderService {
 
         log.info("startKakaoPay tx start");
         Member member = memberRepository.findByMemberEmail(emailFromToken).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        order.addMember(member); 
+        order.addMember(member);
         orderRepository.save(order); //ORDERID 값을 지정받기 위해 값을 저장하고 주문한 맴버를 저장한다.
 
 
@@ -98,7 +103,9 @@ public class OrderService {
      * @return 승인된 결제결과를 받는다.
      */
 
-    public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) {
+    public Challenge approveKakaoPay(String pgtoken, String tid,
+                                                    Challenge challenge,Member loginMember,
+                                                    MultipartFile repImage, List<MultipartFile> exampleImage) throws IOException {
         log.info("approveKakaoPay tx start");
         Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG));
 
@@ -118,33 +125,62 @@ public class OrderService {
             log.info("승인 및 결제완료 {}", approveResponse);
             int beforeTrade = (int) order.getTotalAmount();
             int afterTrade = approveResponse.getAmount().getTotal();
-            log.info("approveKakaoPay tx end");
             if (beforeTrade != afterTrade) { //결제요청전 금액과 결제요청 금액이 다르다면 예외를 반환한다.
                 throw new BusinessLogicException(ExceptionCode.TOTAL_AMOUNT_DIFFERENT);
             }
-
             order.setApproved_at(approveResponse.getApproved_at()); //결제인증시간 저장
             order.setRequestuniquenumber(approveResponse.getAid()); //요청고유번호 저장
             order.setOrderSuccess(Boolean.TRUE);
             orderRepository.save(order);
-            updateMemberMoney(order);
             log.info("approveKakaoPay tx end");
-            return approveResponse;
+            challenge = challengeService.createChallenge(challenge, loginMember, repImage, exampleImage);
 
-        } else //거래가 이상하다면 approveResponse가 안온걸로 반환.
+            return challenge;
+
+        } else {//거래가 이상하다면 approveResponse가 안온걸로 반환.
             log.info("approveKakaoPay tx end");
             throw new BusinessLogicException(ExceptionCode.NO_ORDER_RESOPNSE);
+        }
 
     }
+    public Challenge approveKakaoPay(String pgtoken, String tid,
+                                     Challenge challenge,Member loginMember) throws IOException {
+        log.info("approveKakaoPay tx start");
+        Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG));
 
-    private void updateMemberMoney(Order order) {
-        log.info("updateMemberMoney tx start");
-        Member member = order.getMember();
-        double memberMoney=member.getMemberMoney();
-        memberMoney+= order.getTotalAmount();
-        member.setMemberMoney(memberMoney);
-        memberRepository.save(member);
-        log.info("updateMemberMoney tx end");
+        //카카오톡에서 요청하는 기본 양식
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("cid", cid);
+        parameters.add("tid", tid);
+        parameters.add("partner_order_id", String.valueOf(order.getOrderId()));
+        parameters.add("partner_user_id", String.valueOf(order.getMember().getMemberId()));
+        parameters.add("pg_token", pgtoken);
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+        RestTemplate restTemplate = new RestTemplate();
+        OrderDto.ApproveResponse approveResponse = restTemplate.postForObject(approveUrl, requestEntity, OrderDto.ApproveResponse.class);
+
+        if (approveResponse != null) {
+            log.info("승인 및 결제완료 {}", approveResponse);
+            int beforeTrade = (int) order.getTotalAmount();
+            int afterTrade = approveResponse.getAmount().getTotal();
+            if (beforeTrade != afterTrade) { //결제요청전 금액과 결제요청 금액이 다르다면 예외를 반환한다.
+                throw new BusinessLogicException(ExceptionCode.TOTAL_AMOUNT_DIFFERENT);
+            }
+            order.setApproved_at(approveResponse.getApproved_at()); //결제인증시간 저장
+            order.setRequestuniquenumber(approveResponse.getAid()); //요청고유번호 저장
+            order.setOrderSuccess(Boolean.TRUE);
+            orderRepository.save(order);
+            log.info("approveKakaoPay tx end");
+            challenge = challengeService.participateChallenge(challenge, loginMember);
+
+            return challenge;
+
+        } else {//거래가 이상하다면 approveResponse가 안온걸로 반환.
+            log.info("approveKakaoPay tx end");
+            throw new BusinessLogicException(ExceptionCode.NO_ORDER_RESOPNSE);
+        }
+
     }
 
     /**
