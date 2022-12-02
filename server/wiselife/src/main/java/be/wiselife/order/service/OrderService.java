@@ -33,12 +33,15 @@ public class OrderService {
 
     String readyUrl = "https://kapi.kakao.com/v1/payment/ready";
     String approveUrl = "https://kapi.kakao.com/v1/payment/approve";
-
-    static final String successUrl = "https://just.wiselife.click/order/success"; //"http://localhost:3000/order/success"; //
-
-    static final String cancelUrl = "https://just.wiselife.click/order/cancel"; //"http://localhost:3000/order/cancel"; //
-
-    static final String failUrl = "https://just.wiselife.click/order/fail"; //"http://localhost:3000/order/fail"; //
+    @Getter
+    @Value("${common.data.success}")
+    private String successUrl;
+    @Getter
+    @Value("${common.data.cancel}")
+    private String cancelUrl;
+    @Getter
+    @Value("${common.data.fail}")
+    private String failUrl;
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;

@@ -34,7 +34,6 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderMapper orderMapper;
-    private final JwtTokenizer jwtTokenizer;
 
     /**
      * 

@@ -40,7 +40,6 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-
 	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
@@ -53,8 +52,8 @@ dependencies {
 	implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
 
 	//이미지 리사이징
-	implementation 'com.github.downgoon:marvin:1.5.5'
-	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+//	implementation 'com.github.downgoon:marvin:1.5.5'
+//	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
 }
 
 
