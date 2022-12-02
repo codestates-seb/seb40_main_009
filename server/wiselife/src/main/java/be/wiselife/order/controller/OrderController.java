@@ -74,40 +74,35 @@ public class OrderController {
      * @return
      */
     @NeedMember
-    @PostMapping(value = "/kakaopay/success",consumes = {"multipart/form-data"})
-    public ResponseEntity afterCreateChallengeQR(Member member,
-                                  @RequestParam("pg_token") String pg_token,
-                                  @RequestParam("tid") String tid,
-                                  @Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
-                                  @RequestPart(value = "example") List<MultipartFile> exampleImage,
-                                  @RequestPart(value = "rep") MultipartFile repImage) throws IOException {
-
-        Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
-        challenge = orderService.approveKakaoPay(pg_token, tid,challenge,member,repImage,exampleImage);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
-                , HttpStatus.CREATED);
-    }
-    /**
-     *
-     * @param pg_token 챌린지 참가시 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값, 프론트에서는 참가자가 챌린지 진입시, 탈퇴만 보이게 해야함
-     * @param tid 처음 결제요청에서 거래에대한 암호키
-     * @return
-     */
-    @NeedMember
-    @GetMapping(value = "/kakaopay/success/{challengeId}")
-    public ResponseEntity afterParticipateQR(Member member,
-                                  @PathVariable("challengeId") Long challengeId,
+    @GetMapping(value = "/kakaopay/success")
+    public ResponseEntity afterQR(Member member,
                                   @RequestParam("pg_token") String pg_token,
                                   @RequestParam("tid") String tid) throws IOException {
-            log.info("participate");
-            Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
-            challengeFromRepository = orderService.approveKakaoPay(pg_token,tid,challengeFromRepository, member);
-            return new ResponseEntity<>(
-                    new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challengeFromRepository, challengeReviewMapper))
-                    , HttpStatus.CREATED);
+
+        OrderDto.ApproveResponse approveResponse = orderService.approveKakaoPay(pg_token, tid);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(approveResponse), HttpStatus.CREATED);
     }
+//    /**
+//     *
+//     * @param pg_token 챌린지 참가시 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값, 프론트에서는 참가자가 챌린지 진입시, 탈퇴만 보이게 해야함
+//     * @param tid 처음 결제요청에서 거래에대한 암호키
+//     * @return
+//     */
+//    @NeedMember
+//    @GetMapping(value = "/kakaopay/success/{challengeId}")
+//    public ResponseEntity afterParticipateQR(Member member,
+//                                  @PathVariable("challengeId") Long challengeId,
+//                                  @RequestParam("pg_token") String pg_token,
+//                                  @RequestParam("tid") String tid) throws IOException {
+//            log.info("participate");
+//            Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
+//            challengeFromRepository = orderService.approveKakaoPay(pg_token,tid,challengeFromRepository, member);
+//            return new ResponseEntity<>(
+//                    new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challengeFromRepository, challengeReviewMapper))
+//                    , HttpStatus.CREATED);
+//    }
     /**
      * 결제 취소시 실행 url (결제 QR코드에서 취소한 경우)
      */
@@ -142,8 +137,4 @@ public class OrderController {
         return new ResponseEntity<>(
                 new AmountResponseDto<>(personalOrders, totalAmount), HttpStatus.OK);
     }
-
-    //TODO: 결제 취소리스트 구현
-    //TODO: 환급로직 구현
-
 }

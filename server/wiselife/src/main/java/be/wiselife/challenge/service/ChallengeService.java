@@ -26,6 +26,10 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * 수정, 삭제시 권한 확인하는 함수
+ * 
+ */
 @Transactional(readOnly = false)
 @Service
 @Slf4j
@@ -83,8 +87,8 @@ public class ChallengeService {
 
     /**
      * 챌린지 수정 기능
-     * TODO: 1) 시작 전 일정, 돈 수정 불가
-     *       2) 시작 후 아무것도 수정 불가
+     * 1) 시작 전 일정, 돈 수정 불가
+     * 2) 시작 후 아무것도 수정 불가
      * */
     public Challenge updateChallenge(Challenge changedChallenge, Member loginMember,
                                      Long challengeId, List<MultipartFile> exampleImage, MultipartFile repImage) throws IOException {
@@ -166,14 +170,13 @@ public class ChallengeService {
      *
      * @param challengeId
      * @param loginMember   로그인한 사람의 이메일 정보를 가져오기위한 인자값
-     *                      TODO
      *                      챌린지 참여인원인지 판단하는 로직 추가
      * @param multipartFile
      */
     public Challenge updateCertImage(Long challengeId, Member loginMember, MultipartFile multipartFile) throws IOException {
         log.info("updateCertImage tx start");
         Challenge challenge = findChallengeById(challengeId);
-        challenge.setChallengeCertImagePath(imageService.getOneImagePath(multipartFile)); //TODO 기존의 주소들은 삭제하는 로직을 구현해야하나?
+        challenge.setChallengeCertImagePath(imageService.getOneImagePath(multipartFile));
         log.info("updateCertImage tx end");
         return challengeRepository.save(imageService.patchChallengeCertImage(challenge, loginMember));
     }

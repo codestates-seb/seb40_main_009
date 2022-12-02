@@ -21,5 +21,6 @@ public class LoginDto {
     private String imageUrl;
     private String AccessToken;
     private String RefreshToken;
+    private double memberMoney;
 
 }
