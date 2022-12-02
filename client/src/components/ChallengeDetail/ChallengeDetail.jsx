@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import {
   Container,
@@ -20,11 +19,8 @@ import {
 
 import Swal from 'sweetalert2';
 import Masonry from 'react-responsive-masonry';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { paymentData } from '../../atoms/payment';
 
 export default function ChallengeDetail({ challengeData }) {
-  const [isPaymentData, setPaymentData] = useRecoilState(paymentData);
   const parmas = useParams();
   const navigate = useNavigate();
   const [imageData, setImageData] = useState({ image: '', i: 0 });

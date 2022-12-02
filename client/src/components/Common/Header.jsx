@@ -16,6 +16,7 @@ import {
 } from '../../style/Common/HeaderStyle';
 
 import KakaoLoginButton from '../../image/kakaoIcon.png';
+import LogoImage from '../../image/logo.jpg';
 import { REST_API_KEY, REDIRECT_URI } from '../Login/KakaoLoginData';
 import { LoginState } from '../Login/KakaoLoginData';
 import { FaRunning } from 'react-icons/fa';
@@ -129,10 +130,21 @@ export default function Header() {
   return (
     <HeaderContainer>
       <Container>
-        <FaRunning
+        {/* <FaRunning
           style={{ color: '#8673ff', fontSize: '25px', marginLeft: '5%' }}
+        /> */}
+        {/* <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo> */}
+        <img
+          style={{
+            width: '7%',
+            cursor: 'pointer',
+            marginLeft: '5%',
+            marginRight: '10%',
+          }}
+          onClick={NavigateMainPage}
+          src={LogoImage}
+          alt="슬기로운생활로고 사진"
         />
-        <Logo onClick={NavigateMainPage}>슬기로운 생활1424</Logo>
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
@@ -284,7 +296,7 @@ export default function Header() {
               width: '800px',
               alignItems: 'center',
               justifyContent: 'end',
-              marginRight: '15%',
+              marginRight: '8%',
             }}
           >
             <img
