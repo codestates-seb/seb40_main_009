@@ -46,7 +46,7 @@ export default function ChallengeDetail({ challengeData }) {
 
   //url 파라미터값 받아오기
   const challengeId = Number(parmas.id);
-  console.log('before', isPaymentData);
+
   // 참여하기 클릭시 페이지 이동
   const NavigateMPaymentPage = async () => {
     localStorage.setItem('challengeId', challengeData.challengeId);
@@ -153,7 +153,7 @@ export default function ChallengeDetail({ challengeData }) {
   const startDate = new Date(challengeData.challengeStartDate);
   const distance = now.getTime() - startDate.getTime();
   const left = Math.abs(Math.floor(distance / (1000 * 60 * 60 * 24)));
-  console.log('roqsdgsdg>>', left);
+  // console.log('roqsdgsdg>>', left);
 
   return (
     <>
