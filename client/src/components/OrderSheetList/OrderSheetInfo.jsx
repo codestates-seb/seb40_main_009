@@ -7,7 +7,6 @@ function OrderSheetInfo({ price, title }) {
   const totalAmount = price;
 
   const data = { itemName, totalAmount, orderTax: price * 0.1, quantity: 1 };
-  console.log(data);
 
   const config = {
     method: 'post',

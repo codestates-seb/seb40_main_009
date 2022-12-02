@@ -2,12 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import { isAfter, format } from 'date-fns';
 
 import * as S from '../../style/ChallengeList/Challenge.styled';
+import { useRecoilValue } from 'recoil';
+import { LoginState } from '../Login/KakaoLoginData';
 
 export default function Challenge({ id, title, description, image, endDate }) {
+  const isLogin = useRecoilValue(LoginState);
   const navigate = useNavigate();
 
-  /**챌린지 상세 페이지로 이동 & 용도에 맞게 이름 바꾸기*/
+  /**챌린지 상세 페이지로 이동*/
   const moveToChallengeDetail = () => {
+    if (!isLogin) {
+      alert('로그인 하슈');
+    }
     navigate(`/detail/${id}`);
   };
 

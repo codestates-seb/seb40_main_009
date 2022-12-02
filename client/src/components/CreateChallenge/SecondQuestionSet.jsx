@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { createChallengeStateNumber } from '../../atoms/atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  createChallengeStateNumber,
+  createChllangeRepresentationImage,
+} from '../../atoms/atoms';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
-import exampleImg from '../../image/example.png';
-
 export default function SecondQuestionSet({ register, watch }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
-  const [imageTransform, setImageTransfrom] = useState(exampleImg);
+  const [imageTransform, setImageTransfrom] = useRecoilState(
+    createChllangeRepresentationImage
+  );
 
   /**이미지 미리보기 세팅 */
   const setImagePreview = (file) => {

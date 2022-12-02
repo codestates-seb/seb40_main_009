@@ -121,6 +121,8 @@ export default function Header() {
     window.localStorage.removeItem('authorizationToken');
     window.localStorage.removeItem('LoginId');
     window.localStorage.removeItem('LoginName');
+    window.localStorage.removeItem('createChallengeData');
+    window.localStorage.removeItem('challengeId');
     setLoginState(false);
   };
 
