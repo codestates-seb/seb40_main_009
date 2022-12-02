@@ -129,9 +129,9 @@ public class OrderService {
             order.setRequestuniquenumber(approveResponse.getAid()); //요청고유번호 저장
             order.setOrderSuccess(Boolean.TRUE);
             orderRepository.save(order);
-            updateMemberMoney(order);
+            double chargedMoney = updateMemberMoney(order);
             log.info("approveKakaoPay tx end");
-
+            approveResponse.setMemberMoney(chargedMoney);
             return approveResponse;
 
         } else {//거래가 이상하다면 approveResponse가 안온걸로 반환.
@@ -140,7 +140,7 @@ public class OrderService {
         }
 
     }
-    private void updateMemberMoney(Order order) {
+    private double updateMemberMoney(Order order) {
         log.info("updateMemberMoney tx start");
         Member member = order.getMember();
         double memberMoney=member.getMemberMoney();
@@ -148,6 +148,7 @@ public class OrderService {
         member.setMemberMoney(memberMoney);
         memberRepository.save(member);
         log.info("updateMemberMoney tx end");
+        return memberMoney;
     }
 
     /**

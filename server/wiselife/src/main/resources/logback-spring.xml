@@ -25,8 +25,8 @@
     <property name="LOG_PATTERN"
               value="${LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){blue} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
-    <springProperty name="AWS_ACCESS_KEY" source="cloud.aws.credentials.accessKey"/>
-    <springProperty name="AWS_SECRET_KEY" source="cloud.aws.credentials.secretKey"/>
+    <springProperty name="AWS_ACCESS_KEY_ID" source="cloud.aws.credentials.access-key"/>
+    <springProperty name="AWS_SECRET_ACCESS_KEY" source="cloud.aws.credentials.secret-key"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -34,8 +34,7 @@
         </layout>
     </appender>
 
-<!--aws 관련 로그 세팅-->
-    <appender name="aws_cloud_watch_error_log" class="ca.pjer.logback.AwsLogsAppender">
+    <appender name="aws_cloud_watch_log" class="ca.pjer.logback.AwsLogsAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
@@ -49,8 +48,8 @@
         <maxFlushTimeMillis>30000</maxFlushTimeMillis> <!--마지막 처리를 하고 시간이 지나면 cloud watch로 로그를 쏨-->
         <maxBlockTimeMillis>5000</maxBlockTimeMillis> <!--로그가 전송되는 동안 코드가 계속 실행되는 것을 차단하고 값을 0으로 세팅하면 전송중에 발생되는 모든 로그를 버립니다.-->
         <retentionTimeDays>0</retentionTimeDays> <!--로그보존기간 0 = 무제한-->
-        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
-        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
+        <accessKeyId>${AWS_ACCESS_KEY_ID}</accessKeyId>
+        <secretAccessKey>${AWS_SECRET_ACCESS_KEY}</secretAccessKey>
     </appender>
 
     <springProfile name="local">
@@ -67,17 +66,11 @@
 
         <logger name="mashup.spring.jsmr" level="error" additivity="false">
             <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="aws_cloud_watch_error_log"/>
+            <appender-ref ref="aws_cloud_watch_log"/>
         </logger>
 
-        <logger name="mashup.spring.jsmr" level="Info" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="aws_cloud_watch_error_log"/>
-        </logger>
     </springProfile>
 
-
-    <!--    prod 프로파일일떄는 아래와 같이 실행하겠다.-->
     <springProfile name="prod">
         <root level="info">
             <appender-ref ref="CONSOLE"/>
@@ -89,6 +82,7 @@
         <logger name="mashup.spring.jsmr" level="debug" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
-
     </springProfile>
 </configuration>
+
+
