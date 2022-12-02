@@ -31,6 +31,9 @@ public class MemberChallengeService {
      */
     public Challenge plusMemberAndChallenge(Challenge challenge, Member member) {
         log.info("plusMemberAndChallenge tx start");
+        if (member.getMemberMoney() < challenge.getChallengeFeePerPerson()) {
+            throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_CHARGE_MONEY);
+        }
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
         MemberChallenge memberChallenge = new MemberChallenge();
 
