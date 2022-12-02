@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import styled from 'styled-components';
 
 import {
   createChallengePageNumber,
   createChallengeStateNumber,
-  testData,
+  createChllangeRepresentationImage,
 } from '../../atoms/atoms';
 import { useNavigate } from 'react-router-dom';
 import FirstQuestionSet from './FirstQuestionSet';
@@ -29,10 +29,9 @@ export default function CreateChallenge() {
   const [pageStateNumber, setPageStateNumber] = useRecoilState(
     createChallengeStateNumber
   );
-  const [isTestData, setTestData] = useRecoilState(testData);
+  const representationImage = useRecoilValue(createChllangeRepresentationImage);
   const navigate = useNavigate();
 
-  console.log('1번 나에요', isTestData);
   /**신규 챌린지 생성 데이터 전송 */
   const { register, handleSubmit, watch, getValues } = useForm();
 
@@ -58,23 +57,32 @@ export default function CreateChallenge() {
 
     const stringData = new Blob([dataValue], { type: 'application/json' }); // 텍스트 데이터 Blob에 추가
     data.append('post', stringData); // post 데이터 추가
-    setTestData(dataBox.challengeRepImagePath);
-    console.log('2번 이에요', isTestData);
+    localStorage.setItem('createChallengeData', data);
 
-    try {
-      await axios.post('/challenges', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // 전송 타입 설정
-          'ngrok-skip-browser-warning': 'none',
-          Authorization: localStorage.getItem('authorizationToken'),
-        },
-      });
-      await setPageStateNumber(1);
-      await setPageNumber(1);
-      await navigate('/');
-    } catch (error) {
-      console.log('error : ', error);
-    }
+    navigate('/ordersheet', {
+      state: {
+        title: dataBox.challengeTitle,
+        startDate: dataBox.challengeStartDate,
+        endDate: dataBox.challengeEndDate,
+        price: dataBox.challengeFeePerPerson,
+        image: representationImage,
+      },
+    });
+
+    // try {
+    //   await axios.post('/challenges', data, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data', // 전송 타입 설정
+    //       'ngrok-skip-browser-warning': 'none',
+    //       Authorization: localStorage.getItem('authorizationToken'),
+    //     },
+    //   });
+    //   await setPageStateNumber(1);
+    //   await setPageNumber(1);
+    //   await navigate('/');
+    // } catch (error) {
+    //   console.log('error : ', error);
+    // }
   };
 
   const challengeComponents = [

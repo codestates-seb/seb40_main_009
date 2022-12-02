@@ -42,6 +42,7 @@ export default function CreateChallengePage() {
   const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber);
   const stateNumber = useRecoilValue(createChallengeStateNumber);
   const navigate = useNavigate();
+  window.localStorage.removeItem('challengeId');
 
   useEffect(() => {
     //현재 상태에 맞춰 url 변화

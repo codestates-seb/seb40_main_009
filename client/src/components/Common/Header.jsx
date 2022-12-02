@@ -58,7 +58,7 @@ export default function Header() {
   //검색클릭시 검색결과창으로 이동
   const moveSearchResultPage = () => {
     setSearchBox(false);
-    window.location.reload();
+    // window.location.reload();
     navigate(`/search/${searchFilterValue}/${searchValue}`);
   };
 
@@ -122,6 +122,8 @@ export default function Header() {
     window.localStorage.removeItem('authorizationToken');
     window.localStorage.removeItem('LoginId');
     window.localStorage.removeItem('LoginName');
+    window.localStorage.removeItem('createChallengeData');
+    window.localStorage.removeItem('challengeId');
     setLoginState(false);
   };
 

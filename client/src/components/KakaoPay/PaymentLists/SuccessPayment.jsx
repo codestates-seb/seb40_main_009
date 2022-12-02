@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 
 function SuccessPayment() {
   const challengeId = localStorage.getItem('challengeId');
+  const createChallengeData = localStorage.getItem('createChallengeData');
   const location = useLocation();
   const navigate = useNavigate();
   const onClickImg = () => {
@@ -29,77 +30,61 @@ function SuccessPayment() {
   const PG_TOKEN = pgToken.replace('&tid', '');
 
   const TID = localStorage.getItem('TID');
-
   const data = { PG_TOKEN, TID };
-  console.log(data);
 
+  console.log(data);
   console.log('111', PG_TOKEN);
   console.log('222', TID);
 
-  const config = {
-    method: 'get',
-    url: `/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`,
-    // url: `/order/kakaopay/success?pg_token=${PG_TOKEN}`,
-    headers: {
-      'ngrok-skip-browser-warning': 'none',
-    },
+  // const config = {
+  //   method: 'get',
+  //   url: `/order/kakaopay/success?pg_token=${PG_TOKEN}&tid=${TID}`,
+  //   // url: `/order/kakaopay/success?pg_token=${PG_TOKEN}`,
+  //   headers: {
+  //     'ngrok-skip-browser-warning': 'none',
+  //   },
+  // };
+
+  const participateChallenge = async () => {
+    try {
+      await axios.get(
+        `order/kakaopay/success/1?pg_token=${PG_TOKEN}&tid=${TID}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem('authorizationToken'),
+          },
+        }
+      );
+      navigate('/');
+    } catch (error) {
+      console.log('error : ', error);
+    }
   };
 
-  const getData = () => {
-    axios(config)
-      .then(async () => {
-        console.log('hi i`m 1');
-        try {
-          console.log('hi i`m 222222');
-          console.log('토큰토큰', localStorage.getItem('authorizationToken'));
-          await axios
-            .post(
-              `/challenges/participate/${challengeId}`,
-              {
-                data: '',
-              },
-              {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  Authorization: localStorage.getItem('authorizationToken'),
-                },
-              }
-            )
-            .catch(async (error) => {
-              if (error.response.data.status === 401) {
-                try {
-                  const responseToken = await axios.get('/token', {
-                    headers: {
-                      'ngrok-skip-browser-warning': 'none',
-                      refresh: localStorage.getItem('refreshToken'),
-                    },
-                  });
-                  await localStorage.setItem(
-                    'authorizationToken',
-                    responseToken.headers.authorization
-                  );
-                  await localStorage.setItem(
-                    'test',
-                    responseToken.headers.authorization
-                  );
-                } catch (error) {
-                  console.log('재요청 실패', error);
-                }
-              }
-            });
-          navigate(`/challengelist/bucketlist`);
-        } catch (error) {
-          console.log('error', error);
+  const createChallenge = async () => {
+    try {
+      await axios.get(
+        `order/kakaopay/success/pg_token=${PG_TOKEN}&tid=${TID}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem('authorizationToken'),
+          },
+          data: createChallengeData,
         }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      );
+    } catch (error) {
+      console.log('error : ', error);
+    }
   };
 
   useEffect(() => {
-    getData();
+    if (createChallengeData) {
+      createChallenge();
+    } else {
+      participateChallenge();
+    }
   }, []);
+
   return (
     <CancellationPaymentComponent>
       <div className="font-width">
