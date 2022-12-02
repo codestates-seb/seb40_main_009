@@ -2,7 +2,7 @@ spring:
   application:
     name:
   profiles:
-    active:
+    active: aws
   config:
     import: classpath:/application-aws.yml
 

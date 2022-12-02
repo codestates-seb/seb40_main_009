@@ -57,11 +57,22 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
+	//firebase
+//	implementation 'com.google.firebase:firebase-admin:7.1.0'
 
+	//로그 관련
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+
 }
 
 
+
+configurations {
+	    all {
+		       exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		   }
+	}
 
 tasks.named('test') {
 	useJUnitPlatform()
