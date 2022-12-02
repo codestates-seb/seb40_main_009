@@ -62,7 +62,7 @@ export const CertificationImage = styled.div`
 
 export const Image = styled.img`
   border: 1px solid #eff1fe;
-  width: 50%;
+  width: 30%;
   height: 155px;
   margin-right: 2%;
   border-radius: 20px;

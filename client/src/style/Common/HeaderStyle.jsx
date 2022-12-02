@@ -31,7 +31,7 @@ export const Container = styled.div`
   align-items: center;
 `;
 
-export const Logo = styled.div`
+export const Logo = styled.img`
   color: #8673ff;
   cursor: pointer;
   font-size: 25px;
