@@ -24,7 +24,7 @@ public class Scheduler {
      * 매 00시 00분마다 챌린지 종료 status update
      */
     @Async
-    @Scheduled(cron = "0 0 3 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void scheduleCheckChallengeIsClosed(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================CHECK IF CHALLENGE IS CLOSED START==================");
