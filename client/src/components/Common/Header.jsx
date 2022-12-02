@@ -145,6 +145,7 @@ export default function Header() {
           src={LogoImage}
           alt="슬기로운생활로고 사진"
         />
+
         <ChallengeButton onClick={NavigateChallengePage}>
           Challenge
         </ChallengeButton>
