@@ -44,7 +44,6 @@ public class Challenge extends WriterAudit {
     @Setter
     private String challengeDescription;
 
-    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
     @Setter
     private double challengeCurrentParty;
     @Setter
@@ -98,7 +97,6 @@ public class Challenge extends WriterAudit {
     @Setter
     private String randomIdForImage;
 
-    // TODO: 응답할때는 소수점 없이 보여주기 위해서 Dto에서 Math.round()를 사용하자
     @Setter
     private double challengeSuccessCount=0;
 

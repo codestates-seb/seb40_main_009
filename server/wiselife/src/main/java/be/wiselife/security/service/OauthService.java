@@ -96,8 +96,7 @@ public class OauthService extends DefaultOAuth2UserService {
      */
     private Member getMemberProfile(String providerName, AccessTokenDto tokenData, ClientRegistration provider, String refreshToken) {
          Map<String, Object> userAttributes = getMemberAttributes(provider, tokenData);
-        
-         //TODO: 추가적인 소셜로그인을 구현한다면 아래에 추가한다.
+
          OAuth2MemberInfo oAuth2MemberInfo = null;
         if (providerName.equals("kakao")) {
             oAuth2MemberInfo = new KakaoMemberinfo(userAttributes);

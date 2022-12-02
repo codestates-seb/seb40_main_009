@@ -143,8 +143,4 @@ public class OrderController {
         return new ResponseEntity<>(
                 new AmountResponseDto<>(personalOrders, totalAmount), HttpStatus.OK);
     }
-
-    //TODO: 결제 취소리스트 구현
-    //TODO: 환급로직 구현
-
 }
