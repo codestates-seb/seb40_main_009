@@ -15,6 +15,4 @@ public class WiselifeApplication {
 		SpringApplication.run(WiselifeApplication.class, args);
 	}
 
-
-
 }
