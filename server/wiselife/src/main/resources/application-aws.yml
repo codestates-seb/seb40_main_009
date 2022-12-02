@@ -86,10 +86,13 @@ cloud:
         static: ap-northeast-2
       stack:
         auto: false
-        
+
+
 common:
     data:
-      kakao-ak: ${KAKAO_AUTH_ORDER_KEY} #KakaoAK 79fd132c770be75df16bbafdcfe48463
+      kakao-ak: KakaoAK 79fd132c770be75df16bbafdcfe48463 # ${KAKAO_AUTH_ORDER_KEY} #KakaoAK 79fd132c770be75df16bbafdcfe48463
       success: https://wiselife.click/order/success
       cancel: https://wiselife.click/order/cancel
       fail: https://wiselife.click/order/fail
+
+
