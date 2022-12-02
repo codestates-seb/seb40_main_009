@@ -52,7 +52,6 @@ public class OauthService extends DefaultOAuth2UserService {
         //3
         String accessToken = jwtTokenizer.createAccessToken(String.valueOf(member.getMemberEmail()));
 
-
         //4
         LoginDto loginDto = LoginDto.builder().memberId(member.getMemberId()).memberEmail(member.getMemberEmail()).memberName(member.getMemberName())
                 .imageUrl(member.getMemberImagePath()).AccessToken(accessToken).RefreshToken(refreshToken).memberMoney(member.getMemberMoney()).build();

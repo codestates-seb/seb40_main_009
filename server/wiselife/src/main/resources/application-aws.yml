@@ -2,10 +2,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
-#    properties:
-#      hibernate:
-#        format_sql: true  # (3) SQL pretty print
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${ENDPOINT}:${PORT}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -69,8 +65,7 @@ jwt:
     expire-length: 900000
   refresh-token:
     expire-length: 12096000
-    
-#TODO: 관리자 추가란
+
 mail:
   address:
       admin: mins402kim@kakao.com

@@ -20,9 +20,10 @@ public class ServerDeployChecker{
 
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();
+            String hostName = InetAddress.getLocalHost().getHostName();
 
             webhook.setTts(true);
-            webhook.setContent("computer "+ ip + " 의 서버가 구동되었습니다.");
+            webhook.setContent(hostName+" computer "+ ip + " 의 서버가 구동되었습니다.");
             webhook.execute();
 
         } catch (UnknownHostException e) {
