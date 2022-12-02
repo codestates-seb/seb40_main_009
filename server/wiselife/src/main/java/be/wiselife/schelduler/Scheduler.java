@@ -21,7 +21,7 @@ public class Scheduler {
 
 
     /**
-     * 매 00시 00분마다 챌린지 종료 status update
+     * 매 00시 00분마다 챌린지 종료 status update 밤에 하니까 밤마다 하즈아
      */
     @Async
     @Scheduled(cron = "0 0 0 * * *")

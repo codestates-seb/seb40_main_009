@@ -2,10 +2,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
-    properties:
-      hibernate:
-        format_sql: true  # (3) SQL pretty print
+#    show-sql: true      # (2) SQL 쿼리 출력
+#    properties:
+#      hibernate:
+#        format_sql: true  # (3) SQL pretty print
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${ENDPOINT}:${PORT}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -40,8 +40,8 @@ spring:
 # 이미지 사이즈 저장공간
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
+      max-file-size: 3MB
+      max-request-size: 3MB
 
 logging:
   level:
@@ -90,3 +90,6 @@ cloud:
 common:
   data:
     kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463 # ${KAKAO_AUTH_ORDER_KEY}
+    success: https://wiselife.click/order/success
+    cancel: https://wiselife.click/order/cancel
+    fail: https://wiselife.click/order/fail

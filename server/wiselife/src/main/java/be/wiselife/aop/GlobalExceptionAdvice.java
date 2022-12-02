@@ -15,15 +15,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.validation.ConstraintViolationException;
-import java.awt.*;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.net.URL;
-import java.util.*;
-import java.util.List;
 
 /*
  *  예외처리할떄 try-catch를 일일히 사용하기 귀찮고 가독성이 떨어져서 추가
@@ -150,7 +143,6 @@ public class GlobalExceptionAdvice {
         final ErrorResponse response = ErrorResponse.of(HttpStatus.UNAUTHORIZED, "Jwt expired");
         return response;
     }
-
 
 }
 

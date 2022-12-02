@@ -1,6 +1,7 @@
 package be.wiselife.order.controller;
 
 import be.wiselife.aop.NeedEmail;
+
 import be.wiselife.aop.NeedMember;
 import be.wiselife.challenge.dto.ChallengeDto;
 import be.wiselife.challenge.entity.Challenge;
@@ -51,18 +52,18 @@ public class OrderController {
     /**
      *
      * @param postInfo : 카카오톡 측에서 요구하는 상품명, 금액, 수량, tax 그리고 거래완료여부를 보기위한 boolean이있다.
+     * @param email :
      * @param EmailFromToken :
      * @return
      * @throws IOException
      */
     @NeedEmail
     @PostMapping("/ready")
-    public @ResponseBody ResponseEntity startContract(String EmailFromToken,@RequestBody OrderDto.OrderPostinfo postInfo){
+    public @ResponseBody ResponseEntity startContract(String email, @RequestBody OrderDto.OrderPostinfo postInfo){
 
         Order order = orderMapper.postInfoToOrder(postInfo);
-
-        OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order, EmailFromToken);
-
+        
+        OrderDto.OrderReadyResponse readyForPay = orderService.startKakaoPay(order, email);
         return new ResponseEntity(
                 new SingleResponseDto<>(readyForPay), HttpStatus.OK);
     }
@@ -128,11 +129,11 @@ public class OrderController {
     /*
      * 마이페이지 결제한내역 리스트 조회
      */
+    @NeedEmail
     @GetMapping("/list")
-    public ResponseEntity getOrderlistByUserId(HttpServletRequest request) {
+    public ResponseEntity getOrderlistByUserId(String email) {
         double totalAmount = 0;
-        String emailWithToken = jwtTokenizer.getEmailWithToken(request);
-        List<Order> orderList = orderService.getOrderList(emailWithToken);
+        List<Order> orderList = orderService.getOrderList(email);
         List<OrderDto.PersonalOrder> personalOrders = orderMapper.getOrderList(orderList);
 
         for (int i = 0; i < orderList.size(); i++) {
