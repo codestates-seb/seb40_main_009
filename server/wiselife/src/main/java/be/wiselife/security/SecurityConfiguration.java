@@ -44,7 +44,7 @@ public class SecurityConfiguration{
                 //cors친구가 다른 스크립트 기반 http통신을 해도 선택적으로 리소스에 접근할 수있는 권한을 부여하도록 브라우저에게 알려줌
                 .and()
                 .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 안쓰겠다.
-                .httpBasic().disable() //TODO: https 가능하면
+                .httpBasic().disable()
 
                 .exceptionHandling()
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //인증에러 발생시
