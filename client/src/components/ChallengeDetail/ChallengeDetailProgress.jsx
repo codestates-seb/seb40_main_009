@@ -545,31 +545,32 @@ export default function ChallengeDetailProgress({ challengeData }) {
               </button>
             </div>
 
-            <div style={{ display: 'flex', marginBottom: '2%', width: '30%' }}>
-              <div>제목:</div>
+            <div style={{ display: 'flex', marginBottom: '2%' }}>
+              <div>제목</div>
               <input
                 style={{
                   margin: '0 2%',
-                  width: '100%',
-                  borderTop: 'none',
-                  borderLeft: 'none',
-                  borderRight: 'none',
-                  borderBottom: '2px solid #8673FF',
+                  width: '80%',
+                  border: 'none',
+                  fontSize: '17px',
+                  borderRadius: '5px',
                 }}
                 onChange={(event) => {
                   setReviewTtile(event.target.value);
                 }}
               ></input>
             </div>
-            <div style={{ display: 'flex', marginBottom: '2%', width: '30%' }}>
-              <div>내용:</div>
+            <div style={{ display: 'flex', marginBottom: '2%' }}>
+              <div>내용</div>
               <textarea
                 style={{
                   margin: '0 2%',
-                  width: '100%',
+                  width: '80%',
+                  border: 'none',
+                  fontSize: '17px',
+                  borderRadius: '5px',
                   resize: 'none',
-                  height: '15%',
-                  border: '2px solid #8673FF',
+                  height: '100px',
                 }}
                 onChange={(event) => {
                   setReviewContent(event.target.value);
@@ -578,12 +579,19 @@ export default function ChallengeDetailProgress({ challengeData }) {
             </div>
             <div>이미지</div>
             <input
+              style={{ marginTop: '1%', marginBottom: '3%', color: '#8673FF' }}
               type={'file'}
               onChange={(e) => {
                 setImage(e.target.files[0]);
               }}
             />
-            <div>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
               <button
                 onClick={uploadReview}
                 style={{
@@ -657,7 +665,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
           >
             X
           </button>
-          <Masonry columnsCount={3} gutter="10px">
+          <Masonry
+            columnsCount={3}
+            gutter="10px"
+            style={{ marginTop: '109.5%', marginBottom: '1.5%' }}
+          >
             {challengeData.challengeReviews.map((image, i) => (
               <img
                 key={i}
@@ -801,38 +813,46 @@ export default function ChallengeDetailProgress({ challengeData }) {
             </ChallengeTitle>
 
             <ChallengeDescription>
-              <div className="margin_left3">챌린지 진행률:</div>
+              <div className="margin_right3">챌린지 진행률:</div>
               <div>
                 <ProgressBar percentage={progress} />
               </div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left2">참여 인원:</div>
+              <div className="margin_rightt2">참여 인원:</div>
               <div>{`${challengeData.challengeCurrentParty}명`}</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">챌린지 기간:</div>
+              <div className="margin_right">챌린지 기간:</div>
               <div>{`${challengeData.challengeStartDate} ~ ${challengeData.challengeEndDate}`}</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">챌린지 금액:</div>
+              <div className="margin_right">챌린지 금액:</div>
               <div>{challengeData.challengeFeePerPerson}원</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">결제한 금액:</div>
+              <div className="margin_right">결제한 금액:</div>
               <div>{challengeData.challengeFeePerPerson}원</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
-              <div className="margin_left">도전중인 유저:</div>
+              <div className="margin_right3">도전중인 유저:</div>
               {challengeData.participatingMember &&
                 challengeData.participatingMember.map((member) => {
                   return (
-                    <div key={challengeData.participatingMember.memberId}>
+                    <div
+                      key={challengeData.participatingMember.memberId}
+                      style={{
+                        marginRight: '2%',
+                        border: '2px solid #EFF1FE',
+                        borderRadius: '20px',
+                        padding: '0.3%',
+                      }}
+                    >
                       {member.participatingMemberName}
                     </div>
                   );

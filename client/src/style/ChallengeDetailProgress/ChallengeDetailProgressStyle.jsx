@@ -62,13 +62,13 @@ export const ChallengeDescription = styled.div`
   display: flex;
   width: 100%;
   font-size: 20px;
-  & .margin_left {
+  & .margin_right {
     margin-right: 10%;
   }
-  & .margin_left2 {
+  & .margin_right2 {
     margin-right: 12.5%;
   }
-  & .margin_left3 {
+  & .margin_right3 {
     margin-right: 7.7%;
   }
 `;
@@ -138,7 +138,7 @@ export const CertificationDescription = styled.div`
 
 export const Image = styled.img`
   border: 1px solid #eff1fe;
-  width: 50%;
+  width: 30%;
   height: 155px;
   margin-right: 2%;
   border-radius: 20px;
@@ -157,7 +157,9 @@ export const ViewMore = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
+  width: 220px;
+  height: 220px;
+  cursor: pointer;
 `;
 
 export const ReviewImage = styled.div`
