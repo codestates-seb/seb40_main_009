@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 
 function SuccessPayment() {
   const challengeId = localStorage.getItem('challengeId');
+
   const location = useLocation();
   const navigate = useNavigate();
 

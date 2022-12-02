@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   HeaderContainer,
   Container,
@@ -22,6 +22,7 @@ import { LoginState } from '../Login/KakaoLoginData';
 import { FaRunning } from 'react-icons/fa';
 import { TiArrowDownThick, TiArrowUpThick } from 'react-icons/ti';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { moneyState } from '../../atoms/atoms';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ export default function Header() {
   };
 
   const memberName = localStorage.getItem('LoginName');
+  const memberMoney = localStorage.getItem('memberMoney');
 
   // 메인페이지로 이동
   const NavigateMainPage = () => {
@@ -309,16 +311,18 @@ export default function Header() {
             />
           </div>
         )}
-        <Link to={'/ordersheet'}>
-          <div
-            style={{
-              width: '100px',
-              color: 'black',
-            }}
-          >
-            {localStorage.getItem('memberMoney')} 포인트
-          </div>
-        </Link>
+        {loginState && (
+          <Link to={'/ordersheet'}>
+            <div
+              style={{
+                width: '100px',
+                color: 'black',
+              }}
+            >
+              {memberMoney} 포인트
+            </div>
+          </Link>
+        )}
       </Container>
     </HeaderContainer>
   );

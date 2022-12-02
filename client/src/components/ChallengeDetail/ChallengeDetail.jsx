@@ -68,7 +68,7 @@ export default function ChallengeDetail({ challengeData }) {
             },
           }
         );
-        await navigate('/');
+        // await navigate('/');
       }
     } else {
       const response = await Swal.fire({

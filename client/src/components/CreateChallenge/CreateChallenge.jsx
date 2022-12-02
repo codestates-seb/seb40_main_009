@@ -57,13 +57,18 @@ export default function CreateChallenge() {
     data.append('post', stringData); // post 데이터 추가
 
     try {
-      await axios.post('/challenges', data, {
+      const response = await axios.post('/challenges', data, {
         headers: {
           'Content-Type': 'multipart/form-data', // 전송 타입 설정
           'ngrok-skip-browser-warning': 'none',
           Authorization: localStorage.getItem('authorizationToken'),
         },
       });
+      const minusMoney = response.data.data.challengeFeePerPerson;
+      localStorage.setItem(
+        'memberMoney',
+        Number(localStorage.getItem('memberMoney')) - minusMoney
+      );
       await setPageStateNumber(1);
       await setPageNumber(1);
       await navigate('/');
