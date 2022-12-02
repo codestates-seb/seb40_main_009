@@ -44,8 +44,8 @@ jobs:
         cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
         cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         common.data.kakaoAk: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
-        spring.security.oauth2.client.registration.client-id: ${{ secrets.KAKAO_CILENT_ID }}
-        spring.security.oauth2.client.registration.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+        spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CILENT_ID }}
+        spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
 
      # grant execute permission for gradlew
     - name : Grant execute permission for gradlew
