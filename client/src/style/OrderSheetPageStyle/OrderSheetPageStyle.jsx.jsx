@@ -114,3 +114,20 @@ export const OrderButton = styled.button`
     /* color: #fff; */
   }
 `;
+
+export const OrderButtonIsFalse = styled.button`
+  color: #ffffff;
+  font-size: 24px;
+  width: 250px;
+  height: 80px;
+  margin-top: 1rem;
+  background-color: #c2c2c2;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  :active {
+    height: 80px;
+    background: #8673ff;
+    /* color: #fff; */
+  }
+`;
