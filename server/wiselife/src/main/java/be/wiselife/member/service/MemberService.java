@@ -114,6 +114,7 @@ public class MemberService {
         if (!loginMember.getMemberName().equals(memberName)) {
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON);
         }
+
         verifyExistsMemberName(member.getMemberName());
 
         Optional.ofNullable(member.getMemberName())

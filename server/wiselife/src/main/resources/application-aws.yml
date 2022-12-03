@@ -40,15 +40,12 @@ spring:
       max-request-size: 3MB
 
 logging:
+  config: classpath:logback-spring.xml
   level:
     org:
       springframework:
         orm:
           jpa: DEBUG
-
-log4j:
-  appender:
-    sql:
 
 server:
   servlet:
