@@ -15,16 +15,16 @@ export const Recruitment = styled.div`
   display: flex;
   & > img {
     height: 350px;
-    width: 34%;
-    border-radius: 20px 0 0 20px;
+    width: 325px;
+    border-radius: 20px;
+    margin-right: 2%;
   }
   & > div {
     background-color: #eff1fe;
     height: 350px;
-    width: 30%;
-    position: absolute;
+    width: 700px;
     top: 136px;
-    right: 645px;
+    right: 15%;
     border-radius: 20px;
   }
 `;

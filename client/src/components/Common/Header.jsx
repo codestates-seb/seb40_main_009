@@ -239,6 +239,16 @@ export default function Header() {
               marginRight: '5%',
             }}
           >
+            <Link to={'/ordersheet'} style={{ textDecoration: 'none' }}>
+              <div
+                style={{
+                  width: '100px',
+                  color: 'black',
+                }}
+              >
+                💰{memberMoney} 포인트
+              </div>
+            </Link>
             <div
               style={{
                 display: 'flex',
@@ -266,7 +276,7 @@ export default function Header() {
                   style={{
                     position: 'absolute',
                     top: '65%',
-                    right: '5%',
+                    right: '10%',
                     backgroundColor: '#F2F4FE',
                     padding: '20px 10px',
                     borderRadius: '10px',
@@ -312,7 +322,7 @@ export default function Header() {
             />
           </div>
         )}
-        {loginState && (
+        {/* {loginState && (
           <Link to={'/ordersheet'}>
             <div
               style={{
@@ -320,10 +330,10 @@ export default function Header() {
                 color: 'black',
               }}
             >
-              {memberMoney} 포인트
+              💰{memberMoney} 포인트
             </div>
           </Link>
-        )}
+        )} */}
       </Container>
     </HeaderContainer>
   );
