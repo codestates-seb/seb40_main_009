@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 import {
   OrderSheetInfoPageComponent,
@@ -16,10 +17,16 @@ import {
   CheckPay,
   OrderButton,
   InfoContainerLists,
+  OrderButtonIsFalse,
 } from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx';
 
 function OrderSheetPage() {
+  const [isChecked, setIsChecked] = useState(false);
   const { register, handleSubmit } = useForm();
+
+  const checked = () => {
+    setIsChecked(!isChecked);
+  };
 
   const onPayment = async (data) => {
     data.orderTax = `${data.totalAmount * 0.1}`;
@@ -106,9 +113,21 @@ function OrderSheetPage() {
               <h1 className="order-info-title">결제 정보</h1>
               <h2> 충전 포인트 : 원</h2>
               <CheckPay>
-                <input className="check-input-box" type="checkbox"></input>
+                <input
+                  className="check-input-box"
+                  type="checkbox"
+                  onClick={checked}
+                ></input>
                 <span>동의합니다</span>
-                <OrderButton>결제하기</OrderButton>
+                {isChecked ? (
+                  <OrderButton disabled={isChecked ? false : true}>
+                    결제하기
+                  </OrderButton>
+                ) : (
+                  <OrderButtonIsFalse disabled={isChecked ? false : true}>
+                    결제하기
+                  </OrderButtonIsFalse>
+                )}
               </CheckPay>
             </InfoContainerLists>
           </Container>
