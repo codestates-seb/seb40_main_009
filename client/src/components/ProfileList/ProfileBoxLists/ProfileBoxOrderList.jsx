@@ -19,6 +19,8 @@ function ProfileBoxChallenge() {
     },
   ]);
 
+  console.log('lisy', orderLists);
+
   // get요청;
   const getOrderLists = async () => {
     try {

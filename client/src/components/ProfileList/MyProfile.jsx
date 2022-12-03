@@ -76,6 +76,7 @@ function MyProfile({
             className="readonly-box"
             placeholder={memberDescription}
             readOnly
+            style={{ resize: 'none' }}
           />
         </div>
         <ProfileBar>
