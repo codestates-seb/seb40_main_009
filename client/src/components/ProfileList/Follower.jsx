@@ -1,49 +1,83 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { AiOutlineHeart } from 'react-icons/ai';
 import { AiFillHeart } from 'react-icons/ai';
 
-// 1. 하트를 누르면 하트는 채워지고 숫자는 1 올라간다 => followStatus = 'UNFOLLOW'
-// 2. 하트를 다시 누르면 빈하트가 나오고 숫자는 다시 내려간다 => followStatus = 'FOLLOW'
+function Follower({ followStatus = 'UNFOLLOW', followerCount = 0 }) {
+  const [follow, setFollow] = useState({ followStatus, followerCount });
 
-function Follower({ followStatus, followerCount }) {
-  const data = { followStatus, followerCount };
+  const params = useParams();
+  const name = params.name;
+  console.log('dkdk', follow);
 
-  //   const [clickedHeart, setClickedHeart] = useState(followStatus);
-
-  const clickedHeart = () => {
-    if (followStatus === 'UNFOLLOW') {
+  const handleClick = (event) => {
+    event.preventDefault();
+    if (follow.followStatus === 'UNFOLLOW') {
+      // 서버 요청 필요
+      setFollow((follow) => ({
+        followStatus: 'FOLLOW',
+        followerCount: follow.followerCount + 1, // NaN
+      }));
+    } else {
+      // 서버 요청 필요
+      setFollow((follow) => ({
+        followStatus: 'UNFOLLOW',
+        followerCount: follow.followerCount - 1,
+      }));
     }
   };
 
-  //   // get요청
-  //   const getFollowers = async () => {
-  //     try {
-  //       axios
-  //         .get(`/follow/like/${name}`, {
-  //           headers: {
-  //             'ngrok-skip-browser-warning': 'none',
-  //             Authorization:
-  //               'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.FlS9lUOnWzAi9UFkZOT2UqT4FYmGiiRsST2wfPJErEiQLYYsJw9jSMwYaEwrM1DceWXltVQ5r8o0_OWjFGJa8w',
-  //           },
-  //         })
-  //         .then((response) => {
-  //           const myProfile = response.data;
-  //           console.log('my', myProfile);
-  //           setMyProfileLists(myProfile.data);
-  //         });
-  //     } catch (error) {
-  //       console.log('error: ', error);
-  //     }
-  //   };
+  //post요청
+  const postFollow = async () => {
+    try {
+      axios
+        .post(`follow/like/${name}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+            Authorization: localStorage.getItem('authorizationToken'),
+          },
+          data: follow,
+        })
+        .then((response) => {
+          const follower = response.data;
+          console.log('my', follower);
+          setFollow(follow.data);
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  };
 
   return (
     <>
       <div>
-        인기도
-        {/* {followStatus === 'SELF' && null}
-        {followStatus === 'UNFOLLOW' && <AiOutlineHeart />}
-        {followStatus === 'FOLLOW' && <AiFillHeart style={{ color: 'red' }} />} */}
+        인기도{follow.followerCount}
+        <span onClick={handleClick}>
+          {follow.followStatus === 'UNFOLLOW' && <AiOutlineHeart />}
+          {follow.followStatus === 'FOLLOW' && (
+            <AiFillHeart style={{ color: 'red' }} />
+          )}
+        </span>
       </div>
     </>
   );

@@ -52,35 +52,36 @@ function MyProfilePage() {
   // get요청
   const getProfile = async () => {
     try {
-      const response = await axios.get(`/member/${name}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'none',
-          Authorization: localStorage.getItem('authorizationToken'),
-        },
-      });
-      console.log('전', response);
-      const myProfile = await response.data;
-      setMyProfileLists(myProfile.data);
-      localStorage.setItem('memberMoney', myProfile.data.memberMoney);
-
-      // .catch(async (error) => {
-      //   if (error.response.data.status === 401) {
-      //     try {
-      //       const responseToken = await axios.get('/token', {
-      //         headers: {
-      //           'ngrok-skip-browser-warning': 'none',
-      //           refresh: localStorage.getItem('refreshToken'),
-      //         },
-      //       });
-      //       await localStorage.setItem(
-      //         'authorizationToken',
-      //         responseToken.headers.authorization
-      //       );
-      //     } catch (error) {
-      //       console.log('재요청 실패', error);
-      //     }
-      //   }
-      // });
+      axios
+        .get(`/member/${name}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'none',
+            Authorization: localStorage.getItem('authorizationToken'),
+          },
+        })
+        .then((response) => {
+          const myProfile = response.data;
+          console.log('my', myProfile);
+          setMyProfileLists(myProfile.data);
+        })
+        .catch(async (error) => {
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        });
     } catch (error) {
       console.log('error: ', error);
     }

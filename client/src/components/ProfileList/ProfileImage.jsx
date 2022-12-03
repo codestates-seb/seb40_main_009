@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 
-import { ImageUploadComponent } from '../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
+import { ImageUploadComponent } from '../../style/MyProfilePageStyle/EditProfileStyle';
 
 function ProfileImage({ memberImagePath }) {
   const [Image, setImage] = useState(memberImagePath);
@@ -32,7 +32,7 @@ function ProfileImage({ memberImagePath }) {
         className="profilePicture"
         alt="profile img"
         src={Image}
-        // value={memberImagePath}
+        value={memberImagePath}
         onClick={() => {
           fileInput.current.click();
         }}
@@ -40,7 +40,7 @@ function ProfileImage({ memberImagePath }) {
       <input
         type="file"
         // style={{ display: 'none' }}
-        accept="image/*"
+        accept="image/avif,image/webp,image/apng,image/svg+xml"
         name="profile_img"
         onChange={onChange}
         ref={fileInput}

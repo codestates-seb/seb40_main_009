@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -27,13 +27,14 @@ function EditProfilePage() {
     memberName: memberName,
     memberDescription: memberDescription,
   };
+  console.log('textdata', textData);
 
   const dataValue = JSON.stringify(textData);
   const stringData = new Blob([dataValue], { type: 'application/json' });
 
   const data = {
-    patch: stringData,
-    image: memberImagePath,
+    stringData,
+    memberImagePath,
   };
   console.log('xxxx', data);
 
@@ -53,7 +54,7 @@ function EditProfilePage() {
       .then((response) => {
         console.log(response);
         localStorage.setItem('LoginName', editProfileLists.memberName);
-        navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
+        // navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
       })
 
       .catch(function (error) {
@@ -61,6 +62,9 @@ function EditProfilePage() {
         alert('닉네임은 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.');
       });
   };
+  // useEffect(() => {
+  //   patchEdit;
+  // }, []);
 
   // const patchEdit = async () => {
   //   try {
