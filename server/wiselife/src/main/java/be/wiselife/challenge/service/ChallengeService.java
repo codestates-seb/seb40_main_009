@@ -284,7 +284,6 @@ public class ChallengeService {
      */
     public void updateChallengeSuccessRate(int totalThreadNum, int currentThreadOrder){
         //진행중인 챌린지 전체 조회
-        log.info("updateChallengeSuccessRate tx start");
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
         challengeList = challengeList.subList(challengeList.size()/totalThreadNum * (currentThreadOrder-1), challengeList.size()/totalThreadNum * currentThreadOrder);
@@ -302,7 +301,6 @@ public class ChallengeService {
         }
 
         challengeRepository.saveAll(challengeList);
-        log.info("updateChallengeSuccessRate tx end");
     }
 
     /**
@@ -432,7 +430,6 @@ public class ChallengeService {
      */
     public void updateChallengeTotalRewardAndMemberChallengeToBeRefunded(int totalThreadNum, int currentThreadOrder) {
         //진행중인 챌린지 전체 조회
-        log.info("updateChallengeTotalRewardAndMemberChallengeToBeRefunded tx start");
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
         challengeList = challengeList.subList(challengeList.size()/totalThreadNum * (currentThreadOrder-1), challengeList.size()/totalThreadNum * currentThreadOrder);
@@ -455,7 +452,6 @@ public class ChallengeService {
         }
 
         challengeRepository.saveAll(challengeList);
-        log.info("updateChallengeTotalRewardAndMemberChallengeToBeRefunded tx end");
     }
 
 
