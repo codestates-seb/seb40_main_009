@@ -363,7 +363,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
 
   //인증횟수 계산
   const certificationCount = challengeData.challengeCertImages?.filter(
-    (member) => member.memberId === 100001
+    (member) => member.memberId !== loginId
   ).length;
 
   //인증사진올리기 모달창
@@ -454,7 +454,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
         console.log('22222222');
         await axios
           .post(
-            `/challenges/participate/${challengeId}`,
+            `/challenges/unparticipate/${challengeId}`,
             {
               data: '',
             },
