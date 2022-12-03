@@ -237,7 +237,6 @@ export default function Header() {
               alignItems: 'center',
               justifyContent: 'end',
               marginRight: '5%',
-              border: '1px solid red',
             }}
           >
             <Link to={'/ordersheet'} style={{ textDecoration: 'none' }}>
@@ -258,6 +257,7 @@ export default function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 color: 'black',
+                marginLeft: '2%',
               }}
             >
               반가워요,
