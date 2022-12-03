@@ -11,7 +11,7 @@ import BoxOrderList from './BoxOrderList';
 function ProfileBoxChallenge() {
   const [orderLists, setOrderLists] = useState([]);
 
-  // get요청
+  // get요청;
   const getOrderLists = async () => {
     try {
       const response = await axios.get(`/order/list`, {
