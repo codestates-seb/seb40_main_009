@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { isAfter, format } from 'date-fns';
+import { isAfter, format, parseISO } from 'date-fns';
 
 import * as S from '../../style/ChallengeList/Challenge.styled';
 import { useRecoilValue } from 'recoil';
@@ -12,33 +12,33 @@ export default function Challenge({ id, title, description, image, endDate }) {
   /**챌린지 상세 페이지로 이동*/
   const moveToChallengeDetail = () => {
     if (!isLogin) {
-      alert('로그인 하슈');
+      alert('로그인 후 확인하실 수 있습니다.');
       navigate('/');
     } else {
       navigate(`/detail/${id}`);
     }
   };
 
-  // const checkEndDate = (endDate) => {
-  //   endDate === new Date.now();
-  // };
-  // const a = format(Date.now(), 'yyyy, MM, dd');
-  // const end = format(endDate, 'yyyy, MM, dd');
-  // console.log(a);
-  // console.log(endDate);
-  // isAfter(a, endDate);
+  function checkLateParticipate() {
+    const today = format(Date.now(), 'yyyy-MM-dd');
+    return !isAfter(parseISO(today), parseISO(endDate));
+  }
 
-  // console.log(isAfter(endDate, a));
+  console.log(checkLateParticipate());
+
   return (
-    <S.CardContainer>
-      <S.CardContents className="face1" endDate={endDate}>
+    <S.CardContainer checkLateParticipate={checkLateParticipate()}>
+      <S.CardContents
+        className="face1"
+        checkLateParticipate={checkLateParticipate()}
+      >
         <S.UpperCard>
           <img alt="challengeImage" src={image} />
           <h4>{title}</h4>
         </S.UpperCard>
       </S.CardContents>
       <S.CardContents className="face2">
-        <S.LowerCard>
+        <S.LowerCard checkLateParticipate={checkLateParticipate()}>
           <p>{description}</p>
           <span onClick={moveToChallengeDetail}>Read More</span>
         </S.LowerCard>
