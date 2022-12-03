@@ -103,7 +103,7 @@ public class OrderService {
      */
 
     public OrderDto.ApproveResponse approveKakaoPay(String pgtoken, String tid) throws IOException {
-        log.info("approveKakaoPay tx start");
+        log.info("approveKakaoPay tx start {}",tid);
         Order order = orderRepository.findByTid(tid).orElseThrow(()->new BusinessLogicException(ExceptionCode.TRADE_CODE_WRONG));
 
         //카카오톡에서 요청하는 기본 양식
@@ -119,7 +119,7 @@ public class OrderService {
         OrderDto.ApproveResponse approveResponse = restTemplate.postForObject(approveUrl, requestEntity, OrderDto.ApproveResponse.class);
 
         if (approveResponse != null) {
-            log.info("승인 및 결제완료 {}", approveResponse);
+            log.info("승인 및 결제완료 {}", approveResponse.getTid());
             int beforeTrade = (int) order.getTotalAmount();
             int afterTrade = approveResponse.getAmount().getTotal();
             if (beforeTrade != afterTrade) { //결제요청전 금액과 결제요청 금액이 다르다면 예외를 반환한다.
