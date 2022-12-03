@@ -5,84 +5,49 @@ import { useParams } from 'react-router-dom';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { AiFillHeart } from 'react-icons/ai';
 
-function Follower({ followStatus = 'UNFOLLOW', followerCount = 0 }) {
-  const [follow, setFollow] = useState({ followStatus, followerCount });
+function Follower({ followStatus, followerCount }) {
+  const [like, setLike] = useState(false);
 
   const params = useParams();
   const name = params.name;
-  console.log('dkdk', follow);
 
-  const handleClick = (event) => {
-    // event.preventDefault();
-    if (follow.followStatus === 'UNFOLLOW') {
-      // 서버 요청 필요
-      setFollow((follow) => ({
-        followStatus: 'FOLLOW',
-        followerCount: follow.followerCount + 1, // NaN
-      }));
-    } else {
-      // 서버 요청 필요
-      setFollow((follow) => ({
-        followStatus: 'UNFOLLOW',
-        followerCount: follow.followerCount - 1,
-      }));
+  useEffect(() => {
+    if (followStatus === 'FOLLOW') {
+      setLike(true);
     }
-  };
+  });
 
-  //post요청
-  const postFollow = async () => {
+  const handleClick = async () => {
+    setLike(!like);
+
     try {
-      axios
-        .post(`follow/like/${name}`, {
+      await axios.post(
+        `/follow/like/${name}`,
+        {
+          data: '',
+        },
+        {
           headers: {
             'ngrok-skip-browser-warning': 'none',
             Authorization: localStorage.getItem('authorizationToken'),
           },
-          data: follow,
-        })
-        .then((response) => {
-          const follower = response.data;
-          console.log('my', follower);
-          setFollow(follow.data);
-        })
-        .catch(async (error) => {
-          if (error.response.data.status === 401) {
-            try {
-              const responseToken = await axios.get('/token', {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  refresh: localStorage.getItem('refreshToken'),
-                },
-              });
-              await localStorage.setItem(
-                'authorizationToken',
-                responseToken.headers.authorization
-              );
-            } catch (error) {
-              console.log('재요청 실패', error);
-            }
-          }
-        });
+        }
+      );
+      window.location.reload();
     } catch (error) {
-      console.log('error: ', error);
+      console.log(error);
     }
   };
 
   return (
     <>
       <div>
-        인기도{follow.followerCount}
-        <span
-          onClick={() => {
-            handleClick();
-            postFollow();
-          }}
-        >
-          {follow.followStatus === 'UNFOLLOW' && <AiOutlineHeart />}
-          {follow.followStatus === 'FOLLOW' && (
-            <AiFillHeart style={{ color: 'red' }} />
-          )}
+        인기도{followerCount}
+        <span onClick={handleClick}>
+          {like === false && <AiOutlineHeart />}
+          {like === true && <AiFillHeart style={{ color: 'red' }} />}
         </span>
+        {like}
       </div>
     </>
   );
