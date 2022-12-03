@@ -22,6 +22,7 @@ public enum ExceptionCode {
     YOU_NEED_TO_CHARGE_MONEY(404, "You need to charge money"),
     THIS_CHALLENGE_HAS_MAX_MEMBER(404, "This challenge has max member"),
     YOU_ALREADY_UNPARTICIPATED(404, "You already unparticipated"),
+    CHALLENGE_ALREADY_STARTED(404, "Challenge already started"),
     //Follower 부분 예외 ==========시작
     CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself"),
    

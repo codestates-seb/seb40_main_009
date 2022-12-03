@@ -19,9 +19,10 @@ public interface MemberMapper {
     List<MemberDto.listResponse> memberListResponses(List<Member> memberList);
     // 회원 정보를 수정할때
     default Member memberPatchToMember(MemberDto.Patch patchMember) {
-        if (patchMember == null) {
+    
+        if(patchMember == null)
             return null;
-        }
+
         Member member = new Member();
 
         member.setMemberName(patchMember.getMemberName());

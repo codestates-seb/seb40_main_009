@@ -114,20 +114,25 @@ public class MemberService {
         if (!loginMember.getMemberName().equals(memberName)) {
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON);
         }
-
-        verifyExistsMemberName(member.getMemberName());
-
+        if(member != null){
+        Optional.ofNullable(member.getMemberName())
+                        .ifPresent(this::verifyExistsMemberName);
         Optional.ofNullable(member.getMemberName())
                 .ifPresent(new_memberName->memberFromRepository.setMemberName(new_memberName));
         Optional.ofNullable(member.getMemberDescription())
                 .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
-
-        if (!Optional.ofNullable(multipartFiles).isEmpty()) {
-            log.info("multipartFiles={}",multipartFiles.getBytes());
-            member.setMemberId(memberFromRepository.getMemberId());
-            imageService.patchMemberImage(member,multipartFiles);
-            memberFromRepository.setMemberImagePath(member.getMemberImagePath());
+        Optional.ofNullable(member.getMemberImagePath())
+                .ifPresent(memberFromRepository::setMemberImagePath);
         }
+        Optional.ofNullable(multipartFiles)
+                .ifPresent(file -> {
+                    try {
+                        imageService.patchMemberImage(memberFromRepository, file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
         log.info("updateMemberInfo tx end");
         return memberRepository.save(memberFromRepository);
     }

@@ -206,19 +206,28 @@ public class ChallengeService {
         Challenge savedChallenge = findChallengeById(challengeId);
         //유저 권한 확인
         checkMemberAuthorization(savedChallenge, loginMember);
+        //챌린지가 시작됐는지 여부 확인
+        checkTimeAuthorization(savedChallenge);
         //삭제
         challengeRepository.delete(savedChallenge);
         log.info("deleteChallengeById tx end");
     }
 
+    //챌린지가 시작한 후인지 확인하는 함수
+    private void checkTimeAuthorization(Challenge savedChallenge) {
+        LocalDate now = LocalDate.now();
+        if(now.isAfter(savedChallenge.getChallengeStartDate()))
+            throw new BusinessLogicException(ExceptionCode.CHALLENGE_ALREADY_STARTED);
+    }
+
     /**
     * 조회수 증가 함수
-    * TODO: cookie를 이용한 중복 조회 기능
     * */
     public Challenge updateViewCount(Challenge challenge){
         log.info("updateViewCount tx start");
         challenge.setChallengeViewCount(challenge.getChallengeViewCount() + 1);
         log.info("updateViewCount tx end");
+
         return saveChallenge(challenge);
     }
 
@@ -226,6 +235,7 @@ public class ChallengeService {
     public Challenge findChallengeById(Long challengeId){
         log.info("findChallengeById tx start");
         log.info("findChallengeById tx end");
+
         return verifyChallengeById(challengeId);
     }
 
@@ -274,7 +284,6 @@ public class ChallengeService {
      */
     public void updateChallengeSuccessRate(int totalThreadNum, int currentThreadOrder){
         //진행중인 챌린지 전체 조회
-        log.info("updateChallengeSuccessRate tx start");
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
         challengeList = challengeList.subList(challengeList.size()/totalThreadNum * (currentThreadOrder-1), challengeList.size()/totalThreadNum * currentThreadOrder);
@@ -292,7 +301,6 @@ public class ChallengeService {
         }
 
         challengeRepository.saveAll(challengeList);
-        log.info("updateChallengeSuccessRate tx end");
     }
 
     /**
@@ -422,7 +430,6 @@ public class ChallengeService {
      */
     public void updateChallengeTotalRewardAndMemberChallengeToBeRefunded(int totalThreadNum, int currentThreadOrder) {
         //진행중인 챌린지 전체 조회
-        log.info("updateChallengeTotalRewardAndMemberChallengeToBeRefunded tx start");
         List<Challenge> challengeList = challengeRepository.findChallengesByIsClosed(false).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.CHALLENGE_NOT_FOUND));
         challengeList = challengeList.subList(challengeList.size()/totalThreadNum * (currentThreadOrder-1), challengeList.size()/totalThreadNum * currentThreadOrder);
@@ -445,7 +452,6 @@ public class ChallengeService {
         }
 
         challengeRepository.saveAll(challengeList);
-        log.info("updateChallengeTotalRewardAndMemberChallengeToBeRefunded tx end");
     }
 
 

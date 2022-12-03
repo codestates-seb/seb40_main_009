@@ -91,12 +91,11 @@ public class ChallengeController {
     @PatchMapping(value = "/{challenge-id}", consumes = {"multipart/form-data"})
     public ResponseEntity patchChallenge(Member member,
                                          @PathVariable("challenge-id") @Positive Long challengeId,
-                                         @Valid @RequestPart(value = "patch") ChallengeDto.Patch challengePatchDto,
+                                         @Valid @RequestPart(value = "patch", required = false) ChallengeDto.Patch challengePatchDto,
                                          @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
                                          @RequestPart(value = "rep", required = false) MultipartFile repImage) throws IOException {
 
         Challenge challenge = challengeMapper.challengePatchDtoToChallenge(challengePatchDto);
-
         challenge = challengeService.updateChallenge(challenge, member, challengeId, exampleImage, repImage);
 
         return new ResponseEntity<>(
@@ -184,10 +183,9 @@ public class ChallengeController {
 
     /**
      * 챌린지 삭제
-     *
      * @param challengeId
      * @param member
-     * @return TODO: 챌린지가 시작했다면 챌린지 작성자라도 수정 불가능하게
+     * @return
      */
     @NeedMember
     @DeleteMapping({"/{challenge-id}"})
@@ -200,7 +198,6 @@ public class ChallengeController {
 
     /**
      * 카테고리별 전체 챌린지 조회
-     *
      * @param categoryId 카테고리에 해당하는 카테고리 id
      * @param sortBy     paging 기준 1.newest(=최신순) 2.popularity(=인기순)
      * @param page       조회하고 싶은 페이지 숫자
