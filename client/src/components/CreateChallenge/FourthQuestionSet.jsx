@@ -12,7 +12,7 @@ const TimeContainer = styled.section`
   grid-template-columns: repeat(12, 1fr);
 `;
 
-export default function FourthQuestionSet({ register, watch }) {
+export default function FourthQuestionSet({ register, watch, errors }) {
   const [pageStateNumber, setStatePageNumber] = useRecoilState(
     createChallengeStateNumber
   );
@@ -108,10 +108,16 @@ export default function FourthQuestionSet({ register, watch }) {
         <input
           {...register('challengeAuthDescription', {
             required: 'Please Write validExplain',
+            minLength: {
+              value: 2,
+              message: 'Please Enter 2 characters',
+            },
           })}
           placeholder="인증 방법 설명하기"
           onChange={(event) => answerCheck(event)}
         />
+        {errors.challengeAuthDescription?.type === 'minLength' &&
+          errors.challengeAuthDescription.message}
       </div>
 
       <div className="question">
@@ -175,7 +181,7 @@ export default function FourthQuestionSet({ register, watch }) {
 
       <div className="question">
         <h3>인증 시간</h3>
-        <span>선택한 시간부터 최대 10분까지 인증 가능합니다.</span>
+        <span>선택한 시간부터 최대 10분간 인증이 가능합니다.</span>
         <TimeContainer>
           {timeTable.map((el) => (
             <label key={el}>
@@ -206,6 +212,7 @@ export default function FourthQuestionSet({ register, watch }) {
 }
 
 const timeTable = [
+  '00:00',
   '01:00',
   '02:00',
   '03:00',
@@ -229,5 +236,4 @@ const timeTable = [
   '21:00',
   '22:00',
   '23:00',
-  '24:00',
 ];

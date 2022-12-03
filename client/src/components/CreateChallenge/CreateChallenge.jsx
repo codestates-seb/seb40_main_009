@@ -32,7 +32,8 @@ export default function CreateChallenge() {
   const navigate = useNavigate();
 
   /**신규 챌린지 생성 데이터 전송 */
-  const { register, handleSubmit, watch, getValues } = useForm();
+  const { register, handleSubmit, watch, getValues, formState } = useForm();
+  const { errors } = formState;
 
   /**유효성 검사 & 데이터 전송 */
   const onValid = async (setData) => {
@@ -78,13 +79,14 @@ export default function CreateChallenge() {
   };
 
   const challengeComponents = [
-    <FirstQuestionSet register={register} watch={watch} />,
-    <SecondQuestionSet register={register} watch={watch} />,
-    <ThirdQuestionSet register={register} watch={watch} />,
+    <FirstQuestionSet register={register} watch={watch} errors={errors} />,
+    <SecondQuestionSet register={register} watch={watch} errors={errors} />,
+    <ThirdQuestionSet register={register} watch={watch} errors={errors} />,
     <FourthQuestionSet
       register={register}
       watch={watch}
       getValues={getValues}
+      errors={errors}
     />,
   ];
 
