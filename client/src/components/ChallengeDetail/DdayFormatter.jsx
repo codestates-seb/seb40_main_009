@@ -17,6 +17,7 @@ export default function DdayFormatter(props) {
   const [hour, setHour] = useState(m);
   const [minutes, setMinutes] = useState(d);
   const [seconds, setSeconds] = useState(s);
+
   // 시간이 넘어갈때마다 일, 시간, 분 바꿔주기
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -47,13 +48,21 @@ export default function DdayFormatter(props) {
     return () => clearInterval(countdown);
   }, [day, hour, minutes, seconds]);
 
+  let text = `도전 성공까지 ${day}일 ${hour}시간 ${minutes}분`;
+  if (day + 1 === 0) {
+    text = '오늘이 마지막날이예요! 화이팅';
+  }
+  if (day + 1 !== 0 && setDate < now) {
+    text = '챌린지가 끝났어요!';
+  }
   return (
     <div>
-      {day <= 0 ? (
-        <div>오늘이 마지막날이예요! 화이팅</div>
-      ) : (
-        <div>{`도전 성공까지 ${day}일 ${hour}시간 ${minutes}분`}</div>
-      )}
+      {/* {setDate < now ? <div>챌린지가 끝났어요!</div> : null} */}
+      {/* {day <= 0 ? ( */}
+      <div>{text}</div>
+      {/* ) : ( */}
+      {/* <div>{`도전 성공까지 ${day}일 ${hour}시간 ${minutes}분`}</div> */}
+      {/* )} */}
     </div>
   );
 }
