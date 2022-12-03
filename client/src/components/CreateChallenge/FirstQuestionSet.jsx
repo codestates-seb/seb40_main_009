@@ -4,7 +4,7 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 
-export default function FirstQuestionSet({ register, watch }) {
+export default function FirstQuestionSet({ register, watch, errors }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
 
   /**1번 페이지에서 입력할 모든 값을 입력시 페이지 이동 버튼 활성화 */
@@ -37,7 +37,7 @@ export default function FirstQuestionSet({ register, watch }) {
             <input
               type={'radio'}
               {...register('challengeCategoryId', {
-                required: 'Please Choice Quantity',
+                required: 'Please Choice Category',
               })}
               onChange={(event) => answerCheck(event)}
               value={'1'}
@@ -48,7 +48,7 @@ export default function FirstQuestionSet({ register, watch }) {
             <input
               type={'radio'}
               {...register('challengeCategoryId', {
-                required: 'Please Choice Quantity',
+                required: 'Please Choice Category',
               })}
               onChange={(event) => answerCheck(event)}
               value={'2'}
@@ -59,7 +59,7 @@ export default function FirstQuestionSet({ register, watch }) {
             <input
               type={'radio'}
               {...register('challengeCategoryId', {
-                required: 'Please Choice Quantity',
+                required: 'Please Choice Category',
               })}
               onChange={(event) => answerCheck(event)}
               value={'3'}
@@ -98,6 +98,10 @@ export default function FirstQuestionSet({ register, watch }) {
           className="inputBox"
           {...register('challengeFeePerPerson', {
             required: 'Please Write Content',
+            minLength: {
+              value: 3,
+              message: '천원 이상의 단위를 입력해주세요',
+            },
           })}
           placeholder="참가 금액"
           onChange={(event) => answerCheck(event)}
