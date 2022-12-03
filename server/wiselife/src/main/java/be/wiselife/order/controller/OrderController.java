@@ -73,10 +73,9 @@ public class OrderController {
      * @param tid 처음 결제요청에서 거래에대한 암호키
      * @return
      */
-    @NeedMember
+
     @GetMapping(value = "/kakaopay/success")
-    public ResponseEntity afterQR(Member member,
-                                  @RequestParam("pg_token") String pg_token,
+    public ResponseEntity afterQR(@RequestParam("pg_token") String pg_token,
                                   @RequestParam("tid") String tid) throws IOException {
 
         OrderDto.ApproveResponse approveResponse = orderService.approveKakaoPay(pg_token, tid);
