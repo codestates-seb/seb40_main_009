@@ -59,6 +59,7 @@
 
     <springProfile name="local">
         <root level="info">
+<!--            <appender-ref ref="aws_cloud_watch_log"/> &lt;!&ndash;INFO 출력위치&ndash;&gt;-->
             <appender-ref ref="CONSOLE"/> <!--INFO 일반적인 코드 출력위치-->
         </root>
 
@@ -68,17 +69,6 @@
         <root level="info">
             <appender-ref ref="aws_cloud_watch_log"/> <!--INFO 출력위치-->
         </root>
-
-        <logger name="com.amazonaws.util.EC2MetadataUtils" level="error" additivity="false">
-            <appender-ref ref="aws_cloud_watch_log"/> <!--INFO 출력위치-->
-        </logger>
-        <!--    - name : 로그의 name, 로그를 정의할 패키지의 범위-->
-        <!--    - level : 로그의 Level(위에 log level 참고)-->
-        <!--    - additivity : 중복로깅여부-->
-
-        <logger name="mashup.spring.jsmr" level="debug" additivity="false">
-        </logger>
-
     </springProfile>
 </configuration>
 
