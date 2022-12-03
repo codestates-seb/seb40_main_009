@@ -358,6 +358,10 @@ export default function ChallengeDetailProgress({ challengeData }) {
     progress = 100;
   }
 
+  if (endDate < today) {
+    progress = 100;
+  }
+
   const leftDay = Math.abs(pastDay);
   // console.log('진행률>>>', progress);
 

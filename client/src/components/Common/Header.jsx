@@ -237,12 +237,12 @@ export default function Header() {
               alignItems: 'center',
               justifyContent: 'end',
               marginRight: '5%',
+              border: '1px solid red',
             }}
           >
             <Link to={'/ordersheet'} style={{ textDecoration: 'none' }}>
               <div
                 style={{
-                  width: '100px',
                   color: 'black',
                 }}
               >
