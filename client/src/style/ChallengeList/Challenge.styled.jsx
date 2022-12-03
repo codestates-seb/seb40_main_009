@@ -30,13 +30,14 @@ export const LowerCard = styled.div`
     display: inline-block;
     text-decoration: none;
     height: 20px;
-    color: #8673ff;
+    color: ${(props) => (props.checkLateParticipate ? '#8673ff' : 'gray')};
     font-size: 14px;
     cursor: pointer;
 
     :hover {
       height: 22px;
-      background: #8673ff;
+      background-color: ${(props) =>
+        props.checkLateParticipate ? '#8673ff' : 'gray'};
       color: #fff;
     }
   }
@@ -50,7 +51,8 @@ export const CardContents = styled.div`
     padding-top: 20px;
     padding-bottom: 20px;
     position: relative;
-    background: #eff1fe;
+    background-color: ${(props) =>
+      props.checkLateParticipate ? '#eff1fe' : 'gray'};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,7 +82,8 @@ export const CardContainer = styled.div`
   :hover {
     ${CardContents} {
       &.face1 {
-        background-color: #8673ff;
+        background-color: ${(props) =>
+          props.checkLateParticipate ? '#8673ff' : 'gray'};
         transform: translateY(10px);
       }
 
