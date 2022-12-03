@@ -13,7 +13,7 @@ function Follower({ followStatus = 'UNFOLLOW', followerCount = 0 }) {
   console.log('dkdk', follow);
 
   const handleClick = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     if (follow.followStatus === 'UNFOLLOW') {
       // 서버 요청 필요
       setFollow((follow) => ({
@@ -72,7 +72,12 @@ function Follower({ followStatus = 'UNFOLLOW', followerCount = 0 }) {
     <>
       <div>
         인기도{follow.followerCount}
-        <span onClick={handleClick}>
+        <span
+          onClick={() => {
+            handleClick();
+            postFollow();
+          }}
+        >
           {follow.followStatus === 'UNFOLLOW' && <AiOutlineHeart />}
           {follow.followStatus === 'FOLLOW' && (
             <AiFillHeart style={{ color: 'red' }} />
