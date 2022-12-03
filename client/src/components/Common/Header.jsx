@@ -121,14 +121,14 @@ export default function Header() {
   };
 
   const logOut = () => {
-    window.localStorage.removeItem('refreshToken');
-    window.localStorage.removeItem('authorizationToken');
-    window.localStorage.removeItem('LoginId');
-    window.localStorage.removeItem('LoginName');
-    window.localStorage.removeItem('createChallengeData');
-    window.localStorage.removeItem('challengeId');
-    window.localStorage.removeItem('memberMoney');
+    window.localStorage.clear();
     setLoginState(false);
+  };
+
+  const onKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      moveSearchResultPage();
+    }
   };
 
   return (
@@ -179,6 +179,7 @@ export default function Header() {
               setSearchValue(event.target.value);
               setSearchBox(true);
             }}
+            onKeyPress={onKeyPress}
           />
           {/* 유저검색 */}
           {searchValue !== '' &&
@@ -242,7 +243,6 @@ export default function Header() {
             <Link to={'/ordersheet'} style={{ textDecoration: 'none' }}>
               <div
                 style={{
-                  width: '100px',
                   color: 'black',
                 }}
               >
@@ -254,6 +254,7 @@ export default function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 color: 'black',
+                marginLeft: '2%',
               }}
             >
               반가워요,
@@ -322,18 +323,6 @@ export default function Header() {
             />
           </div>
         )}
-        {/* {loginState && (
-          <Link to={'/ordersheet'}>
-            <div
-              style={{
-                width: '100px',
-                color: 'black',
-              }}
-            >
-              💰{memberMoney} 포인트
-            </div>
-          </Link>
-        )} */}
       </Container>
     </HeaderContainer>
   );
