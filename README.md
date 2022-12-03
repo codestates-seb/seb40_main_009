@@ -84,7 +84,7 @@
 ## :earth_africa: Project Architecture
 
 ---
-
+[![aws-arc.png](https://i.postimg.cc/Hssjtfd3/aws-arc.png)](https://postimg.cc/bdWzyVG2)
 ......
 
 <br>
