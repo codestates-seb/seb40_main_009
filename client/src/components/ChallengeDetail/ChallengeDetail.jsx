@@ -56,19 +56,60 @@ export default function ChallengeDetail({ challengeData }) {
         cancelButtonText: '다음에...',
       });
       if (response.isConfirmed) {
-        await axios.post(
-          `/challenges/participate/${challengeId}`,
-          {
-            data: '',
-          },
-          {
-            headers: {
-              'ngrok-skip-browser-warning': 'none',
-              Authorization: authorizationToken,
+        try {
+          await axios.post(
+            `/challenges/participate/${challengeId}`,
+            {
+              data: '',
             },
+            {
+              headers: {
+                'ngrok-skip-browser-warning': 'none',
+                Authorization: authorizationToken,
+              },
+            }
+          );
+        } catch (error) {
+          const errorMessage = error.response.data.error.message;
+          console.log('error', errorMessage);
+
+          if ('This challenge has max member' === errorMessage) {
+            Swal.fire({
+              icon: 'info',
+              title: '챌린지 정원이 다 찼습니다.',
+              text: '다음에 이용해주세요.',
+            });
           }
-        );
-        // await navigate('/');
+
+          if ('You need to charge money' === errorMessage) {
+            Swal.fire({
+              icon: 'info',
+              title: '포인트를 충전해주세요.',
+            });
+            navigate('/ordersheet');
+          }
+
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
+        }
       }
     } else {
       const response = await Swal.fire({
@@ -100,32 +141,39 @@ export default function ChallengeDetail({ challengeData }) {
                 title: `${challengeData.challengeTitle}에 참가하셨습니다.`,
               });
               window.location.reload();
-            })
-            .catch(async (error) => {
-              if (error.response.data.status === 401) {
-                try {
-                  const responseToken = await axios.get('/token', {
-                    headers: {
-                      'ngrok-skip-browser-warning': 'none',
-                      refresh: localStorage.getItem('refreshToken'),
-                    },
-                  });
-                  await localStorage.setItem(
-                    'authorizationToken',
-                    responseToken.headers.authorization
-                  );
-                  await localStorage.setItem(
-                    'test',
-                    responseToken.headers.authorization
-                  );
-                } catch (error) {
-                  console.log('재요청 실패', error);
-                }
-              }
             });
           return navigate(`/detail/${challengeData.challengeId}`);
         } catch (error) {
-          console.log('error', error);
+          const errorMessage = error.response.data.error.message;
+          console.log('error', errorMessage);
+
+          if ('This challenge has max member' === errorMessage) {
+            Swal.fire({
+              icon: 'info',
+              title: '챌린지 정원이 다 찼습니다.',
+              text: '다음에 이용해주세요.',
+            });
+          }
+          if (error.response.data.status === 401) {
+            try {
+              const responseToken = await axios.get('/token', {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  refresh: localStorage.getItem('refreshToken'),
+                },
+              });
+              await localStorage.setItem(
+                'authorizationToken',
+                responseToken.headers.authorization
+              );
+              await localStorage.setItem(
+                'test',
+                responseToken.headers.authorization
+              );
+            } catch (error) {
+              console.log('재요청 실패', error);
+            }
+          }
         }
       }
     }
@@ -152,7 +200,6 @@ export default function ChallengeDetail({ challengeData }) {
   const startDate = new Date(challengeData.challengeStartDate);
   const distance = now.getTime() - startDate.getTime();
   const left = Math.abs(Math.floor(distance / (1000 * 60 * 60 * 24)));
-  // console.log('roqsdgsdg>>', left);
 
   return (
     <>
@@ -230,8 +277,8 @@ export default function ChallengeDetail({ challengeData }) {
 
               {/* 참여버튼 */}
               {new Date() < new Date(challengeData.challengeStartDate) &&
-              Number(challengeData.challengeMinParty) !==
-                Number(challengeData.challengeMaxParty) &&
+              // Number(challengeData.challengeMinParty) !==
+              //   Number(challengeData.challengeMaxParty) &&
               authorizationToken !== null ? (
                 <ButtonWrapper>
                   <button className="custom-btn btn-8">
@@ -286,10 +333,10 @@ export default function ChallengeDetail({ challengeData }) {
             </div>
           ) : (
             <Masonry columnsCount={3} gutter="10px">
-              {challengeData.challengeReviews?.map((image, i) => (
+              {challengeData.challengeReviews.map((image, i) => (
                 <img
                   key={i}
-                  src={image}
+                  src={image.challengeReviewImagePath}
                   style={{ width: '100%', display: 'block', cursor: 'pointer' }}
                   alt="후기사진들"
                   onClick={() => viewImage(image, i)}
