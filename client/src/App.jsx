@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SearchResult from './pages/SearchResult';
 
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="/profile/edit/:name" element={<EditProfilePage />} />
           <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
           <Route path="/order/success" element={<SuccessPayment />} />
+          <Route path="/searchresult" element={<SearchResult />} />
           <Route path="/order/fail" element={<FailedPayment />} />
           <Route path="/order/cancel" element={<CancellationPayment />} />
           <Route
