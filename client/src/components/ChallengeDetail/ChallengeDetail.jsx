@@ -260,11 +260,11 @@ export default function ChallengeDetail({ challengeData }) {
 
               <ChallengeDescription>
                 <div className="title">최소 / 최대 인원:</div>
-                <div>{`${challengeData.challengeMinParty} / ${challengeData.challengeMaxParty}명`}</div>
+                <div>{`${challengeData.challengeMinParty} / ${challengeData.challengeMaxParty} 명`}</div>
               </ChallengeDescription>
               <ChallengeDescription>
                 <div className="title">신청 인원 / 정원:</div>
-                <div>{`${challengeData.challengeCurrentParty} / ${challengeData.challengeMaxParty}명`}</div>
+                <div>{`${challengeData.challengeCurrentParty} / ${challengeData.challengeMaxParty} 명`}</div>
               </ChallengeDescription>
               <ChallengeDescription>
                 <div className="title2">챌린지 기간:</div>
@@ -272,7 +272,12 @@ export default function ChallengeDetail({ challengeData }) {
               </ChallengeDescription>
               <ChallengeDescription>
                 <div className="title2">챌린지 금액:</div>
-                <div>{challengeData.challengeFeePerPerson}원</div>
+                <div>
+                  {challengeData.challengeFeePerPerson
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                  &nbsp; 원
+                </div>
               </ChallengeDescription>
 
               {/* 참여버튼 */}

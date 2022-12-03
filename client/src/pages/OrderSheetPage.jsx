@@ -4,9 +4,6 @@ import { useState } from 'react';
 
 import {
   OrderSheetInfoPageComponent,
-  // Header,
-  // OrderLists,
-  // OrderList,
   PayButton,
   Main,
   OrderLeft,
@@ -20,8 +17,9 @@ import {
   OrderButtonIsFalse,
 } from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx';
 
-function OrderSheetPage() {
+export default function OrderSheetPage() {
   const [isChecked, setIsChecked] = useState(false);
+  const [isChargePoint, setChargePoint] = useState(0);
   const { register, handleSubmit } = useForm();
 
   const checked = () => {
@@ -47,6 +45,10 @@ function OrderSheetPage() {
     }
   };
 
+  const answerCheck = (event) => {
+    setChargePoint(event.target.value);
+  };
+
   return (
     <OrderSheetInfoPageComponent onSubmit={handleSubmit(onPayment)}>
       <h1 className="order-title">주문서 작성</h1>
@@ -61,46 +63,20 @@ function OrderSheetPage() {
               hidden
             />
             <input type={'number'} value={1} {...register('quantity')} hidden />
-            <label>
-              <input
-                type={'radio'}
-                value={'1000'}
-                {...register('totalAmount')}
-              />
-              1,000원
-            </label>
-            <label>
-              <input
-                type={'radio'}
-                value={'5000'}
-                {...register('totalAmount')}
-              />
-              5,000원
-            </label>
-            <label>
-              <input
-                type={'radio'}
-                value={'10000'}
-                {...register('totalAmount')}
-              />
-              10,000원
-            </label>
-            <label>
-              <input
-                type={'radio'}
-                value={'50000'}
-                {...register('totalAmount')}
-              />
-              50,000원
-            </label>
-            <label>
-              <input
-                type={'radio'}
-                value={'100000'}
-                {...register('totalAmount')}
-              />
-              100,000원
-            </label>
+            {pointList.map((point, index) => (
+              <label key={index}>
+                <input
+                  type={'radio'}
+                  value={point}
+                  {...register('totalAmount')}
+                  onChange={(event) => answerCheck(event)}
+                />
+                {point
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp;원
+              </label>
+            ))}
           </OrderInfoTop>
           <OrderInfoBottom>
             <h2 className="order-title">결제 수단</h2>
@@ -111,7 +87,14 @@ function OrderSheetPage() {
           <Container>
             <InfoContainerLists>
               <h1 className="order-info-title">결제 정보</h1>
-              <h2> 충전 포인트 : 원</h2>
+              <h2>
+                {' '}
+                충전 포인트 :{' '}
+                {isChargePoint
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp;원
+              </h2>
               <CheckPay>
                 <input
                   className="check-input-box"
@@ -137,4 +120,4 @@ function OrderSheetPage() {
   );
 }
 
-export default OrderSheetPage;
+const pointList = ['1000', '5000', '10000', '50000', '100000'];

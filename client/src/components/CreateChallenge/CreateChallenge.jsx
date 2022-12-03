@@ -72,7 +72,7 @@ export default function CreateChallenge() {
       );
       await setPageStateNumber(1);
       await setPageNumber(1);
-      await navigate('/');
+      await navigate('/challengelist/bucketlist');
     } catch (error) {
       console.log('error : ', error);
     }

@@ -64,12 +64,15 @@ function MyProfile({
               <GiMedallist style={{ color: badgeLevelColor[memberBadge] }} />
             </div>
             <p>
-              챌린지성공률:
+              챌린지성공률:&nbsp;
               {memberChallengePercentage}%
             </p>
             <p>
-              현재 포인트:
-              {memberMoney} 포인트
+              현재 포인트: &nbsp;
+              {memberMoney
+                .toString()
+                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+              &nbsp;포인트
             </p>
           </div>
           <textarea
