@@ -4,7 +4,12 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 
-export default function FirstQuestionSet({ register, watch, errors }) {
+export default function FirstQuestionSet({
+  register,
+  watch,
+  errors,
+  setError,
+}) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
 
   /**1번 페이지에서 입력할 모든 값을 입력시 페이지 이동 버튼 활성화 */
@@ -26,6 +31,20 @@ export default function FirstQuestionSet({ register, watch, errors }) {
     watch(validateList[2])
       ? setStatePageNumber(2)
       : setStatePageNumber(1);
+  };
+
+  const moneyCheck = (event) => {
+    const haveMoney = Number(localStorage.getItem('memberMoney'));
+    if (haveMoney < event.target.value) {
+      return setError('pointError', {
+        message: `현재 보유중인 ${haveMoney
+          .toString()
+          .replace(
+            /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+            ','
+          )} 포인트보다 많게 설정할 수는 없습니다`,
+      });
+    }
   };
 
   return (
@@ -98,15 +117,15 @@ export default function FirstQuestionSet({ register, watch, errors }) {
           className="inputBox"
           {...register('challengeFeePerPerson', {
             required: 'Please Write Content',
-            minLength: {
-              value: 3,
-              message: '천원 이상의 단위를 입력해주세요',
-            },
           })}
           placeholder="참가 금액"
-          onChange={(event) => answerCheck(event)}
+          onChange={(event) => {
+            answerCheck(event);
+            moneyCheck(event);
+          }}
           type={'number'}
         />
+        <S.ErrorMessage>{errors.pointError?.message}</S.ErrorMessage>
       </div>
     </S.CreateAsk>
   );

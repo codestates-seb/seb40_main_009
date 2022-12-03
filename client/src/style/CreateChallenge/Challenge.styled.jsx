@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const ErrorMessage = styled.span`
+  color: red;
+`;
+
 export const CreateAsk = styled.section`
   display: flex;
   flex-direction: column;
