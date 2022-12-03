@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import { BsHouse } from 'react-icons/bs';
 import {
   AiFillGithub,
@@ -7,6 +8,7 @@ import {
   AiFillLinkedin,
   AiFillInstagram,
 } from 'react-icons/ai';
+
 import {
   CancellationPaymentComponent,
   WiseLife,

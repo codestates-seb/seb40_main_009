@@ -80,11 +80,6 @@ export const ProfileBoxChallengeComponent = styled.div`
   }
 `;
 
-// ProfileBoxChallengeList.jsx
-export const ProfileBoxChallengeListComponent = styled.div`
-  margin: 2.5rem;
-`;
-
 // ProfileBoxOrderList
 export const ProfileBoxOrderListComponent = styled.div`
   margin: 2.5rem;
@@ -119,7 +114,7 @@ export const ProfileBoxOrderList = styled.div`
 `;
 
 // BorderOrderList.jsx
-export const BoxOrderList = styled.div`
+export const BoxOrderListComponent = styled.div`
   /* font-size: 16px; */
   border: 1px solid #b5b4f9;
   padding: 1rem;

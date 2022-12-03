@@ -1,5 +1,7 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { BsHouse } from 'react-icons/bs';
 import {
   AiFillGithub,
@@ -13,7 +15,6 @@ import {
   DescriptionContainer,
   FooterLogo,
 } from '../../../style/KakaoPay/KakaoPayStyle';
-import { useEffect } from 'react';
 
 function SuccessPayment() {
   const challengeId = localStorage.getItem('challengeId');

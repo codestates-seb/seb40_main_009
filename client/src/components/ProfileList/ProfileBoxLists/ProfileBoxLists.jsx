@@ -1,7 +1,11 @@
-import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
 import { useState, useEffect } from 'react';
+
+import {
+  ProfileBoxComponent,
+  Tab,
+} from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
+
 import ProfileBoxChallenge from './ProfileBoxChallenge';
-import ProfileBoxChallengeList from './ProfileBoxChallengeList';
 import ProfileBoxOrderList from './ProfileBoxOrderList';
 
 function ProfileBoxLists({
@@ -18,8 +22,6 @@ function ProfileBoxLists({
     2: '결제 내역',
   };
 
-  // const data = {p}
-
   useEffect(() => {
     if (clickedTab === 0) {
       setChallenges(participatingChallenges);
@@ -33,22 +35,21 @@ function ProfileBoxLists({
   }, [participatingChallenges, endChallenges, clickedTab]);
 
   return (
-    <S.ProfileBoxComponent>
+    <ProfileBoxComponent>
       <header>
         {[0, 1, 2].map((tab) => (
-          <S.Tab
+          <Tab
             key={tab}
             className={clickedTab === tab ? 'active-tabs' : 'tabs'}
-            // style={{
-            //   display:
-            //     clickedTab === 2 && memberName !== LoginName ? 'none' : 'block',
-            // }}
+            style={{
+              display: tab === 2 && memberName !== LoginName ? 'none' : 'block',
+            }}
             onClick={() => {
               setClickedTab(tab);
             }}
           >
             {tabName[tab]}
-          </S.Tab>
+          </Tab>
         ))}
       </header>
       <section>
@@ -66,9 +67,11 @@ function ProfileBoxLists({
               clickedTab={clickedTab}
             />
           ))}
-        {clickedTab === 2 && <ProfileBoxOrderList />}
+        {clickedTab === 2 && memberName === LoginName && (
+          <ProfileBoxOrderList />
+        )}
       </section>
-    </S.ProfileBoxComponent>
+    </ProfileBoxComponent>
   );
 }
 export default ProfileBoxLists;

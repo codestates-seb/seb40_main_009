@@ -1,7 +1,22 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 
-import * as S from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx';
+import {
+  OrderSheetInfoPageComponent,
+  // Header,
+  // OrderLists,
+  // OrderList,
+  PayButton,
+  Main,
+  OrderLeft,
+  OrderInfoTop,
+  OrderInfoBottom,
+  OrderRight,
+  Container,
+  CheckPay,
+  OrderButton,
+  InfoContainerLists,
+} from '../style/OrderSheetPageStyle/OrderSheetPageStyle.jsx';
 
 function OrderSheetPage() {
   const { register, handleSubmit } = useForm();
@@ -26,11 +41,11 @@ function OrderSheetPage() {
   };
 
   return (
-    <S.OrderSheetInfoPageComponent onSubmit={handleSubmit(onPayment)}>
+    <OrderSheetInfoPageComponent onSubmit={handleSubmit(onPayment)}>
       <h1 className="order-title">주문서 작성</h1>
-      <S.Main>
-        <S.OrderLeft>
-          <S.OrderInfoTop>
+      <Main>
+        <OrderLeft>
+          <OrderInfoTop>
             <h2 className="order-title">주문 정보</h2>
             <input
               type={'text'}
@@ -79,27 +94,27 @@ function OrderSheetPage() {
               />
               100,000원
             </label>
-          </S.OrderInfoTop>
-          <S.OrderInfoBottom>
+          </OrderInfoTop>
+          <OrderInfoBottom>
             <h2 className="order-title">결제 수단</h2>
-            <S.PayButton>카카오페이</S.PayButton>
-          </S.OrderInfoBottom>
-        </S.OrderLeft>
-        <S.OrderRight>
-          <S.Container>
-            <S.InfoContainerLists>
+            <PayButton>카카오페이</PayButton>
+          </OrderInfoBottom>
+        </OrderLeft>
+        <OrderRight>
+          <Container>
+            <InfoContainerLists>
               <h1 className="order-info-title">결제 정보</h1>
               <h2> 충전 포인트 : 원</h2>
-              <S.CheckPay>
+              <CheckPay>
                 <input className="check-input-box" type="checkbox"></input>
                 <span>동의합니다</span>
-                <S.OrderButton>결제하기</S.OrderButton>
-              </S.CheckPay>
-            </S.InfoContainerLists>
-          </S.Container>
-        </S.OrderRight>
-      </S.Main>
-    </S.OrderSheetInfoPageComponent>
+                <OrderButton>결제하기</OrderButton>
+              </CheckPay>
+            </InfoContainerLists>
+          </Container>
+        </OrderRight>
+      </Main>
+    </OrderSheetInfoPageComponent>
   );
 }
 

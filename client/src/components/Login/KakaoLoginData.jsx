@@ -1,6 +1,4 @@
 import { atom } from 'recoil';
-import { useEffect } from 'react';
-
 import { recoilPersist } from 'recoil-persist';
 
 //'설정한 리다이렉트 URL을 넣어준다'
@@ -18,13 +16,3 @@ export const LoginState = atom({
   default: false,
   effects_UNSTABLE: [persistAtom],
 });
-
-// 왜 getItem 해서 안꺼내지..?
-
-// 사용해서 로그인
-// const token = window.location.href.split('?token=')[1];
-
-// useEffect(() => {
-//     if (authorizationToken) localStorage.setItem('authorizationToken', token);
-//     if (localStorage.getItem('authorizationToken')) setIsLoggedIn(true);
-//   }, []);
