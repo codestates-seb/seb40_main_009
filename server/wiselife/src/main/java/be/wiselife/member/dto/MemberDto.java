@@ -21,7 +21,6 @@ public class MemberDto {
 
         private String memberDescription;
 
-
     }
 
     @AllArgsConstructor

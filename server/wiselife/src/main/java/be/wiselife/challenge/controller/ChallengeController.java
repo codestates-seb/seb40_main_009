@@ -103,8 +103,9 @@ public class ChallengeController {
                 , HttpStatus.OK);
     }
 
+
     /**
-     * 탈퇴에 사용될 url 프론트에서는 참가자가 챌린지에 접근하면 이 유알엘로 가는 버튼만 활성화 해야함
+     * 참가에 사용될 url 프론트에서는 참가자가 챌린지에 접근하면 이 유알엘로 가는 버튼만 활성화 해야함
      *
      * @param challengeId CHALLENGE 테이블 PK
      * @param member login member
@@ -113,18 +114,35 @@ public class ChallengeController {
     @NeedMember
     @PostMapping("/participate/{challengeId}")
     public ResponseEntity postMemberAndChallenge(Member member,
+                                                   @PathVariable("challengeId") @Positive Long challengeId) {
+
+        Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
+
+        Challenge challenge = challengeService.participateChallenge(challengeFromRepository, member);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper)),HttpStatus.OK);
+    }
+
+    /**
+     * 탈퇴에 사용될 url 프론트에서는 참가자가 챌린지에 접근하면 이 유알엘로 가는 버튼만 활성화 해야함
+     *
+     * @param challengeId CHALLENGE 테이블 PK
+     * @param member login member
+     * @return
+     */
+    @NeedMember
+    @PostMapping("/unparticipate/{challengeId}")
+    public ResponseEntity deleteMemberAndChallenge(Member member,
                                                  @PathVariable("challengeId") @Positive Long challengeId) {
 
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
         Challenge challenge = challengeService.minusParticipateChallenge(challengeFromRepository, member);
 
-        MemberChallenge memberChallenge = memberChallengeRepository.findByChallengeAndMember(challenge, member);
 
-            log.info("unparti");
-            return new ResponseEntity<>(
+        return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper)),HttpStatus.OK);
-
     }
 
     /**
