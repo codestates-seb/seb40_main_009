@@ -9,55 +9,21 @@ import {
 import BoxOrderList from './BoxOrderList';
 
 function ProfileBoxChallenge() {
-  const [orderLists, setOrderLists] = useState([
-    {
-      itemName: '',
-      orderId: '',
-      requestuniquenumber: '',
-      approved_at: '',
-      totalAmount: '',
-    },
-  ]);
+  const [orderLists, setOrderLists] = useState([]);
 
-  console.log('lisy', orderLists);
-
-  // get요청;
+  // get요청
   const getOrderLists = async () => {
     try {
-      axios
-        .get(`order/list`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'none',
-            Authorization: localStorage.getItem('authorizationToken'),
-          },
-        })
-        .then((response) => {
-          const order = response.data;
-          console.log('order', order);
-          setOrderLists(order);
-          // setOrderLists(order.data);
-          console.log('set', setOrderLists);
-        })
-        .catch(async (error) => {
-          if (error.response.data.status === 401) {
-            try {
-              const responseToken = await axios.get('/token', {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  refresh: localStorage.getItem('refreshToken'),
-                },
-              });
-              await localStorage.setItem(
-                'authorizationToken',
-                responseToken.headers.authorization
-              );
-            } catch (error) {
-              console.log('재요청 실패', error);
-            }
-          }
-        });
+      const response = await axios.get(`/order/list`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+          Authorization: localStorage.getItem('authorizationToken'),
+        },
+      });
+      const orderList = response.data.data;
+      setOrderLists(orderList);
     } catch (error) {
-      console.log(error);
+      console.error('error', error);
     }
   };
 
@@ -75,13 +41,7 @@ function ProfileBoxChallenge() {
         <div className="approved_at-size">결제시간</div>
         <div className="totalAmount-size">결제금액</div>
       </ProfileBoxOrderList>
-      <BoxOrderList
-        orderId={orderLists.orderId}
-        approved_at={orderLists.approved_at}
-        requestuniquenumber={orderLists.equestuniquenumber}
-        itemName={orderLists.itemName}
-        totalAmount={orderLists.totalAmount}
-      />
+      <BoxOrderList orderLists={orderLists} />
     </ProfileBoxOrderListComponent>
   );
 }
