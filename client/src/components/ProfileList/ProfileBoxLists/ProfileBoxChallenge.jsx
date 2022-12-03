@@ -1,4 +1,4 @@
-import * as S from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
+import { ProfileBoxChallengeComponent } from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
 //반복되는 대상 맵 필요x
 
 function ProfileBoxList({
@@ -13,16 +13,10 @@ function ProfileBoxList({
   if (ProfileBoxList === []) {
     return 'dkdk';
   }
-  // console.log('tab', memberSuccessDay);
-  // if (clickedTab === 2) return null;
-  // const tabName = {
-  //   0: '도전 중',
-  //   1: '도전내역',
-  //   2: '결제내역',
-  // };
+  // 문제 => 각각의 탭 잘 나오다 0번째 탭을 클릭하고 이동하면 모두 0번 째 내용으로만 나옴
 
   return (
-    <S.ProfileBoxChallengeComponent>
+    <ProfileBoxChallengeComponent>
       <div className="title">
         <h1>
           {clickedTab === 0 && '도전 중'}
@@ -52,7 +46,7 @@ function ProfileBoxList({
       <p className="notice">
         *수수료로 인해 예상금액과 실제 환급금액은 서로 상이할 수 있음.
       </p>
-    </S.ProfileBoxChallengeComponent>
+    </ProfileBoxChallengeComponent>
   );
 }
 

@@ -1,20 +1,19 @@
-import { useEffect, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  REST_API_KEY,
-  REDIRECT_URI,
-  LoginState,
-} from '../Login/KakaoLoginData';
 import axios from 'axios';
+
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { LoginState } from './KakaoLoginData';
 import { useSetRecoilState } from 'recoil';
 
 function KakaoLogin() {
   const location = useLocation();
   const navigate = useNavigate();
   const setLoginState = useSetRecoilState(LoginState);
+
   const KAKAO_CODE = location.search.split('=')[1]; // 인가코드
 
   // 로그인
+  // Todo 리프레시 토큰
   const getKakaoToken = async () => {
     try {
       const response = await axios.get(`/oauth/kakao?code=${KAKAO_CODE}`, {

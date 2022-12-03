@@ -55,16 +55,6 @@ export const ProfileEditButton = styled.button`
   cursor: pointer;
 `;
 
-// ProfileImage.jsx
-
-export const ImageUploadComponent = styled.div`
-  .profilePicture {
-    width: 180px;
-    height: 180px;
-    border-radius: 30px;
-  }
-`;
-
 // ChartBar.jsx
 export const move = keyframes`
 	0%{
