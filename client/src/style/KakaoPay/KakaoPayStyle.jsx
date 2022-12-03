@@ -6,6 +6,7 @@ export const CancellationPaymentComponent = styled.div`
   background-color: #8673ff;
   padding-top: 10rem;
   font-size: 20px;
+
   h1 {
     font-size: 60px;
     text-align: right;

@@ -20,6 +20,7 @@ function MyProfilePage() {
       memberImagePath: '',
       memberChallengePercentage: '',
       memberExpObjRate: '',
+      memberMoney: '',
       followStatus: '',
       followerCount: '',
       participatingChallenges: [
@@ -51,43 +52,39 @@ function MyProfilePage() {
 
   const params = useParams();
   const name = params.name;
-  console.log('my', myProfileLists);
 
   // get요청
   const getProfile = async () => {
     try {
-      axios
-        .get(`/member/${name}`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'none',
-            // Authorization:
-            //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBrYWthby5jb20iLCJpYXQiOjE2Njg1NjQ0OTMsImV4cCI6MTY3Nzc4NDY3M30.U8NmMuT3VVJGhaBbe33gvm5WnEBHQFRFNwogwzLwYNYfa2BdluAbSRPu81y29LGQaLxi-AHvwmd-6ONPwR_KMA',
-            Authorization: localStorage.getItem('authorizationToken'),
-          },
-        })
-        .then((response) => {
-          const myProfile = response.data;
-          console.log('my', myProfile);
-          setMyProfileLists(myProfile.data);
-        })
-        .catch(async (error) => {
-          if (error.response.data.status === 401) {
-            try {
-              const responseToken = await axios.get('/token', {
-                headers: {
-                  'ngrok-skip-browser-warning': 'none',
-                  refresh: localStorage.getItem('refreshToken'),
-                },
-              });
-              await localStorage.setItem(
-                'authorizationToken',
-                responseToken.headers.authorization
-              );
-            } catch (error) {
-              console.log('재요청 실패', error);
-            }
-          }
-        });
+      const response = await axios.get(`/member/${name}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+          Authorization: localStorage.getItem('authorizationToken'),
+        },
+      });
+      console.log('전', response);
+      const myProfile = await response.data;
+      setMyProfileLists(myProfile.data);
+      localStorage.setItem('memberMoney', myProfile.data.memberMoney);
+
+      // .catch(async (error) => {
+      //   if (error.response.data.status === 401) {
+      //     try {
+      //       const responseToken = await axios.get('/token', {
+      //         headers: {
+      //           'ngrok-skip-browser-warning': 'none',
+      //           refresh: localStorage.getItem('refreshToken'),
+      //         },
+      //       });
+      //       await localStorage.setItem(
+      //         'authorizationToken',
+      //         responseToken.headers.authorization
+      //       );
+      //     } catch (error) {
+      //       console.log('재요청 실패', error);
+      //     }
+      //   }
+      // });
     } catch (error) {
       console.log('error: ', error);
     }
@@ -107,6 +104,7 @@ function MyProfilePage() {
         memberExpObjRate={myProfileLists.memberExpObjRate}
         followerCount={myProfileLists.followerCount}
         followStatus={myProfileLists.followStatus}
+        memberMoney={myProfileLists.memberMoney}
       />
       <ProfileBoxLists
         endChallenges={myProfileLists.endChallenges}

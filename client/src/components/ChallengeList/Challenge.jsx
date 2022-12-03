@@ -13,8 +13,10 @@ export default function Challenge({ id, title, description, image, endDate }) {
   const moveToChallengeDetail = () => {
     if (!isLogin) {
       alert('로그인 하슈');
+      navigate('/');
+    } else {
+      navigate(`/detail/${id}`);
     }
-    navigate(`/detail/${id}`);
   };
 
   // const checkEndDate = (endDate) => {

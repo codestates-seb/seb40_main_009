@@ -13,7 +13,7 @@ function KakaoLogin() {
   const navigate = useNavigate();
   const setLoginState = useSetRecoilState(LoginState);
   const KAKAO_CODE = location.search.split('=')[1]; // 인가코드
-  console.log('hi');
+
   // 로그인
   const getKakaoToken = async () => {
     try {
@@ -22,11 +22,11 @@ function KakaoLogin() {
           'ngrok-skip-browser-warning': 'none',
         },
       });
-
       localStorage.setItem('refreshToken', response.data.refreshToken);
       localStorage.setItem('authorizationToken', response.data.accessToken);
       localStorage.setItem('LoginId', response.data.memberId);
       localStorage.setItem('LoginName', response.data.memberName);
+      localStorage.setItem('memberMoney', response.data.memberMoney);
       setLoginState(true);
       navigate('/');
       // .catch(async (error) => {

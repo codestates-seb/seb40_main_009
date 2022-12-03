@@ -5,7 +5,6 @@ import { AiFillHeart } from 'react-icons/ai';
 
 function Follower({ followStatus, followerCount }) {
   const data = { followStatus, followerCount };
-  console.log('data', data);
 
   //   const [clickedHeart, setClickedHeart] = useState(followStatus);
 
