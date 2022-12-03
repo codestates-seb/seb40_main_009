@@ -4,13 +4,10 @@ import be.wiselife.aop.NeedEmail;
 import be.wiselife.aop.NeedMember;
 import be.wiselife.dto.MultiResponseDto;
 import be.wiselife.dto.SingleResponseDto;
-import be.wiselife.exception.BusinessLogicException;
-import be.wiselife.exception.ExceptionCode;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.mapper.MemberMapper;
 import be.wiselife.member.service.MemberService;
-import be.wiselife.security.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
@@ -41,10 +38,8 @@ public class MemberController {
 
     //추가 의존성 주입 필요, voter, image, challenge, challengeReview 관련 Service 클래스
     private final MemberService memberService;
-
     private final MemberMapper mapper;
 
-    private final JwtTokenizer jwtTokenizer;
 
 
     /**
@@ -96,13 +91,15 @@ public class MemberController {
      * DTO와 함께받기위해선 RequestPart를 사용해야함.
      */
     @NeedMember
-    @PatchMapping(value = "/{memberName}",consumes = {"multipart/form-data"})
-    public ResponseEntity patchMember(Member member,@PathVariable("memberName") String memberName,
-                                      @Valid @RequestPart("patch") MemberDto.Patch patchData,
+    @PatchMapping(value = "/{memberName}", consumes = {"multipart/form-data"})
+    public ResponseEntity patchMember(Member member,
+                                      @PathVariable("memberName") String memberName,
+                                      @Valid @RequestPart(value = "patch", required = false) MemberDto.Patch patchData,
                                       @RequestPart(value = "image",required = false) MultipartFile multipartFiles
                                       ) throws IOException {
 
-        Member updateMember = memberService.updateMemberInfo(memberName, mapper.memberPatchToMember(patchData), member, multipartFiles);
+
+        Member updateMember = memberService.updateMemberInfo(member.getMemberName(), mapper.memberPatchToMember(patchData), member, multipartFiles);
 
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(updateMember)), HttpStatus.OK);
@@ -122,7 +119,7 @@ public class MemberController {
 
         Page<Member> pageInfo = memberService.searchMember(name, page - 1, size);
         List<Member> memberList = pageInfo.getContent();
-
+        log.error("test ");
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.memberListResponses(memberList), pageInfo), HttpStatus.OK);
     }
