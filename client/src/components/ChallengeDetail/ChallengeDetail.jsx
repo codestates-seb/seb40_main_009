@@ -57,18 +57,27 @@ export default function ChallengeDetail({ challengeData }) {
       });
       if (response.isConfirmed) {
         try {
-          await axios.post(
-            `/challenges/participate/${challengeId}`,
-            {
-              data: '',
-            },
-            {
-              headers: {
-                'ngrok-skip-browser-warning': 'none',
-                Authorization: authorizationToken,
+          await axios
+            .post(
+              `/challenges/participate/${challengeId}`,
+              {
+                data: '',
               },
-            }
-          );
+              {
+                headers: {
+                  'ngrok-skip-browser-warning': 'none',
+                  Authorization: authorizationToken,
+                },
+              }
+            )
+            .then(() => {
+              Toast.fire({
+                icon: 'success',
+                title: `${challengeData.challengeTitle}에 참가하셨습니다.`,
+              });
+              window.location.reload();
+            });
+          return navigate(`/detail/${challengeData.challengeId}`);
         } catch (error) {
           const errorMessage = error.response.data.error.message;
           console.log('error', errorMessage);
