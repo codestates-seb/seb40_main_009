@@ -82,7 +82,7 @@ public class Scheduler {
     }
 
     @Async
-    @Scheduled(cron = " 0/10 * * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduleUpdateChallengeReward4(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
