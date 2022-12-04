@@ -13,7 +13,6 @@ function KakaoLogin() {
   const KAKAO_CODE = location.search.split('=')[1]; // 인가코드
 
   // 로그인
-  // Todo 리프레시 토큰
   const getKakaoToken = async () => {
     try {
       const response = await axios.get(`/oauth/kakao?code=${KAKAO_CODE}`, {
@@ -28,25 +27,6 @@ function KakaoLogin() {
       localStorage.setItem('memberMoney', response.data.memberMoney);
       setLoginState(true);
       navigate('/');
-      // .catch(async (error) => {
-      //   if (error.response.data.status === 401) {
-      //     try {
-      //       const responseToken = await axios.get('/token', {
-      //         headers: {
-      //           'ngrok-skip-browser-warning': 'none',
-      //           refresh: localStorage.getItem('refreshToken'),
-      //         },
-      //       });
-      //       await localStorage.setItem(
-      //         'authorizationToken',
-      //         responseToken.headers.authorization
-      //       );
-      //     } catch (error) {
-      //       console.log('재요청 실패', error);
-      //     }
-      //   }
-      // }
-      // );
     } catch (error) {
       console.log('error: ', error);
     }
