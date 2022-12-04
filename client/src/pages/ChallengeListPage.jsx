@@ -81,7 +81,7 @@ export default function ChallengeListPage() {
 
     try {
       const response = await axios.get(
-        `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=${pageNumber}&size=30`,
+        `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=${pageNumber}&size=12`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
