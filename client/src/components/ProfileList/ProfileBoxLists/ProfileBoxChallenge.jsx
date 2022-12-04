@@ -10,9 +10,6 @@ function ProfileBoxList({
   objDay,
   memberChallengeSuccessRate,
 }) {
-  if (ProfileBoxList === []) {
-    return 'dkdk';
-  }
   // 문제 => 각각의 탭 잘 나오다 0번째 탭을 클릭하고 이동하면 모두 0번 째 내용으로만 나옴
 
   return (
