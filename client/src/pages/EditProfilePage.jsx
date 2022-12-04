@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -7,9 +7,8 @@ import {
   Edit,
   CancelBtn,
   EditBtn,
+  ImageUploadComponent,
 } from '../style/MyProfilePageStyle/EditProfileStyle';
-
-import ProfileImage from '../components/ProfileList/ProfileImage';
 
 function EditProfilePage() {
   const location = useLocation();
@@ -21,7 +20,6 @@ function EditProfilePage() {
   const memberName = editProfileLists.memberName;
   const memberDescription = editProfileLists.memberDescription;
   const memberImagePath = editProfileLists.memberImagePath;
-  console.log('aa', memberImagePath);
 
   const textData = {
     memberName: memberName,
@@ -31,30 +29,58 @@ function EditProfilePage() {
 
   const dataValue = JSON.stringify(textData);
   const stringData = new Blob([dataValue], { type: 'application/json' });
-
-  const data = {
+  const EditData = {
     stringData,
     memberImagePath,
   };
-  console.log('xxxx', data);
+
+  // console.log('xxxx', data);
+
+  // 프로필 이미지
+
+  const [Image, setImage] = useState(memberImagePath);
+  const fileInput = useRef(null);
+  // console.log('qqq', Image);
+  // console.log('data', data);
+  const onChange = (e) => {
+    setImage(e.target.files[0]);
+    setEditProfileLists({
+      ...editProfileLists,
+      memberImagePath: e.target.files[0],
+    });
+
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
 
   // Todo async await으로 바꾸기, 리프레쉬 토큰
-  const config = {
-    method: 'patch',
-    url: `/member/${params.name}`,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      'ngrok-skip-browser-warning': 'none',
-      Authorization: localStorage.getItem('authorizationToken'),
-    },
-    data,
-  };
+
   const patchEdit = () => {
+    console.log(EditData);
+    const data = new FormData();
+    data.append('image', EditData.memberImagePath);
+    data.append('patch', stringData);
+    const config = {
+      method: 'patch',
+      url: `/member/${params.name}`,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'ngrok-skip-browser-warning': 'none',
+        Authorization: localStorage.getItem('authorizationToken'),
+      },
+      data,
+    };
     axios(config)
       .then((response) => {
-        console.log(response);
+        console.log('response', response);
         localStorage.setItem('LoginName', editProfileLists.memberName);
-        // navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
+        navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
       })
 
       .catch(function (error) {
@@ -62,53 +88,6 @@ function EditProfilePage() {
         alert('닉네임은 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.');
       });
   };
-  // useEffect(() => {
-  //   patchEdit;
-  // }, []);
-
-  // const patchEdit = async () => {
-  //   try {
-  //     axios
-  //       .patch(`/member/${params.name}`, {
-  //         headers: {
-  //           'ngrok-skip-browser-warning': 'none',
-  //           // utf-8?
-  //           // 'content-type': 'text/html; charset=utf-8',
-  //           // 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  //           Authorization: localStorage.getItem('authorizationToken'),
-  //         },
-  //       })
-  //       .then((response) => {
-  //         const edit = response.data;
-  //         console.log('edit', edit);
-  //         setEditProfileLists(edit.data);
-  //         navigate(`/profile/${editProfileLists.memberName}`); // name을 받아오는 방법
-  //       })
-  //       .catch(async (error) => {
-  //         if (error.response.data.status === 401) {
-  //           try {
-  //             const responseToken = await axios.get('/token', {
-  //               headers: {
-  //                 'ngrok-skip-browser-warning': 'none',
-  //                 refresh: localStorage.getItem('refreshToken'),
-  //               },
-  //             });
-  //             await localStorage.setItem(
-  //               'authorizationToken',
-  //               responseToken.headers.authorization
-  //             );
-  //             // await localStorage.setItem(
-  //             //   'test',
-  //             //   responseToken.headers.authorization
-  //             // );
-  //           } catch (error) {
-  //             console.log('재요청 실패', error);
-  //           }
-  //         }
-  //       });
-  //   } catch (error) {
-  //     console.log('error: ', error);
-  //   }
 
   const onChangeEdit = (event) => {
     setEditProfileLists({
@@ -117,7 +96,8 @@ function EditProfilePage() {
     });
     console.log(editProfileLists);
   };
-  console.log('1111', editProfileLists);
+
+  // console.log('1111', editProfileLists);
 
   // 취소 버튼을 누르면 이전 마이페이지로 돌아감
   const clickedCancel = () =>
@@ -126,11 +106,30 @@ function EditProfilePage() {
   return (
     <EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
-      <ProfileImage
+      {/* <ProfileImage
         memberImagePath={memberImagePath}
         name="profileimage"
         value={editProfileLists.memberImagePath}
-      />
+      /> */}
+      <ImageUploadComponent>
+        <img
+          className="profilePicture"
+          alt="profile img"
+          src={Image}
+          value={memberImagePath}
+          onClick={() => {
+            fileInput.current.click();
+          }}
+        />
+        <input
+          type="file"
+          // style={{ display: 'none' }}
+          accept="image/*"
+          name="profile_img"
+          onChange={onChange}
+          ref={fileInput}
+        />
+      </ImageUploadComponent>
       <Edit>
         <div>닉네임</div>
         <input
@@ -146,6 +145,7 @@ function EditProfilePage() {
           name="memberDescription"
           onChange={onChangeEdit}
           value={editProfileLists.memberDescription}
+          style={{ resize: 'none' }}
         />
         <div className="button">
           <CancelBtn onClick={clickedCancel}>취소</CancelBtn>
