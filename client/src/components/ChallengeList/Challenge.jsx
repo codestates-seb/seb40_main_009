@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { isAfter, format, parseISO } from 'date-fns';
+import { useRecoilValue } from 'recoil';
 
 import * as S from '../../style/ChallengeList/Challenge.styled';
-import { useRecoilValue } from 'recoil';
+
 import { LoginState } from '../Login/KakaoLoginData';
 
 export default function Challenge({ id, title, description, image, endDate }) {

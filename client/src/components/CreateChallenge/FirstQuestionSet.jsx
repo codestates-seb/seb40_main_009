@@ -9,6 +9,7 @@ export default function FirstQuestionSet({
   watch,
   errors,
   setError,
+  clearErrors,
 }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
 
@@ -33,10 +34,54 @@ export default function FirstQuestionSet({
       : setStatePageNumber(1);
   };
 
-  const moneyCheck = (event) => {
+  /**챌린지 멤버 설정 유효성검사 - 최소 > 최대 인원 */
+  const checkMinimumParty = (event) => {
+    if (watch('challengeMaxParty') !== '') {
+      if (watch('challengeMaxParty') < event.target.value) {
+        setError('checkMaxMemberError', {
+          message: '최대 인원보다 적은 인원을 입력하세요',
+        });
+      } else {
+        clearErrors('checkMaxMemberError');
+      }
+    }
+
+    if (event.target.value < 1) {
+      setError('minimumMemberMoreThanZero', {
+        message: '참가자 수는 0보다 많아야 합니다',
+      });
+    } else {
+      clearErrors('minimumMemberMoreThanZero');
+    }
+  };
+
+  /**챌린지 멤버 설정 유효성검사 - 최소 < 최대 인원 */
+  const checkMaxParty = (event) => {
+    if (watch('challengeMinParty') !== '') {
+      if (watch('challengeMinParty') > event.target.value) {
+        setError('checkMinimumMemberError', {
+          message: '최소 인원보다 많은 인원을 입력하세요',
+        });
+      } else {
+        clearErrors('checkMinimumMemberError');
+      }
+    }
+
+    if (event.target.value < 1) {
+      setError('maximumMemberMoreThanZero', {
+        message: '참가자 수는 0보다 많아야 합니다',
+      });
+    } else {
+      clearErrors('maximumMemberMoreThanZero');
+    }
+  };
+
+  /**참가 포인트 유효성검사 */
+  const checkPoint = (event) => {
     const haveMoney = Number(localStorage.getItem('memberMoney'));
+    // 현재 보유한 포인트보다 많은 챌린지 포인트를 설정했을때
     if (haveMoney < event.target.value) {
-      return setError('pointError', {
+      setError('pointError', {
         message: `현재 보유중인 ${haveMoney
           .toString()
           .replace(
@@ -44,6 +89,16 @@ export default function FirstQuestionSet({
             ','
           )} 포인트보다 많게 설정할 수는 없습니다`,
       });
+    } else {
+      clearErrors('pointError');
+    }
+    // 1000 포인트보다 적은 챌린지 포인트를 설정했을때
+    if (event.target.value < 1000) {
+      setError('moreThanThousandError', {
+        message: `챌린지 금액은 1,000원 이상으로 적어주세요`,
+      });
+    } else {
+      clearErrors('moreThanThousandError');
     }
   };
 
@@ -95,9 +150,16 @@ export default function FirstQuestionSet({
             required: 'Please Write Content',
           })}
           placeholder="최소 인원수를 입력하세요"
-          onChange={(event) => answerCheck(event)}
+          onChange={(event) => {
+            answerCheck(event);
+            checkMinimumParty(event);
+          }}
           type={'number'}
         />
+        <S.ErrorMessage>{errors.checkMaxMemberError?.message}</S.ErrorMessage>
+        <S.ErrorMessage>
+          {errors.minimumMemberMoreThanZero?.message}
+        </S.ErrorMessage>
       </div>
       <div className="question">
         <h3>함께 챌린지를 진행할 최대 인원을 정해주세요</h3>
@@ -107,12 +169,22 @@ export default function FirstQuestionSet({
             required: 'Please Write Content',
           })}
           placeholder="최대 인원수를 입력하세요"
-          onChange={(event) => answerCheck(event)}
+          onChange={(event) => {
+            answerCheck(event);
+            checkMaxParty(event);
+          }}
           type={'number'}
         />
+
+        <S.ErrorMessage>
+          {errors.checkMinimumMemberError?.message}
+        </S.ErrorMessage>
+        <S.ErrorMessage>
+          {errors.maximumMemberMoreThanZero?.message}
+        </S.ErrorMessage>
       </div>
       <div className="question">
-        <h3>챌린지 참가 금액을 입력해주세요</h3>
+        <h3>챌린지 참가 포인트를 입력해주세요</h3>
         <input
           className="inputBox"
           {...register('challengeFeePerPerson', {
@@ -121,11 +193,12 @@ export default function FirstQuestionSet({
           placeholder="참가 금액"
           onChange={(event) => {
             answerCheck(event);
-            moneyCheck(event);
+            checkPoint(event);
           }}
           type={'number'}
         />
         <S.ErrorMessage>{errors.pointError?.message}</S.ErrorMessage>
+        <S.ErrorMessage>{errors.moreThanThousandError?.message}</S.ErrorMessage>
       </div>
     </S.CreateAsk>
   );
