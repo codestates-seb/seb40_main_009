@@ -168,7 +168,7 @@ export const Image = styled.img`
 export const CertificationImage = styled.div`
   width: 600px;
   height: 180px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   display: flex;
 `;
 

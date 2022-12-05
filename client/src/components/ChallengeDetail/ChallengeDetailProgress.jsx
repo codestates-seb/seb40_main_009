@@ -21,6 +21,7 @@ import {
   ReviewWrapper,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
+import dayjs from 'dayjs';
 import ProgressBar from './ProgressBar';
 import DdayFormatter from './DdayFormatter';
 import Masonry from 'react-responsive-masonry';
@@ -349,16 +350,21 @@ export default function ChallengeDetailProgress({ challengeData }) {
   const pastDay = Math.floor(gap / (1000 * 60 * 60 * 24));
   // console.log('지나온 시간>>', pastDay);
   let progress = Math.ceil((pastDay / totalDay) * 100);
-
+  // console.log('progress>>>', progress);
+  // console.log('pastDay>>>', pastDay);
+  // console.log('startDate>>>', startDate);
+  // console.log('endDate>>>', endDate === startDate);
   //도전시작하기전
   if (pastDay < 0) {
     progress = 0;
   }
 
-  if (pastDay === 0) {
+  //당일 챌린지일 때
+  if (startDate === endDate) {
     progress = 100;
   }
 
+  //챌린지 종료 후
   if (endDate < today) {
     progress = 100;
   }
@@ -456,7 +462,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
     });
     if (response.isConfirmed) {
       try {
-        console.log('22222222');
+        // console.log('22222222');
         await axios
           .post(
             `/challenges/unparticipate/${challengeId}`,
@@ -1304,7 +1310,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
                     <div style={{ marginRight: 'auto' }}>
                       {talk.challengeTalkBody}
                     </div>
-                    <div>{talk.updated_at}</div>
+                    <div>
+                      {dayjs(new Date(talk.updated_at)).format(
+                        'YYYY-MM-DD HH:mm'
+                      )}
+                    </div>
                     {Number(loginId) === Number(talk.memberId) ? (
                       <>
                         <button
