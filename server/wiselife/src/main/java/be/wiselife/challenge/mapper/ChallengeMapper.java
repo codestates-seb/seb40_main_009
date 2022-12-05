@@ -148,7 +148,7 @@ public interface ChallengeMapper {
         simpleResponse.setChallengeAuthAvailableTime(challenge.getChallengeAuthAvailableTime());
         simpleResponse.setChallengeDirectLink( challenge.getChallengeDirectLink() );
         simpleResponse.setChallengeFeePerPerson( challenge.getChallengeFeePerPerson() );
-        simpleResponse.setChallengeTotalReward( challenge.getChallengeTotalReward() );
+        simpleResponse.setChallengeTotalReward(Math.round(challenge.getChallengeTotalReward()));
         simpleResponse.setChallengeViewCount( challenge.getChallengeViewCount() );
         simpleResponse.setIsClosed( challenge.getIsClosed() );
         simpleResponse.setCreated_at( challenge.getCreatedAt() );
@@ -200,7 +200,7 @@ public interface ChallengeMapper {
             detailResponse.challengeAuthAvailableTime(challenge.getChallengeAuthAvailableTime());
             detailResponse.challengeDirectLink( challenge.getChallengeDirectLink() );
             detailResponse.challengeFeePerPerson( challenge.getChallengeFeePerPerson() );
-            detailResponse.challengeTotalReward( challenge.getChallengeTotalReward() );
+            detailResponse.challengeTotalReward( Math.round(challenge.getChallengeTotalReward()));
             detailResponse.challengeViewCount( challenge.getChallengeViewCount() );
             detailResponse.isClosed( challenge.getIsClosed() );
             detailResponse.created_at( challenge.getCreatedAt() );
