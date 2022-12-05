@@ -36,9 +36,13 @@ function ProfileBoxList({
             <p>
               성공일수:{memberSuccessDay} / 목표일수:{objDay}
             </p>
-            {/* <p>예상환급금:0원</p> */}
-            <p>예상환급금:{memberReward}원</p>
-            {/* 수정예정 */}
+            <p>
+              예상환급금:&nbsp;
+              {memberReward
+                .toString()
+                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+              &nbsp; 원
+            </p>
           </div>
         </div>
       </form>
