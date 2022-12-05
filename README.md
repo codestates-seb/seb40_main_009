@@ -29,12 +29,14 @@
 ---
 
     개발 기간 2022.11.8 - 2022.12.7 (22일)
-    배포 주소
-    관리자
+ 
+ - 웹사이트 : [바로가기](https://wiselife.click/)
+ - 발표 영상 : [바로가기](https://www.youtube.com/watch?v=I0s1v3WJ95g)
+ - 발표 문서 : [바로가기](https://www.notion.so/codestates/40-Team009-f7a07fc2c5ae4d5a9e5ba4766dd42e8c0)   
 
 <br>
 
-사이트기능, gif 및 시연영상 추가 
+
 
 <br>
 
@@ -85,22 +87,5 @@
 
 ---
 [![aws-arc.png](https://i.postimg.cc/Hssjtfd3/aws-arc.png)](https://postimg.cc/bdWzyVG2)
-......
 
 <br>
-<br>
-
-## :floppy_disk: Documents
-
----
-
-....
-
-<br>
-<br>
-
-## :seedling: Git Commit & PR Message
-
----
-
-....
