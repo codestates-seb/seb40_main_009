@@ -246,7 +246,11 @@ export default function Header() {
                   color: 'black',
                 }}
               >
-                💰{memberMoney} 포인트
+                💰
+                {memberMoney
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp; 포인트
               </div>
             </Link>
             <div

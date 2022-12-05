@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { isAfter, format, parseISO } from 'date-fns';
+import { useRecoilValue } from 'recoil';
 
 import * as S from '../../style/ChallengeList/Challenge.styled';
-import { useRecoilValue } from 'recoil';
+
 import { LoginState } from '../Login/KakaoLoginData';
 
 export default function Challenge({ id, title, description, image, endDate }) {
@@ -19,12 +20,11 @@ export default function Challenge({ id, title, description, image, endDate }) {
     }
   };
 
+  /**종료된 챌린지 확인 */
   function checkLateParticipate() {
     const today = format(Date.now(), 'yyyy-MM-dd');
     return !isAfter(parseISO(today), parseISO(endDate));
   }
-
-  console.log(checkLateParticipate());
 
   return (
     <S.CardContainer checkLateParticipate={checkLateParticipate()}>
