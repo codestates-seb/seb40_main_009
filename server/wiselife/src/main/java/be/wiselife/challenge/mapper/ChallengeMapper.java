@@ -127,7 +127,7 @@ public interface ChallengeMapper {
     }
 
 
-    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge, ChallengeReviewMapper challengeReviewMapper) {
+    default ChallengeDto.SimpleResponse challengeToChallengeSimpleResponseDto(Challenge challenge, ChallengeReviewMapper challengeReviewMapper,Member member) {
         if ( challenge == null) {
             return null;
         }
@@ -150,6 +150,7 @@ public interface ChallengeMapper {
         simpleResponse.setChallengeFeePerPerson( challenge.getChallengeFeePerPerson() );
         simpleResponse.setChallengeTotalReward( challenge.getChallengeTotalReward() );
         simpleResponse.setChallengeViewCount( challenge.getChallengeViewCount() );
+        simpleResponse.setCurrentMemberMoney(member.getMemberMoney());
         simpleResponse.setIsClosed( challenge.getIsClosed() );
         simpleResponse.setCreated_at( challenge.getCreatedAt() );
         simpleResponse.setUpdated_at( challenge.getUpdated_at() );
@@ -282,8 +283,9 @@ public interface ChallengeMapper {
     default List<ChallengeDto.SimpleResponse> challengeListToSimpleResponseDtoList(List<Challenge> challengeList, ChallengeReviewMapper challengeReviewMapper){
         List<ChallengeDto.SimpleResponse> simpleResponseList = new ArrayList<>();
 
+        Member member = new Member();
         for(Challenge challenge: challengeList){
-            simpleResponseList.add(challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper));
+            simpleResponseList.add(challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper,member));
         }
 
         return simpleResponseList;

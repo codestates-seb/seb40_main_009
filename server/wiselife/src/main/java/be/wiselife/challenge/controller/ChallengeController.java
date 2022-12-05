@@ -75,7 +75,7 @@ public class ChallengeController {
         challenge = challengeService.createChallenge(challenge, member, repImage, exampleImage);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper,member))
                 , HttpStatus.CREATED);
     }
 
@@ -99,7 +99,7 @@ public class ChallengeController {
         challenge = challengeService.updateChallenge(challenge, member, challengeId, exampleImage, repImage);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper))
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper,member))
                 , HttpStatus.OK);
     }
 
@@ -121,7 +121,7 @@ public class ChallengeController {
         Challenge challenge = challengeService.participateChallenge(challengeFromRepository, member);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper)),HttpStatus.OK);
+                new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper,member)),HttpStatus.OK);
     }
 
     /**
@@ -142,7 +142,7 @@ public class ChallengeController {
 
 
         return new ResponseEntity<>(
-                    new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper)),HttpStatus.OK);
+                    new SingleResponseDto<>(challengeMapper.challengeToChallengeSimpleResponseDto(challenge,challengeReviewMapper,member)),HttpStatus.OK);
     }
 
     /**
@@ -185,7 +185,7 @@ public class ChallengeController {
         if (request.getHeader("Authorization") == null || memberChallengeService.findMemberChallengeByMemberAndChallenge(challenge, member) == null) {
 
             ChallengeDto.SimpleResponse challengeResponseDto
-                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper);
+                    = challengeMapper.challengeToChallengeSimpleResponseDto(challenge, challengeReviewMapper,member);
 
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
