@@ -48,7 +48,8 @@ function MyProfile({
           <div className="profile-list">
             <p>
               챌린지성공률:
-              {memberChallengePercentage}%
+              {memberChallengePercentage}%{/* 0% */}
+              {/* 임시 */}
             </p>
             <p>
               현재 포인트:

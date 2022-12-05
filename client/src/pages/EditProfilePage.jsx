@@ -40,13 +40,12 @@ function EditProfilePage() {
 
   const [Image, setImage] = useState(memberImagePath);
   const fileInput = useRef(null);
-  // console.log('qqq', Image);
-  // console.log('data', data);
-  const onChange = (e) => {
-    setImage(e.target.files[0]);
+
+  const onChange = (event) => {
+    setImage(event.target.files[0]);
     setEditProfileLists({
       ...editProfileLists,
-      memberImagePath: e.target.files[0],
+      memberImagePath: event.target.files[0],
     });
 
     //화면에 프로필 사진 표시
@@ -56,11 +55,10 @@ function EditProfilePage() {
         setImage(reader.result);
       }
     };
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(event.target.files[0]);
   };
 
   // Todo async await으로 바꾸기, 리프레쉬 토큰
-
   const patchEdit = () => {
     console.log(EditData);
     const data = new FormData();
@@ -96,8 +94,6 @@ function EditProfilePage() {
     });
     console.log(editProfileLists);
   };
-
-  // console.log('1111', editProfileLists);
 
   // 취소 버튼을 누르면 이전 마이페이지로 돌아감
   const clickedCancel = () =>
