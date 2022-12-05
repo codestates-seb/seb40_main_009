@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { DateRange } from 'react-date-range';
 import { ko } from 'date-fns/locale';
-import { isAfter, format, parseISO } from 'date-fns';
+import { isAfter, parseISO } from 'date-fns';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
@@ -17,33 +17,56 @@ export default function ThirdQuestionSet({
 }) {
   const setPageNumber = useSetRecoilState(createChallengeStateNumber);
 
-  const checkEndDate = (event) => {
-    if (
-      !isAfter(
-        parseISO(watch('challengeEndDate')),
-        parseISO(event.target.value)
-      )
-    ) {
-      setError('fastEndDate', {
-        message: '시작일자는 종료일자보다 빨라야합니다',
-      });
-    } else {
-      clearErrors('fastEndDate');
+  /**시작일자 유효성 검사 */
+  const checkStartDate = (event) => {
+    if (watch('challengeEndDate') !== '') {
+      if (event.target.value === watch('challengeEndDate')) {
+        console.log('upper');
+        setError('fastEndDate', {
+          message: '종료일자는 시작일자보다 느려야합니다',
+        });
+      } else {
+        clearErrors('fastEndDate');
+      }
+      if (
+        !isAfter(
+          parseISO(watch('challengeEndDate')),
+          parseISO(event.target.value)
+        )
+      ) {
+        setError('fastEndDate', {
+          message: '시작일자는 종료일자보다 빨라야합니다',
+        });
+      } else {
+        clearErrors('fastEndDate');
+      }
     }
   };
 
-  const checkStartDate = (event) => {
-    if (
-      isAfter(
-        parseISO(watch('challengeStartDate')),
-        parseISO(event.target.value)
-      )
-    ) {
-      setError('lateStartDate', {
-        message: '종료일자는 시작일자보다 느려야합니다',
-      });
-    } else {
-      clearErrors('lateStartDate');
+  /**종료일자 유효성 검사 */
+  const checkEndDate = (event) => {
+    if (watch('challengeStartDate') !== '') {
+      if (event.target.value === watch('challengeStartDate')) {
+        console.log('lower');
+        console.log(event.target.value);
+        setError('lateStartDate', {
+          message: '종료일자는 시작일자보다 느려야합니다',
+        });
+      } else {
+        clearErrors('lateStartDate');
+      }
+      if (
+        isAfter(
+          parseISO(watch('challengeStartDate')),
+          parseISO(event.target.value)
+        )
+      ) {
+        setError('lateStartDate', {
+          message: '종료일자는 시작일자보다 느려야합니다',
+        });
+      } else {
+        clearErrors('lateStartDate');
+      }
     }
   };
 
@@ -70,7 +93,7 @@ export default function ThirdQuestionSet({
           })}
           type="date"
           placeholder="챌린지 시작일"
-          onChange={(event) => checkEndDate(event)}
+          onChange={(event) => checkStartDate(event)}
         />
         <S.ErrorMessage>{errors.fastEndDate?.message}</S.ErrorMessage>
       </div>
@@ -82,7 +105,7 @@ export default function ThirdQuestionSet({
           })}
           type="date"
           placeholder="챌린지 종료일"
-          onChange={(event) => checkStartDate(event)}
+          onChange={(event) => checkEndDate(event)}
         />
         <S.ErrorMessage>{errors.lateStartDate?.message}</S.ErrorMessage>
       </div>
