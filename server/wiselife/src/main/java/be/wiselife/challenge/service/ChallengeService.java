@@ -468,8 +468,11 @@ public class ChallengeService {
         LocalDate now = LocalDate.now();
 
         challengeTotalDay = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-
+        System.out.printf("challengeTotalDay: %f",challengeTotalDay);
         log.info("getChallengeProgressRate  tx end");
-        return ((double)ChronoUnit.DAYS.between(startDate, now) + 1) / challengeTotalDay;
+
+        double progressRate = ((double)ChronoUnit.DAYS.between(startDate, now) + 1) / challengeTotalDay;
+
+        return (progressRate > 0) ? progressRate : 0;
     }
 }

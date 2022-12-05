@@ -92,14 +92,13 @@ public class MemberController {
      */
     @NeedMember
     @PatchMapping(value = "/{memberName}", consumes = {"multipart/form-data"})
-    public ResponseEntity patchMember(Member member,
+    public ResponseEntity patchMember(Member jwtMember,
                                       @PathVariable("memberName") String memberName,
                                       @Valid @RequestPart(value = "patch", required = false) MemberDto.Patch patchData,
                                       @RequestPart(value = "image",required = false) MultipartFile multipartFiles
                                       ) throws IOException {
 
-
-        Member updateMember = memberService.updateMemberInfo(member.getMemberName(), mapper.memberPatchToMember(patchData), member, multipartFiles);
+        Member updateMember = memberService.updateMemberInfo(memberName, mapper.memberPatchToMember(patchData), jwtMember, multipartFiles);
 
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(updateMember)), HttpStatus.OK);
