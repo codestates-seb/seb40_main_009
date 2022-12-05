@@ -107,34 +107,40 @@ public class MemberService {
     }
 
     @Transactional(readOnly = false)
-    public Member updateMemberInfo(String memberName, Member member, Member loginMember, MultipartFile multipartFiles) throws IOException {
+    public Member updateMemberInfo(String existingMemberName, Member patchMember, Member existingMember, MultipartFile multipartFiles) throws IOException {
         log.info("updateMemberInfo tx start");
-        Member memberFromRepository = findMemberByMemberName(memberName);
 
-        if (!loginMember.getMemberName().equals(memberName)) {
+        //유저의 수정 권한 check
+        if (!existingMember.getMemberName().equals(existingMemberName)) {
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_UPDATE_MEMBER_INFORMATION_OTHER_PERSON);
         }
-        if(member != null){
-        Optional.ofNullable(member.getMemberName())
+
+        //수정하려는 멤버이름 중복 check
+        if(!patchMember.getMemberName().equals(existingMember.getMemberName())){
+            verifyExistsMemberName(patchMember.getMemberName());
+        }
+
+        if(patchMember != null){
+        Optional.ofNullable(patchMember.getMemberName())
                         .ifPresent(this::verifyExistsMemberName);
-        Optional.ofNullable(member.getMemberName())
-                .ifPresent(new_memberName->memberFromRepository.setMemberName(new_memberName));
-        Optional.ofNullable(member.getMemberDescription())
-                .ifPresent(new_memberDescription->memberFromRepository.setMemberDescription(new_memberDescription));
-        Optional.ofNullable(member.getMemberImagePath())
-                .ifPresent(memberFromRepository::setMemberImagePath);
+        Optional.ofNullable(patchMember.getMemberName())
+                .ifPresent(new_memberName->existingMember.setMemberName(new_memberName));
+        Optional.ofNullable(patchMember.getMemberDescription())
+                .ifPresent(new_memberDescription->existingMember.setMemberDescription(new_memberDescription));
+        Optional.ofNullable(patchMember.getMemberImagePath())
+                .ifPresent(existingMember::setMemberImagePath);
         }
         Optional.ofNullable(multipartFiles)
                 .ifPresent(file -> {
                     try {
-                        imageService.patchMemberImage(memberFromRepository, file);
+                        imageService.patchMemberImage(existingMember, file);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 });
 
         log.info("updateMemberInfo tx end");
-        return memberRepository.save(memberFromRepository);
+        return memberRepository.save(existingMember);
     }
 
     // 회원정보 수정시 닉네임이 같은것이 있는지 파악용
