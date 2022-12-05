@@ -42,11 +42,17 @@ function EditProfilePage() {
   const fileInput = useRef(null);
 
   const onChange = (event) => {
-    setImage(event.target.files[0]);
-    setEditProfileLists({
-      ...editProfileLists,
-      memberImagePath: event.target.files[0],
-    });
+    if (event.target.files[0]) {
+      setImage(event.target.files[0]);
+      setEditProfileLists({
+        ...editProfileLists,
+        memberImagePath: event.target.files[0],
+      });
+    } else {
+      //업로드 취소할 시
+      setImage(event.target.files[0]);
+      return;
+    }
 
     //화면에 프로필 사진 표시
     const reader = new FileReader();
@@ -102,11 +108,6 @@ function EditProfilePage() {
   return (
     <EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
-      {/* <ProfileImage
-        memberImagePath={memberImagePath}
-        name="profileimage"
-        value={editProfileLists.memberImagePath}
-      /> */}
       <ImageUploadComponent>
         <img
           className="profilePicture"
