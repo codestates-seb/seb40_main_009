@@ -18,6 +18,7 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404, "Comment not found"),
     CHALLENGE_CATEGORY_NOT_FOUND(404, "Category not found. Category-id must be between 1 to 3"),
     YOU_ALREADY_PARTICIPATE(404, "You already participate"),
+    CHALLENGE_MAX_PARTY_CAN_NOT_SMALLER_THAN_MIN_PARTY(404, "Challenge max party can't smaller than min party"),
     USER_NOT_PARTICIPATING_THIS_CHALLENGE(404, "Only users who have participated in the challenge can write reviews"),
     YOU_NEED_TO_CHARGE_MONEY(404, "You need to charge money"),
     THIS_CHALLENGE_HAS_MAX_MEMBER(404, "This challenge has max member"),
