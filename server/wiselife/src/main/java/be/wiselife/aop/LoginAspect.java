@@ -47,7 +47,7 @@ public class LoginAspect {
 
         return resultObj;
     }
-
+//argument resolver
     @Around("@annotation(be.wiselife.aop.NeedMember)")
     public Object getMember(ProceedingJoinPoint joinPoint) throws  Throwable {
         // 애플리케이션에서 Request 객체를 읽어옴

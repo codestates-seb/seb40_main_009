@@ -91,7 +91,6 @@ public class MemberController {
      * DTO와 함께받기위해선 RequestPart를 사용해야함.
      */
     @NeedMember
-
     @PatchMapping(value = "/{memberName}", consumes = {"multipart/form-data"})
     public ResponseEntity patchMember(Member member,
                                       @PathVariable("memberName") String memberName,
