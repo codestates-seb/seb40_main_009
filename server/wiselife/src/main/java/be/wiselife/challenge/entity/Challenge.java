@@ -40,7 +40,7 @@ public class Challenge extends WriterAudit {
     @Setter
     private String challengeTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "VARCHAR(1000)")
     @Setter
     private String challengeDescription;
 
