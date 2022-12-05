@@ -80,7 +80,7 @@ export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
   justify-content: space-between;
-  height: 300px;
+  /* height: 300px; */
 `;
 
 export const CertificationWrapper = styled.div`
@@ -106,6 +106,23 @@ export const CertificationWrapper = styled.div`
 
 export const Review = styled.div`
   margin-top: 5%;
+  height: 500px;
+  font-size: 25px;
+  width: 100%;
+  & > .flex {
+    display: flex;
+    align-items: center;
+  }
+  & > .flex .marginRight {
+    margin-right: auto;
+  }
+  & > .flex .cursur {
+    cursor: pointer;
+  }
+`;
+
+export const ReviewWrapper = styled.div`
+  margin-top: 120px;
   height: 500px;
   font-size: 25px;
   width: 100%;
@@ -151,8 +168,8 @@ export const Image = styled.img`
 export const CertificationImage = styled.div`
   width: 600px;
   height: 180px;
+  border: 1px solid red;
   display: flex;
-  margin-bottom: 3%;
 `;
 
 export const ViewMore = styled.div`

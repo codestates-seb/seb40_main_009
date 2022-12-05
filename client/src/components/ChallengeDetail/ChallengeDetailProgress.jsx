@@ -18,6 +18,7 @@ import {
   CertificationDescription,
   Image,
   ChallengeViewCount,
+  ReviewWrapper,
 } from '../../style/ChallengeDetailProgress/ChallengeDetailProgressStyle';
 
 import ProgressBar from './ProgressBar';
@@ -28,8 +29,8 @@ import exampleImage from '../../image/example.png';
 // import Loading from '../Loading/Loading';
 
 export default function ChallengeDetailProgress({ challengeData }) {
+  // console.log('challengeData>>>', challengeData);
   const parmas = useParams();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [certificationModal, setCertificationModal] = useState(false);
   const [talk, setTalk] = useState([]);
@@ -1012,6 +1013,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
         <Review>
           <div className="flex">
             <div className="marginRight"> 인증 사진</div>
+            <div
+              style={{ color: '#787878', fontSize: '15px', marginRight: '8px' }}
+            >
+              인증은 10분까지 가능합니다.
+            </div>
             {/* <div> */}
             <div
               style={{ fontSize: '20px' }}
@@ -1031,6 +1037,38 @@ export default function ChallengeDetailProgress({ challengeData }) {
             >
               인증 사진 올리기
             </button>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(8, 1fr)',
+              fontSize: '20px',
+              width: '1024px',
+              // border: '1px solid blue',
+              marginBottom: '5px',
+              marginTop: '5px',
+              placeItems: 'center',
+            }}
+          >
+            {challengeData.challengeAuthAvailableTime.map((time, index) => {
+              return (
+                <>
+                  <div
+                    style={{
+                      backgroundColor: '#EFF1FE',
+                      width: '100%',
+                      borderRadius: '7px',
+                      padding: '3px 0 3px 13px',
+                      marginBottom: '7px',
+                    }}
+                  >
+                    {index + 1}번째 인증시간:
+                  </div>
+                  <div>{time}</div>
+                </>
+              );
+            })}
           </div>
 
           {/* 인증사진 */}
@@ -1057,7 +1095,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
             <div
               style={{
                 border: '2px solid #eff1fe',
-                width: '985px',
+                width: '1000px',
                 height: '450px',
                 marginTop: '1%',
                 fontSize: '20px',
@@ -1101,7 +1139,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
           )}
         </Review>
 
-        <Review>
+        <ReviewWrapper style={{ marignTop: '1000px' }}>
           <div style={{ display: 'flex' }}>
             <div style={{ marginRight: 'auto' }}>후기 사진</div>
 
@@ -1142,7 +1180,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
             <div
               style={{
                 border: '2px solid #eff1fe',
-                width: '985px',
+                width: '1000px',
                 height: '450px',
                 marginTop: '1%',
                 fontSize: '20px',
@@ -1166,7 +1204,11 @@ export default function ChallengeDetailProgress({ challengeData }) {
                           key={index}
                           src={image.challengeReviewImagePath}
                           alt="후기사진들"
-                          style={{ width: '200px', cursor: 'pointer' }}
+                          style={{
+                            width: '220px',
+                            height: '220px',
+                            cursor: 'pointer',
+                          }}
                           onClick={() =>
                             viewImage(image.challengeReviewImagePath, index)
                           }
@@ -1177,15 +1219,23 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 })}
             </div>
           )}
-        </Review>
+        </ReviewWrapper>
 
         <div style={{ marginTop: '8%' }}>
+          {challengeData.challengeTalks === null ? (
+            <div style={{ fontSize: '25px', marginBottom: '3px' }}>댓글 0</div>
+          ) : (
+            <div style={{ fontSize: '25px', marginBottom: '3px' }}>
+              댓글 {challengeData.challengeTalks?.length}
+            </div>
+          )}
+
           {/* <div style={{}}>댓글 {challengeData.challengeTalks?.length}</div> */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{ marginRight: '5%' }}>{memberName}</div>
             <input
               style={{
-                width: '76%',
+                width: '1024px',
                 borderTop: 'none',
                 borderLeft: 'none',
                 borderRight: 'none',
@@ -1218,51 +1268,57 @@ export default function ChallengeDetailProgress({ challengeData }) {
               입력
             </button>
           </div>
-          <div
-            style={{
-              border: '2px solid #EFF1FE',
-              padding: '1% 1% 0 1%',
-              borderRadius: '10px',
-              marginTop: '2%',
-            }}
-          >
-            {challengeData.challengeTalks?.map((talk, index) => {
-              return (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginBottom: '1%',
-                    borderBottom: '2px solid #EFF1FE',
-                  }}
-                  key={index}
-                >
-                  {/* <div>{talk.memberBadge}</div> */}
-                  <div style={{ marginRight: '5%' }}>{talk.memberName}</div>
-                  <div style={{ width: '58%' }}>{talk.challengeTalkBody}</div>
-                  <div>{talk.updated_at}</div>
-                  {Number(loginId) === Number(talk.memberId) ? (
-                    <>
-                      <button
-                        style={{
-                          marginLeft: '1%',
-                          width: '5%',
-                          backgroundColor: '#8673FF',
-                          border: 'none',
-                          fontSize: '17px',
-                          borderRadius: '5px',
-                          color: '#F2F4FE',
-                        }}
-                        onClick={() => deleteTalk(index)}
-                      >
-                        삭제
-                      </button>
-                    </>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
+          {challengeData.challengeTalks === null ? null : (
+            <div
+              style={{
+                border: '2px solid #EFF1FE',
+                padding: '1% 1% 0 1%',
+                borderRadius: '10px',
+                marginTop: '2%',
+                width: '1000px',
+              }}
+            >
+              {challengeData.challengeTalks?.map((talk, index) => {
+                return (
+                  <div
+                    style={{
+                      width: '1000px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '1%',
+                      borderBottom: '2px solid #EFF1FE',
+                    }}
+                    key={index}
+                  >
+                    <div style={{ marginRight: '5%' }}>{talk.memberName}</div>
+                    <div style={{ marginRight: 'auto' }}>
+                      {talk.challengeTalkBody}
+                    </div>
+                    <div>{talk.updated_at}</div>
+                    {Number(loginId) === Number(talk.memberId) ? (
+                      <>
+                        <button
+                          style={{
+                            marginLeft: '1%',
+                            width: '5%',
+                            backgroundColor: '#8673FF',
+                            border: 'none',
+                            fontSize: '17px',
+                            borderRadius: '5px',
+                            color: '#F2F4FE',
+                            marginRight: '10px',
+                          }}
+                          onClick={() => deleteTalk(index)}
+                        >
+                          삭제
+                        </button>
+                      </>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </Container>
     </>
