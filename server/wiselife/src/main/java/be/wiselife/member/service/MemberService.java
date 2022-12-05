@@ -122,8 +122,6 @@ public class MemberService {
 
         if(patchMember != null){
         Optional.ofNullable(patchMember.getMemberName())
-                        .ifPresent(this::verifyExistsMemberName);
-        Optional.ofNullable(patchMember.getMemberName())
                 .ifPresent(new_memberName->existingMember.setMemberName(new_memberName));
         Optional.ofNullable(patchMember.getMemberDescription())
                 .ifPresent(new_memberDescription->existingMember.setMemberDescription(new_memberDescription));
