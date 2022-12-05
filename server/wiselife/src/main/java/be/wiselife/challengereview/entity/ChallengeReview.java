@@ -33,13 +33,13 @@ public class ChallengeReview extends WriterAudit {
     @Setter
     private String challengeReviewImagePath;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @ToString.Exclude
     @Setter
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
     @ToString.Exclude
     @Setter

@@ -14,7 +14,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
 
         threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
-        threadPoolTaskScheduler.setThreadNamePrefix("wiselife-scheduled-task-pool");
+        threadPoolTaskScheduler.setThreadNamePrefix("scheduled-task-thread num: ");
         threadPoolTaskScheduler.initialize();
 
         scheduledTaskRegistrar.setTaskScheduler(threadPoolTaskScheduler);

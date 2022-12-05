@@ -40,7 +40,11 @@ public class Scheduler {
      * 매 03시 00분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
      */
     @Async
+<<<<<<< HEAD
     @Scheduled(cron = "0 0 0 * * *")
+=======
+    @Scheduled(cron = "0 0/10 * * * *")
+>>>>>>> e943dfa4ef5688763a7b2a0a8d359e44ac3121e4
     public void scheduleUpdateChallengeReward1(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -54,7 +58,11 @@ public class Scheduler {
     }
 
     @Async
+<<<<<<< HEAD
     @Scheduled(cron = "0 0 0 * * *")
+=======
+    @Scheduled(cron = "0 0/10 * * * *")
+>>>>>>> e943dfa4ef5688763a7b2a0a8d359e44ac3121e4
     public void scheduleUpdateChallengeReward2(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -68,7 +76,11 @@ public class Scheduler {
     }
 
     @Async
+<<<<<<< HEAD
     @Scheduled(cron = "0 0 0 * * *")
+=======
+    @Scheduled(cron = "0 0/10 * * * *")
+>>>>>>> e943dfa4ef5688763a7b2a0a8d359e44ac3121e4
     public void scheduleUpdateChallengeReward3(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -82,7 +94,11 @@ public class Scheduler {
     }
 
     @Async
+<<<<<<< HEAD
     @Scheduled(cron = "0 0 0 * * *")
+=======
+    @Scheduled(cron = "0 0/10 * * * *")
+>>>>>>> e943dfa4ef5688763a7b2a0a8d359e44ac3121e4
     public void scheduleUpdateChallengeReward4(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -96,7 +112,11 @@ public class Scheduler {
     }
 
     @Async
+<<<<<<< HEAD
     @Scheduled(cron = "0 0 0 * * *")
+=======
+    @Scheduled(cron = "0 0/10 * * * *")
+>>>>>>> e943dfa4ef5688763a7b2a0a8d359e44ac3121e4
     public void scheduleUpdateChallengeReward5(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
