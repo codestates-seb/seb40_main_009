@@ -12,6 +12,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ public class ChallengeDto {
         private String challengeDescription;
 
         private int challengeMaxParty;
-
+        @Min(value = 1,message = "최소인원은 1명 이상이 되어야 합니다.")
         private int challengeMinParty;
         @NotBlank
         private String challengeStartDate;
@@ -45,6 +46,7 @@ public class ChallengeDto {
         @NotNull
         private List<String> challengeAuthAvailableTime;
         @NotNull
+        @Min(value = 1000,message = "참가금액은 최소 1,000원 이상이 되어야합니다.")
         private int challengeFeePerPerson; //인당 참여금액
     }
 
@@ -116,6 +118,8 @@ public class ChallengeDto {
 
         private int challengeViewCount;
 
+        private double currentMemberMoney;
+
         private Boolean isClosed;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime created_at;
@@ -149,6 +153,7 @@ public class ChallengeDto {
 
         private int challengeMaxParty;
 
+
         private int challengeMinParty;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate challengeStartDate;
@@ -163,6 +168,7 @@ public class ChallengeDto {
 
         private String challengeDirectLink;
 
+        @Min(value = 1000,message = "참가금액은 최소 1,000원 이상이 되어야합니다.")
         private int challengeFeePerPerson; //인당 참여금액
 
         private double challengeTotalReward; // 현재까지의 전체 상금

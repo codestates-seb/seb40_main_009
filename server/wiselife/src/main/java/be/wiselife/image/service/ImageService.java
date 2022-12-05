@@ -41,6 +41,7 @@ public class ImageService {
      */
     public void patchMemberImage(Member member, MultipartFile multipartFiles) throws IOException {
         log.info("patchMemberImage  tx start");
+
         MemberImage memberImageFromRepository =
                 imageRepository.findByImageTypeAndMemberId("MI", member.getMemberId());
         
@@ -67,6 +68,7 @@ public class ImageService {
     //ChallengeRepImage 부분 코드====================================== rep image 받아옴
     public String patchChallengeRepImage(Challenge challenge, MultipartFile repImage) throws IOException {
         log.info("patchChallengeRepImage tx start");
+
         ChallengeRepImage challengeRepImageFromRepository =
                 imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
         String newRepImage = s3UploadService.uploadJustOne(repImage);

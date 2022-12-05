@@ -17,8 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -62,6 +65,9 @@ public class ChallengeService {
      */
     public Challenge createChallenge(Challenge challenge, Member loginMember, MultipartFile repImage, List<MultipartFile> exampleImage) throws IOException {
         log.info("createChallenge tx start");
+        if (challenge.getChallengeMaxParty() < challenge.getChallengeMinParty()) {
+            throw new BusinessLogicException(ExceptionCode.CHALLENGE_MAX_PARTY_CAN_NOT_SMALLER_THAN_MIN_PARTY);
+        }
         challenge.setCreate_by_member(loginMember.getMemberName());
         challenge.setAuthorizedMemberId(loginMember.getMemberId());
 

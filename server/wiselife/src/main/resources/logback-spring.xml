@@ -39,7 +39,7 @@
 
     <appender name="aws_cloud_watch_log" class="ca.pjer.logback.AwsLogsAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
+            <level>ERROR</level>
         </filter>
         <layout>
             <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
@@ -65,8 +65,8 @@
 
     </springProfile>
 
-    <springProfile name="prod">
-        <root level="info">
+    <springProfile name="aws">
+        <root level="error">
             <appender-ref ref="aws_cloud_watch_log"/> <!--INFO 출력위치-->
         </root>
     </springProfile>
