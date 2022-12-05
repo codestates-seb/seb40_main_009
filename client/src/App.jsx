@@ -25,11 +25,12 @@ import CancellationPayment from './components/KakaoPay/PaymentLists/Cancellation
 
 import ProfileBoxChallenge from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
 import ProfileBoxOrderList from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
-import { FollowersDetailComponent } from './style/MyProfilePageStyle/MyProfilePageStyle';
+import FollowersDetailComponent from './style/MyProfilePageStyle/MyProfilePageStyle';
 
 export default function App() {
   return (
     <>
+      <Header />
       <BrowserRouter>
         <Header />
         <Routes>
@@ -70,6 +71,7 @@ export default function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
+      <Footer />
     </>
   );
 }
