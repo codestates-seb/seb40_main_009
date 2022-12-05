@@ -478,6 +478,7 @@ public class ChallengeService {
         log.info("getChallengeProgressRate  tx end");
 
         double progressRate = ((double)ChronoUnit.DAYS.between(startDate, now) + 1) / challengeTotalDay;
+        if(progressRate > 1) return 1;
 
         return (progressRate > 0) ? progressRate : 0;
     }

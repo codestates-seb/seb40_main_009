@@ -21,10 +21,10 @@ public class Scheduler {
 
 
     /**
-     * 매 00시 00분마다 챌린지 종료 status update 밤에 하니까 밤마다 하즈아
+     * 매 00시 10분마다 챌린지 종료 status update 밤에 하니까 밤마다 하즈아
      */
     @Async
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 10 0 * * *")
     public void scheduleCheckChallengeIsClosed(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================CHECK IF CHALLENGE IS CLOSED START==================");
@@ -37,10 +37,10 @@ public class Scheduler {
     }
 
     /**
-     * 매 03시 00분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
+     * 매 10분마다 챌린지 성공률 + 챌린지 상금 + 환급예정금액 update
      */
     @Async
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduleUpdateChallengeReward1(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -54,7 +54,7 @@ public class Scheduler {
     }
 
     @Async
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduleUpdateChallengeReward2(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -68,7 +68,7 @@ public class Scheduler {
     }
 
     @Async
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduleUpdateChallengeReward3(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -82,7 +82,7 @@ public class Scheduler {
     }
 
     @Async
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduleUpdateChallengeReward4(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
@@ -96,7 +96,7 @@ public class Scheduler {
     }
 
     @Async
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void scheduleUpdateChallengeReward5(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================UPDATE CHALLENGE REWARD START==================");
