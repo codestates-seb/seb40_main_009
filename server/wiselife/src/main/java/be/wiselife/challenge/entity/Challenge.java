@@ -59,7 +59,7 @@ public class Challenge extends WriterAudit {
     @Setter
     private LocalDate challengeEndDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "VARCHAR(1000)")
     @Setter
     private String challengeAuthDescription;
     @Column(nullable = false)
