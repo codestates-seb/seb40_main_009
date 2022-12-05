@@ -925,7 +925,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
 
             <ChallengeDescription>
               <div className="margin_right4">참여 인원:</div>
-              <div>{`${challengeData.challengeCurrentParty}명`}</div>
+              <div>{`${challengeData.challengeCurrentParty} 명`}</div>
             </ChallengeDescription>
 
             <ChallengeDescription>
@@ -935,12 +935,22 @@ export default function ChallengeDetailProgress({ challengeData }) {
 
             <ChallengeDescription>
               <div className="margin_right">챌린지 금액:</div>
-              <div>{challengeData.challengeFeePerPerson}원</div>
+              <div>
+                {challengeData.challengeFeePerPerson
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp; 포인트
+              </div>
             </ChallengeDescription>
 
             <ChallengeDescription>
               <div className="margin_right">결제한 금액:</div>
-              <div>{challengeData.challengeFeePerPerson}원</div>
+              <div>
+                {challengeData.challengeFeePerPerson
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp; 포인트
+              </div>
             </ChallengeDescription>
 
             <ChallengeDescription>

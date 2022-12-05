@@ -37,7 +37,6 @@ export default function MemberListPage() {
         }
       );
       const members = response.data.data;
-      console.log(members);
       setMemberTotalPages(response.data.pageInfo.totalPages);
       setMemberList(members);
       setLoading(false);
