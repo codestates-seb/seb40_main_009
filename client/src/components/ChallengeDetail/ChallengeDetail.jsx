@@ -70,14 +70,20 @@ export default function ChallengeDetail({ challengeData }) {
                 },
               }
             )
-            .then(() => {
+            .then((response) => {
               Toast.fire({
                 icon: 'success',
                 title: `${challengeData.challengeTitle}에 참가하셨습니다.`,
               });
-              window.location.reload();
-            });
-          return navigate(`/detail/${challengeData.challengeId}`);
+              localStorage.setItem(
+                'memberMoney',
+                response.data.data.currentMemberMoney
+              );
+              setTimeout(() => {
+                window.location.reload();
+              }, 3000);
+            })
+            .then(navigate(`/detail/${challengeData.challengeId}`));
         } catch (error) {
           const errorMessage = error.response.data.error.message;
           console.log('error', errorMessage);

@@ -469,13 +469,19 @@ export default function ChallengeDetailProgress({ challengeData }) {
               },
             }
           )
-          .then(() => {
+          .then((response) => {
             Toast.fire({
               icon: 'success',
               title: `${challengeData.challengeTitle}도전이 취소 되었습니다.`,
             });
+            localStorage.setItem(
+              'memberMoney',
+              response.data.data.currentMemberMoney
+            );
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
             // return navigate(`/detail/${challengeId}`);
-            window.location.reload();
           });
         // .catch(async (error) => {
         //   if (error.response.data.status === 401) {
@@ -1003,13 +1009,17 @@ export default function ChallengeDetailProgress({ challengeData }) {
         <Certification>
           <CertificationWrapper>
             <div className="title">챌린지 설명</div>
-            <div className="pd-5">{challengeData.challengeDescription}</div>
+            <div className="pd-5" style={{ 'white-space': 'pre-line' }}>
+              {challengeData.challengeDescription}
+            </div>
           </CertificationWrapper>
 
           {/* 인증 방법 */}
           <CertificationDescription>
             <div className="title">인증 방법 / 인증 예시</div>
-            <div className="pd-5">{challengeData.challengeAuthDescription}</div>
+            <div className="pd-5" style={{ 'white-space': 'pre-line' }}>
+              {challengeData.challengeAuthDescription}
+            </div>
             {/* 인증예시 */}
             <CertificationImage>
               {challengeData.challengeExamImagePath.map((image, index) => {

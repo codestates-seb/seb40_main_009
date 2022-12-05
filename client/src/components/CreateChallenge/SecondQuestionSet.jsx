@@ -69,13 +69,12 @@ export default function SecondQuestionSet({ register, watch }) {
       </div>
       <div className="question">
         <h3>챌린지 내용을 입력해주세요</h3>
-        <input
-          className="inputBox"
+        <textarea
           {...register('challengeDescription', {
             required: 'Please Write Content',
           })}
           onChange={(event) => answerCheck(event)}
-          placeholder="ex) 매일 아침 지정된 시간에 인증합니다"
+          placeholder="ex) 매일 아침 지정된 시간에 인증합니다."
         />
       </div>
     </S.CreateAsk>
