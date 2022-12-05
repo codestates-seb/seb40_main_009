@@ -100,6 +100,7 @@ public class MemberController {
 
         Member updateMember = memberService.updateMemberInfo(memberName, mapper.memberPatchToMember(patchData), jwtMember, multipartFiles);
 
+
         return new ResponseEntity(
                 new SingleResponseDto<>(mapper.memberToDetailResponse(updateMember)), HttpStatus.OK);
     }

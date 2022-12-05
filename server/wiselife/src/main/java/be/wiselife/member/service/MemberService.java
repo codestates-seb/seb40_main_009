@@ -125,8 +125,6 @@ public class MemberService {
                 .ifPresent(new_memberName->existingMember.setMemberName(new_memberName));
         Optional.ofNullable(patchMember.getMemberDescription())
                 .ifPresent(new_memberDescription->existingMember.setMemberDescription(new_memberDescription));
-        Optional.ofNullable(patchMember.getMemberImagePath())
-                .ifPresent(existingMember::setMemberImagePath);
         }
         Optional.ofNullable(multipartFiles)
                 .ifPresent(file -> {

@@ -21,9 +21,7 @@ public interface MemberMapper {
     default Member memberPatchToMember(MemberDto.Patch patchMember) {
         if(patchMember == null)
             return null;
-
         Member member = new Member();
-
         member.setMemberName(patchMember.getMemberName());
         member.setMemberDescription(patchMember.getMemberDescription());
 
