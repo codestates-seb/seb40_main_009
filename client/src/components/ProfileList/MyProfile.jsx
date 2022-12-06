@@ -1,5 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 
+import Swal from 'sweetalert2';
+
 import {
   MyProfileComponent,
   ProfileList,
@@ -42,6 +44,12 @@ function MyProfile({
     navigate(`/profile/${name}/followers`);
   };
 
+  const handleClickRefund = () => {
+    Swal.fire(
+      '여러분의 포인트는 데모데이가 끝나고</br>운영진이 맛있게 먹었습니다!'
+    );
+  };
+
   return (
     <MyProfileComponent>
       <header className="profile-info">
@@ -74,6 +82,9 @@ function MyProfile({
         <ProfileBar>
           {memberName === LoginName ? (
             <div className="buttonLists">
+              <ProfileEditButton onClick={handleClickRefund}>
+                환급받기
+              </ProfileEditButton>
               <Link to={'/ordersheet'}>
                 <ProfileEditButton>충전하기</ProfileEditButton>
               </Link>
