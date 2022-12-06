@@ -11,19 +11,22 @@ function ProfileBoxList({
   memberSuccessDay,
   objDay,
   memberChallengeSuccessRate,
-  endChallenges = [],
+  endChallengesData,
 }) {
   const navigate = useNavigate();
+  // console.log('endChallengesData>>', endChallengesData);
 
   // 챌린지 클릭시 이동
   const onClickChallenge = () => {
     navigate(`/detail/${challengeId}`);
   };
-  console.log('1234', endChallenges);
+
+  // console.log('clickedTab>>', clickedTab);
+  // console.log('challengeId>>', challengeId);
   // 문제 => 각각의 탭 잘 나오다 0번째 탭을 클릭하고 이동하면 모두 0번 째 내용으로만 나옴
   return (
     <>
-      {endChallenges.length === 0 && clickedTab === 1 ? (
+      {clickedTab === 1 && endChallengesData === [] ? (
         <div
           role="img"
           aria-label="writing hand"
@@ -49,7 +52,6 @@ function ProfileBoxList({
               {clickedTab === 1 && '도전내역'}
               {clickedTab === 2 && '결제내역'}
               {clickedTab === 0 && <span className="tag">NOW</span>}
-              {/* 도전중 내전 내역 통합 */}
             </h1>
             <span className="percentage">
               {Math.floor(memberChallengeSuccessRate)}%
