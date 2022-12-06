@@ -196,7 +196,7 @@ public class ImageService {
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
         log.info("patchReviewImage tx start");
 
-        인증가능 시간인지 검증
+        //인증가능 시간인지 검증
         if(!isAuthAvailableTime(challenge))
            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
