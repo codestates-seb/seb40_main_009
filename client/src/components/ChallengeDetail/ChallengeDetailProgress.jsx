@@ -1457,7 +1457,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
                     </div>
                     {Number(loginId) === Number(talk.memberId) ? (
                       <>
-                        <div>ddjdj</div>
                         <button
                           style={{
                             marginLeft: '1%',
