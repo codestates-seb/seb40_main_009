@@ -14,7 +14,7 @@
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
               value="%yellow([%d{yyyy-MM-dd HH:mm:ss}:%-4relative]) %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
-    <!-- 시간 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
+
 
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
@@ -25,9 +25,9 @@
                     converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
     <property name="LOG_PATTERN"
               value="${LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){blue}
-                  %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta}
-                  %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint}
-                  %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+              %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta}
+              %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint}
+              %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
     <springProperty name="AWS_ACCESS_KEY" source="cloud.aws.credentials.accessKey"/>
     <springProperty name="AWS_SECRET_KEY" source="cloud.aws.credentials.secretKey"/>
@@ -45,24 +45,27 @@
         <layout>
             <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
         </layout>
-        <logGroupName>wiselifeInfo-log</logGroupName> <!--CloudWatch log Group Name-->
-        <logStreamUuidPrefix>wiselife-Ilog-</logStreamUuidPrefix> <!--로그스트림 UUID-->
-        <logRegion>ap-northeast-2</logRegion>
-        <maxBatchLogEvents>50</maxBatchLogEvents> <!--배치의 최대 이벤트 갯수-->
-        <maxFlushTimeMillis>30000</maxFlushTimeMillis> <!--마지막 처리를 하고 시간이 지나면 cloud watch로 로그를 쏨-->
-        <maxBlockTimeMillis>5000</maxBlockTimeMillis> <!--로그가 전송되는 동안 코드가 계속 실행되는 것을 차단하고 값을 0으로 세팅하면 전송중에 발생되는 모든 로그를 버립니다.-->
-        <retentionTimeDays>0</retentionTimeDays> <!--로그보존기간 0 = 무제한-->
-        <accessKeyId>${AWS_ACCESS_KEY_ID}</accessKeyId>
-        <secretAccessKey>${AWS_SECRET_ACCESS_KEY}</secretAccessKey>
+            <logGroupName>wiselifeInfo-log</logGroupName> <!--CloudWatch log Group Name-->
+            <logStreamUuidPrefix>wiselife-Ilog-</logStreamUuidPrefix> <!--로그스트림 UUID-->
+            <logRegion>ap-northeast-2</logRegion>
+            <maxBatchLogEvents>50</maxBatchLogEvents> <!--배치의 최대 이벤트 갯수-->
+            <maxFlushTimeMillis>30000</maxFlushTimeMillis> <!--마지막 처리를 하고 시간이 지나면 cloud watch로 로그를 쏨-->
+            <maxBlockTimeMillis>5000</maxBlockTimeMillis> <!--로그가 전송되는 동안 코드가 계속 실행되는 것을 차단하고 값을 0으로 세팅하면 전송중에 발생되는 모든 로그를 버립니다.-->
+            <retentionTimeDays>0</retentionTimeDays> <!--로그보존기간 0 = 무제한-->
+            <accessKeyId>${AWS_ACCESS_KEY_ID}</accessKeyId>
+            <secretAccessKey>${AWS_SECRET_ACCESS_KEY}</secretAccessKey>
     </appender>
+
+
 
     <springProfile name="local">
         <root level="info">
-            <!--            <appender-ref ref="aws_cloud_watch_log"/> &lt;!&ndash;INFO 출력위치&ndash;&gt;-->
+<!--            <appender-ref ref="aws_cloud_watch_log"/> &lt;!&ndash;INFO 출력위치&ndash;&gt;-->
             <appender-ref ref="CONSOLE"/> <!--INFO 일반적인 코드 출력위치-->
         </root>
 
     </springProfile>
+
 </configuration>
 
 
@@ -98,3 +101,17 @@
         <!--    <appender name="aws" class="ch.qos.logback.core.ConsoleAppender">-->
         <!--        <encoder>-->
         <!--            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>-->
+<!--    <appender name="aws" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+<!--    <root level="INFO">-->
+<!--        &lt;!&ndash; Append to the console &ndash;&gt;-->
+<!--        <appender-ref ref="aws"/>-->
+<!--        &lt;!&ndash; Append also to the (async) AwsLogsAppender &ndash;&gt;-->
+<!--        <appender-ref ref="ASYNC_AWS_LOGS"/>-->
+<!--    </root>-->
+
+<!--</configuration>-->

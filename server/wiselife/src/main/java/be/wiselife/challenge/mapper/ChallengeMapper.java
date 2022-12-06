@@ -85,19 +85,24 @@ public interface ChallengeMapper {
         }
 
         Challenge.ChallengeBuilder challenge = Challenge.builder();
-        challenge.challengeTitle( challengePatchDto.getChallengeTitle() );
-        challenge.challengeDescription( challengePatchDto.getChallengeDescription() );
-        challenge.challengeMaxParty( challengePatchDto.getChallengeMaxParty() );
-        challenge.challengeMinParty( challengePatchDto.getChallengeMinParty() );
+        if(challengePatchDto.getChallengeTitle() != null)
+            challenge.challengeTitle( challengePatchDto.getChallengeTitle() );
+        if(challengePatchDto.getChallengeDescription() != null)
+            challenge.challengeDescription( challengePatchDto.getChallengeDescription() );
+        if(challengePatchDto.getChallengeMaxParty() != 0)
+            challenge.challengeMaxParty( challengePatchDto.getChallengeMaxParty() );
+        if(challengePatchDto.getChallengeMinParty() != 0)
+            challenge.challengeMinParty( challengePatchDto.getChallengeMinParty() );
         if ( challengePatchDto.getChallengeStartDate() != null ) {
             challenge.challengeStartDate( LocalDate.parse( challengePatchDto.getChallengeStartDate() ) );
         }
         if ( challengePatchDto.getChallengeEndDate() != null ) {
             challenge.challengeEndDate( LocalDate.parse( challengePatchDto.getChallengeEndDate() ) );
         }
-        challenge.challengeAuthDescription( challengePatchDto.getChallengeAuthDescription() );
-        challenge.challengeAuthCycle( challengePatchDto.getChallengeAuthCycle() );
-        challenge.challengeFeePerPerson( challengePatchDto.getChallengeFeePerPerson() );
+        if(challengePatchDto.getChallengeDescription() != null)
+            challenge.challengeAuthDescription( challengePatchDto.getChallengeAuthDescription() );
+        if(challengePatchDto.getChallengeAuthCycle() != 0)
+            challenge.challengeAuthCycle( challengePatchDto.getChallengeAuthCycle() );
 
         /*챌린지 인증 시간 추가*/
         List<String> list = challengePatchDto.getChallengeAuthAvailableTime();
@@ -106,7 +111,7 @@ public interface ChallengeMapper {
         }
 
         /*챌린지 카테고리를 숫자로 받아 enum으로 변환하여 entity에 저장*/
-        switch (challengePatchDto.getChallengeCategoryId()){
+        switch (challengePatchDto.getChallengeCategoryId()) {
             case 1:
                 challenge.challengeCategory(Challenge.ChallengeCategory.BUCKET_LIST);
                 break;
@@ -116,12 +121,14 @@ public interface ChallengeMapper {
             case 3:
                 challenge.challengeCategory(Challenge.ChallengeCategory.OFFLINE_CHALLENGE);
                 break;
+            default:
+                challenge.challengeCategory(null);
+                break;
         }
-        challenge.challengeRepImagePath(challengePatchDto.getChallengeRepImagePath());
-
-        challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
-
-
+        if(challengePatchDto.getChallengeRepImagePath() != null)
+            challenge.challengeRepImagePath(challengePatchDto.getChallengeRepImagePath());
+        if(challengePatchDto.getChallengeExamImagePath() != null)
+            challenge.challengeExamImagePath(challengePatchDto.getChallengeExamImagePath());
 
         return challenge.build();
     }
