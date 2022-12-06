@@ -198,6 +198,7 @@ public interface ChallengeMapper {
             detailResponse.challengeEndDate( challenge.getChallengeEndDate() );
             detailResponse.challengeAuthDescription( challenge.getChallengeAuthDescription() );
             detailResponse.challengeAuthCycle( challenge.getChallengeAuthCycle() );
+            detailResponse.challengeCurrentMemberTodayAuth(member.getMemberChallengeTodayCertCount());
             detailResponse.challengeAuthAvailableTime(challenge.getChallengeAuthAvailableTime());
             detailResponse.challengeDirectLink( challenge.getChallengeDirectLink() );
             detailResponse.challengeFeePerPerson( challenge.getChallengeFeePerPerson() );

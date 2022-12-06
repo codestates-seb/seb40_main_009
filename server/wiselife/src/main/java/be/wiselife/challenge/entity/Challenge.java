@@ -65,10 +65,6 @@ public class Challenge extends WriterAudit {
     @Setter
     private int challengeAuthCycle; //인증 빈도
 
-    @Column(nullable = false)
-    @Setter
-    private int challengeCurrentMemberTodayAuth;
-
     private String challengeDirectLink;//이건 프런트가 해야하지 않나?? ㅇㅈ
     @Setter
     private int challengeFeePerPerson; //인당 참여금액

@@ -92,6 +92,8 @@ public class Member extends TimeAudit {
     private String memberImagePath="이미지";
 
     @Column(nullable = false)
+    private int memberChallengeTodayCertCount;
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 

@@ -234,9 +234,9 @@ public class ImageService {
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
-            challenge.setChallengeCurrentMemberTodayAuth(challengeCertImages.size());
             challengeCertImage.setChallenge(challenge);
         }
+        loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
         imageRepository.save(challengeCertImage);
         return challenge;
