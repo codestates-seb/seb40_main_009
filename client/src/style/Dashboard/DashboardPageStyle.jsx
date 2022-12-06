@@ -33,7 +33,7 @@ export const MarginTop = styled.div`
 export const Container = styled.div`
   width: 1024px;
   height: 100vh;
-  margin-top: 12%;
+  margin-top: 20%;
 `;
 
 export const FontSize30 = styled.div`
@@ -60,8 +60,8 @@ export const PopularChallengeWrapper = styled.div`
 `;
 
 export const PopularChallenge = styled.img`
-  width: 300px;
-  height: 300px;
+  width: 230px;
+  height: 230px;
 `;
 
 export const UserRankingWrapper = styled.div`

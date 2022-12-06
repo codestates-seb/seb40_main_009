@@ -250,7 +250,13 @@ export default function MainPage() {
                     <TitleWrapper>
                       <div className="title">✨슬기로운 생활의 1등 유저✨</div>
                     </TitleWrapper>
-                    <div>
+                    <div
+                      style={{
+                        // border: '1px solid red',
+                        justifyContent: 'center',
+                        display: 'flex',
+                      }}
+                    >
                       <PopularChallenge
                         src={members[0]?.memberImagePath}
                         alt="인기 챌린지"
