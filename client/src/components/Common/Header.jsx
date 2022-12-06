@@ -131,6 +131,45 @@ export default function Header() {
     }
   };
 
+  const tokenRefresh = async () => {
+    try {
+      const response = await axios.get('/token', {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+          Refresh: localStorage.getItem('refreshToken'),
+        },
+      });
+      localStorage.setItem(
+        'authorizationToken',
+        response.headers.authorization
+      );
+      localStorage.setItem('loginPersistTime', Date.now() + 900000);
+      console.log(response.data);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      Number(Date.now()) >= Number(localStorage.getItem('loginPersistTime'))
+    ) {
+      tokenRefresh();
+      console.log('현재시각', Number(Date.now()));
+      console.log('설정시간', Number(localStorage.getItem('loginPersistTime')));
+      console.log(
+        Number(Date.now()) > Number(localStorage.getItem('loginPersistTime'))
+      );
+    }
+
+    if (
+      Number(Date.now()) >=
+      Number(localStorage.getItem('loginPersistTime') + 900000)
+    ) {
+      logOut();
+    }
+  });
+
   return (
     <HeaderContainer>
       <Container>

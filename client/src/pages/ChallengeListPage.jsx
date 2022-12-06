@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
+import { useInView } from 'react-intersection-observer';
 
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
 import Challenge from '../components/ChallengeList/Challenge';
 import Loading from '../components/Loading/Loading';
 import { LoginState } from '../components/Login/KakaoLoginData';
-import { useInView } from 'react-intersection-observer';
 
 export default function ChallengeListPage() {
   const loginState = useRecoilValue(LoginState);
