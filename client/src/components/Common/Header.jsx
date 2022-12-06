@@ -34,6 +34,9 @@ export default function Header() {
   const [view, setView] = useState(false);
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
+  const aboutUrl =
+    'https://www.notion.so/codestates/6c99ac022cef4dc0ad366150a816454b';
+
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   // 카카오로그인 api로 이동
@@ -123,6 +126,7 @@ export default function Header() {
   const logOut = () => {
     window.localStorage.clear();
     setLoginState(false);
+    console.log('로그아웃 되었습니다');
   };
 
   const onKeyPress = (event) => {
@@ -130,6 +134,41 @@ export default function Header() {
       moveSearchResultPage();
     }
   };
+
+  const tokenRefresh = async () => {
+    try {
+      const response = await axios.get('/token', {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+          Refresh: localStorage.getItem('refreshToken'),
+        },
+      });
+      localStorage.setItem(
+        'authorizationToken',
+        response.headers.authorization
+      );
+      localStorage.setItem('loginPersistTime', Date.now() + 900000);
+      console.log('AuthorizationToken을 재발급 받았습니다');
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      Number(Date.now()) >=
+      Number(localStorage.getItem('loginPersistTime')) + 900000
+    ) {
+      logOut();
+    }
+
+    if (
+      Number(Date.now()) >= Number(localStorage.getItem('loginPersistTime')) &&
+      localStorage.getItem('loginPersistTime')
+    ) {
+      tokenRefresh();
+    }
+  });
 
   return (
     <HeaderContainer>
@@ -140,34 +179,50 @@ export default function Header() {
         {/* <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo> */}
         <img
           style={{
-            width: '7%',
+            width: '9%',
+            // border: '1px solid red',
             cursor: 'pointer',
-            marginLeft: '5%',
-            marginRight: '10%',
+            marginLeft: '2%',
+            marginRight: '4%',
           }}
           onClick={NavigateMainPage}
           src={LogoImage}
           alt="슬기로운생활로고 사진"
         />
-
-        <ChallengeButton onClick={NavigateChallengePage}>
-          Challenge
-        </ChallengeButton>
-        <ChallengeButton
-          style={{ marginRight: '8%' }}
-          onClick={NavigateMemberPage}
-        >
-          Ranking
-        </ChallengeButton>
         <div
-          style={{ color: 'black' }}
-          onChange={(event) => setSearchFilterValue(event.target.value)}
+          style={{
+            display: 'flex',
+            width: '40%',
+            // border: '1px solid green',
+            justifyContent: 'space-between',
+          }}
         >
-          <Select>
-            {searchFilterData.map((element) => {
-              return <option key={element.id}>{element.value}</option>;
-            })}
-          </Select>
+          <ChallengeButton
+            onClick={() => {
+              window.open(aboutUrl);
+            }}
+          >
+            About us
+          </ChallengeButton>
+          <ChallengeButton onClick={NavigateChallengePage}>
+            Challenge
+          </ChallengeButton>
+          <ChallengeButton
+            style={{ marginRight: '8%' }}
+            onClick={NavigateMemberPage}
+          >
+            Ranking
+          </ChallengeButton>
+          <div
+            style={{ color: 'black' }}
+            onChange={(event) => setSearchFilterValue(event.target.value)}
+          >
+            <Select>
+              {searchFilterData.map((element) => {
+                return <option key={element.id}>{element.value}</option>;
+              })}
+            </Select>
+          </div>
         </div>
         <Search>
           <input
@@ -237,7 +292,7 @@ export default function Header() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'end',
-              marginRight: '5%',
+              marginRight: '2%',
             }}
           >
             <Link to={'/ordersheet'} style={{ textDecoration: 'none' }}>
@@ -317,7 +372,7 @@ export default function Header() {
               width: '800px',
               alignItems: 'center',
               justifyContent: 'end',
-              marginRight: '8%',
+              marginRight: '2%',
             }}
           >
             <img

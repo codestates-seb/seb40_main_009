@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
+import { useInView } from 'react-intersection-observer';
 
 import * as S from '../style/ChallengeList/ChallengeList.styled';
 
 import Challenge from '../components/ChallengeList/Challenge';
 import Loading from '../components/Loading/Loading';
 import { LoginState } from '../components/Login/KakaoLoginData';
-import { useInView } from 'react-intersection-observer';
 
 export default function ChallengeListPage() {
   const loginState = useRecoilValue(LoginState);
@@ -52,6 +52,7 @@ export default function ChallengeListPage() {
   const challengeFiltering = useCallback(async () => {
     setLoading(true);
     setChallengeList([]);
+    setPageNumber(1);
     try {
       const response = await axios.get(
         `/challenges/all/${categorySelect}?sort-by=${filterValue}&page=1&size=12`,
@@ -76,7 +77,7 @@ export default function ChallengeListPage() {
   }, [challengeFiltering]);
 
   /** 무한 스크롤*/
-  const getMemberList = useCallback(async () => {
+  const getChallengeList = useCallback(async () => {
     setLoading(true);
 
     try {
@@ -88,10 +89,13 @@ export default function ChallengeListPage() {
           },
         }
       );
-      const members = response.data.data;
+      const challenges = response.data.data;
 
       if (pageNumber !== 1) {
-        setChallengeList((prevMembers) => [...prevMembers, ...members]);
+        setChallengeList((prevChallenges) => [
+          ...prevChallenges,
+          ...challenges,
+        ]);
       }
       setLoading(false);
     } catch (error) {
@@ -100,8 +104,8 @@ export default function ChallengeListPage() {
   }, [pageNumber]);
 
   useEffect(() => {
-    getMemberList();
-  }, [getMemberList]);
+    getChallengeList();
+  }, [getChallengeList]);
 
   useEffect(() => {
     if (inView && !isLoading) {
@@ -154,7 +158,7 @@ export default function ChallengeListPage() {
               index
             ) => (
               <React.Fragment key={index}>
-                {isLastMember(challengeList.length - 1, index) ? (
+                {isChallengeMember(challengeList.length - 1, index) ? (
                   <>
                     <Challenge
                       key={challengeId}
@@ -188,7 +192,7 @@ export default function ChallengeListPage() {
   );
 }
 
-const isLastMember = (lastIndex, targetIndex) => {
+const isChallengeMember = (lastIndex, targetIndex) => {
   return lastIndex === targetIndex;
 };
 

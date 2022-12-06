@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import Swal from 'sweetalert2';
 
+import FollowersDetail from './FollowersDetail';
+
 import {
   MyProfileComponent,
   ProfileList,
@@ -22,6 +24,7 @@ function MyProfile({
   followStatus,
   followerCount,
   memberMoney,
+  followers = [],
 }) {
   //edit페이지로 가져갈 데이터
   const profileData = {
@@ -34,6 +37,7 @@ function MyProfile({
     objectPeriod: '',
     followerCount: '',
   };
+  console.log('야호', followers);
 
   const navigate = useNavigate();
   const LoginName = localStorage.getItem('LoginName');
@@ -41,7 +45,7 @@ function MyProfile({
   console.log('이건 이름', name);
 
   const onClickFollowers = () => {
-    navigate(`/profile/${name}/followers`);
+    // navigate(`/profile/${name}/followers`);
   };
 
   const handleClickRefund = () => {
@@ -55,6 +59,7 @@ function MyProfile({
       <header className="profile-info">
         <img src={memberImagePath} className="image-size" alt="profile-img" />
         <div>
+          <FollowersDetail />
           <ProfileList>
             <button onClick={onClickFollowers}>{memberName}</button>
             <Follower

@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 
-export const ErrorMessage = styled.span`
+export const ErrorMessage = styled.div`
+  position: relative;
   color: red;
+
+  > span {
+    position: absolute;
+    top: 100px;
+  }
 `;
 
 export const CreateAsk = styled.section`
@@ -9,29 +15,38 @@ export const CreateAsk = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  /* 
   > form {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  }
+  } */
+
   .imgSection {
     margin-bottom: 20px;
     border: 1px solid gray;
   }
 
   .inputBox {
-    height: 30px;
+    width: 400px;
+    height: 50px;
     text-align: center;
     border-radius: 10px;
   }
 
   .question {
     height: 80px;
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
+    margin-top: 20px;
+
+    > textarea {
+      resize: none;
+      width: 400px;
+      height: 50px;
+      border-radius: 10px;
+      border: 2px solid black;
+      text-align: center;
+    }
 
     > h3 {
       margin-bottom: 10px;
@@ -62,6 +77,13 @@ export const CreateAsk = styled.section`
     :hover {
       background-color: #aec4fa;
     }
+  }
+  .dateInput {
+    width: 200px;
+  }
+
+  .checkInputButton {
+    margin-top: 100px;
   }
 `;
 

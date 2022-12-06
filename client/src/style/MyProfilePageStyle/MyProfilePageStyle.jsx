@@ -91,8 +91,7 @@ export const ChartBarComponent = styled.div`
   }
 
   .progress-bar .progress {
-    width: ${(props) =>
-      props.percentage}%; // 나타내고자 하는 퍼센트 값을 넣으면 됩니다.
+    width: ${(props) => props.percentage}%; // 나타내고자 하는 퍼센트 값
     height: 20px;
     padding: 0;
     text-align: center;
@@ -103,5 +102,3 @@ export const ChartBarComponent = styled.div`
     animation: ${move} 3s 1;
   }
 `;
-
-export const FollowersDetailComponent = styled.div``;

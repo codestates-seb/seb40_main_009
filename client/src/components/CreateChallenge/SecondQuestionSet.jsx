@@ -1,10 +1,14 @@
+import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   createChallangeRepresentationImage,
   createChallengeStateNumber,
 } from '../../atoms/atoms';
+import { checkImageSize } from '../../function/checkImageSize';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
+
+import exampleImg from '../../image/example.png';
 
 export default function SecondQuestionSet({ register, watch }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
@@ -40,6 +44,10 @@ export default function SecondQuestionSet({ register, watch }) {
       : setStatePageNumber(2);
   };
 
+  useEffect(() => {
+    setImageTransfrom(exampleImg);
+  }, []);
+
   return (
     <S.CreateAsk>
       <section className="imgSection">
@@ -53,8 +61,10 @@ export default function SecondQuestionSet({ register, watch }) {
             required: 'Please Upload Picture',
           })}
           onChange={(event) => {
-            setImagePreview(event.target.files[0]);
-            answerCheck(event);
+            if (checkImageSize(event.target.files)) {
+              setImagePreview(event.target.files[0]);
+              answerCheck(event);
+            }
           }}
         />
       </div>

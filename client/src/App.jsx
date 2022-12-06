@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import SearchResult from './pages/SearchResult';
 
+import SearchResult from './pages/SearchResult';
 import MyProfilePage from './pages/MyProfilePage';
 import OrderSheetPage from './pages/OrderSheetPage';
 import Header from './components/Common/Header';
@@ -25,12 +25,11 @@ import CancellationPayment from './components/KakaoPay/PaymentLists/Cancellation
 
 import ProfileBoxChallenge from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
 import ProfileBoxOrderList from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
-import FollowersDetailComponent from './style/MyProfilePageStyle/MyProfilePageStyle';
 
 export default function App() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <BrowserRouter>
         <Header />
         <Routes>
@@ -64,14 +63,10 @@ export default function App() {
             path="/profile/:name/orderlist"
             element={<ProfileBoxOrderList />}
           />
-          <Route
-            path="/profile/:name/followers"
-            element={<FollowersDetailComponent />}
-          />
         </Routes>
         <Footer />
       </BrowserRouter>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

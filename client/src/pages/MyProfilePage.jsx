@@ -19,6 +19,15 @@ function MyProfilePage() {
       memberMoney: '',
       followStatus: '',
       followerCount: '',
+      followers: [
+        {
+          followId: '',
+          followingId: '',
+          followerId: '',
+          followerName: '',
+          followStatus: '',
+        },
+      ],
       participatingChallenges: [
         {
           memberChallengeId: '',
@@ -48,6 +57,8 @@ function MyProfilePage() {
 
   const params = useParams();
   const name = params.name;
+  console.log('wow', myProfileLists.followers);
+  // const followedPeop .
 
   // get요청
   const getProfile = async () => {
@@ -102,6 +113,7 @@ function MyProfilePage() {
         followerCount={myProfileLists.followerCount}
         followStatus={myProfileLists.followStatus}
         memberMoney={myProfileLists.memberMoney}
+        followers={myProfileLists.follower}
       />
       <ProfileBoxLists
         endChallenges={myProfileLists.endChallenges}
