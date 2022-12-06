@@ -66,6 +66,7 @@ function ProfileBoxLists({
               objDay={challenge.objDay}
               memberChallengeSuccessRate={challenge.memberChallengeSuccessRate}
               clickedTab={clickedTab}
+              endChallenges={challenge.endChallenges}
             />
           ))}
         {clickedTab === 2 && memberName === LoginName && (
