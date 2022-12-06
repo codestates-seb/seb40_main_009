@@ -190,7 +190,8 @@ public class ChallengeController {
             return new ResponseEntity<>(
                     new SingleResponseDto<>(challengeResponseDto), HttpStatus.OK);
         } else {
-
+            int memberCertTodayCount = memberChallengeRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI", member.getMemberId(), challenge.getRandomIdForImage()).size();
+            challenge.setMemberChallengeTodayCertCount(memberCertTodayCount);
             ChallengeDto.DetailResponse challengeResponseDto
                     = challengeMapper.challengeToChallengeDetailResponseDto(challenge, challengeTalkMapper, memberService, challengeReviewMapper, member, memberChallengeService);
 
