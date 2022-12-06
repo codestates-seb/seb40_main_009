@@ -180,7 +180,7 @@ export default function Header() {
         <img
           style={{
             width: '9%',
-            border: '1px solid red',
+            // border: '1px solid red',
             cursor: 'pointer',
             marginLeft: '2%',
             marginRight: '4%',
@@ -193,7 +193,7 @@ export default function Header() {
           style={{
             display: 'flex',
             width: '40%',
-            border: '1px solid green',
+            // border: '1px solid green',
             justifyContent: 'space-between',
           }}
         >
