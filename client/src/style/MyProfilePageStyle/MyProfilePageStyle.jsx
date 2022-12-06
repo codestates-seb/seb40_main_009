@@ -34,14 +34,6 @@ export const MyProfileComponent = styled.div`
 export const ProfileList = styled.div`
   display: flex;
   margin: 0.7rem 0;
-  button {
-    font-size: 25px;
-    color: black;
-    cursor: pointer;
-    background-color: #ffffff;
-    border: none;
-    padding-left: 0%;
-  }
 `;
 
 export const ProfileBar = styled.div`

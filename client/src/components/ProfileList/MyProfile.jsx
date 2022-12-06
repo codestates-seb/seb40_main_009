@@ -37,16 +37,10 @@ function MyProfile({
     objectPeriod: '',
     followerCount: '',
   };
-  console.log('야호', followers);
 
   const navigate = useNavigate();
   const LoginName = localStorage.getItem('LoginName');
   const name = memberName;
-  console.log('이건 이름', name);
-
-  const onClickFollowers = () => {
-    // navigate(`/profile/${name}/followers`);
-  };
 
   const handleClickRefund = () => {
     Swal.fire(
@@ -59,18 +53,18 @@ function MyProfile({
       <header className="profile-info">
         <img src={memberImagePath} className="image-size" alt="profile-img" />
         <div>
-          <FollowersDetail />
           <ProfileList>
-            <button onClick={onClickFollowers}>{memberName}</button>
+            <div>{memberName}</div>
             <Follower
               followStatus={followStatus}
               followerCount={followerCount}
+              followers={followers}
             />
           </ProfileList>
           <div className="profile-list">
             <p>
               챌린지성공률:
-              {memberChallengePercentage}%
+              {Math.floor(memberChallengePercentage)}%
             </p>
             <p>
               현재 포인트:
