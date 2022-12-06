@@ -34,6 +34,9 @@ export default function Header() {
   const [view, setView] = useState(false);
   const [loginState, setLoginState] = useRecoilState(LoginState);
 
+  const aboutUrl =
+    'https://www.notion.so/codestates/6c99ac022cef4dc0ad366150a816454b';
+
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   // 카카오로그인 api로 이동
@@ -176,34 +179,50 @@ export default function Header() {
         {/* <Logo onClick={NavigateMainPage}>슬기로운 생활</Logo> */}
         <img
           style={{
-            width: '7%',
+            width: '9%',
+            border: '1px solid red',
             cursor: 'pointer',
-            marginLeft: '5%',
-            marginRight: '10%',
+            marginLeft: '2%',
+            marginRight: '4%',
           }}
           onClick={NavigateMainPage}
           src={LogoImage}
           alt="슬기로운생활로고 사진"
         />
-
-        <ChallengeButton onClick={NavigateChallengePage}>
-          Challenge
-        </ChallengeButton>
-        <ChallengeButton
-          style={{ marginRight: '8%' }}
-          onClick={NavigateMemberPage}
-        >
-          Ranking
-        </ChallengeButton>
         <div
-          style={{ color: 'black' }}
-          onChange={(event) => setSearchFilterValue(event.target.value)}
+          style={{
+            display: 'flex',
+            width: '40%',
+            border: '1px solid green',
+            justifyContent: 'space-between',
+          }}
         >
-          <Select>
-            {searchFilterData.map((element) => {
-              return <option key={element.id}>{element.value}</option>;
-            })}
-          </Select>
+          <ChallengeButton
+            onClick={() => {
+              window.open(aboutUrl);
+            }}
+          >
+            About us
+          </ChallengeButton>
+          <ChallengeButton onClick={NavigateChallengePage}>
+            Challenge
+          </ChallengeButton>
+          <ChallengeButton
+            style={{ marginRight: '8%' }}
+            onClick={NavigateMemberPage}
+          >
+            Ranking
+          </ChallengeButton>
+          <div
+            style={{ color: 'black' }}
+            onChange={(event) => setSearchFilterValue(event.target.value)}
+          >
+            <Select>
+              {searchFilterData.map((element) => {
+                return <option key={element.id}>{element.value}</option>;
+              })}
+            </Select>
+          </div>
         </div>
         <Search>
           <input
@@ -273,7 +292,7 @@ export default function Header() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'end',
-              marginRight: '5%',
+              marginRight: '2%',
             }}
           >
             <Link to={'/ordersheet'} style={{ textDecoration: 'none' }}>
@@ -353,7 +372,7 @@ export default function Header() {
               width: '800px',
               alignItems: 'center',
               justifyContent: 'end',
-              marginRight: '8%',
+              marginRight: '2%',
             }}
           >
             <img
