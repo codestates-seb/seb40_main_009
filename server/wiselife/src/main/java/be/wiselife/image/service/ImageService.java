@@ -263,7 +263,7 @@ public class ImageService {
             return false;
 
         //데모데이 이벤트 챌린지인 경우 인증시간 인증을 거치지 않도록
-        if(challenge.getChallengeTitle().startsWith("깜짝이벤트")) return true;
+        if(challenge.getChallengeTitle().startsWith("[깜짝이벤트]")) return true;
 
         //시간 검증
         for(String time : challengeAuthAvailableTime){
