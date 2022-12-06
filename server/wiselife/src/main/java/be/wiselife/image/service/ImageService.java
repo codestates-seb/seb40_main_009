@@ -197,9 +197,9 @@ public class ImageService {
 
         log.info("patchReviewImage tx start");
 
-        //인증가능 시간인지 검증
-        if(!isAuthAvailableTime(challenge))
-            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
+//        //인증가능 시간인지 검증
+//        if(!isAuthAvailableTime(challenge))
+//            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
@@ -214,7 +214,12 @@ public class ImageService {
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
+
+
         Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage,challengeCertImages);
+
+        if(challengeCertImages.size()>challenge.getChallengeAuthCycle())
+            throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
         loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
@@ -226,12 +231,10 @@ public class ImageService {
     }
     // 인증사진 등록 및 수정 메소드
     private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage,List<ChallengeCertImage> challengeCertImages) {
-        //인증횟수 CHECK
-        if(challengeCertImages.size() >= challenge.getChallengeAuthCycle())
-            throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
+
 
         //깜짝이벤트 용
-        if(challengeCertImages.size() >=1)
+        if(challengeCertImages.size()>challenge.getChallengeAuthCycle())
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
         if (challengeCertImage == null) {
@@ -239,10 +242,11 @@ public class ImageService {
             challengeCertImage = new ChallengeCertImage();
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
-            challenge.getChallengeCertImages().add(challengeCertImage);
+            challengeCertImages.add(challengeCertImage);
             challengeCertImage.setChallenge(challenge);
             challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
             imageRepository.save(challengeCertImage);
+
             return challenge;
         }
         log.info("cert patch");
