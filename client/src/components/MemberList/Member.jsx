@@ -14,16 +14,42 @@ export default function Member({
   const date = format(parseISO(created_at), 'yyyy-MM-dd');
 
   return (
-    <S.UserContainer>
-      <Link to={`/profile/${name}`}>
-        <div>
-          <img alt="memberImage" src={image} />
-          <span>{name}</span>
-        </div>
-        <div>{badge}</div>
-        <div>{followerCount}</div>
-        <div>{date}</div>
-      </Link>
-    </S.UserContainer>
+    <div>
+      <S.UserContainer>
+        <Link to={`/profile/${name}`}>
+          <div>
+            <div style={{ width: '120px' }}>
+              <img
+                alt="memberImage"
+                src={image}
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  borderRadius: '10px',
+                  // border: '1px solid red',
+                  boxShadow: '3px 7px 12px 0 #c2c2c2',
+                }}
+              />
+              <span>{name}</span>
+            </div>
+          </div>
+          <div>{badge}</div>
+          <div>{followerCount}</div>
+          <div>{date}</div>
+        </Link>
+      </S.UserContainer>
+    </div>
+
+    // <S.UserContainer>
+    //   <Link to={`/profile/${name}`}>
+    //     <div>
+    //       <img alt="memberImage" src={image} />
+    //       <span>{name}</span>
+    //     </div>
+    //     <div>{badge}</div>
+    //     <div>{followerCount}</div>
+    //     <div>{date}</div>
+    //   </Link>
+    // </S.UserContainer>
   );
 }
