@@ -246,9 +246,19 @@ public class ImageService {
      */
     private boolean isAuthAvailableTime(Challenge challenge, List<ChallengeCertImage> challengeCertImages){
         LocalTime now = LocalTime.now();
+        LocalDate todayDate = LocalDate.now();
         List<String> challengeAuthAvailableTime = challenge.getChallengeAuthAvailableTime();
         LocalTime authAvailableTime;
 
+        //데모데이 이벤트 챌린지인 경우 인증시간 인증을 거치지 않도록
+        if(challenge.getChallengeTitle().startsWith("[이벤트]")) return true;
+
+
+        //날짜 검증
+        if(todayDate.isBefore(challenge.getChallengeStartDate()) || todayDate.isAfter(challenge.getChallengeEndDate()))
+            return false;
+
+        //시간 검증
         for(String time : challengeAuthAvailableTime){
             authAvailableTime = LocalTime.parse(time);
             if(authAvailableTime.equals(now) || now.isAfter(authAvailableTime) && now.isBefore(authAvailableTime.plusMinutes(11)))
