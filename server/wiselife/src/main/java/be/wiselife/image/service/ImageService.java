@@ -194,7 +194,6 @@ public class ImageService {
      * @return
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
-
         log.info("patchReviewImage tx start");
 
         //인증가능 시간인지 검증
@@ -231,7 +230,7 @@ public class ImageService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
         //깜짝이벤트 용
-        if(challengeCertImages.size() >=1)
+        if(challenge.getChallengeTitle().startsWith("[깜짝이벤트]") && challengeCertImages.size() >=1 )
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
         if (challengeCertImage == null) {
