@@ -57,8 +57,7 @@ function MyProfilePage() {
 
   const params = useParams();
   const name = params.name;
-  console.log('wow', myProfileLists.followers);
-  // const followedPeop .
+  console.log('wow', myProfileLists.memberChallengePercentage);
 
   // get요청
   const getProfile = async () => {
@@ -113,7 +112,8 @@ function MyProfilePage() {
         followerCount={myProfileLists.followerCount}
         followStatus={myProfileLists.followStatus}
         memberMoney={myProfileLists.memberMoney}
-        followers={myProfileLists.follower}
+        followers={myProfileLists.followers}
+        memberChallengePercentage={myProfileLists.memberChallengePercentage}
       />
       <ProfileBoxLists
         endChallenges={myProfileLists.endChallenges}

@@ -31,6 +31,7 @@ function ProfileBoxList({
           role="img"
           aria-label="writing hand"
           style={{
+            border: '2px solid #eff1fe',
             width: '100%',
             height: '450px',
             marginTop: '1%',
@@ -52,7 +53,9 @@ function ProfileBoxList({
               {clickedTab === 2 && '결제내역'}
               {clickedTab === 0 && <span className="tag">NOW</span>}
             </h1>
-            <span className="percentage">{memberChallengeSuccessRate}%</span>
+            <span className="percentage">
+              {Math.floor(memberChallengeSuccessRate)}%
+            </span>
           </div>
           <form className="challenge-box">
             <img
