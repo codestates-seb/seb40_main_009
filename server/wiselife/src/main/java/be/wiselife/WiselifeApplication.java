@@ -10,9 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableJpaAuditing
 public class WiselifeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(WiselifeApplication.class, args);
 	}
-
 }

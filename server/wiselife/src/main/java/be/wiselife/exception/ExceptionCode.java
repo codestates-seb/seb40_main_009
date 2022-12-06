@@ -20,6 +20,8 @@ public enum ExceptionCode {
     THIS_CHALLENGE_HAS_MAX_MEMBER(404, "This challenge has max member"),
     YOU_ALREADY_UNPARTICIPATED(404, "You already unparticipated"),
     CHALLENGE_ALREADY_STARTED(404, "Challenge already started"),
+
+    ALREADY_VERIFIED_TODAY_TOTAL_QUOTA(404, "You have already completed all verification counts for today"),
     //Follower 부분 예외 ==========시작
     CAN_NOT_FOLLOW_YOURSELF(404, "Can not follow yourself"),
     YOU_ALREADY_FILL_CERT_NUMBER(404, "You already fill cert number"),

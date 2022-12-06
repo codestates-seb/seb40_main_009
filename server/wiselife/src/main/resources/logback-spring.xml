@@ -62,7 +62,6 @@
 <!--            <appender-ref ref="aws_cloud_watch_log"/> &lt;!&ndash;INFO 출력위치&ndash;&gt;-->
             <appender-ref ref="CONSOLE"/> <!--INFO 일반적인 코드 출력위치-->
         </root>
-
     </springProfile>
 
     <springProfile name="aws">
