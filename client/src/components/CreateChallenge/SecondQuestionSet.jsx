@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   createChallangeRepresentationImage,
@@ -6,6 +7,8 @@ import {
 import { checkImageSize } from '../../function/checkImageSize';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
+
+import exampleImg from '../../image/example.png';
 
 export default function SecondQuestionSet({ register, watch }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
@@ -40,6 +43,10 @@ export default function SecondQuestionSet({ register, watch }) {
       ? setStatePageNumber(3)
       : setStatePageNumber(2);
   };
+
+  useEffect(() => {
+    setImageTransfrom(exampleImg);
+  }, []);
 
   return (
     <S.CreateAsk>

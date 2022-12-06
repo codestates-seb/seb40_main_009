@@ -7,6 +7,7 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 import { createChallengeStateNumber } from '../../atoms/atoms';
 import exampleImage from '../../image/example.png';
 import { checkImageSize } from '../../function/checkImageSize';
+import { useEffect } from 'react';
 
 const TimeContainer = styled.section`
   display: grid;
@@ -79,6 +80,10 @@ export default function FourthQuestionSet({ register, watch, errors }) {
       setStatePageNumber(5);
     }
   };
+
+  useEffect(() => {
+    setImageTransfrom(exampleImage);
+  }, []);
 
   return (
     <S.CreateAsk>
@@ -207,6 +212,7 @@ export default function FourthQuestionSet({ register, watch, errors }) {
           type={'button'}
           {...register('lastCheck')}
           value={'모든 내용을 입력하셨습니까?'}
+          className="checkInputButton"
           onClick={() => lastCheck()}
         />
       ) : null}

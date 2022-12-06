@@ -37,14 +37,15 @@ export const CreateAsk = styled.section`
 
   .question {
     height: 80px;
-    margin-bottom: 15px;
+    margin-top: 20px;
 
     > textarea {
       resize: none;
       width: 400px;
-      height: 100px;
+      height: 50px;
       border-radius: 10px;
       border: 2px solid black;
+      text-align: center;
     }
 
     > h3 {
@@ -79,6 +80,10 @@ export const CreateAsk = styled.section`
   }
   .dateInput {
     width: 200px;
+  }
+
+  .checkInputButton {
+    margin-top: 100px;
   }
 `;
 

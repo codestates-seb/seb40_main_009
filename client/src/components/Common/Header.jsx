@@ -123,6 +123,7 @@ export default function Header() {
   const logOut = () => {
     window.localStorage.clear();
     setLoginState(false);
+    console.log('로그아웃 되었습니다');
   };
 
   const onKeyPress = (event) => {
@@ -144,7 +145,7 @@ export default function Header() {
         response.headers.authorization
       );
       localStorage.setItem('loginPersistTime', Date.now() + 900000);
-      console.log(response.data);
+      console.log('AuthorizationToken을 재발급 받았습니다');
     } catch (error) {
       console.log('error', error);
     }
@@ -153,21 +154,16 @@ export default function Header() {
   useEffect(() => {
     if (
       Number(Date.now()) >=
-      Number(localStorage.getItem('loginPersistTime') + 900000)
+      Number(localStorage.getItem('loginPersistTime')) + 900000
     ) {
-      window.localStorage.clear();
-      setLoginState(false);
+      logOut();
     }
 
     if (
-      Number(Date.now()) >= Number(localStorage.getItem('loginPersistTime'))
+      Number(Date.now()) >= Number(localStorage.getItem('loginPersistTime')) &&
+      localStorage.getItem('loginPersistTime')
     ) {
       tokenRefresh();
-      console.log('현재시각', Number(Date.now()));
-      console.log('설정시간', Number(localStorage.getItem('loginPersistTime')));
-      console.log(
-        Number(Date.now()) > Number(localStorage.getItem('loginPersistTime'))
-      );
     }
   });
 

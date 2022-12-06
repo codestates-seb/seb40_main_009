@@ -13,7 +13,7 @@ import 'react-date-range/dist/theme/default.css';
 import CreateChallenge from '../components/CreateChallenge/CreateChallenge';
 
 const AddContainer = styled.section`
-  padding-top: 100px;
+  padding-top: 80px;
   width: 1024px;
   margin: 0 auto;
   display: flex;
@@ -23,8 +23,8 @@ const AddContainer = styled.section`
 `;
 
 const Container = styled.section`
-  padding: 92px 30px 80px 30px;
-  height: 680px;
+  padding: 0px 30px 80px 30px;
+  height: 1000px;
   gap: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
