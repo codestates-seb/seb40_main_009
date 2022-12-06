@@ -27,26 +27,33 @@ public class ChallengeDto {
         @NotNull
         @Range(min = 1, max = 3) // 1: 버킷 리스트 2: 공유 챌린지 3: 오프라인 챌린지
         private int challengeCategoryId;
+
         @NotBlank
         private String challengeTitle;
+
         @NotBlank
         private String challengeDescription;
 
         private int challengeMaxParty;
+
         @Min(value = 1,message = "최소인원은 1명 이상이 되어야 합니다.")
         private int challengeMinParty;
+
         @NotBlank
         private String challengeStartDate;
+
         @NotBlank
         private String challengeEndDate;
+
         @NotBlank
         private String challengeAuthDescription;
+
         @NotNull
         private int challengeAuthCycle;
+
         @NotNull
         private List<String> challengeAuthAvailableTime;
-        @NotNull
-        @Min(value = 1000,message = "참가금액은 최소 1,000원 이상이 되어야합니다.")
+
         private int challengeFeePerPerson; //인당 참여금액
     }
 
@@ -163,6 +170,8 @@ public class ChallengeDto {
         private String challengeAuthDescription;
 
         private int challengeAuthCycle;
+
+        private int challengeCurrentMemberTodayAuth;
 
         private List<String> challengeAuthAvailableTime;
 

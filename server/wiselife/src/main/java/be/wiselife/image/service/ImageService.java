@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -193,6 +194,7 @@ public class ImageService {
      * @return
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
+
         log.info("patchReviewImage tx start");
 
         //인증가능 시간인지 검증
@@ -212,15 +214,12 @@ public class ImageService {
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
+        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage,challengeCertImages);
 
-        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage, challengeCertImages);
-
-        challengeCertImages.add(challengeCertImage);
-
+        loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
         plusSuccessCount(loginMember);
-
         calculateMemberChallengePercentage(loginMember);
         log.info("patchReviewImage tx end");
         return challengeUpdateChallengeCertImage;
@@ -236,12 +235,17 @@ public class ImageService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
         if (challengeCertImage == null) {
+            log.info("cert New");
             challengeCertImage = new ChallengeCertImage();
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
             challengeCertImage.setChallenge(challenge);
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            imageRepository.save(challengeCertImage);
+            return challenge;
         }
+        log.info("cert patch");
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
         imageRepository.save(challengeCertImage);
         return challenge;
@@ -277,6 +281,7 @@ public class ImageService {
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
     private void isSuccessDay(Challenge challenge, MemberChallenge memberChallengeFromRepository, List<ChallengeCertImage> challengeCertImages) {
+
         if (challengeCertImages.size() == challenge.getChallengeAuthCycle()) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
 

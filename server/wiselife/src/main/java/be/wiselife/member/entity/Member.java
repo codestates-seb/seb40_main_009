@@ -42,6 +42,7 @@ public class Member extends TimeAudit {
         this.memberExp = 0;
         this.memberMoney = 0;
         this.followers = 0;
+        this.memberChallengeTodayCertCount=0;
         this.memberDescription = "안녕하세요! 슬린이에요^^";
         this.memberImagePath = memberImagePath;
         this.refreshToken = RefreshToken;
@@ -91,6 +92,7 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private String memberImagePath="이미지";
 
+    private int memberChallengeTodayCertCount;
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
