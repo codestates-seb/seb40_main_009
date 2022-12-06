@@ -231,6 +231,10 @@ public class ImageService {
         if(challengeCertImages.size() >= challenge.getChallengeAuthCycle())
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
+        //깜짝이벤트 용
+        if(challengeCertImages.size() >=1)
+            throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
+
         if (challengeCertImage == null) {
             challengeCertImage = new ChallengeCertImage();
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
@@ -259,7 +263,7 @@ public class ImageService {
             return false;
 
         //데모데이 이벤트 챌린지인 경우 인증시간 인증을 거치지 않도록
-        if(challenge.getChallengeTitle().startsWith("[이벤트]")) return true;
+        if(challenge.getChallengeTitle().startsWith("깜짝이벤트")) return true;
 
         //시간 검증
         for(String time : challengeAuthAvailableTime){
