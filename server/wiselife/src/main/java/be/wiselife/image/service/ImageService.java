@@ -223,6 +223,9 @@ public class ImageService {
     // 인증사진 등록 및 수정 메소드
     private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage,List<ChallengeCertImage> challengeCertImages) {
         //인증가능 시간인지 검증
+        if (challengeCertImages.size() > challenge.getChallengeAuthCycle()) {
+            throw new BusinessLogicException(ExceptionCode.YOU_ALREADY_FILL_CERT_NUMBER);
+        }
         if(!isAuthAvailableTime(challenge, challengeCertImages))
             throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
@@ -231,6 +234,7 @@ public class ImageService {
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
+            challenge.setChallengeCurrentMemberTodayAuth(challengeCertImages.size());
             challengeCertImage.setChallenge(challenge);
         }
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
@@ -260,6 +264,7 @@ public class ImageService {
 
     // 멤버가 참여한 챌린지에 대한 하루를 성공으로 칠껀지에 대한 로직
     private void isSuccessDay(Challenge challenge, MemberChallenge memberChallengeFromRepository, List<ChallengeCertImage> challengeCertImages) {
+
         if (challengeCertImages.size() == challenge.getChallengeAuthCycle()) {
             memberChallengeFromRepository.setMemberSuccessDay(memberChallengeFromRepository.getMemberSuccessDay()+1);
 
