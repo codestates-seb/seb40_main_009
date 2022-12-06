@@ -40,7 +40,7 @@ public class Challenge extends WriterAudit {
     @Setter
     private String challengeTitle;
 
-    @Column(nullable = false,columnDefinition = "VARCHAR(1000)")
+    @Column(nullable = false,columnDefinition = "MEDIUMTEXT")
     @Setter
     private String challengeDescription;
 
@@ -59,7 +59,7 @@ public class Challenge extends WriterAudit {
     @Setter
     private LocalDate challengeEndDate;
 
-    @Column(nullable = false,columnDefinition = "VARCHAR(1000)")
+    @Column(nullable = false,columnDefinition = "MEDIUMTEXT")
     @Setter
     private String challengeAuthDescription;
     @Column(nullable = false)
@@ -84,7 +84,7 @@ public class Challenge extends WriterAudit {
     private String challengeRepImagePath;
 
     @Setter
-    @Column(columnDefinition = "VARCHAR(1000)")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String challengeExamImagePath;
 
     //이미지 중 챌린지 참여자가 추가할 사진 필드
