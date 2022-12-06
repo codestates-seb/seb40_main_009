@@ -336,7 +336,7 @@ export default function Header() {
                   style={{
                     position: 'absolute',
                     top: '65%',
-                    right: '10%',
+                    right: '2%',
                     backgroundColor: '#F2F4FE',
                     padding: '20px 10px',
                     borderRadius: '10px',
