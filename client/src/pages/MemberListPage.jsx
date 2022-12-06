@@ -29,7 +29,7 @@ export default function MemberListPage() {
 
     try {
       const response = await axios.get(
-        `/member?page=${pageNumber}&size=30&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=15&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -56,7 +56,7 @@ export default function MemberListPage() {
 
     try {
       const response = await axios.get(
-        `/member?page=${pageNumber}&size=30&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=15&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -149,17 +149,17 @@ const filterList = [
   { id: 0, title: '이름', value: 'memberBadge' },
   {
     id: 1,
-    title: '등급',
+    title: '등급 🔽',
     value: 'memberBadge',
   },
   {
     id: 2,
-    title: '인기도',
+    title: '인기도 🔽',
     value: 'followerCount',
   },
   {
     id: 3,
-    title: '가입일',
+    title: '가입일 🔽',
     value: 'memberId',
   },
 ];

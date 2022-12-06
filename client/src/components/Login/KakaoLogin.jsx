@@ -26,6 +26,7 @@ function KakaoLogin() {
       localStorage.setItem('LoginId', response.data.memberId);
       localStorage.setItem('LoginName', response.data.memberName);
       localStorage.setItem('memberMoney', response.data.memberMoney);
+      localStorage.setItem('loginPersistTime', Date.now() + 900000);
       setLoginState(true);
       navigate('/');
       // .catch(async (error) => {

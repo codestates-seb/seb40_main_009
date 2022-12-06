@@ -123,6 +123,7 @@ export default function Header() {
   const logOut = () => {
     window.localStorage.clear();
     setLoginState(false);
+    console.log('로그아웃 되었습니다');
   };
 
   const onKeyPress = (event) => {
@@ -130,6 +131,41 @@ export default function Header() {
       moveSearchResultPage();
     }
   };
+
+  const tokenRefresh = async () => {
+    try {
+      const response = await axios.get('/token', {
+        headers: {
+          'ngrok-skip-browser-warning': 'none',
+          Refresh: localStorage.getItem('refreshToken'),
+        },
+      });
+      localStorage.setItem(
+        'authorizationToken',
+        response.headers.authorization
+      );
+      localStorage.setItem('loginPersistTime', Date.now() + 900000);
+      console.log('AuthorizationToken을 재발급 받았습니다');
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      Number(Date.now()) >=
+      Number(localStorage.getItem('loginPersistTime')) + 900000
+    ) {
+      logOut();
+    }
+
+    if (
+      Number(Date.now()) >= Number(localStorage.getItem('loginPersistTime')) &&
+      localStorage.getItem('loginPersistTime')
+    ) {
+      tokenRefresh();
+    }
+  });
 
   return (
     <HeaderContainer>

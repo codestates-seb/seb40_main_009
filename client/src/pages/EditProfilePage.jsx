@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { checkImageSize } from '../function/checkImageSize';
 
 import {
   EditProfileComponent,
@@ -126,7 +127,11 @@ function EditProfilePage() {
           // style={{ display: 'none' }}
           accept="image/*"
           name="profile_img"
-          onChange={onChange}
+          onChange={(e) => {
+            if (checkImageSize(e.target.files)) {
+              onChange(e);
+            }
+          }}
           ref={fileInput}
         />
       </ImageUploadComponent>
