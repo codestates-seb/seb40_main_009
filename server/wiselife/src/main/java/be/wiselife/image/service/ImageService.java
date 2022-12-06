@@ -196,7 +196,7 @@ public class ImageService {
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
         log.info("patchReviewImage tx start");
 
-        인증가능 시간인지 검증
+        //인증가능 시간인지 검증
         if(!isAuthAvailableTime(challenge))
            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
@@ -220,7 +220,7 @@ public class ImageService {
         if(challengeCertImages.size()>challenge.getChallengeAuthCycle())
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
-        loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
+        challenge.setMemberChallengeTodayCertCount(challengeCertImages.size());
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
         plusSuccessCount(loginMember);
