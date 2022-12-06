@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -193,6 +194,7 @@ public class ImageService {
      * @return
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
+
         log.info("patchReviewImage tx start");
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
@@ -204,39 +206,43 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
+        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
+
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage, challengeCertImages);
-
-        challengeCertImages.add(challengeCertImage);
-
+        log.info("size={}",challengeCertImages.size());
+        if (challengeCertImages.size() > challenge.getChallengeAuthCycle()) {
+            throw new BusinessLogicException(ExceptionCode.YOU_ALREADY_FILL_CERT_NUMBER);
+        }
+        loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
         plusSuccessCount(loginMember);
-
         calculateMemberChallengePercentage(loginMember);
         log.info("patchReviewImage tx end");
         return challengeUpdateChallengeCertImage;
     }
     // 인증사진 등록 및 수정 메소드
-    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage,List<ChallengeCertImage> challengeCertImages) {
+    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage) {
         //인증가능 시간인지 검증
-        if (challengeCertImages.size() > challenge.getChallengeAuthCycle()) {
-            throw new BusinessLogicException(ExceptionCode.YOU_ALREADY_FILL_CERT_NUMBER);
-        }
-        if(!isAuthAvailableTime(challenge, challengeCertImages))
-            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
+
+//        if(!isAuthAvailableTime(challenge, challengeCertImages))
+//            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
         if (challengeCertImage == null) {
+            log.info("cert New");
             challengeCertImage = new ChallengeCertImage();
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
             challengeCertImage.setMemberId(loginMember.getMemberId());
             challenge.getChallengeCertImages().add(challengeCertImage);
             challengeCertImage.setChallenge(challenge);
+            challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
+            imageRepository.save(challengeCertImage);
+            return challenge;
         }
-        loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
+        log.info("cert patch");
         challengeCertImage.setImagePath(challenge.getChallengeCertImagePath());
         imageRepository.save(challengeCertImage);
         return challenge;
