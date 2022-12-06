@@ -206,28 +206,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
           });
           window.location.reload();
         });
-      // .catch(async (error) => {
-      //   if (error.response.data.status === 401) {
-      //     try {
-      //       const responseToken = await axios.get('/token', {
-      //         headers: {
-      //           'ngrok-skip-browser-warning': 'none',
-      //           refresh: localStorage.getItem('refreshToken'),
-      //         },
-      //       });
-      //       await localStorage.setItem(
-      //         'authorizationToken',
-      //         responseToken.headers.authorization
-      //       );
-      //       await localStorage.setItem(
-      //         'test',
-      //         responseToken.headers.authorization
-      //       );
-      //     } catch (error) {
-      //       console.log('재요청 실패', error);
-      //     }
-      //   }
-      // });
     } catch (error) {
       // 후기한번쓰면 못쓰게 alert띄우기
       const errorMessage = error.response.data.error.message;
@@ -243,6 +221,27 @@ export default function ChallengeDetailProgress({ challengeData }) {
             setReviewModal(false);
           }
         });
+      }
+
+      if (error.response.data.status === 401) {
+        try {
+          const responseToken = await axios.get('/token', {
+            headers: {
+              'ngrok-skip-browser-warning': 'none',
+              refresh: localStorage.getItem('refreshToken'),
+            },
+          });
+          await localStorage.setItem(
+            'authorizationToken',
+            responseToken.headers.authorization
+          );
+          await localStorage.setItem(
+            'test',
+            responseToken.headers.authorization
+          );
+        } catch (error) {
+          console.log('재요청 실패', error);
+        }
       }
     }
   };
@@ -1038,80 +1037,34 @@ export default function ChallengeDetailProgress({ challengeData }) {
                 marginBottom: '10px',
               }}
             >
-              <div style={{ width: '158px' }} className="margin_right3">
+              <div style={{ width: '127px' }} className="margin_right3">
                 도전중인 유저:
               </div>
               <div
                 style={{
                   display: 'grid',
                   width: '442px',
-                  gridTemplateColumns: 'repeat(6, 1fr)',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
                   // border: '2px solid red',
+                  placeItems: 'center',
                 }}
               >
-                {
-                  challengeData.participatingMember &&
-                    challengeData.participatingMember.map((member, index) => {
-                      return (
-                        <div
-                          key={challengeData.participatingMember.memberId}
-                          style={{
-                            margin: '0 3px 0 3px',
-                            // border: '1px solid #EFF1FE',
-                            borderRadius: '20px',
-                            padding: '0 2% 2% 0',
-                          }}
-                        >
-                          <div>{member.participatingMemberName}</div>
-                        </div>
-                      );
-
-                      // return (
-                      //   {
-                      //     index === 4 ? (
-                      //       <>
-                      //         <br />
-                      //       </>
-                      //     ) : (
-                      //         // return (
-                      //       <>
-                      //         <div
-                      //           key={challengeData.participatingMember.memberId}
-                      //           style={{
-                      //             margin: '0 3px 0 3px',
-                      //             border: '1px solid #EFF1FE',
-                      //             borderRadius: '20px',
-                      //             padding: '0.3%',
-                      //           }}
-                      //         >
-                      //           <div>
-                      //             {member.participatingMemberName}
-                      //             gdfgdfg
-                      //           </div>
-                      //         </div>
-                      //       </>
-                      // )
-                      // )
-                    })
-
-                  // return (
-                  //   <div
-                  //     key={challengeData.participatingMember.memberId}
-                  //     style={{
-                  //       margin: '0 3px 0 3px',
-                  //       border: '1px solid #EFF1FE',
-                  //       borderRadius: '20px',
-                  //       padding: '0.3%',
-                  //     }}
-                  //   >
-                  //     <div>
-                  //       {member.participatingMemberName}
-                  //       gdfgdfg
-                  //     </div>
-                  //   </div>
-                  // );
-                }
-                {/* )} */}
+                {challengeData.participatingMember &&
+                  challengeData.participatingMember.map((member, index) => {
+                    return (
+                      <div
+                        key={challengeData.participatingMember.memberId}
+                        style={{
+                          margin: '0 3px 0 3px',
+                          // border: '1px solid #EFF1FE',
+                          borderRadius: '20px',
+                          padding: '0 2% 2% 0',
+                        }}
+                      >
+                        <div>{member.participatingMemberName}</div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
             {/* </ChallengeDescription> */}

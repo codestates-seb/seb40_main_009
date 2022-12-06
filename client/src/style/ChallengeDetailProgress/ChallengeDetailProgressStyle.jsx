@@ -107,7 +107,8 @@ export const CertificationWrapper = styled.div`
 
 export const Review = styled.div`
   margin-top: 5%;
-  height: 500px;
+  /* height: 500px; */
+  /* border: 1px solid red; */
   font-size: 25px;
   width: 100%;
   & > .flex {

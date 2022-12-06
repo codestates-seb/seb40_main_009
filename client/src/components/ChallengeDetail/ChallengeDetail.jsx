@@ -71,6 +71,7 @@ export default function ChallengeDetail({ challengeData }) {
                 },
               }
             )
+            .then(navigate(`/detail/${challengeData.challengeId}`))
             .then((response) => {
               Toast.fire({
                 icon: 'success',
@@ -83,8 +84,7 @@ export default function ChallengeDetail({ challengeData }) {
               setTimeout(() => {
                 window.location.reload();
               }, 3000);
-            })
-            .then(navigate(`/detail/${challengeData.challengeId}`));
+            });
         } catch (error) {
           const errorMessage = error.response.data.error.message;
           console.log('error', errorMessage);
