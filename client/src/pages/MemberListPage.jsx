@@ -29,7 +29,7 @@ export default function MemberListPage() {
 
     try {
       const response = await axios.get(
-        `/member?page=${pageNumber}&size=30&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=15&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
@@ -56,7 +56,7 @@ export default function MemberListPage() {
 
     try {
       const response = await axios.get(
-        `/member?page=${pageNumber}&size=30&sort=${checkedFilter}`,
+        `/member?page=${pageNumber}&size=15&sort=${checkedFilter}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'none',
