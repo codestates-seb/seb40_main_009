@@ -1,7 +1,9 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import { ProfileBoxChallengeComponent } from '../../../style/MyProfilePageStyle/ProfileBoxListsStyle/ProfileBoxListsStyle';
 //반복되는 대상 맵 필요x
 
 function ProfileBoxList({
+  challengeId,
   memberReward,
   challengeTitle,
   clickedTab,
@@ -10,10 +12,16 @@ function ProfileBoxList({
   objDay,
   memberChallengeSuccessRate,
 }) {
-  // 문제 => 각각의 탭 잘 나오다 0번째 탭을 클릭하고 이동하면 모두 0번 째 내용으로만 나옴
+  const navigate = useNavigate();
 
+  // 챌린지 클릭시 이동
+  const onClickChallenge = () => {
+    navigate(`/detail/${challengeId}`);
+  };
+
+  // 문제 => 각각의 탭 잘 나오다 0번째 탭을 클릭하고 이동하면 모두 0번 째 내용으로만 나옴
   return (
-    <ProfileBoxChallengeComponent>
+    <ProfileBoxChallengeComponent onClick={onClickChallenge}>
       <div className="title">
         <h1>
           {clickedTab === 0 && '도전 중'}

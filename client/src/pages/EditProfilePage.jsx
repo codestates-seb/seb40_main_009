@@ -41,14 +41,19 @@ function EditProfilePage() {
 
   const [Image, setImage] = useState(memberImagePath);
   const fileInput = useRef(null);
-  // console.log('qqq', Image);
-  // console.log('data', data);
-  const onChange = (e) => {
-    setImage(e.target.files[0]);
-    setEditProfileLists({
-      ...editProfileLists,
-      memberImagePath: e.target.files[0],
-    });
+
+  const onChange = (event) => {
+    if (event.target.files[0]) {
+      setImage(event.target.files[0]);
+      setEditProfileLists({
+        ...editProfileLists,
+        memberImagePath: event.target.files[0],
+      });
+    } else {
+      //업로드 취소할 시
+      setImage(event.target.files[0]);
+      return;
+    }
 
     //화면에 프로필 사진 표시
     const reader = new FileReader();
@@ -57,11 +62,10 @@ function EditProfilePage() {
         setImage(reader.result);
       }
     };
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(event.target.files[0]);
   };
 
   // Todo async await으로 바꾸기, 리프레쉬 토큰
-
   const patchEdit = () => {
     console.log(EditData);
     const data = new FormData();
@@ -98,8 +102,6 @@ function EditProfilePage() {
     console.log(editProfileLists);
   };
 
-  // console.log('1111', editProfileLists);
-
   // 취소 버튼을 누르면 이전 마이페이지로 돌아감
   const clickedCancel = () =>
     navigate(`/profile/${editProfileLists.memberName}`);
@@ -107,11 +109,6 @@ function EditProfilePage() {
   return (
     <EditProfileComponent>
       <h1 className="title">프로필 수정</h1>
-      {/* <ProfileImage
-        memberImagePath={memberImagePath}
-        name="profileimage"
-        value={editProfileLists.memberImagePath}
-      /> */}
       <ImageUploadComponent>
         <img
           className="profilePicture"
