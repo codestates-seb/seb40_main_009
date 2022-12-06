@@ -37,7 +37,7 @@ export default function FirstQuestionSet({
   /**챌린지 멤버 설정 유효성검사 - 최소 > 최대 인원 */
   const checkMinimumParty = (event) => {
     if (watch('challengeMaxParty') !== '') {
-      if (watch('challengeMaxParty') < event.target.value) {
+      if (Number(watch('challengeMaxParty')) < Number(event.target.value)) {
         setError('checkMaxMemberError', {
           message: '최대 인원보다 적은 인원을 입력하세요',
         });
@@ -58,7 +58,7 @@ export default function FirstQuestionSet({
   /**챌린지 멤버 설정 유효성검사 - 최소 < 최대 인원 */
   const checkMaxParty = (event) => {
     if (watch('challengeMinParty') !== '') {
-      if (watch('challengeMinParty') > event.target.value) {
+      if (Number(watch('challengeMinParty')) > Number(event.target.value)) {
         setError('checkMinimumMemberError', {
           message: '최소 인원보다 많은 인원을 입력하세요',
         });
@@ -93,9 +93,9 @@ export default function FirstQuestionSet({
       clearErrors('pointError');
     }
     // 1000 포인트보다 적은 챌린지 포인트를 설정했을때
-    if (event.target.value < 1000) {
+    if (event.target.value < 1000 && event.target.value > 0) {
       setError('moreThanThousandError', {
-        message: `챌린지 금액은 1,000원 이상으로 적어주세요`,
+        message: `유료 챌린지는 1,000 포인트 이상으로 적어주세요, 무료 챌린지를 원하시면 0을 입력하세요`,
       });
     } else {
       clearErrors('moreThanThousandError');
@@ -156,8 +156,8 @@ export default function FirstQuestionSet({
           }}
           type={'number'}
         />
-        <S.ErrorMessage>{errors.checkMaxMemberError?.message}</S.ErrorMessage>
         <S.ErrorMessage>
+          {errors.checkMaxMemberError?.message}
           {errors.minimumMemberMoreThanZero?.message}
         </S.ErrorMessage>
       </div>

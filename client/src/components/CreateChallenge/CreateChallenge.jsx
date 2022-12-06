@@ -20,6 +20,26 @@ const CreateContainer = styled.section`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    > button {
+      margin-top: 50px;
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      background-color: #8672ff;
+      color: white;
+
+      :hover {
+        color: black;
+        background-color: #e9e5ff;
+        border: 1px solid #e9e5ff;
+      }
+
+      :active {
+        color: #8672ff;
+        background-color: #e9e5ff;
+        border: 1px solid #8672ff;
+      }
+    }
   }
 `;
 

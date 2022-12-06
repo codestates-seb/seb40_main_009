@@ -39,7 +39,7 @@ export default function Challenge({ id, title, description, image, endDate }) {
       </S.CardContents>
       <S.CardContents className="face2">
         <S.LowerCard checkLateParticipate={checkLateParticipate()}>
-          <p>{description}</p>
+          <p>{description.slice(0, 24)}</p>
           <span onClick={moveToChallengeDetail}>Read More</span>
         </S.LowerCard>
       </S.CardContents>

@@ -88,6 +88,7 @@ export default function ThirdQuestionSet({
       <div className="question">
         <h3>챌린지 시작일</h3>
         <input
+          className="dateInput"
           {...register('challengeStartDate', {
             required: 'Please Write FirstDay',
           })}
@@ -100,6 +101,7 @@ export default function ThirdQuestionSet({
       <div className="question">
         <h3>챌린지 종료일</h3>
         <input
+          className="dateInput"
           {...register('challengeEndDate', {
             required: 'Please Write LastDay',
           })}

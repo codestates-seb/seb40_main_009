@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ListContainer = styled.section`
   padding-top: 60px;
-  width: 1024px;
+  width: 1300px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@ export const ListContainer = styled.section`
 export const Container = styled.section`
   padding: 92px 30px 80px 30px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
