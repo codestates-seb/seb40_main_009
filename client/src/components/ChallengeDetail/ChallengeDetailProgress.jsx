@@ -27,6 +27,7 @@ import DdayFormatter from './DdayFormatter';
 import Masonry from 'react-responsive-masonry';
 import Swal from 'sweetalert2';
 import exampleImage from '../../image/example.png';
+import { checkImageSize } from '../../function/checkImageSize';
 // import Loading from '../Loading/Loading';
 
 export default function ChallengeDetailProgress({ challengeData }) {
@@ -629,8 +630,10 @@ export default function ChallengeDetailProgress({ challengeData }) {
             <input
               type={'file'}
               onChange={(e) => {
-                imageUpload(e.target.files[0]);
-                setImage(e.target.files[0]);
+                if (checkImageSize(e.target.files)) {
+                  imageUpload(e.target.files[0]);
+                  setImage(e.target.files[0]);
+                }
               }}
               style={{ marginBottom: '4%', color: '#8673FF' }}
             />
