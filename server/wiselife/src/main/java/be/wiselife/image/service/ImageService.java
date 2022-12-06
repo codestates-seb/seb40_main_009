@@ -194,12 +194,11 @@ public class ImageService {
      * @return
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
-
         log.info("patchReviewImage tx start");
 
-//        //인증가능 시간인지 검증
-//        if(!isAuthAvailableTime(challenge))
-//            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
+        인증가능 시간인지 검증
+        if(!isAuthAvailableTime(challenge))
+           throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
@@ -234,7 +233,8 @@ public class ImageService {
 
 
         //깜짝이벤트 용
-        if(challengeCertImages.size()>challenge.getChallengeAuthCycle())
+
+        if(challenge.getChallengeTitle().startsWith("[깜짝이벤트]") && challengeCertImages.size() >=1 )
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
         if (challengeCertImage == null) {
