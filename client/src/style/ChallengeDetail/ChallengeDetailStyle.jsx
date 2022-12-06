@@ -21,7 +21,7 @@ export const Recruitment = styled.div`
   }
   & > div {
     background-color: #eff1fe;
-    height: 350px;
+    /* height: 350px; */
     width: 700px;
     top: 136px;
     right: 15%;
@@ -121,7 +121,7 @@ export const Review = styled.div`
 
 export const ButtonWrapper = styled.div`
   display: flex;
-  margin-top: 5%;
+  margin-top: 2%;
   justify-content: center;
   & > .custom-btn {
     font-size: 20px;
