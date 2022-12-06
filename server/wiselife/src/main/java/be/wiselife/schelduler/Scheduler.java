@@ -24,7 +24,7 @@ public class Scheduler {
      * 매 00시 10분마다 챌린지 종료 status update 밤에 하니까 밤마다 하즈아
      */
     @Async
-    @Scheduled(cron = "0 10 0 * * *")
+    @Scheduled(cron = "0 59 23 * * *")
     public void scheduleCheckChallengeIsClosed(){
         LocalDateTime start = LocalDateTime.now();
         log.info("==================CHECK IF CHALLENGE IS CLOSED START==================");

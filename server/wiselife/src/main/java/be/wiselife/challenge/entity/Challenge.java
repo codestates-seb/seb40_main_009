@@ -43,7 +43,6 @@ public class Challenge extends WriterAudit {
     @Column(nullable = false,columnDefinition = "MEDIUMTEXT")
     @Setter
     private String challengeDescription;
-
     @Setter
     private double challengeCurrentParty;
     @Setter
