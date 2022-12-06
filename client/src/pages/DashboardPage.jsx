@@ -292,9 +292,9 @@ export default function MainPage() {
                     </Members>
                     {members.map((user, index) => (
                       <UserRanking key={user.memberId}>
-                        <div>{index + 1}</div>
-                        <div>{user.memberName}</div>
-                        <div>{user.memberBadge}</div>
+                        <div style={{ width: '29%' }}>{index + 1}</div>
+                        <div style={{ width: '33%' }}>{user.memberName}</div>
+                        <div style={{ width: '33%' }}>{user.memberBadge}</div>
                         <div>{user.followerCount}</div>
                       </UserRanking>
                     ))}
