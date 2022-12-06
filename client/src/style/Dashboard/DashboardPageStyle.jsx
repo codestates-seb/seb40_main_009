@@ -70,7 +70,7 @@ export const UserRankingWrapper = styled.div`
 
 export const UserRanking = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   padding: 1% 5%;
   border-bottom: 1px solid #f2f4fe;
 `;

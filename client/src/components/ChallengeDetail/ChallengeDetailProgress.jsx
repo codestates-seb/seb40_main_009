@@ -30,7 +30,14 @@ import exampleImage from '../../image/example.png';
 // import Loading from '../Loading/Loading';
 
 export default function ChallengeDetailProgress({ challengeData }) {
-  // console.log('challengeData>>>', challengeData);
+  // console.log(
+  //   'challengeData>>>',
+  //   challengeData.challengeCurrentMemberTodayAuth
+  // );
+  // console.log(
+  //   'challengeData>>>',
+  //   challengeData.challengeCurrentMemberTodayAuth
+  // );
   const parmas = useParams();
   const [loading, setLoading] = useState(true);
   const [certificationModal, setCertificationModal] = useState(false);
@@ -350,14 +357,10 @@ export default function ChallengeDetailProgress({ challengeData }) {
   // console.log('진행률>>>', progress);
 
   //인증횟수 계산
-  const certificationCount = challengeData.challengeCertImages?.filter(
-    (member) => member.memberId === loginId
-  ).length;
+  // const certificationCount = challengeData.challengeCertImages?.filter(
+  //   (member) => member.memberId === loginId
+  // ).length;
 
-  // console.log(
-  //   'challengeData.challengeCertImages>>',
-  //   challengeData.challengeCertImages
-  // );
   //인증사진올리기 모달창
   const showCertificationModal = () => {
     setCertificationModal(true);
@@ -1130,9 +1133,25 @@ export default function ChallengeDetailProgress({ challengeData }) {
             {/* <div> */}
             <div
               style={{ fontSize: '20px' }}
-            >{`인증 횟수:  ${certificationCount} / ${challengeData.challengeAuthCycle}`}</div>
+            >{`인증 횟수:  ${challengeData.challengeCurrentMemberTodayAuth} / ${challengeData.challengeAuthCycle}`}</div>
 
-            <button
+            {pastDay < 0 ? null : (
+              <button
+                style={{
+                  marginLeft: '1%',
+                  backgroundColor: '#8673FF',
+                  border: 'none',
+                  borderRadius: '5px',
+                  fontSize: '17px',
+                  color: '#F2F4FE',
+                }}
+                className="cursur"
+                onClick={showCertificationModal}
+              >
+                인증 사진 올리기
+              </button>
+            )}
+            {/* <button
               style={{
                 marginLeft: '1%',
                 backgroundColor: '#8673FF',
@@ -1145,7 +1164,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
               onClick={showCertificationModal}
             >
               인증 사진 올리기
-            </button>
+            </button> */}
           </div>
 
           <div
