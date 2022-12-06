@@ -194,6 +194,11 @@ public class ImageService {
      */
     public Challenge patchChallengeCertImage(Challenge challenge, Member loginMember) {
         log.info("patchReviewImage tx start");
+
+        //인증가능 시간인지 검증
+        if(!isAuthAvailableTime(challenge))
+            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
+
         MemberChallenge memberChallengeFromRepository = memberChallengeRepository.findByChallengeAndMember(challenge,loginMember);
         if ( memberChallengeFromRepository== null) {
             log.info("patchReviewImage tx end");
@@ -222,10 +227,6 @@ public class ImageService {
     }
     // 인증사진 등록 및 수정 메소드
     private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage,List<ChallengeCertImage> challengeCertImages) {
-        //인증가능 시간인지 검증
-        if(!isAuthAvailableTime(challenge, challengeCertImages))
-            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
-
         //인증횟수 CHECK
         if(challengeCertImages.size() >= challenge.getChallengeAuthCycle())
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
@@ -245,21 +246,20 @@ public class ImageService {
     /**
      * 인증가능 시간인지 검증
      * @param challenge 인증 사진 관련된 해당 챌린지
-     * @param challengeCertImages 오늘 해당 멤버가 올린 인증 사진들
      * @return
      */
-    private boolean isAuthAvailableTime(Challenge challenge, List<ChallengeCertImage> challengeCertImages){
+    private boolean isAuthAvailableTime(Challenge challenge){
         LocalTime now = LocalTime.now();
         LocalDate todayDate = LocalDate.now();
         List<String> challengeAuthAvailableTime = challenge.getChallengeAuthAvailableTime();
         LocalTime authAvailableTime;
 
-        //데모데이 이벤트 챌린지인 경우 인증시간 인증을 거치지 않도록
-        if(challenge.getChallengeTitle().startsWith("[이벤트]")) return true;
-
         //날짜 검증
         if(todayDate.isBefore(challenge.getChallengeStartDate()) || todayDate.isAfter(challenge.getChallengeEndDate()))
             return false;
+
+        //데모데이 이벤트 챌린지인 경우 인증시간 인증을 거치지 않도록
+        if(challenge.getChallengeTitle().startsWith("[이벤트]")) return true;
 
         //시간 검증
         for(String time : challengeAuthAvailableTime){
