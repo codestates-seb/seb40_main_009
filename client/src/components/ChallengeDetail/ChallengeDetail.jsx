@@ -21,6 +21,7 @@ import Swal from 'sweetalert2';
 import Masonry from 'react-responsive-masonry';
 
 export default function ChallengeDetail({ challengeData }) {
+  // console.log('challengeData>>>', challengeData);
   const parmas = useParams();
   const navigate = useNavigate();
   const [imageData, setImageData] = useState({ image: '', i: 0 });
@@ -216,6 +217,16 @@ export default function ChallengeDetail({ challengeData }) {
   const distance = now.getTime() - startDate.getTime();
   const left = Math.abs(Math.floor(distance / (1000 * 60 * 60 * 24)));
 
+  const startDateSplit = challengeData.challengeStartDate.split('-');
+  // console.log('ssdfsfsd>>>>', startDateSplit);
+
+  const day = Number(startDateSplit[2]) + 1;
+  // console.log('day>>>>', day);
+  const plusDayOne = new Date(
+    `${startDateSplit[0]}-${startDateSplit[1]}-${day}`
+  );
+  // console.log('plusDayOne>>>>', plusDayOne);
+
   return (
     <>
       {imageData.image && (
@@ -294,12 +305,42 @@ export default function ChallengeDetail({ challengeData }) {
                   &nbsp; 원
                 </div>
               </ChallengeDescription>
+              <ChallengeDescription>
+                <div
+                  style={{
+                    width: '31%',
+                  }}
+                >
+                  인증 시간:
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    fontSize: '20px',
+                    width: '70%',
+                    // border: '1px solid blue',
+                    marginBottom: '5px',
+                    marginTop: '5px',
+                  }}
+                >
+                  {challengeData.challengeAuthAvailableTime.map(
+                    (time, index) => {
+                      return (
+                        <>
+                          <div>{time}</div>
+                        </>
+                      );
+                    }
+                  )}
+                </div>
+              </ChallengeDescription>
 
               {/* 참여버튼 */}
-              {new Date() < new Date(challengeData.challengeStartDate) &&
-              // Number(challengeData.challengeMinParty) !==
-              //   Number(challengeData.challengeMaxParty) &&
-              authorizationToken !== null ? (
+              {/* {new Date() < new Date(challengeData.challengeStartDate) &&
+              authorizationToken !== null ? ( */}
+              {new Date() < plusDayOne && authorizationToken !== null ? (
                 <ButtonWrapper>
                   <button className="custom-btn btn-8">
                     <span onClick={NavigateMPaymentPage}>참여하기</span>

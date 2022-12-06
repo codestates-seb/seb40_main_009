@@ -9,6 +9,7 @@ export const Container = styled.header`
 export const ChallengeViewCount = styled.div`
   margin-bottom: 1%;
   color: #787878;
+  margin-right: auto;
 `;
 
 export const ChallengeProgress = styled.div`
