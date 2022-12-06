@@ -5,6 +5,7 @@ import be.wiselife.dto.ErrorResponseDto;
 import be.wiselife.exception.BusinessLogicException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -144,5 +145,14 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
+    /**
+     * 파일용량이 5mb이상일 경우
+     */
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse dataExpiredException(SizeLimitExceededException e) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.NOT_ACCEPTABLE, "File is too big less than 3MB");
+        return response;
+    }
 }
 

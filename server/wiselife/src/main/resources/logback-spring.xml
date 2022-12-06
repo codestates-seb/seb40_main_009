@@ -69,6 +69,12 @@
         <root level="error">
             <appender-ref ref="aws_cloud_watch_log"/> <!--INFO 출력위치-->
         </root>
+        <logger name="com.amazonaws.util.EC2MetadataUtils" level="error" additivity="false">
+        </logger>
+
+        <logger name="mashup.spring.jsmr" level="debug" additivity="false">
+            <appender-ref ref="aws_cloud_watch_log"/>
+        </logger>
     </springProfile>
 </configuration>
 
