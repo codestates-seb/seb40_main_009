@@ -113,7 +113,7 @@ export default function FourthQuestionSet({ register, watch, errors }) {
 
       <div className="question">
         <h3>인증 방법을 설명해주세요</h3>
-        <input
+        <textarea
           {...register('challengeAuthDescription', {
             required: 'Please Write validExplain',
             minLength: {
