@@ -586,7 +586,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
             style={{
               backgroundColor: '#EFF1FE',
               width: '20%',
-              height: '60%',
+              height: '35%',
               borderRadius: '20px',
               padding: '2%',
             }}
@@ -625,7 +625,7 @@ export default function ChallengeDetailProgress({ challengeData }) {
               <img
                 src={imageTransform}
                 alt="업로드한 이미지 미리보기"
-                style={{ width: '400px', height: '400px', marginBottom: '2%' }}
+                style={{ width: '200px', height: '200px', marginBottom: '2%' }}
               />
             ) : null}
             <input
