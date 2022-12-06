@@ -206,12 +206,10 @@ public class ImageService {
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdPatch("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
 
-        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage);
-
         List<ChallengeCertImage> challengeCertImages =
                 imageRepository.findByImageTypeAndMemberIdAndChallengeCertIdCount("CCI",
                         loginMember.getMemberId(), challenge.getRandomIdForImage());
-
+        Challenge challengeUpdateChallengeCertImage=patchCertificationImage(challenge, loginMember, challengeCertImage,challengeCertImages);
         log.info("size={}",challengeCertImages.size());
         if (challengeCertImages.size() > challenge.getChallengeAuthCycle()) {
             throw new BusinessLogicException(ExceptionCode.YOU_ALREADY_FILL_CERT_NUMBER);
@@ -225,11 +223,11 @@ public class ImageService {
         return challengeUpdateChallengeCertImage;
     }
     // 인증사진 등록 및 수정 메소드
-    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage) {
+    private Challenge patchCertificationImage(Challenge challenge, Member loginMember, ChallengeCertImage challengeCertImage, List<ChallengeCertImage>challengeCertImages) {
         //인증가능 시간인지 검증
 
-//        if(!isAuthAvailableTime(challenge, challengeCertImages))
-//            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
+        if(!isAuthAvailableTime(challenge, challengeCertImages))
+            throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
         if (challengeCertImage == null) {
             log.info("cert New");
