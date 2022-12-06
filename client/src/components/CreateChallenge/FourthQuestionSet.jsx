@@ -6,6 +6,7 @@ import * as S from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 import exampleImage from '../../image/example.png';
+import { checkImageSize } from '../../function/checkImageSize';
 
 const TimeContainer = styled.section`
   display: grid;
@@ -96,8 +97,10 @@ export default function FourthQuestionSet({ register, watch, errors }) {
             required: 'Please Upload Image',
           })}
           onChange={(event) => {
-            imagePreview(event.target.files[0]);
-            answerCheck(event);
+            if (checkImageSize(event.target.files)) {
+              imagePreview(event.target.files[0]);
+              answerCheck(event);
+            }
           }}
           multiple
         />

@@ -52,13 +52,7 @@ export default function CreateChallengePage() {
   return (
     <AddContainer>
       <Container>
-        {pageNumber < 2 ? (
-          <NextButton style={{ visibility: 'hidden' }} />
-        ) : (
-          <NextButton onClick={() => setPageNumber(pageNumber - 1)}>
-            {'<'}
-          </NextButton>
-        )}
+        <NextButton style={{ visibility: 'hidden' }} />
 
         <CreateChallenge />
 

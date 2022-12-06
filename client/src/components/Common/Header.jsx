@@ -152,6 +152,14 @@ export default function Header() {
 
   useEffect(() => {
     if (
+      Number(Date.now()) >=
+      Number(localStorage.getItem('loginPersistTime') + 900000)
+    ) {
+      window.localStorage.clear();
+      setLoginState(false);
+    }
+
+    if (
       Number(Date.now()) >= Number(localStorage.getItem('loginPersistTime'))
     ) {
       tokenRefresh();
@@ -160,13 +168,6 @@ export default function Header() {
       console.log(
         Number(Date.now()) > Number(localStorage.getItem('loginPersistTime'))
       );
-    }
-
-    if (
-      Number(Date.now()) >=
-      Number(localStorage.getItem('loginPersistTime') + 900000)
-    ) {
-      logOut();
     }
   });
 

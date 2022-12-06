@@ -3,6 +3,7 @@ import {
   createChallangeRepresentationImage,
   createChallengeStateNumber,
 } from '../../atoms/atoms';
+import { checkImageSize } from '../../function/checkImageSize';
 
 import * as S from '../../style/CreateChallenge/Challenge.styled';
 
@@ -53,8 +54,10 @@ export default function SecondQuestionSet({ register, watch }) {
             required: 'Please Upload Picture',
           })}
           onChange={(event) => {
-            setImagePreview(event.target.files[0]);
-            answerCheck(event);
+            if (checkImageSize(event.target.files)) {
+              setImagePreview(event.target.files[0]);
+              answerCheck(event);
+            }
           }}
         />
       </div>
