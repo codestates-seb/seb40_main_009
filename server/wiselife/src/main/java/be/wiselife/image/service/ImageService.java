@@ -44,9 +44,9 @@ public class ImageService {
 
         MemberImage memberImageFromRepository =
                 imageRepository.findByImageTypeAndMemberId("MI", member.getMemberId());
-        
+
         String ImageUrl = s3UploadService.uploadJustOne(multipartFiles); //이미지 URL받아오기
-       
+
         if (memberImageFromRepository == null) {
             MemberImage memberImage = new MemberImage();
             saveMemberImage(member, memberImage, ImageUrl);
@@ -226,6 +226,10 @@ public class ImageService {
         if(!isAuthAvailableTime(challenge, challengeCertImages))
             throw new BusinessLogicException(ExceptionCode.NOT_CERTIFICATION_AVAILABLE_TIME);
 
+        //인증횟수 CHECK
+        if(challengeCertImages.size() >= challenge.getChallengeAuthCycle())
+            throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
+
         if (challengeCertImage == null) {
             challengeCertImage = new ChallengeCertImage();
             challengeCertImage.setRandomIdForImage(challenge.getRandomIdForImage());
@@ -252,7 +256,7 @@ public class ImageService {
 
         //데모데이 이벤트 챌린지인 경우 인증시간 인증을 거치지 않도록
         if(challenge.getChallengeTitle().startsWith("[이벤트]")) return true;
-        
+
         //날짜 검증
         if(todayDate.isBefore(challenge.getChallengeStartDate()) || todayDate.isAfter(challenge.getChallengeEndDate()))
             return false;
