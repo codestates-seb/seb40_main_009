@@ -32,7 +32,7 @@
  
  - 웹사이트 : [바로가기](https://wiselife.click/)
  - 발표 영상 : [바로가기](https://www.youtube.com/watch?v=I0s1v3WJ95g)
- - 발표 문서 : [바로가기](https://www.notion.so/codestates/40-Team009-f7a07fc2c5ae4d5a9e5ba4766dd42e8c0)   
+ - 발표 문서 : [바로가기](https://codestates.notion.site/40-Team009-f7a07fc2c5ae4d5a9e5ba4766dd42e8c)   
 
 <br>
 
