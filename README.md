@@ -46,13 +46,13 @@
 
 |                         한병주                         |                         김은비                         |                         심이서                         |
 | :----------------------------------------------------: | :----------------------------------------------------: | :----------------------------------------------------: |
-| <img src ="https://ifh.cc/g/rx4z5N.jpg" width="900" /> | <img src ="https://ifh.cc/g/kVrOmW.jpg" width="750" /> | <img src ="https://ifh.cc/g/0T7Rc6.jpg" width="780" /> |
+| <img src ="https://ifh.cc/g/PhKbwS.jpg" width="900" /> | <img src ="https://ifh.cc/g/m9k8O5.jpg" width="750" /> | <img src ="https://ifh.cc/g/3az1RX.jpg" width="780" /> |
 
 ### Backend
 
 |                         김민섭                         |                         김유현                          |                         오영운                         |
 | :----------------------------------------------------: | :-----------------------------------------------------: | :----------------------------------------------------: |
-| <img src ="https://ifh.cc/g/sXfPsG.jpg" width="700" /> | <img src ="https://ifh.cc/g/g3hCNH.webp" width="630" /> | <img src ="https://ifh.cc/g/lqs5PB.jpg" width="630" /> |
+| <img src ="https://ifh.cc/g/qtOQCX.jpg" width="700" /> | <img src ="https://ifh.cc/g/nDYSGQ.jpg" width="600" /> | <img src ="https://ifh.cc/g/RjO0Xy.jpg" width="630" /> |
 
 <br>
 
