@@ -25,12 +25,15 @@ import CancellationPayment from './components/KakaoPay/PaymentLists/Cancellation
 import ProfileBoxChallenge from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
 import ProfileBoxOrderList from './components/ProfileList/ProfileBoxLists/ProfileBoxOrderList';
 
+import MapContainer from './components/KakaoMap/MapContainer';
+
 export default function App() {
   return (
     <>
       <BrowserRouter>
         <Header />
         <Routes>
+          <Route path="/map" element={<MapContainer />} />
           <Route path="/" element={<DashboardPage />} />
           <Route path="/challengelist/*" element={<ChallengeListPage />} />
           <Route path="/memberlist" element={<MemberListPage />} />
