@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import * as U from '../../style/MemberList/MemberList.styled';
+import {
+  Container,
+  IndexContainer,
+} from '../../style/MemberList/MemberList.styled';
 
 import Member from '../MemberList/Member';
 
@@ -31,13 +34,13 @@ export default function MemberResult({ searchValue }) {
   }, []);
 
   return (
-    <U.Container>
-      <U.IndexContainer>
+    <Container>
+      <IndexContainer>
         <div>이름</div>
         <div>등급</div>
         <div>인기도</div>
         <div>가입일</div>
-      </U.IndexContainer>
+      </IndexContainer>
       {memberList.map(
         ({
           memberId,
@@ -58,6 +61,6 @@ export default function MemberResult({ searchValue }) {
           />
         )
       )}
-    </U.Container>
+    </Container>
   );
 }

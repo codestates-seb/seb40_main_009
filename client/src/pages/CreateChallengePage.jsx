@@ -6,37 +6,15 @@ import {
   createChallengeStateNumber,
 } from '../atoms/atoms';
 
-import styled from 'styled-components';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import {
+  AddContainer,
+  Container,
+  NextButton,
+} from '../style/CreateChallenge/CreateChallengePage.styled';
 
 import CreateChallenge from '../components/CreateChallenge/CreateChallenge';
-
-const AddContainer = styled.section`
-  padding-top: 80px;
-  width: 1024px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-`;
-
-const Container = styled.section`
-  padding: 0px 30px 80px 30px;
-  height: 1000px;
-  gap: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const NextButton = styled.button`
-  width: 30px;
-  height: 30px;
-`;
 
 export default function CreateChallengePage() {
   const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber);

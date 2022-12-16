@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { parseISO } from 'date-fns/esm';
 
-import * as S from '../../style/MemberList/MemberList.styled';
+import { UserContainer } from '../../style/MemberList/MemberList.styled';
 
 export default function Member({
   name,
@@ -15,7 +15,7 @@ export default function Member({
 
   return (
     <div>
-      <S.UserContainer>
+      <UserContainer>
         <Link to={`/profile/${name}`}>
           <div>
             <div style={{ width: '120px' }}>
@@ -37,7 +37,7 @@ export default function Member({
           <div>{followerCount}</div>
           <div>{date}</div>
         </Link>
-      </S.UserContainer>
+      </UserContainer>
     </div>
 
     // <S.UserContainer>

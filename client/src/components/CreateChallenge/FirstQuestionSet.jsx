@@ -1,6 +1,9 @@
 import { useSetRecoilState } from 'recoil';
 
-import * as S from '../../style/CreateChallenge/Challenge.styled';
+import {
+  CreateAsk,
+  ErrorMessage,
+} from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 
@@ -103,7 +106,7 @@ export default function FirstQuestionSet({
   };
 
   return (
-    <S.CreateAsk>
+    <CreateAsk>
       <div className="question">
         <h3>카테고리를 선택하세요</h3>
         <div>
@@ -156,10 +159,10 @@ export default function FirstQuestionSet({
           }}
           type={'number'}
         />
-        <S.ErrorMessage>
+        <ErrorMessage>
           {errors.checkMaxMemberError?.message}
           {errors.minimumMemberMoreThanZero?.message}
-        </S.ErrorMessage>
+        </ErrorMessage>
       </div>
       <div className="question">
         <h3>함께 챌린지를 진행할 최대 인원을 정해주세요</h3>
@@ -176,12 +179,8 @@ export default function FirstQuestionSet({
           type={'number'}
         />
 
-        <S.ErrorMessage>
-          {errors.checkMinimumMemberError?.message}
-        </S.ErrorMessage>
-        <S.ErrorMessage>
-          {errors.maximumMemberMoreThanZero?.message}
-        </S.ErrorMessage>
+        <ErrorMessage>{errors.checkMinimumMemberError?.message}</ErrorMessage>
+        <ErrorMessage>{errors.maximumMemberMoreThanZero?.message}</ErrorMessage>
       </div>
       <div className="question">
         <h3>챌린지 참가 포인트를 입력해주세요</h3>
@@ -197,9 +196,9 @@ export default function FirstQuestionSet({
           }}
           type={'number'}
         />
-        <S.ErrorMessage>{errors.pointError?.message}</S.ErrorMessage>
-        <S.ErrorMessage>{errors.moreThanThousandError?.message}</S.ErrorMessage>
+        <ErrorMessage>{errors.pointError?.message}</ErrorMessage>
+        <ErrorMessage>{errors.moreThanThousandError?.message}</ErrorMessage>
       </div>
-    </S.CreateAsk>
+    </CreateAsk>
   );
 }

@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const TimeContainer = styled.section`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+`;
+
 export const ErrorMessage = styled.div`
   position: relative;
   color: red;
