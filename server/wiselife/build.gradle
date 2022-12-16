@@ -57,6 +57,15 @@ dependencies {
 
 	//로그 관련
 	implementation "ca.pjer:logback-awslogs-appender:1.6.0"
+
+	//쿼리 로그
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
+	//test 의존성 추가
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testCompileOnly 'org.projectlombok:lombok:1.18.12' // 테스트 의존성 추가
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12' // 테스트 의존성 추가
 }
 
 
@@ -74,4 +83,8 @@ tasks.named('test') {
 //Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
 clean {
 delete file('src/main/generated')
+}
+
+test {
+	useJUnitPlatform()
 }

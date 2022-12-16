@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -89,7 +90,7 @@ public class MemberChallengeService {
 
     public void updateMemberChallengeExpectedRefund(Challenge challenge, double challengeProgressRate){
         log.info("updateMemberChallengeExpectedRefund tx start");
-        List<MemberChallenge> memberChallengeList = challenge.getMemberChallenges();
+        Set<MemberChallenge> memberChallengeList = challenge.getMemberChallenges();
         if(memberChallengeList == null) return ;
 
         int challengeFeePerPerson = challenge.getChallengeFeePerPerson();

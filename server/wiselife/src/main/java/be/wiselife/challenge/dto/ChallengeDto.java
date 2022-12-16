@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 
 public class ChallengeDto {
@@ -199,7 +200,7 @@ public class ChallengeDto {
         private LocalDateTime updated_at;
 
         //참여중인 멤버 리스트
-        private List<MemberChallengeResponseDto> participatingMember;
+        private Set<MemberChallengeResponseDto> participatingMember;
         //이미지 중 챌린지 생성자가 추가할 사진 필드
         private String challengeRepImagePath;
 

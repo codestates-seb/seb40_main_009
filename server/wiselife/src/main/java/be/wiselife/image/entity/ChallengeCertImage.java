@@ -21,7 +21,7 @@ public class ChallengeCertImage extends Image {
 
     private Long memberId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 }

@@ -1,0 +1,139 @@
+{\rtf1\ansi\ansicpg949\cocoartf2706
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset129 AppleSDGothicNeo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs48 \cf0 \'c3\'a7\'b8\'b0\'c1\'f6 \'c5\'e5
+\f1  
+\f0 \'b4\'f5\'b9\'cc\'b5\'a5\'c0\'cc\'c5\'cd
+\f1  
+\fs128 \
+
+\fs24 \
+
+\fs36 1. 
+\f0 \'bb\'fd\'bc\'ba
+\f1  
+\f0 \'c4\'f5\'b8\'ae
+\f1\fs24 \
+\
+DELIMITER $$\
+\
+DROP PROCEDURE IF EXISTS insertTalkDummyData$$\
+ \
+CREATE PROCEDURE insertTalkDummyData()\
+BEGIN\
+    DECLARE i INT DEFAULT 1;\
+        \
+ WHILE i <= 300000 DO\
+	IF (i<= 100000 AND i%8=1) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u49352 \u45236 \u44592 ',i,i);\
+	ELSEIF(i<=100000 AND i%8=2) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u51328 \u52824 \u45716 \u46020 \u51204 \u51088 ',i,i);\
+            \
+	ELSEIF(i<=100000 AND i%8=3) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u50676 \u51221 \u46020 \u51204 \u51088 ',i,i);\
+            \
+	ELSEIF(i<=100000 AND i%8=4) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u47784 \u48276 \u46020 \u51204 \u51088 ',i,i);\
+            \
+	ELSEIF(i<=100000 AND i%8=5) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u50864 \u49688 \u46020 \u51204 \u51088 ',i,i);\
+            \
+	ELSEIF(i<=100000 AND i%8=6) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u52300 \u47536 \u51648 \u51109 \u51064 ',i,i);\
+            \
+	ELSEIF(i<=100000 AND i%8=7) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u49884 \u44036 \u51032 \u51648 \u48176 \u51088 ',i,i);\
+            \
+	ELSEIF(i<=100000 AND i%8=0) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u52300 \u47536 \u51648 \u49888 ',i,i);\
+	\
+    ELSEIF(i>100000 AND i<= 200000 AND i%8=1) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u49352 \u45236 \u44592 ',i,i-100000);\
+	ELSEIF(i>100000 AND i<= 200000 AND i%8=2) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u51328 \u52824 \u45716 \u46020 \u51204 \u51088 ',i,i-100000);\
+            \
+	ELSEIF(i>100000 AND i<= 200000 AND i<= 200000 AND i%8=3) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u50676 \u51221 \u46020 \u51204 \u51088 ',i,i-100000);\
+            \
+	ELSEIF(i>100000 AND i<= 200000 AND i%8=4) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u47784 \u48276 \u46020 \u51204 \u51088 ',i,i-100000);\
+            \
+	ELSEIF(i>100000 AND i<= 200000 AND i%8=5) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u50864 \u49688 \u46020 \u51204 \u51088 ',i,i-100000);\
+            \
+	ELSEIF(i>100000 AND i<= 200000 AND i%8=6) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u52300 \u47536 \u51648 \u51109 \u51064 ',i,i-100000);\
+            \
+	ELSEIF(i>100000 AND i<= 200000 AND i%8=7) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u49884 \u44036 \u51032 \u51648 \u48176 \u51088 ',i,i-100000);\
+            \
+	ELSEIF(i>100000 AND i<= 200000 AND i%8=0) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u52300 \u47536 \u51648 \u49888 ',i,i-100000);\
+\
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=1) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u49352 \u45236 \u44592 ',i,i-200000);\
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=2) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u51328 \u52824 \u45716 \u46020 \u51204 \u51088 ',i,i-200000);\
+            \
+	ELSEIF(i>200000 AND i<= 300000 AND i<= 200000 AND i%8=3) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u50676 \u51221 \u46020 \u51204 \u51088 ',i,i-200000);\
+            \
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=4) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u47784 \u48276 \u46020 \u51204 \u51088 ',i,i-200000);\
+            \
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=5) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u50864 \u49688 \u46020 \u51204 \u51088 ',i,i-200000);\
+            \
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=6) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u52300 \u47536 \u51648 \u51109 \u51064 ',i,i-200000);\
+            \
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=7) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u49884 \u44036 \u51032 \u51648 \u48176 \u51088 ',i,i-200000);\
+            \
+	ELSEIF(i>200000 AND i<= 300000 AND i%8=0) THEN\
+			INSERT INTO challenge_talk(challenge_talk_id,created_at,updated_at,create_by_member,updated_by_member,challenge_talk_body,member_badge,member_id,challenge_id)\
+			VALUES(i, now(), now(),concat('test',i),concat('test',i),concat('talk content',i),'\uc0\u52300 \u47536 \u51648 \u49888 ',i,i-200000);\
+            \
+	  END IF;\
+        SET i = i + 1;\
+\
+    \
+    END WHILE;\
+END$$\
+DELIMITER $$\
+\
+\
+CALL insertTalkDummyData;
+\fs36 \
+
+\fs96 \
+
+\fs24 \
+}

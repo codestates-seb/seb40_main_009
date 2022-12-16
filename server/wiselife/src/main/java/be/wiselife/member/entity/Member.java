@@ -9,6 +9,9 @@ import be.wiselife.order.entity.Order;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 import javax.persistence.*;
@@ -26,7 +29,7 @@ import java.util.*;
 public class Member extends TimeAudit {
 
     @Builder
-    public Member(String memberEmail, String memberImagePath, List<String> roles, String provider, String providerId, String RefreshToken) {
+    public Member(String memberEmail, String memberImagePath, Set<String> roles, String provider, String providerId, String RefreshToken) {
 
         this.roles = roles;
         this.provider = provider;
@@ -70,7 +73,7 @@ public class Member extends TimeAudit {
     private boolean hasRedCard;
 
     //이 필드는 팔로우 하트의 음영 처리를 위해 필요한 필드
-    @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "following", cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     private Set<Follow> follows = new HashSet<>();
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -92,12 +95,12 @@ public class Member extends TimeAudit {
     private String memberImagePath="이미지";
 
     @Column(nullable = false)
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Set<String> roles = new HashSet<>();
 
     // 주문내역 관련 필드
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<Order> orders = new HashSet<>();
     @Column(nullable = false)
     private double memberMoney;
     public void addOrder(Order order) {
@@ -113,7 +116,7 @@ public class Member extends TimeAudit {
      * memberLevel : 경험치에 따라 변화될 값
      * memberChallengePercentage : 멤버가 인증한 총 횟수 / 총 참여한 챌린지가 요구하는 목표 일수
      */
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 

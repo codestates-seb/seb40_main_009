@@ -18,9 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.UUID;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @NoArgsConstructor
@@ -87,7 +85,7 @@ public class Challenge extends WriterAudit {
     private String challengeExamImagePath;
 
     //이미지 중 챌린지 참여자가 추가할 사진 필드
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ChallengeCertImage> challengeCertImages = new ArrayList<>();
     @Setter
     private String challengeCertImagePath;
@@ -106,18 +104,19 @@ public class Challenge extends WriterAudit {
 
     @Setter
     private int memberChallengeTodayCertCount;
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @ToString.Exclude
     @JsonManagedReference
     private List<ChallengeTalk> challengeTalkList = new ArrayList<>();
 
+
     //챌린지 진행 현황 관련 필드
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @ToString.Exclude
     @JsonManagedReference
-    private List<MemberChallenge> memberChallenges = new ArrayList<>();
+    private Set<MemberChallenge> memberChallenges = new HashSet<>();
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<ChallengeReview> challengeReviewList = new ArrayList<>();
 

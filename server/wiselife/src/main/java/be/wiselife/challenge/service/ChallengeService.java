@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -330,7 +331,7 @@ public class ChallengeService {
     }
 
     private void updateMemberMoney(Challenge challenge) {
-        List<MemberChallenge> memberChallenges = challenge.getMemberChallenges();
+        Set<MemberChallenge> memberChallenges = challenge.getMemberChallenges();
         for (MemberChallenge memberChallenge : memberChallenges) {
             Member member = memberChallenge.getMember();
             double memberMoney = member.getMemberMoney();

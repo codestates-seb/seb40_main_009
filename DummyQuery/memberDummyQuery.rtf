@@ -1,0 +1,99 @@
+{\rtf1\ansi\ansicpg949\cocoartf2706
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset129 AppleSDGothicNeo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28300\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs48 \cf0 \'b8\'e2\'b9\'f6
+\f1  
+\f0 \'b4\'f5\'b9\'cc\'b5\'a5\'c0\'cc\'c5\'cd
+\f1  
+\fs128 \
+
+\fs24 \
+
+\fs36 1. 
+\f0 \'bb\'fd\'bc\'ba
+\f1  
+\f0 \'c4\'f5\'b8\'ae
+\f1\fs24 \
+\
+\
+DELIMITER $$\
+\
+DROP PROCEDURE IF EXISTS insertMemberDummyData$$\
+ \
+CREATE PROCEDURE insertMemberDummyData()\
+BEGIN\
+    DECLARE i INT DEFAULT 1;\
+        \
+	WHILE i<=300000 DO \
+		if(i%8=1) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u49352 \u45236 \u44592 ',0,'hi',concat('test',i,'@kakao.com'),1,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',1,0,concat('test',i),'kakao',1,null);\
+		\
+        ELSEIF(i%8=2) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u51328 \u52824 \u45716 \u46020 \u51204 \u51088 ',0,'hi',concat('test',i,'@kakao.com'),3,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',2,0,concat('test',i),'kakao',1,null);\
+          \
+		ELSEIF(i%8=3) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u50676 \u51221 \u46020 \u51204 \u51088 ',0,'hi',concat('test',i,'@kakao.com'),9,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',3,0,concat('test',i),'kakao',1,null);\
+          \
+		ELSEIF(i%8=4) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u47784 \u48276 \u46020 \u51204 \u51088 ',0,'hi',concat('test',i,'@kakao.com'),20,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',4,0,concat('test',i),'kakao',1,null);\
+          \
+		ELSEIF(i%8=5) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u50864 \u49688 \u46020 \u51204 \u51088 ',0,'hi',concat('test',i,'@kakao.com'),60,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',5,0,concat('test',i),'kakao',1,null);\
+          \
+		ELSEIF(i%8=6) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u52300 \u47536 \u51648 \u51109 \u51064 ',0,'hi',concat('test',i,'@kakao.com'),110,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',6,0,concat('test',i),'kakao',1,null);\
+          \
+		ELSEIF(i%8=7) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u49884 \u44036 \u51032 \u51648 \u48176 \u51088 ',0,'hi',concat('test',i,'@kakao.com'),200,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',7,0,concat('test',i),'kakao',1,null);\
+          \
+		ELSEIF(i%8=0) THEN\
+		INSERT INTO member_table(member_id,created_at,updated_at,follow_status,follower_count,followers,has_red_card,member_badge,member_challenge_percentage,member_description,member_email,member_exp,member_image_path,member_level,member_money,member_name,provider,provider_id,refresh_token)\
+          VALUES(i, now(), now(), 'UNFOLLOW',0,0,false,'\uc0\u52300 \u47536 \u51648 \u49888 ',0,'hi',concat('test',i,'@kakao.com'),254,'https://wiselife-image.s3.ap-northeast-2.amazonaws.com/ed952b35-6414-4975-8a92-6f78c52e6a89.png',8,0,concat('test',i),'kakao',1,null);\
+\
+          \
+		END IF;\
+	SET i = i + 1;\
+    \
+    END WHILE;\
+END$$\
+DELIMITER $$\
+\
+\
+CALL insertMemberDummyData;\
+
+\fs96 \
+
+\fs36 2. 
+\f0 \'bb\'e8\'c1\'a6
+\f1  
+\f0 \'c4\'f5\'b8\'ae
+\f1\fs96 \
+
+\fs24 delete from member_challenge_table;
+\fs36 \
+\
+3. 
+\f0 \'c1\'b6\'c8\'b8
+\f1  
+\f0 \'c4\'f5\'b8\'ae
+\f1\fs96 \
+
+\fs24 SELECT * FROM wiseLifeTest.member_challenge_table;
+\fs36 \
+\
+
+\fs96 \
+
+\fs24 \
+}

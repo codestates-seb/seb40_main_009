@@ -28,7 +28,7 @@ public class MemberChallenge {
     @Column(nullable = false)
     private double memberChallengeSuccessRate=0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonBackReference
     private Member member;

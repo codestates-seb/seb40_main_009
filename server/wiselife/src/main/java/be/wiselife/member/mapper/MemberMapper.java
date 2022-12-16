@@ -101,7 +101,7 @@ public interface MemberMapper {
 
     //진행중인 챌린지 리스트
     default List<MemberDto.MemberChallengeResponseDto> proceedingChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
-
+        System.out.println("=============실제 필요할때 조회==============");
         return memberChallenges
                 .stream()
                 .sorted(Comparator.comparing(MemberChallenge::getMemberChallengeId).reversed())
@@ -122,7 +122,7 @@ public interface MemberMapper {
     }
     //참여했던 챌린지 리스트
     default List<MemberDto.MemberChallengeResponseDto> endChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
-
+        System.out.println("=============실제 필요할때 조회==============");
         return memberChallenges
                 .stream()
                 .sorted(Comparator.comparing(MemberChallenge::getMemberChallengeId).reversed())

@@ -20,6 +20,7 @@ import org.mapstruct.ReportingPolicy;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -256,7 +257,7 @@ public interface ChallengeMapper {
         return detailResponse.build();
     }
 
-    default List<ChallengeDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(List<MemberChallenge> memberChallenges) {
+    default Set<ChallengeDto.MemberChallengeResponseDto> memberChallengeToMemberChallengeResponseDto(Set<MemberChallenge> memberChallenges) {
         return memberChallenges
                 .stream()
                 .map(memberChallenge -> ChallengeDto.MemberChallengeResponseDto
@@ -269,7 +270,7 @@ public interface ChallengeMapper {
                         .memberSuccessDay((int)memberChallenge.getMemberSuccessDay())
                         .memberChallengeSuccessRate(memberChallenge.getMemberChallengeSuccessRate())
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     default List<ChallengeDto.ChallengeCertImageResponseDto> challengeCertImageToChallengeCertImageResponseDto(List<ChallengeCertImage> certImages) {

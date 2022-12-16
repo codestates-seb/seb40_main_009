@@ -23,6 +23,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -108,7 +110,7 @@ public class OauthService extends DefaultOAuth2UserService {
         String providerId = oAuth2MemberInfo.getProviderId();
         String email = oAuth2MemberInfo.getEmail();
         String imageURL = oAuth2MemberInfo.getImageURL();
-        List<String> rolesForDatabase = authorityUtils.createRolesForDatabase(email);
+        Set<String> rolesForDatabase = authorityUtils.createRolesForDatabase(email);
 
         Member member = memberRepository.findByMemberEmail(email)
                 .orElseGet(()-> memberRepository.save(new Member(email,imageURL,rolesForDatabase,provide,providerId,refreshToken)));
