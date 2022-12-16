@@ -207,28 +207,6 @@ export default function ChallengeDetailProgress({ challengeData }) {
           });
           window.location.reload();
         });
-      // .catch(async (error) => {
-      //   if (error.response.data.status === 401) {
-      //     try {
-      //       const responseToken = await axios.get('/token', {
-      //         headers: {
-      //           'ngrok-skip-browser-warning': 'none',
-      //           refresh: localStorage.getItem('refreshToken'),
-      //         },
-      //       });
-      //       await localStorage.setItem(
-      //         'authorizationToken',
-      //         responseToken.headers.authorization
-      //       );
-      //       await localStorage.setItem(
-      //         'test',
-      //         responseToken.headers.authorization
-      //       );
-      //     } catch (error) {
-      //       console.log('재요청 실패', error);
-      //     }
-      //   }
-      // });
     } catch (error) {
       // 후기한번쓰면 못쓰게 alert띄우기
       const errorMessage = error.response.data.error.message;
