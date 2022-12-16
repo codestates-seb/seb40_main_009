@@ -250,7 +250,13 @@ export default function MainPage() {
                     <TitleWrapper>
                       <div className="title">✨슬기로운 생활의 1등 유저✨</div>
                     </TitleWrapper>
-                    <div>
+                    <div
+                      style={{
+                        // border: '1px solid red',
+                        justifyContent: 'center',
+                        display: 'flex',
+                      }}
+                    >
                       <PopularChallenge
                         src={members[0]?.memberImagePath}
                         alt="인기 챌린지"
@@ -286,9 +292,9 @@ export default function MainPage() {
                     </Members>
                     {members.map((user, index) => (
                       <UserRanking key={user.memberId}>
-                        <div>{index + 1}</div>
-                        <div>{user.memberName}</div>
-                        <div>{user.memberBadge}</div>
+                        <div style={{ width: '29%' }}>{index + 1}</div>
+                        <div style={{ width: '33%' }}>{user.memberName}</div>
+                        <div style={{ width: '33%' }}>{user.memberBadge}</div>
                         <div>{user.followerCount}</div>
                       </UserRanking>
                     ))}

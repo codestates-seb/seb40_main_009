@@ -11,6 +11,7 @@ export const MyProfilePageComponent = styled.div`
 
 // MyProfile.jsx
 export const MyProfileComponent = styled.div`
+  color: #343434;
   .profile-info {
     display: flex;
     justify-content: space-between;
@@ -32,7 +33,7 @@ export const MyProfileComponent = styled.div`
 
 export const ProfileList = styled.div`
   display: flex;
-  margin: 1rem 0;
+  margin: 0.7rem 0;
 `;
 
 export const ProfileBar = styled.div`
@@ -82,8 +83,7 @@ export const ChartBarComponent = styled.div`
   }
 
   .progress-bar .progress {
-    width: ${(props) =>
-      props.percentage}%; // 나타내고자 하는 퍼센트 값을 넣으면 됩니다.
+    width: ${(props) => props.percentage}%; // 나타내고자 하는 퍼센트 값
     height: 20px;
     padding: 0;
     text-align: center;

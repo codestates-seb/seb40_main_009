@@ -73,7 +73,7 @@ export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
   justify-content: space-between;
-  height: 300px;
+  /* height: 300px; */
 `;
 
 export const CertificationWrapper = styled.div`

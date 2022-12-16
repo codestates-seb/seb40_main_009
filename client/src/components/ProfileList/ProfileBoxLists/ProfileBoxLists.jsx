@@ -15,6 +15,8 @@ function ProfileBoxLists({
 }) {
   const [clickedTab, setClickedTab] = useState(0); //router 사용하기
   const [challenges, setChallenges] = useState(participatingChallenges);
+  const [endChallengesData, setEndChallengesData] = useState(endChallenges);
+
   const LoginName = localStorage.getItem('LoginName');
   const tabName = {
     0: '도전 중',
@@ -26,13 +28,16 @@ function ProfileBoxLists({
     if (clickedTab === 0) {
       setChallenges(participatingChallenges);
     }
+    // if (clickedTab === 1) {
+    //   setChallenges(endChallenges);
+    // }
     if (clickedTab === 1) {
-      setChallenges(endChallenges);
+      setEndChallengesData(endChallengesData);
     }
     if (clickedTab === 2) {
       setChallenges([]); // 빈배열을 주는 이유: 아래 내용을 빈배열로 만들고 새로운 내용 넣음
     }
-  }, [participatingChallenges, endChallenges, clickedTab]);
+  }, [participatingChallenges, endChallengesData, clickedTab]);
 
   return (
     <ProfileBoxComponent>
@@ -56,7 +61,7 @@ function ProfileBoxLists({
         {clickedTab !== 2 &&
           challenges.map((challenge) => (
             <ProfileBoxChallenge
-              key={challenge.challengeId}
+              challengeId={challenge.challengeId}
               challengeTitle={challenge.challengeTitle}
               memberReward={challenge.memberReward}
               memberSuccessDay={challenge.memberSuccessDay}
@@ -65,6 +70,7 @@ function ProfileBoxLists({
               objDay={challenge.objDay}
               memberChallengeSuccessRate={challenge.memberChallengeSuccessRate}
               clickedTab={clickedTab}
+              endChallengesData={endChallengesData}
             />
           ))}
         {clickedTab === 2 && memberName === LoginName && (

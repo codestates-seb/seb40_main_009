@@ -1,4 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import Swal from 'sweetalert2';
+
+import FollowersDetail from './FollowersDetail';
 
 import {
   MyProfileComponent,
@@ -6,7 +10,6 @@ import {
   ProfileBar,
   ProfileEditButton,
 } from '../../style/MyProfilePageStyle/MyProfilePageStyle';
-import { GiMedallist } from 'react-icons/gi';
 
 import Follower from './Follower';
 import ChartBar from './ChartBar';
@@ -21,7 +24,9 @@ function MyProfile({
   followStatus,
   followerCount,
   memberMoney,
+  followers = [],
 }) {
+  //edit페이지로 가져갈 데이터
   const profileData = {
     memberImagePath,
     memberName,
@@ -32,16 +37,15 @@ function MyProfile({
     objectPeriod: '',
     followerCount: '',
   };
+
+  const navigate = useNavigate();
   const LoginName = localStorage.getItem('LoginName');
-  const badgeLevelColor = {
-    새내기: '#EEF1FF',
-    좀치는도전자: '#D2DAFF',
-    열정도전자: '#AAC4FF',
-    모범도전자: '#B1B2FF',
-    우수도전자: '#9C9EFE',
-    챌린지장인: '#A294FF',
-    시간의지배자: '#A66CFF',
-    챌린지신: '#8673ff',
+  const name = memberName;
+
+  const handleClickRefund = () => {
+    Swal.fire(
+      '여러분의 포인트는 데모데이가 끝나고</br>운영진이 맛있게 먹었습니다!'
+    );
   };
 
   return (
@@ -50,22 +54,17 @@ function MyProfile({
         <img src={memberImagePath} className="image-size" alt="profile-img" />
         <div>
           <ProfileList>
-            <p>{memberName}</p>
-            {/* Todo 좋아요 기능 구현*/}
+            <div>{memberName}</div>
             <Follower
               followStatus={followStatus}
               followerCount={followerCount}
+              followers={followers}
             />
           </ProfileList>
           <div className="profile-list">
-            <div>
-              {memberBadge}
-              {/* Todo 색 다른걸로 바꾸기 */}
-              <GiMedallist style={{ color: badgeLevelColor[memberBadge] }} />
-            </div>
             <p>
               챌린지성공률:
-              {memberChallengePercentage}%
+              {Math.floor(memberChallengePercentage)}%
             </p>
             <p>
               현재 포인트:
@@ -82,7 +81,9 @@ function MyProfile({
         <ProfileBar>
           {memberName === LoginName ? (
             <div className="buttonLists">
-              <ProfileEditButton>환급받기</ProfileEditButton>
+              <ProfileEditButton onClick={handleClickRefund}>
+                환급받기
+              </ProfileEditButton>
               <Link to={'/ordersheet'}>
                 <ProfileEditButton>충전하기</ProfileEditButton>
               </Link>
@@ -97,7 +98,7 @@ function MyProfile({
               </Link>
             </div>
           ) : null}
-          <ChartBar percentage={memberExpObjRate} />
+          <ChartBar percentage={memberExpObjRate} memberBadge={memberBadge} />
         </ProfileBar>
       </header>
     </MyProfileComponent>
