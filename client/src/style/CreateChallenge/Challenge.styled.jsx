@@ -41,7 +41,6 @@ export const CreateAsk = styled.section`
   }
 
   .question {
-    height: 80px;
     margin-top: 20px;
 
     > textarea {
