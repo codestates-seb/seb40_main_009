@@ -46,6 +46,13 @@ export const ChallengeButton = styled.button`
   font-size: 16px;
   margin-right: 1%;
   cursor: pointer;
+  :hover {
+    background-color: #a294ff;
+    opacity: 0.3;
+    color: #ffffff;
+    border-radius: 10%;
+    padding: 5px;
+  }
 `;
 
 export const Search = styled.div`
