@@ -13,31 +13,10 @@ export const FontSize50 = styled.div`
   font-size: 50px;
 `;
 
-export const FifthPage = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const MarginTop = styled.div`
-  margin-top: 10%;
-  width: 1024px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
 export const Container = styled.div`
   width: 1024px;
   height: 100vh;
   margin-top: 20%;
-`;
-
-export const FontSize30 = styled.div`
-  font-size: 30px;
 `;
 
 export const TitleWrapper = styled.div`
@@ -54,11 +33,6 @@ export const TitleWrapper = styled.div`
   }
 `;
 
-export const PopularChallengeWrapper = styled.div`
-  width: 35%;
-  margin-right: auto;
-`;
-
 export const PopularChallenge = styled.img`
   width: 230px;
   height: 230px;
@@ -70,7 +44,6 @@ export const UserRankingWrapper = styled.div`
 
 export const UserRanking = styled.div`
   display: flex;
-  /* justify-content: space-between; */
   padding: 1% 5%;
   border-bottom: 1px solid #f2f4fe;
 `;
@@ -81,4 +54,35 @@ export const Members = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 1% 5%;
+`;
+
+export const ScrollText = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+export const ChallengeList = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 1024px;
+`;
+
+export const FirstPopularChallenge = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const FirstPopularImage = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const UserRankingList = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2%;
 `;
