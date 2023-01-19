@@ -79,11 +79,10 @@ public class OrderController {
                                   @RequestParam("tid") String tid) throws IOException {
 
         OrderDto.ApproveResponse approveResponse = orderService.approveKakaoPay(pg_token, tid);
-
         return new ResponseEntity<>(
                 new SingleResponseDto<>(approveResponse), HttpStatus.CREATED);
     }
-   
+
 //    /**
 //     *
 //     * @param pg_token 챌린지 참가시 카톡에서 결제요청이 다 승인된 뒤에 받아오는 값, 프론트에서는 참가자가 챌린지 진입시, 탈퇴만 보이게 해야함

@@ -6,6 +6,7 @@ import be.wiselife.security.JwtTokenizer;
 import be.wiselife.security.dto.AccessTokenDto;
 import be.wiselife.security.dto.LoginDto;
 import be.wiselife.security.principal.KakaoMemberinfo;
+import be.wiselife.security.principal.NaverMemberInfo;
 import be.wiselife.security.principal.OAuth2MemberInfo;
 import be.wiselife.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ import org.springframework.http.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -59,6 +63,7 @@ public class OauthService extends DefaultOAuth2UserService {
         return loginDto;
     }
 
+
     /**
      * 서버에 엑세스 토큰과 리프레쉬 토큰을 받아오는 메서드
      * @param code 카톡에서 발행한 인가코드
@@ -99,11 +104,13 @@ public class OauthService extends DefaultOAuth2UserService {
          OAuth2MemberInfo oAuth2MemberInfo = null;
         if (providerName.equals("kakao")) {
             oAuth2MemberInfo = new KakaoMemberinfo(userAttributes);
+        } else if (providerName.equals("naver")) {
+            oAuth2MemberInfo = new NaverMemberInfo(userAttributes);
         } else {
             log.info("지원하지않는 로그인 방식");
         }
 
-        /* 카톡에서 받아온 데이터를 넣는 작업 */
+        /* 받아온 데이터를 넣는 작업 */
         String provide = oAuth2MemberInfo.getProvider();
         String providerId = oAuth2MemberInfo.getProviderId();
         String email = oAuth2MemberInfo.getEmail();
@@ -117,8 +124,8 @@ public class OauthService extends DefaultOAuth2UserService {
         member.setRefreshToken(refreshToken);
         memberRepository.save(member);
         return member;
-
     }
+
 
     private Map<String, Object> getMemberAttributes(ClientRegistration provider, AccessTokenDto tokenData) {
 
@@ -134,6 +141,7 @@ public class OauthService extends DefaultOAuth2UserService {
         //restTemplate의 리턴값을 제네릭을 이용해서 설정한 방법 ParameterizedTypeReference사용
         return body;
     }
+
 
 
 }
