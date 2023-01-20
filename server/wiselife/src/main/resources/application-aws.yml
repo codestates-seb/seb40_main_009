@@ -36,7 +36,7 @@ spring:
 # 이미지 사이즈 저장공간
   servlet:
     multipart:
-      max-file-size: 3MB
+      max-file-size: 5MB
       max-request-size: 15MB
 
 logging:
