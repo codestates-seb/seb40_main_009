@@ -59,6 +59,7 @@ public class S3UploadService {
     }
 
     /**
+     * 한개업로드와 따로 구별했으나 합침
      * 업로드할 친구들을 리스트형태로 받아온다.
      * @param multipartFile 리스트형태로 찬찬히 받아낸다.
      * @return
