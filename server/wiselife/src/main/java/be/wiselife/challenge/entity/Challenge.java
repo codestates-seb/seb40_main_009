@@ -104,6 +104,8 @@ public class Challenge extends WriterAudit {
     @Getter
     private Long authorizedMemberId;
 
+    @Setter
+    private int memberChallengeTodayCertCount;
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
@@ -154,6 +156,7 @@ public class Challenge extends WriterAudit {
         this.randomIdForImage = UUID.randomUUID().toString().substring(0, 6);
 
         this.challengeCertImagePath = challengeCertImagePath;
+        this.memberChallengeTodayCertCount = 0;
     }
 
     /**

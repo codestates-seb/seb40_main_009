@@ -221,7 +221,7 @@ public class ImageService {
         if(challengeCertImages.size()>challenge.getChallengeAuthCycle())
             throw new BusinessLogicException(ExceptionCode.ALREADY_VERIFIED_TODAY_TOTAL_QUOTA);
 
-        loginMember.setMemberChallengeTodayCertCount(challengeCertImages.size());
+        challenge.setMemberChallengeTodayCertCount(challengeCertImages.size());
         isSuccessDay(challenge, memberChallengeFromRepository, challengeCertImages);
 
         plusSuccessCount(loginMember);

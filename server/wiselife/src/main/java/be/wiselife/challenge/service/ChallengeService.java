@@ -112,32 +112,25 @@ public class ChallengeService {
                 .ifPresent(existingChallenge::setChallengeTitle);
         Optional.ofNullable(changedChallenge.getChallengeDescription())
                 .ifPresent(existingChallenge::setChallengeDescription);
-        Optional.ofNullable(changedChallenge.getChallengeCurrentParty())
-                .ifPresent(existingChallenge::setChallengeCurrentParty);
-        Optional.ofNullable(changedChallenge.getChallengeAuthCycle())
-                .ifPresent(existingChallenge::setChallengeAuthCycle);
+        if(changedChallenge.getChallengeAuthCycle() != 0)
+            existingChallenge.setChallengeAuthCycle(changedChallenge.getChallengeAuthCycle());
         Optional.ofNullable(changedChallenge.getChallengeStartDate())
                 .ifPresent(existingChallenge::setChallengeStartDate);
         Optional.ofNullable(changedChallenge.getChallengeEndDate())
                 .ifPresent(existingChallenge::setChallengeEndDate);
-        Optional.ofNullable(changedChallenge.getChallengeMaxParty())
-                .ifPresent(existingChallenge::setChallengeMaxParty);
-        Optional.ofNullable(changedChallenge.getChallengeMinParty())
-                .ifPresent(existingChallenge::setChallengeMinParty);
-        Optional.ofNullable(changedChallenge.getChallengeViewCount())
-                .ifPresent(existingChallenge::setChallengeViewCount);
-        Optional.ofNullable(changedChallenge.getChallengeTotalReward())
-                .ifPresent(existingChallenge::setChallengeTotalReward);
-        Optional.ofNullable(changedChallenge.getIsClosed())
-                .ifPresent(existingChallenge::setIsClosed);
+        if(changedChallenge.getChallengeMaxParty() != 0)
+            existingChallenge.setChallengeMaxParty(changedChallenge.getChallengeMaxParty());
+        if(changedChallenge.getChallengeMinParty() != 0)
+            existingChallenge.setChallengeMinParty(changedChallenge.getChallengeMinParty());
+        if(changedChallenge.getChallengeViewCount() != 0)
+            existingChallenge.setChallengeViewCount(changedChallenge.getChallengeViewCount());
         Optional.ofNullable(changedChallenge.getChallengeAuthAvailableTime())
                 .ifPresent(existingChallenge::setChallengeAuthAvailableTime);
         /**
          * 작성자 : 유현
          * 대표 이미지 수정시 사용하는 로직
          */
-
-        if (!Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isEmpty()) {
+        if (Optional.ofNullable(changedChallenge.getChallengeRepImagePath()).isPresent()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             String repImageUrl = imageService.patchChallengeRepImage(changedChallenge, repImage);
             existingChallenge.setChallengeRepImagePath(repImageUrl);
@@ -147,7 +140,7 @@ public class ChallengeService {
          * 작성자 : 유현
          * 예시 이미지 수정시 사용하는 로직
          */
-        if (!Optional.ofNullable(changedChallenge.getChallengeExamImagePath()).isEmpty()) {
+        if (Optional.ofNullable(changedChallenge.getChallengeExamImagePath()).isPresent()) {
             changedChallenge.setRandomIdForImage(existingChallenge.getRandomIdForImage());
             String challengeExamImagePaths= imageService.patchChallengeExamImage(changedChallenge, exampleImage);
             existingChallenge.setChallengeExamImagePath(challengeExamImagePaths);
