@@ -66,15 +66,15 @@ public class S3UploadService {
      */
     public List<String> uploadAsList(List<MultipartFile> multipartFile) {
         log.info("uploadAsList tx start");
-        List<String> fileNameList = new ArrayList<>();
+        List<String> imageList = new ArrayList<>();
 
-        multipartFile.forEach(file -> {
-        if(Objects.requireNonNull(file.getContentType()).contains("image")) {
+        multipartFile.forEach(image -> {
+        if(Objects.requireNonNull(image.getContentType()).contains("image")) {
 
-            String fileName = createFileName(file.getOriginalFilename());
-            String fileFormat = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
+            String fileName = createFileName(image.getOriginalFilename());
+            String fileFormat = image.getContentType().substring(image.getContentType().lastIndexOf("/") + 1);
 
-            MultipartFile resizedImage = resizer(fileName, fileFormat, file, 400);
+            MultipartFile resizedImage = resizer(fileName, fileFormat, image, 400);
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(resizedImage.getSize()); //사이즈를 전달한다.
@@ -87,11 +87,11 @@ public class S3UploadService {
                 throw new BusinessLogicException(ExceptionCode.FILEUPLOAD_FAILED);
             }
 
-            fileNameList.add(s3.getUrl(bucket, fileName).toString());
+            imageList.add(s3.getUrl(bucket, fileName).toString());
             }
         });
         log.info("uploadAsList tx end");
-        return fileNameList;
+        return imageList;
     }
 
 
@@ -125,22 +125,13 @@ public class S3UploadService {
     }
 
     /**
-     * 이미지를 리사이징 높이 400에 고정하여 변환
+     * 이미지를 리사이징 너비 400에 고정하여 변환
      * @return
      */
     @Transactional
     public MultipartFile resizer(String fileName, String fileFormat, MultipartFile originalImage, int width) {
-//        BufferedImage image = null;
-        try {
-//            Iterator<ImageReader> imageReaders = ImageIO.getImageReadersByFormatName(fileFormat);
-//            if ( imageReaders.hasNext() ) {
-//                ImageReader imageReader = (ImageReader)imageReaders.next();
-//                ImageInputStream stream = ImageIO.createImageInputStream(originalImage);
-//                imageReader.setInput(stream, true);
-//                ImageReadParam param = imageReader.getDefaultReadParam();
-//                image = imageReader.read(0, param);
-//            }
 
+        try {
             BufferedImage image = ImageIO.read(originalImage.getInputStream());// MultipartFile -> BufferedImage Convert
             // newWidth : newHeight = originWidth : originHeight
 

@@ -36,7 +36,7 @@ public class MemberDto {
         private Member.MemberBadge memberBadge;
         private boolean hasRedCard;
         private double memberChallengePercentage;
-        private double memberMoney;
+        private int memberMoney;
         private String memberImagePath;
         private int followerCount;
         private List<MemberFollowerResponseDto> followers;
