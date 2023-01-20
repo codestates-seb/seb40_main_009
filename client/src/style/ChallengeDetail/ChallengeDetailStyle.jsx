@@ -21,7 +21,6 @@ export const Recruitment = styled.div`
   }
   & > div {
     background-color: #eff1fe;
-    /* height: 350px; */
     width: 700px;
     top: 136px;
     right: 15%;
@@ -73,7 +72,6 @@ export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
   justify-content: space-between;
-  /* height: 300px; */
 `;
 
 export const CertificationWrapper = styled.div`
@@ -209,4 +207,37 @@ export const ButtonWrapper = styled.div`
   & > .btn-8 span:hover:after {
     width: 100%;
   }
+`;
+
+export const ImageModal = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 10000;
+`;
+
+export const CertificationTimeList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-size: 20px;
+  width: 70%;
+  margin-bottom: 5px;
+  margin-top: 5px;
+`;
+
+export const NonReviewList = styled.div`
+  border: 2px solid #eff1fe;
+  width: 100%;
+  height: 450px;
+  margin-top: 1%;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  align-items: center;
 `;

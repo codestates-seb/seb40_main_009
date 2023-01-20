@@ -81,7 +81,6 @@ export const Certification = styled.div`
   margin-top: 5%;
   display: flex;
   justify-content: space-between;
-  /* height: 300px; */
 `;
 
 export const CertificationWrapper = styled.div`
@@ -107,8 +106,6 @@ export const CertificationWrapper = styled.div`
 
 export const Review = styled.div`
   margin-top: 5%;
-  /* height: 500px; */
-  /* border: 1px solid red; */
   font-size: 25px;
   width: 100%;
   & > .flex {
@@ -170,7 +167,6 @@ export const Image = styled.img`
 export const CertificationImage = styled.div`
   width: 600px;
   height: 180px;
-  /* border: 1px solid red; */
   display: flex;
 `;
 
@@ -185,9 +181,265 @@ export const ViewMore = styled.div`
 `;
 
 export const ReviewImage = styled.div`
-  /* border: 2px solid red; */
   width: 220px;
   height: 180px;
   display: flex;
   margin-bottom: 3%;
+`;
+
+export const CertificationModal = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+`;
+
+export const CertificationModalWrapper = styled.div`
+  background-color: #eff1fe;
+  width: 20%;
+  height: 35%;
+  border-radius: 20px;
+  padding: 2%;
+`;
+
+export const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const CertImage = styled.div`
+  font-size: 25px;
+  margin: 0 auto;
+  margin-bottom: 2%;
+`;
+
+export const Button = styled.button`
+  background-color: #8673ff;
+  border: #8673ff;
+  color: #ffff;
+  border-radius: 5px;
+  font-size: 17px;
+`;
+
+export const ImageCenter = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+export const CertModal = styled.div`
+  background-color: #eff1fe;
+  width: 30%;
+  height: 30%;
+  border-radius: 20px;
+  padding: 2%;
+`;
+
+export const ModalTtile = styled.input`
+  margin: 0 2%;
+  width: 80%;
+  border: none;
+  font-size: 17px;
+  border-radius: 5px;
+`;
+
+export const ModalTextarea = styled.textarea`
+  margin: 0 2%;
+  width: 80%;
+  border: none;
+  font-size: 17px;
+  border-radius: 5px;
+  resize: none;
+  height: 100px;
+`;
+
+export const CertificationModalImage = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  z-index: 10000;
+`;
+
+export const ShowCertImage = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 10000;
+`;
+
+export const ShowReviewImage = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  position: fixed;
+  overflow: auto;
+  z-index: 10000;
+`;
+
+export const ReviewImg = styled.div`
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ReviewImgWrapper = styled.div`
+  width: 580px;
+  background-color: #eff1fe;
+  padding: 1%;
+  border-radius: 10px;
+`;
+
+export const ReviewTitle = styled.div`
+  display: flex;
+  margin-bottom: 2%;
+  font-size: 18px;
+`;
+
+export const User = styled.div`
+  width: 600px;
+  font-size: 20px;
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+export const ParticipateUser = styled.div`
+  display: grid;
+  width: 442px;
+  grid-template-columns: repeat(4, 1fr);
+  place-items: center;
+`;
+
+export const ParticipateUserName = styled.div`
+  margin: 0 3px;
+  border-radius: 20px;
+  padding: 0 2% 2% 0;
+`;
+
+export const NextChallenge = styled.div`
+  width: 100%;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+`;
+
+export const ButtonType = styled.button`
+  margin-left: 1%;
+  background-color: #8673ff;
+  border: #8673ff;
+  border-radius: 5px;
+  font-size: 17px;
+  color: #ffff;
+`;
+
+export const CertTime = styled.div`
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  font-size: 20px;
+  width: 1024px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  place-items: center;
+`;
+
+export const CertificationTtime = styled.div`
+  background-color: #eff1fe;
+  width: 100%;
+  border-radius: 7px;
+  padding: 3px 0 3px 13px;
+  margin-bottom: 7px;
+`;
+
+export const NonReviewList = styled.div`
+  border: 2px solid #eff1fe;
+  width: 100%;
+  height: 450px;
+  margin-top: 1%;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  align-items: center;
+`;
+
+export const List = styled.div`
+  border: 2px solid #eff1fe;
+  width: 1000px;
+  height: 450px;
+  margin-top: 1%;
+  font-size: 20px;
+  border-radius: 20px;
+  padding: 2% 0 2% 2%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+`;
+
+export const CertButtonType = styled.button`
+  width: 10%;
+  background-color: #8673ff;
+  border: #8673ff;
+  border-radius: 5px;
+  font-size: 17px;
+  color: #ffff;
+  cursor: pointer;
+`;
+
+export const Comment = styled.input`
+  width: 1024px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #8673ff;
+`;
+
+export const CommentButton = styled.button`
+  margin-left: 5%;
+  width: 5%;
+  background-color: #8673ff;
+  border: #8673ff;
+  border-radius: 5px;
+  font-size: 17px;
+  color: #ffff;
+`;
+
+export const CommentList = styled.div`
+  border: 2px solid #eff1fe;
+  padding: 1% 1% 0 1%;
+  border-radius: 10px;
+  margin-top: 2%;
+  width: 1000px;
+`;
+
+export const CommentWrapper = styled.div`
+  width: 1000px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1%;
+  border-bottom: 2px solid #eff1fe;
+`;
+
+export const DeleteButton = styled.button`
+  margin-left: 1%;
+  width: 5%;
+  background-color: #8673ff;
+  border: #8673ff;
+  font-size: 17px;
+  border-radius: 5px;
+  color: #ffff;
+  margin-right: 10px;
 `;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import {
@@ -15,13 +15,15 @@ import {
   Image,
   Review,
   ButtonWrapper,
+  ImageModal,
+  CertificationTimeList,
+  NonReviewList,
 } from '../../style/ChallengeDetail/ChallengeDetailStyle';
 
 import Swal from 'sweetalert2';
 import Masonry from 'react-responsive-masonry';
 
 export default function ChallengeDetail({ challengeData }) {
-  // console.log('challengeData>>>', challengeData);
   const parmas = useParams();
   const navigate = useNavigate();
   const [imageData, setImageData] = useState({ image: '', i: 0 });
@@ -218,31 +220,16 @@ export default function ChallengeDetail({ challengeData }) {
   const left = Math.abs(Math.floor(distance / (1000 * 60 * 60 * 24)));
 
   const startDateSplit = challengeData.challengeStartDate.split('-');
-  // console.log('ssdfsfsd>>>>', startDateSplit);
 
   const day = Number(startDateSplit[2]) + 1;
-  // console.log('day>>>>', day);
   const plusDayOne = new Date(
     `${startDateSplit[0]}-${startDateSplit[1]}-${day}`
   );
-  // console.log('plusDayOne>>>>', plusDayOne);
 
   return (
     <>
       {imageData.image && (
-        <div
-          style={{
-            width: '100%',
-            height: '100vh',
-            background: 'black',
-            position: 'fixed',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'hidden',
-            zIndex: 10000,
-          }}
-        >
+        <ImageModal>
           <button
             onClick={() => imageAction()}
             style={{ position: 'absolute', top: '10px', right: '10px' }}
@@ -256,7 +243,7 @@ export default function ChallengeDetail({ challengeData }) {
             alt="이미지크게보기"
           />
           <button onClick={() => imageAction('next-image')}>다음</button>
-        </div>
+        </ImageModal>
       )}
       <Container>
         <ChallengeViewCount>{`조회수 ${challengeData.challengeViewCount}`}</ChallengeViewCount>
@@ -314,17 +301,7 @@ export default function ChallengeDetail({ challengeData }) {
                   인증 시간:
                 </div>
 
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    fontSize: '20px',
-                    width: '70%',
-                    // border: '1px solid blue',
-                    marginBottom: '5px',
-                    marginTop: '5px',
-                  }}
-                >
+                <CertificationTimeList>
                   {challengeData.challengeAuthAvailableTime.map(
                     (time, index) => {
                       return (
@@ -334,12 +311,10 @@ export default function ChallengeDetail({ challengeData }) {
                       );
                     }
                   )}
-                </div>
+                </CertificationTimeList>
               </ChallengeDescription>
 
               {/* 참여버튼 */}
-              {/* {new Date() < new Date(challengeData.challengeStartDate) &&
-              authorizationToken !== null ? ( */}
               {new Date() < plusDayOne && authorizationToken !== null ? (
                 <ButtonWrapper>
                   <button className="custom-btn btn-8">
@@ -375,23 +350,9 @@ export default function ChallengeDetail({ challengeData }) {
           <div style={{ marginBottom: '1%' }}>후기 사진</div>
 
           {challengeData.challengeReviews === null ? (
-            <div
-              role="img"
-              aria-label="writing hand"
-              style={{
-                border: '2px solid #eff1fe',
-                width: '100%',
-                height: '450px',
-                marginTop: '1%',
-                fontSize: '20px',
-                display: 'flex',
-                justifyContent: 'center',
-                borderRadius: '20px',
-                alignItems: 'center',
-              }}
-            >
+            <NonReviewList>
               {challengeData.challengeTitle} 챌린지에 대한 후기가 없습니다.😥
-            </div>
+            </NonReviewList>
           ) : (
             <Masonry columnsCount={3} gutter="10px">
               {challengeData.challengeReviews.map((image, i) => (

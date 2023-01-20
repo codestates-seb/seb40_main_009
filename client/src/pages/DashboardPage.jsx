@@ -11,31 +11,28 @@ import {
   MoveOut,
   Sticky,
   ZoomIn,
-  ZoomInScrollOut,
-  FadeUp,
 } from 'react-scroll-motion';
 
 import {
   MainContainer,
   FirstPage,
   FontSize50,
-  FifthPage,
-  MarginTop,
   Container,
-  FontSize30,
   TitleWrapper,
-  PopularChallengeWrapper,
   PopularChallenge,
   UserRankingWrapper,
   UserRanking,
   Members,
+  ScrollText,
+  ChallengeList,
+  FirstPopularChallenge,
+  FirstPopularImage,
+  UserRankingList,
 } from '../style/Dashboard/DashboardPageStyle';
 
 import Challenge from '../components/ChallengeList/Challenge';
 import SlideBanner from '../components/Dashboard/SlideBanner';
 import Loading from '../components/Loading/Loading';
-
-import smile from '../image/smile.jpg';
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -154,14 +151,7 @@ export default function MainPage() {
         </ScrollPage>
 
         <ScrollPage page={5}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
+          <ScrollText>
             <span style={{ fontSize: '40px' }}>
               <Animator animation={MoveIn(-1000, 0)}>지금 바로</Animator>
               <Animator animation={MoveIn(1000, 0)}>
@@ -171,19 +161,12 @@ export default function MainPage() {
               <Animator animation={MoveOut(1000, 0)}>건강하게 </Animator>
               <Animator animation={MoveOut(-1000, 0)}>앞서 나아가다</Animator>
             </span>
-          </div>
+          </ScrollText>
         </ScrollPage>
 
         {/* 신규챌린지 */}
         <ScrollPage page={6}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
+          <ScrollText>
             <div>
               <Animator animation={MoveIn(-1000, 0)}>
                 <span style={{ fontSize: '30px' }}>
@@ -193,13 +176,7 @@ export default function MainPage() {
               <Animator animation={MoveIn(1000, 0)}>
                 <div style={{ marginTop: '5%' }}>
                   <div style={{ fontSize: '25px' }}>신규챌린지</div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      width: '1024px',
-                      justifyContent: 'space-between',
-                    }}
-                  >
+                  <ChallengeList>
                     {challenges.map(
                       ({
                         challengeId,
@@ -216,67 +193,36 @@ export default function MainPage() {
                         />
                       )
                     )}
-                  </div>
+                  </ChallengeList>
                 </div>
               </Animator>
             </div>
-          </div>
+          </ScrollText>
         </ScrollPage>
 
         <ScrollPage page={7}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100vh',
-              // width: '1024px',
-              // border: '1px solid blue',
-            }}
-          >
+          <ScrollText>
             <Container>
               {/* 인기 챌린지 */}
-              {/* 3개 순환하는거 만들기 */}
-              <div
-                style={{
-                  // border: '1px solid orange',
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
+              <FirstPopularChallenge>
                 <Animator animation={Spin(10)}>
                   <div>
                     <TitleWrapper>
                       <div className="title">✨슬기로운 생활의 1등 유저✨</div>
                     </TitleWrapper>
-                    <div
-                      style={{
-                        // border: '1px solid red',
-                        justifyContent: 'center',
-                        display: 'flex',
-                      }}
-                    >
+                    <FirstPopularImage>
                       <PopularChallenge
                         src={members[0]?.memberImagePath}
                         alt="인기 챌린지"
                       />
-                    </div>
+                    </FirstPopularImage>
                   </div>
                 </Animator>
-              </div>
+              </FirstPopularChallenge>
 
               {/* 유저 랭킹 */}
               <Animator animation={MoveIn(1000, 0)}>
-                <div
-                  style={{
-                    // border: '1px solid orange',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '2%',
-                  }}
-                >
+                <UserRankingList>
                   <UserRankingWrapper>
                     <TitleWrapper>
                       <div className="title">유저 랭킹</div>
@@ -299,10 +245,10 @@ export default function MainPage() {
                       </UserRanking>
                     ))}
                   </UserRankingWrapper>
-                </div>
+                </UserRankingList>
               </Animator>
             </Container>
-          </div>
+          </ScrollText>
         </ScrollPage>
       </ScrollContainer>
     </MainContainer>
