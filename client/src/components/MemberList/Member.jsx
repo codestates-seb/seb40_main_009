@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { parseISO } from 'date-fns/esm';
 
 import { UserContainer } from '../../style/MemberList/MemberList.styled';
+import { useRecoilValue } from 'recoil';
+import { LoginState } from '../Login/KakaoLoginData';
 
 export default function Member({
   name,
@@ -11,12 +13,24 @@ export default function Member({
   created_at,
   image,
 }) {
+  const isLogin = useRecoilValue(LoginState);
+  const navigate = useNavigate();
   const date = format(parseISO(created_at), 'yyyy-MM-dd');
+
+  /**유저 상세 페이지로 이동*/
+  const moveToMemberDetail = () => {
+    if (!isLogin) {
+      alert('로그인 후 확인하실 수 있습니다.');
+      navigate('/');
+    } else {
+      navigate(`/profile/${name}`);
+    }
+  };
 
   return (
     <div>
-      <UserContainer>
-        <Link to={`/profile/${name}`}>
+      <UserContainer onClick={moveToMemberDetail}>
+        <div>
           <div>
             <div style={{ width: '120px' }}>
               <img
@@ -36,20 +50,8 @@ export default function Member({
           <div>{badge}</div>
           <div>{followerCount}</div>
           <div>{date}</div>
-        </Link>
+        </div>
       </UserContainer>
     </div>
-
-    // <S.UserContainer>
-    //   <Link to={`/profile/${name}`}>
-    //     <div>
-    //       <img alt="memberImage" src={image} />
-    //       <span>{name}</span>
-    //     </div>
-    //     <div>{badge}</div>
-    //     <div>{followerCount}</div>
-    //     <div>{date}</div>
-    //   </Link>
-    // </S.UserContainer>
   );
 }

@@ -71,7 +71,7 @@ export const UserContainer = styled.div`
   flex-direction: column;
   justify-content: start;
 
-  > a {
+  > div {
     margin-top: 3px;
     text-decoration: none;
     color: black;
