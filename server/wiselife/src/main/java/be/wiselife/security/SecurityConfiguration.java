@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -39,15 +40,15 @@ public class SecurityConfiguration{
         http
                 .headers().frameOptions().disable()
                 .and()
-                .csrf().disable() //CSRF 공격 방어 안하겠다~ 쿠키를 사용한 인증을 안할꺼라서
+                .csrf().disable() //TODO CSRF 토큰 활성화
                 .cors().configurationSource(corsConfigurationSource()) // 아래의 corsCofiguartionSource 소환 APP간의 출처가 다른경우 http통신을 통한 리소스 접근이 제한됨
-                //cors친구가 다른 스크립트 기반 http통신을 해도 선택적으로 리소스에 접근할 수있는 권한을 부여하도록 브라우저에게 알려줌
-                .and()
-                .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능 안쓰겠다.
-                .httpBasic().disable()
 
+                .and()
+                //AuthenticationEntryPoint
+                .formLogin().disable() //기본으로 제공하는 form 로그인 인증 기능
+                .httpBasic().disable() //팝업창 뜨는 방식으로 뜨는 로그인 인증 기능
                 .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //인증에러 발생시
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new MemberAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
                 /*-----추후 어느정도 구성이 완료되고 인가 관련 설정----*/
@@ -69,13 +70,15 @@ public class SecurityConfiguration{
                         .antMatchers(HttpMethod.DELETE, "/*/challenge-reviews/**").hasAnyRole("USER")
                         .anyRequest().permitAll() //그외 get 요청은 전부다 가능하도록
                 )
-                .oauth2Login()
-                .defaultSuccessUrl("/")
-                .failureUrl("/") //로그인 실패시 이동해야하는 위치
-                .userInfoEndpoint() //로그인 성공후 사용자정보를 가져오겠다.
-                .userService(oauthservice);
+                .oauth2Login(Customizer.withDefaults());
+//                .defaultSuccessUrl("/")
+//                .failureUrl("/") //로그인 실패시 이동해야하는 위치
+//                .userInfoEndpoint() //로그인 성공후 사용자정보를 가져오겠다.
+//                .userService(oauthservice);
 
+        http.logout().logoutSuccessUrl("/");
         return http.build();
+
     }
 
 

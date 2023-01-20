@@ -60,8 +60,6 @@ public class GlobalExceptionAdvice {
 
         return response;
     }
-
-
     /*
      * ConstraintViolationException jpa 제약조건 위반시 발생하는 에러 구현
      */

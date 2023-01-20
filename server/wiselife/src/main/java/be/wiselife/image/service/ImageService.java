@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -46,7 +47,7 @@ public class ImageService {
         MemberImage memberImageFromRepository =
                 imageRepository.findByImageTypeAndMemberId("MI", member.getMemberId());
 
-        String ImageUrl = s3UploadService.uploadJustOne(multipartFiles); //이미지 URL받아오기
+        String ImageUrl = s3UploadService.uploadAsList(new ArrayList<>(Arrays.asList(multipartFiles))).get(0); //이미지 URL받아오기
 
         if (memberImageFromRepository == null) {
             MemberImage memberImage = new MemberImage();
@@ -72,7 +73,7 @@ public class ImageService {
 
         ChallengeRepImage challengeRepImageFromRepository =
                 imageRepository.findByImageTypeAndChallengeRep("CRI", challenge.getRandomIdForImage());
-        String newRepImage = s3UploadService.uploadJustOne(repImage);
+        String newRepImage = s3UploadService.uploadAsList(new ArrayList<>(Arrays.asList(repImage))).get(0);
 
         if (challengeRepImageFromRepository == null) {
             ChallengeRepImage challengeRepImage = new ChallengeRepImage();
@@ -164,7 +165,7 @@ public class ImageService {
 
         if (reviewImageFromRepository == null) {
             ReviewImage reviewImage = new ReviewImage();
-            String ImagePath = s3UploadService.uploadJustOne(image);
+            String ImagePath = s3UploadService.uploadAsList(new ArrayList<>(Arrays.asList(image))).get(0);
             reviewImage.setImagePath(ImagePath);
             saveReviewImage(review, reviewImage);
             log.info("patchReviewImage  tx end");
@@ -328,7 +329,7 @@ public class ImageService {
     public String getOneImagePath(MultipartFile multipartFile) throws IOException {
         log.info("getOneImagePath tx start");
         log.info("getOneImagePath tx end");
-        return s3UploadService.uploadJustOne(multipartFile);
+        return s3UploadService.uploadAsList(new ArrayList<>(Arrays.asList(multipartFile))).get(0);
     }
 
 }
