@@ -19,14 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -73,7 +73,7 @@ public class S3UploadService {
             String fileName = createFileName(file.getOriginalFilename());
             String fileFormat = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
 
-            MultipartFile resizedImage = resizer(fileName, fileFormat, file, 100);
+            MultipartFile resizedImage = resizer(fileName, fileFormat, file, 400);
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(resizedImage.getSize()); //사이즈를 전달한다.
@@ -127,8 +127,18 @@ public class S3UploadService {
      * 이미지를 리사이징 높이 400에 고정하여 변환
      * @return
      */
-    private MultipartFile resizer(String fileName, String fileFormat, MultipartFile originalImage, int width) {
+    @Transactional
+    public MultipartFile resizer(String fileName, String fileFormat, MultipartFile originalImage, int width) {
+//        BufferedImage image = null;
         try {
+//            Iterator<ImageReader> imageReaders = ImageIO.getImageReadersByFormatName(fileFormat);
+//            if ( imageReaders.hasNext() ) {
+//                ImageReader imageReader = (ImageReader)imageReaders.next();
+//                ImageInputStream stream = ImageIO.createImageInputStream(originalImage);
+//                imageReader.setInput(stream, true);
+//                ImageReadParam param = imageReader.getDefaultReadParam();
+//                image = imageReader.read(0, param);
+//            }
 
             BufferedImage image = ImageIO.read(originalImage.getInputStream());// MultipartFile -> BufferedImage Convert
             // newWidth : newHeight = originWidth : originHeight
