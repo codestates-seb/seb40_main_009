@@ -40,7 +40,7 @@ public interface MemberMapper {
         memberDetailResponse.setHasRedCard(member.isHasRedCard());
         memberDetailResponse.setMemberExp(member.getMemberExp());
         memberDetailResponse.setMemberChallengePercentage(member.getMemberChallengePercentage());
-        memberDetailResponse.setMemberMoney(member.getMemberMoney());
+        memberDetailResponse.setMemberMoney((int)member.getMemberMoney());
         memberDetailResponse.setFollowerCount(member.getFollowerCount());
         memberDetailResponse.setMemberImagePath(member.getMemberImagePath());
         //멤버에 팔로워 정보뜨게 추가
