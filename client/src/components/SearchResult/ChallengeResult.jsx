@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import * as S from '../../style/ChallengeList/ChallengeList.styled';
+import { Container } from '../../style/ChallengeList/ChallengeList.styled';
 
 import Challenge from '../ChallengeList/Challenge';
 
@@ -9,7 +9,6 @@ export default function ChallengeResult({ searchValue }) {
   const [challengeList, setChallengeList] = useState([]);
 
   /**챌린지 검색 결과 데이터 요청 */
-  //useCallback  & useEffect -> 요청하는 hook 을 만들어서 데이터 받아오기
   const challengeSearch = async () => {
     try {
       const response = await axios.get(
@@ -32,7 +31,7 @@ export default function ChallengeResult({ searchValue }) {
   }, []);
 
   return (
-    <S.Container>
+    <Container>
       {challengeList.map(
         ({
           challengeId,
@@ -49,6 +48,6 @@ export default function ChallengeResult({ searchValue }) {
           />
         )
       )}
-    </S.Container>
+    </Container>
   );
 }

@@ -1,18 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
-import styled from 'styled-components';
-import * as S from '../../style/CreateChallenge/Challenge.styled';
+import {
+  CreateAsk,
+  ImgExample,
+  TimeContainer,
+} from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
-import exampleImage from '../../image/example.png';
 import { checkImageSize } from '../../function/checkImageSize';
-import { useEffect } from 'react';
-
-const TimeContainer = styled.section`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-`;
+import exampleImage from '../../image/example.png';
 
 export default function FourthQuestionSet({ register, watch, errors }) {
   const [pageStateNumber, setStatePageNumber] = useRecoilState(
@@ -25,6 +22,7 @@ export default function FourthQuestionSet({ register, watch, errors }) {
   const imagePreview = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
+
     return new Promise((resolve) => {
       reader.onload = () => {
         setImageTransfrom(reader.result);
@@ -61,7 +59,7 @@ export default function FourthQuestionSet({ register, watch, errors }) {
       : setStatePageNumber(4);
   };
 
-  //throw
+  /**마지막 유효성 검사 */
   const lastCheck = () => {
     if (
       Number(watch('challengeAuthCycle')) ===
@@ -86,10 +84,10 @@ export default function FourthQuestionSet({ register, watch, errors }) {
   }, []);
 
   return (
-    <S.CreateAsk>
+    <CreateAsk>
       <section className="imgSection">
         {imageTransform && (
-          <S.ImgExample src={imageTransform} alt="preview.img" />
+          <ImgExample src={imageTransform} alt="preview.img" />
         )}
       </section>
       <div className="question">
@@ -216,7 +214,7 @@ export default function FourthQuestionSet({ register, watch, errors }) {
           onClick={() => lastCheck()}
         />
       ) : null}
-    </S.CreateAsk>
+    </CreateAsk>
   );
 }
 

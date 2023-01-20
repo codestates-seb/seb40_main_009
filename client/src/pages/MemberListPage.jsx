@@ -2,7 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
 
-import * as S from '../style/MemberList/MemberList.styled';
+import {
+  Container,
+  IndexContainer,
+  ListContainer,
+} from '../style/MemberList/MemberList.styled';
 
 import Loading from '../components/Loading/Loading';
 import Member from '../components/MemberList/Member';
@@ -10,6 +14,7 @@ import Member from '../components/MemberList/Member';
 export default function MemberListPage() {
   const [memberList, setMemberList] = useState([]);
   const [isLoading, setLoading] = useState(true);
+
   const [checkedFilter, setCheckedFilter] = useState('memberBadge');
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -86,15 +91,15 @@ export default function MemberListPage() {
   }, [inView, isLoading]);
 
   return (
-    <S.ListContainer>
-      <S.Container>
-        <S.IndexContainer>
+    <ListContainer>
+      <Container>
+        <IndexContainer>
           {filterList.map(({ id, title, value }) => (
             <button onClick={handleFilter} key={id} value={value}>
               {title}
             </button>
           ))}
-        </S.IndexContainer>
+        </IndexContainer>
         {memberList.map(
           (
             {
@@ -136,8 +141,8 @@ export default function MemberListPage() {
           )
         )}
         {isLoading ? <Loading /> : null}
-      </S.Container>
-    </S.ListContainer>
+      </Container>
+    </ListContainer>
   );
 }
 

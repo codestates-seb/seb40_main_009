@@ -1,8 +1,14 @@
 import { useSetRecoilState } from 'recoil';
 
-import * as S from '../../style/CreateChallenge/Challenge.styled';
+import {
+  CreateAsk,
+  ErrorMessage,
+} from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import CreateKakaoMap from '../KakaoMap/CreateKakaomap';
 
 export default function FirstQuestionSet({
   register,
@@ -12,8 +18,17 @@ export default function FirstQuestionSet({
   clearErrors,
 }) {
   const setStatePageNumber = useSetRecoilState(createChallengeStateNumber);
+  const [isOfflineChallenge, setOfflineChallenge] = useState(false);
 
-  /**1번 페이지에서 입력할 모든 값을 입력시 페이지 이동 버튼 활성화 */
+  const categoryCheck = (event) => {
+    if (event.target.value === '3') {
+      setOfflineChallenge(true);
+    } else {
+      setOfflineChallenge(false);
+    }
+  };
+
+  /**1번 페이지에서 모든 값을 입력시 페이지 이동 버튼 활성화 */
   const answerCheck = (event) => {
     const allValidateList = [
       'challengeCategoryId',
@@ -34,7 +49,7 @@ export default function FirstQuestionSet({
       : setStatePageNumber(1);
   };
 
-  /**챌린지 멤버 설정 유효성검사 - 최소 > 최대 인원 */
+  /**챌린지 멤버 유효성검사 - 최소 > 최대 인원 */
   const checkMinimumParty = (event) => {
     if (watch('challengeMaxParty') !== '') {
       if (Number(watch('challengeMaxParty')) < Number(event.target.value)) {
@@ -55,7 +70,7 @@ export default function FirstQuestionSet({
     }
   };
 
-  /**챌린지 멤버 설정 유효성검사 - 최소 < 최대 인원 */
+  /**챌린지 멤버 유효성검사 - 최소 < 최대 인원 */
   const checkMaxParty = (event) => {
     if (watch('challengeMinParty') !== '') {
       if (Number(watch('challengeMinParty')) > Number(event.target.value)) {
@@ -102,8 +117,22 @@ export default function FirstQuestionSet({
     }
   };
 
+  useEffect(() => {
+    if (isOfflineChallenge) {
+      setOfflineChallenge();
+    }
+  }, [isOfflineChallenge]);
+
   return (
-    <S.CreateAsk>
+    <CreateAsk>
+      {isOfflineChallenge ?? (
+        <div className="question">
+          <h3>만남의 장소를 선택하세요</h3>
+          <div style={{ width: '500px', height: '500px' }}>
+            <CreateKakaoMap register={register} />
+          </div>
+        </div>
+      )}
       <div className="question">
         <h3>카테고리를 선택하세요</h3>
         <div>
@@ -113,7 +142,10 @@ export default function FirstQuestionSet({
               {...register('challengeCategoryId', {
                 required: 'Please Choice Category',
               })}
-              onChange={(event) => answerCheck(event)}
+              onChange={(event) => {
+                answerCheck(event);
+                categoryCheck(event);
+              }}
               value={'1'}
             />
             버킷 리스트
@@ -124,7 +156,10 @@ export default function FirstQuestionSet({
               {...register('challengeCategoryId', {
                 required: 'Please Choice Category',
               })}
-              onChange={(event) => answerCheck(event)}
+              onChange={(event) => {
+                answerCheck(event);
+                categoryCheck(event);
+              }}
               value={'2'}
             />
             공유 챌린지
@@ -135,7 +170,10 @@ export default function FirstQuestionSet({
               {...register('challengeCategoryId', {
                 required: 'Please Choice Category',
               })}
-              onChange={(event) => answerCheck(event)}
+              onChange={(event) => {
+                answerCheck(event);
+                categoryCheck(event);
+              }}
               value={'3'}
             />
             오프라인 챌린지
@@ -143,7 +181,7 @@ export default function FirstQuestionSet({
         </div>
       </div>
       <div className="question">
-        <h3>함께 챌린지를 진행할 최소 인원을 정해주세요</h3>
+        <h3>챌린지 최소 인원을 정해주세요</h3>
         <input
           className="inputBox"
           {...register('challengeMinParty', {
@@ -156,13 +194,13 @@ export default function FirstQuestionSet({
           }}
           type={'number'}
         />
-        <S.ErrorMessage>
+        <ErrorMessage>
           {errors.checkMaxMemberError?.message}
           {errors.minimumMemberMoreThanZero?.message}
-        </S.ErrorMessage>
+        </ErrorMessage>
       </div>
       <div className="question">
-        <h3>함께 챌린지를 진행할 최대 인원을 정해주세요</h3>
+        <h3>챌린지 최대 인원을 정해주세요</h3>
         <input
           className="inputBox"
           {...register('challengeMaxParty', {
@@ -176,12 +214,8 @@ export default function FirstQuestionSet({
           type={'number'}
         />
 
-        <S.ErrorMessage>
-          {errors.checkMinimumMemberError?.message}
-        </S.ErrorMessage>
-        <S.ErrorMessage>
-          {errors.maximumMemberMoreThanZero?.message}
-        </S.ErrorMessage>
+        <ErrorMessage>{errors.checkMinimumMemberError?.message}</ErrorMessage>
+        <ErrorMessage>{errors.maximumMemberMoreThanZero?.message}</ErrorMessage>
       </div>
       <div className="question">
         <h3>챌린지 참가 포인트를 입력해주세요</h3>
@@ -197,9 +231,9 @@ export default function FirstQuestionSet({
           }}
           type={'number'}
         />
-        <S.ErrorMessage>{errors.pointError?.message}</S.ErrorMessage>
-        <S.ErrorMessage>{errors.moreThanThousandError?.message}</S.ErrorMessage>
+        <ErrorMessage>{errors.pointError?.message}</ErrorMessage>
+        <ErrorMessage>{errors.moreThanThousandError?.message}</ErrorMessage>
       </div>
-    </S.CreateAsk>
+    </CreateAsk>
   );
 }

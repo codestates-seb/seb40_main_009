@@ -4,7 +4,10 @@ import { DateRange } from 'react-date-range';
 import { ko } from 'date-fns/locale';
 import { isAfter, parseISO } from 'date-fns';
 
-import * as S from '../../style/CreateChallenge/Challenge.styled';
+import {
+  CreateAsk,
+  ErrorMessage,
+} from '../../style/CreateChallenge/Challenge.styled';
 
 import { createChallengeStateNumber } from '../../atoms/atoms';
 
@@ -75,7 +78,7 @@ export default function ThirdQuestionSet({
   }, []);
 
   return (
-    <S.CreateAsk>
+    <CreateAsk>
       {/* <DateRange
         editableDateInputs={false}
         onChange={(item) => {
@@ -96,7 +99,7 @@ export default function ThirdQuestionSet({
           placeholder="챌린지 시작일"
           onChange={(event) => checkStartDate(event)}
         />
-        <S.ErrorMessage>{errors.fastEndDate?.message}</S.ErrorMessage>
+        <ErrorMessage>{errors.fastEndDate?.message}</ErrorMessage>
       </div>
       <div className="question">
         <h3>챌린지 종료일</h3>
@@ -109,8 +112,8 @@ export default function ThirdQuestionSet({
           placeholder="챌린지 종료일"
           onChange={(event) => checkEndDate(event)}
         />
-        <S.ErrorMessage>{errors.lateStartDate?.message}</S.ErrorMessage>
+        <ErrorMessage>{errors.lateStartDate?.message}</ErrorMessage>
       </div>
-    </S.CreateAsk>
+    </CreateAsk>
   );
 }

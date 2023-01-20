@@ -4,7 +4,12 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useInView } from 'react-intersection-observer';
 
-import * as S from '../style/ChallengeList/ChallengeList.styled';
+import {
+  AddChallengeButton,
+  Container,
+  ListContainer,
+  Tab,
+} from '../style/ChallengeList/ChallengeList.styled';
 
 import Challenge from '../components/ChallengeList/Challenge';
 import Loading from '../components/Loading/Loading';
@@ -12,11 +17,15 @@ import { LoginState } from '../components/Login/KakaoLoginData';
 
 export default function ChallengeListPage() {
   const loginState = useRecoilValue(LoginState);
+
   const [challengeList, setChallengeList] = useState([]);
+
   const [isLoading, setLoading] = useState(true);
+
   const [filterSelect, setFilterSelect] = useState('1');
   const [categorySelect, setCategorySelect] = useState('1');
   const [pageNumber, setPageNumber] = useState(1);
+
   const [challengeTotalPages, setChallengeTotalPages] = useState();
 
   const [ref, inView] = useInView();
@@ -29,6 +38,7 @@ export default function ChallengeListPage() {
     navigate('/createchallenge/1');
   };
 
+  // 챌린지 리스트 URL 초기 설정
   useEffect(() => {
     if (navMatch) {
       navigate('/challengelist/bucketlist');
@@ -116,23 +126,23 @@ export default function ChallengeListPage() {
   return (
     <>
       {loginState ? (
-        <S.AddChallengeButton onClick={moveToCreateChallenge}>
+        <AddChallengeButton onClick={moveToCreateChallenge}>
           <span>챌린지</span>
           <br />
           <span>추가</span>
-        </S.AddChallengeButton>
+        </AddChallengeButton>
       ) : null}
-      <S.ListContainer>
+      <ListContainer>
         <section>
           {categoryList.map(({ id, category, tabName }) => (
             <Link to={`/challengelist/${category}`} key={id}>
-              <S.Tab
+              <Tab
                 onClick={setCategory}
                 value={id}
                 isActive={id === categorySelect}
               >
                 {tabName}
-              </S.Tab>
+              </Tab>
             </Link>
           ))}
           <div>
@@ -145,7 +155,7 @@ export default function ChallengeListPage() {
             </select>
           </div>
         </section>
-        <S.Container>
+        <Container>
           {challengeList.map(
             (
               {
@@ -186,8 +196,8 @@ export default function ChallengeListPage() {
             )
           )}
           {isLoading ? <Loading /> : null}
-        </S.Container>
-      </S.ListContainer>
+        </Container>
+      </ListContainer>
     </>
   );
 }

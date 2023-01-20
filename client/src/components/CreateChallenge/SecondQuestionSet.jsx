@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+
+import {
+  CreateAsk,
+  ImgExample,
+} from '../../style/CreateChallenge/Challenge.styled';
+
 import {
   createChallangeRepresentationImage,
   createChallengeStateNumber,
 } from '../../atoms/atoms';
 import { checkImageSize } from '../../function/checkImageSize';
-
-import * as S from '../../style/CreateChallenge/Challenge.styled';
-
 import exampleImg from '../../image/example.png';
 
 export default function SecondQuestionSet({ register, watch }) {
@@ -49,14 +52,15 @@ export default function SecondQuestionSet({ register, watch }) {
   }, []);
 
   return (
-    <S.CreateAsk>
+    <CreateAsk>
       <section className="imgSection">
-        <S.ImgExample src={imageTransform} alt="preview.img" />
+        <ImgExample src={imageTransform} alt="preview.img" />
       </section>
       <div className="question">
         <h3>대표 이미지를 설정해주세요</h3>
         <input
           type={'file'}
+          accept="image/*"
           {...register('challengeRepImagePath', {
             required: 'Please Upload Picture',
           })}
@@ -87,6 +91,6 @@ export default function SecondQuestionSet({ register, watch }) {
           placeholder="ex) 매일 아침 지정된 시간에 인증합니다."
         />
       </div>
-    </S.CreateAsk>
+    </CreateAsk>
   );
 }

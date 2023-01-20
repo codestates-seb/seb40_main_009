@@ -1,47 +1,18 @@
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
-import styled from 'styled-components';
+import { CreateContainer } from '../../style/CreateChallenge/CreateChallengePage.styled';
 
 import {
   createChallengePageNumber,
   createChallengeStateNumber,
 } from '../../atoms/atoms';
-import { useNavigate } from 'react-router-dom';
 import FirstQuestionSet from './FirstQuestionSet';
 import SecondQuestionSet from './SecondQuestionSet';
 import ThirdQuestionSet from './ThirdQuestionSet';
 import FourthQuestionSet from './FourthQuestionSet';
-
-const CreateContainer = styled.section`
-  > form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    > button {
-      margin-top: 50px;
-      width: 100px;
-      height: 100px;
-      border-radius: 20px;
-      background-color: #8672ff;
-      color: white;
-
-      :hover {
-        color: black;
-        background-color: #e9e5ff;
-        border: 1px solid #e9e5ff;
-      }
-
-      :active {
-        color: #8672ff;
-        background-color: #e9e5ff;
-        border: 1px solid #8672ff;
-      }
-    }
-  }
-`;
 
 export default function CreateChallenge() {
   const [pageNumber, setPageNumber] = useRecoilState(createChallengePageNumber);
@@ -93,11 +64,14 @@ export default function CreateChallenge() {
           Authorization: localStorage.getItem('authorizationToken'),
         },
       });
+
       const minusMoney = response.data.data.challengeFeePerPerson;
+
       localStorage.setItem(
         'memberMoney',
         Number(localStorage.getItem('memberMoney')) - minusMoney
       );
+
       await setPageStateNumber(1);
       await setPageNumber(1);
       await navigate('/challengelist/bucketlist');
