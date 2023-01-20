@@ -60,6 +60,7 @@ export default function SecondQuestionSet({ register, watch }) {
         <h3>대표 이미지를 설정해주세요</h3>
         <input
           type={'file'}
+          accept="image/*"
           {...register('challengeRepImagePath', {
             required: 'Please Upload Picture',
           })}

@@ -72,9 +72,9 @@ export default function CreateChallenge() {
         Number(localStorage.getItem('memberMoney')) - minusMoney
       );
 
-      setPageStateNumber(1);
-      setPageNumber(1);
-      navigate('/challengelist/bucketlist');
+      await setPageStateNumber(1);
+      await setPageNumber(1);
+      await navigate('/challengelist/bucketlist');
     } catch (error) {
       console.log('error : ', error);
     }
