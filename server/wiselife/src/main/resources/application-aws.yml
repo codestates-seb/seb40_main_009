@@ -37,7 +37,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 3MB
-      max-request-size: 3MB
+      max-request-size: 15MB
 
 logging:
   config: classpath:logback-spring.xml
