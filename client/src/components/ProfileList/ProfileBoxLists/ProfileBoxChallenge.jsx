@@ -71,9 +71,11 @@ function ProfileBoxList({
                 </p>
                 <p>
                   예상환급금:&nbsp;
-                  {memberReward
-                    .toString()
-                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                  {Math.floor(
+                    memberReward
+                      .toString()
+                      .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+                  )}
                   &nbsp; 원
                 </p>
               </div>
