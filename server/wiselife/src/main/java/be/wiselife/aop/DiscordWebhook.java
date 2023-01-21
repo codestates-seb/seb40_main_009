@@ -2,6 +2,8 @@ package be.wiselife.aop;
 
 
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,18 +14,16 @@ import java.util.*;
 
 public class DiscordWebhook {
 
-    private final String url;
+    @Value("${discord.webhook}")
+    private String url;
+
     private String content;
     private boolean tts;
 
-    public DiscordWebhook(String url) {
-        this.url = url;
+    public DiscordWebhook() {}
+    public DiscordWebhook(String depoly) {
+        this.url = depoly;
     }
-
-    public DiscordWebhook() {
-        this.url = "";
-    }
-
     public void setContent(String content) {
         this.content = content;
     }
@@ -41,6 +41,7 @@ public class DiscordWebhook {
 
         json.put("content", this.content);
         json.put("tts", this.tts);
+
 
         URL url = new URL(this.url);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();

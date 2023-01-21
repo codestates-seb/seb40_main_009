@@ -1,5 +1,6 @@
 package be.wiselife.aop;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -12,11 +13,13 @@ import java.net.UnknownHostException;
 @Configuration
 public class ServerDeployChecker{
 
+    @Value("${discord.depoly}")
+    private String depolyUrl;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
-        DiscordWebhook webhook = new DiscordWebhook
-                ();
+
+        DiscordWebhook webhook = new DiscordWebhook(depolyUrl);
 
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();
