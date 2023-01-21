@@ -80,7 +80,7 @@ cloud:
         auto: false
 common:
     data:
-      kakao: KakaoAK ${ORDER_KEY}
+      kakao: KakaoAK 79fd132c770be75df16bbafdcfe48463 //for test
       success: https://wiselife.click/order/success
       cancel: https://wiselife.click/order/cancel
       fail: https://wiselife.click/order/fail
