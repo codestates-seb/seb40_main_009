@@ -18,6 +18,7 @@ public class ServerDeployChecker{
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
+
         DiscordWebhook webhook = new DiscordWebhook(depolyUrl);
 
         try {

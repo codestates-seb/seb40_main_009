@@ -24,8 +24,6 @@ public class DiscordWebhook {
     public DiscordWebhook(String depoly) {
         this.url = depoly;
     }
-
-
     public void setContent(String content) {
         this.content = content;
     }
