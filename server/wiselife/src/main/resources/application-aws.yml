@@ -80,7 +80,7 @@ cloud:
         auto: false
 common:
     data:
-      kakaoAK: ${ORDER_KEY}
+      kakaoAK: KakaoAK ${ORDER_KEY}
       success: https://wiselife.click/order/success
       cancel: https://wiselife.click/order/cancel
       fail: https://wiselife.click/order/fail
