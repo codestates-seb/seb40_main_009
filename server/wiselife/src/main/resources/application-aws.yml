@@ -1,0 +1,90 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none  # (1) 스키마 자동 생성
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${ENDPOINT}:${PORT}/wiselife_db?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DB_ID}
+    password: ${DB_PASSWORD}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CILENT_ID}
+            redirect-uri: https://wiselife.click/oauth/callback/kakao
+            client-authentication-method: POST
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            client_name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize #인증을 요청하는 url을 작성
+            token-uri: https://kauth.kakao.com/oauth/token #토큰을 요청하는 url
+            user-info-uri: https://kapi.kakao.com/v2/user/me #회원 정보를 가져오는 url
+            user-name-attribute: id
+  # OAuth2ClientPropertiesRegistrationAdapter를 통해OAuth2ClientProperties에서 각 OAuth2 server마다 ClientRegistration 생성
+  # ClientRegistration 리스트를 InMemoryClientRegistrationRepository에 저장
+
+
+# 이미지 사이즈 저장공간
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 15MB
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+      charset: utf-8
+      force: true
+  port: 3000
+
+jwt:
+  token:
+    secret-key: ${JWT_SECRET_KEY}
+  access-token:
+    expire-length: 900000
+  refresh-token:
+    expire-length: 12096000
+
+mail:
+  address:
+      admin: mins402kim@kakao.com
+
+cloud:
+  aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      s3:
+        bucket: wiselife-image
+      region:
+        static: ap-northeast-2
+      stack:
+        auto: false
+
+
+common:
+    data:
+      kakaoAK: KakaoAK 79fd132c770be75df16bbafdcfe48463 #${KAKAO_AUTH_ORDER_KEY}
+      success: https://wiselife.click/order/success
+      cancel: https://wiselife.click/order/cancel
+      fail: https://wiselife.click/order/fail
+
+

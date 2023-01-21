@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+[Layout]
+%d : 날짜
+%n : new line
+%t : thread
+%p : 로깅레벨
+%c : 로깅이 발생한 카테고리
+%C : 로깅이 발생한 클래스명
+%m : 로깅 메세지
+-->
+
+<configuration>
+        <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
+        <property name="LOG_PATTERN"
+                  value="%yellow([%d{yyyy-MM-dd HH:mm:ss}:%-4relative]) %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+    <!-- 시간 , 실행 스레드 로그 레벨, 클레스 메소드 라인-->
+
+        <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+        <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+        <conversionRule conversionWord="wex"
+                        converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+        <conversionRule conversionWord="wEx"
+                        converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+        <property name="LOG_PATTERN"
+                  value="${LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){blue}
+                  %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta}
+                  %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint}
+                  %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+        <springProperty name="AWS_ACCESS_KEY" source="cloud.aws.credentials.accessKey"/>
+        <springProperty name="AWS_SECRET_KEY" source="cloud.aws.credentials.secretKey"/>
+
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </layout>
+        </appender>
+
+        <appender name="aws_cloud_watch_log" class="ca.pjer.logback.AwsLogsAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>ERROR</level>
+            </filter>
+            <layout>
+                <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
+            </layout>
+                <logGroupName>wiselifeInfo-log</logGroupName> <!--CloudWatch log Group Name-->
+                <logStreamUuidPrefix>wiselife-Ilog-</logStreamUuidPrefix> <!--로그스트림 UUID-->
+                <logRegion>ap-northeast-2</logRegion>
+                <maxBatchLogEvents>50</maxBatchLogEvents> <!--배치의 최대 이벤트 갯수-->
+                <maxFlushTimeMillis>30000</maxFlushTimeMillis> <!--마지막 처리를 하고 시간이 지나면 cloud watch로 로그를 쏨-->
+                <maxBlockTimeMillis>5000</maxBlockTimeMillis> <!--로그가 전송되는 동안 코드가 계속 실행되는 것을 차단하고 값을 0으로 세팅하면 전송중에 발생되는 모든 로그를 버립니다.-->
+                <retentionTimeDays>0</retentionTimeDays> <!--로그보존기간 0 = 무제한-->
+                <accessKeyId>${AWS_ACCESS_KEY_ID}</accessKeyId>
+                <secretAccessKey>${AWS_SECRET_ACCESS_KEY}</secretAccessKey>
+        </appender>
+
+        <springProfile name="local">
+            <root level="info">
+    <!--            <appender-ref ref="aws_cloud_watch_log"/> &lt;!&ndash;INFO 출력위치&ndash;&gt;-->
+                <appender-ref ref="CONSOLE"/> <!--INFO 일반적인 코드 출력위치-->
+            </root>
+
+        </springProfile>
+    </configuration>
+
+
+<!--<configuration packagingData="true">-->
+
+
+<!--    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>-->
+
+<!--    <timestamp key="timestamp" datePattern="yyyyMMddHHmmssSSS"/>-->
+
+<!--    <appender name="ASYNC_AWS_LOGS" class="ca.pjer.logback.AwsLogsAppender">-->
+
+<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--            <level>WARN</level>-->
+<!--        </filter>-->
+
+<!--        <layout>-->
+<!--            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>-->
+<!--        </layout>-->
+
+<!--        <logGroupName>wiselifeInfo-log</logGroupName> &lt;!&ndash;CloudWatch log Group Name&ndash;&gt;-->
+<!--        <logStreamUuidPrefix>wiselife-Ilog-</logStreamUuidPrefix> &lt;!&ndash;로그스트림 UUID&ndash;&gt;-->
+<!--        <logRegion>ap-northeast-2</logRegion>-->
+<!--        <maxBatchLogEvents>50</maxBatchLogEvents> &lt;!&ndash;배치의 최대 이벤트 갯수&ndash;&gt;-->
+<!--        <maxFlushTimeMillis>30000</maxFlushTimeMillis> &lt;!&ndash;마지막 처리를 하고 시간이 지나면 cloud watch로 로그를 쏨&ndash;&gt;-->
+<!--        <maxBlockTimeMillis>5000</maxBlockTimeMillis> &lt;!&ndash;로그가 전송되는 동안 코드가 계속 실행되는 것을 차단하고 값을 0으로 세팅하면 전송중에 발생되는 모든 로그를 버립니다.&ndash;&gt;-->
+<!--        <retentionTimeDays>0</retentionTimeDays> &lt;!&ndash;로그보존기간 0 = 무제한&ndash;&gt;-->
+<!--        <accessKeyId>${AWS_ACCESS_KEY_ID}</accessKeyId>-->
+<!--        <secretAccessKey>${AWS_SECRET_ACCESS_KEY}</secretAccessKey>-->
+
+<!--    </appender>-->
+
+<!--    <appender name="aws" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+<!--    <root level="INFO">-->
+<!--        &lt;!&ndash; Append to the console &ndash;&gt;-->
+<!--        <appender-ref ref="aws"/>-->
+<!--        &lt;!&ndash; Append also to the (async) AwsLogsAppender &ndash;&gt;-->
+<!--        <appender-ref ref="ASYNC_AWS_LOGS"/>-->
+<!--    </root>-->
+
+<!--</configuration>-->
+
+
+
+

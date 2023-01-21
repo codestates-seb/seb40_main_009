@@ -22,20 +22,56 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.google.code.gson:gson'	//GSON JSON 데이터 변환
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	implementation 'com.google.code.gson:gson'    //GSON JSON 데이터 변환
+
+	//보안관련 설정
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-//	runtimeOnly 'com.mysql:mysql-connector-j' //서버 배포할때
+//	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
 
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	//Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+	//AWS cloud
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
+
+	//이미지 리사이징
+	implementation 'com.github.downgoon:marvin:1.5.5'
+	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+
+	//로그 관련
+	implementation "ca.pjer:logback-awslogs-appender:1.6.0"
 }
+
+
+
+configurations {
+	    all {
+		       exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		   }
+	}
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+//Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
+clean {
+delete file('src/main/generated')
 }
