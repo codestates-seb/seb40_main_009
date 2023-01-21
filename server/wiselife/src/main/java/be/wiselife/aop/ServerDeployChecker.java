@@ -16,7 +16,7 @@ public class ServerDeployChecker{
     @EventListener(ApplicationReadyEvent.class)
     public void initData() {
         DiscordWebhook webhook = new DiscordWebhook
-                ("https://discord.com/api/webhooks/1045570083558273044/AErMVlgJw6eAMfjz3Q1sgiRNtp35WGtjpLKOWkQN7fZkesUxGAyPnVWB-zxMkoeYyKv1");
+                ();
 
         try {
             String ip = InetAddress.getLocalHost().getHostAddress();
