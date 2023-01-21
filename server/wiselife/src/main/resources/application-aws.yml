@@ -89,3 +89,4 @@ common:
 
 discord:
   key: ${DISCORD_KEY}
+  depoly: ${DISCORD_DEPOLY}
