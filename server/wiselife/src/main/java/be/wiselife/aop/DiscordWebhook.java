@@ -15,12 +15,14 @@ import java.util.*;
 public class DiscordWebhook {
 
     @Value("${discord.webhook}")
-    private final String url;
+    private String url;
+
     private String content;
     private boolean tts;
 
-    public DiscordWebhook(String url) {
-        this.url = url;
+    public DiscordWebhook() {}
+    public DiscordWebhook(String depoly) {
+        this.url = depoly;
     }
 
 
@@ -41,6 +43,7 @@ public class DiscordWebhook {
 
         json.put("content", this.content);
         json.put("tts", this.tts);
+
 
         URL url = new URL(this.url);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
