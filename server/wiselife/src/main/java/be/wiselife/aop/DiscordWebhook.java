@@ -21,7 +21,7 @@ public class DiscordWebhook {
     }
 
     public DiscordWebhook() {
-        this.url = "https://discord.com/api/webhooks/1041711811545796689/YgVukR11d24wegp9D4vYYDIpqPGcZHR8Q7Jt4LRAhtlJjyYpnsLM-pixpSJa2EUGrh_R";
+        this.url = "";
     }
 
     public void setContent(String content) {
