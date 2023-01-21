@@ -45,7 +45,9 @@ jobs:
         cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
         spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
-        common.data.kakaoAK: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
+        common.data.kakao: ${{ secrets.ORDER_KEY }}
+        discord.webhook: ${{ secrets.WEBHOOK }}
+        discord.depoly: ${{ secrets.DEPOLY }}
 
      # grant execute permission for gradlew
     - name : Grant execute permission for gradlew
@@ -66,7 +68,9 @@ jobs:
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        KAKAO_AUTH_ORDER_KEY: ${{ secrets.KAKAO_AUTH_ORDER_KEY }}
+        ORDER_KEY: ${{ secrets.ORDER_KEY }}
+        WEBHOOK: ${{ secrets.WEBHOOK }}
+        DEPOLY: ${{ secrets.DEPOLY }}
     
     - name: Make zip file
       run: zip -r ./wiselife-deploy.zip .
