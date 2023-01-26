@@ -3,7 +3,7 @@
 목표 달성을 위해 꼭 필요한 서비스
 <br>_Have you found joy in life? Has your life made others happy?_
 
-## ✍ About Service
+## :one: About Service
 
 <img src ="https://ifh.cc/g/Rag38b.jpg" width="100%" height="250"/>
 
@@ -31,7 +31,7 @@
 
 <br>
 
-### 화면 미리보기
+### 🔍 화면 미리보기
 
 |메인1|메인2|로그인|
 |:---:|:---:|:---:|
@@ -53,7 +53,7 @@
 
 -----
 
-## About Project
+## :two: About Project
 
 ### :earth_africa: Project Architecture
 
