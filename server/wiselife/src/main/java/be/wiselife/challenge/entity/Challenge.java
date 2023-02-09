@@ -14,7 +14,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -43,7 +46,7 @@ public class Challenge extends WriterAudit {
     @Column(nullable = false,columnDefinition = "MEDIUMTEXT")
     @Setter
     private String challengeDescription;
-    @Setter
+
     private double challengeCurrentParty;
     @Setter
     private int challengeMaxParty;
@@ -195,5 +198,10 @@ public class Challenge extends WriterAudit {
         ChallengeCategory(String category) {
             this.category = category;
         }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public synchronized void setChallengeCurrentParty(double challengeCurrentParty) {
+        this.challengeCurrentParty=challengeCurrentParty;
     }
 }

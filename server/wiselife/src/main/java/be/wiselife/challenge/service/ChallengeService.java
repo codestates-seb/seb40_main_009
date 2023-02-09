@@ -15,12 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.LockModeType;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -33,9 +35,10 @@ import java.util.Optional;
  * 수정, 삭제시 권한 확인하는 함수
  * 
  */
-@Transactional(readOnly = false)
+//@Transactional(readOnly = false)
 @Service
 @Slf4j
+@Transactional(readOnly = false)
 public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
@@ -63,7 +66,7 @@ public class ChallengeService {
      * @param exampleImage
      * @return
      */
-    public Challenge createChallenge(Challenge challenge, Member loginMember, MultipartFile repImage, List<MultipartFile> exampleImage) throws IOException {
+    public Challenge createChallenge(Challenge challenge, Member loginMember, MultipartFile repImage, List<MultipartFile> exampleImage) throws IOException, InterruptedException {
         log.info("createChallenge tx start");
         if (challenge.getChallengeMaxParty() < challenge.getChallengeMinParty()) {
             throw new BusinessLogicException(ExceptionCode.CHALLENGE_MAX_PARTY_CAN_NOT_SMALLER_THAN_MIN_PARTY);
@@ -84,9 +87,8 @@ public class ChallengeService {
         return saveChallenge(challenge);
     }
 
-    public Challenge participateChallenge(Challenge challenge, Member loginMember) {
-        log.info("participateChallenge tx start");
-        log.info("participateChallenge tx end");
+
+    public Challenge participateChallenge(Challenge challenge, Member loginMember) throws InterruptedException {
         return memberChallengeService.plusMemberAndChallenge(challenge,loginMember);
     }
 

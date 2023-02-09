@@ -5,9 +5,11 @@ import be.wiselife.quesrydslrepo.QuerydslRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface MemberRepository extends JpaRepository<Member,Long>, QuerydslRepository {
     //memberName를 클릭했을때, 해당 회원에 상세페이지로 넘어가기위해 db에서 꺼내오는 메소드
     Optional<Member> findByMemberName(String memberName);

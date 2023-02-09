@@ -10,10 +10,15 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 @Service
 @Slf4j
@@ -29,7 +34,9 @@ public class MemberChallengeService {
      * 역할 1. 생성 시점의 챌린지 참여인원 증가
      * 역할 2. 생성 시점의 예상 멤버가 가져갈 예상 상금 계산, 챌린지에 모인 총상금 계산
      */
-    public Challenge plusMemberAndChallenge(Challenge challenge, Member member) {
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public Challenge plusMemberAndChallenge(Challenge challenge, Member member) throws InterruptedException {
         log.info("plusMemberAndChallenge tx start");
 
         if (member.getMemberMoney() < challenge.getChallengeFeePerPerson()) {
@@ -37,8 +44,13 @@ public class MemberChallengeService {
         }
         double challengeCurrentParty = challenge.getChallengeCurrentParty();
         MemberChallenge memberChallenge = new MemberChallenge();
+        try {
+            challenge.setChallengeCurrentParty(challengeCurrentParty+1);
+            sleep(5000);
+        } catch (Exception e) {
+            throw e;
+        }
 
-        challenge.setChallengeCurrentParty(challengeCurrentParty+1);
         if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
             throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
         }
@@ -51,11 +63,16 @@ public class MemberChallengeService {
         challenge.setChallengeTotalReward(challenge.getChallengeTotalReward()+challenge.getChallengeFeePerPerson());
         member.getMemberChallenges().add(memberChallenge);
         member.setMemberMoney(member.getMemberMoney()-challenge.getChallengeFeePerPerson());
-
         memberChallengeRepository.save(memberChallenge);
         memberRepository.save(member);
-        log.info("patchMemberAndChallenge tx end");
-        return challengeRepository.save(challenge);
+        log.info("plusMemberAndChallenge tx end");
+//        try {
+//            sleep(5000);
+            return challengeRepository.save(challenge);
+//        } catch (Exception e) {
+//            throw e;
+//        }
+
     }
 
 

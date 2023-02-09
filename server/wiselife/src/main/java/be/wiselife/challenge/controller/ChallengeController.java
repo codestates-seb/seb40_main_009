@@ -69,7 +69,7 @@ public class ChallengeController {
     public ResponseEntity postChallenge(Member member,
                                         @Valid @RequestPart(value = "post") ChallengeDto.Post challengePostDto,
                                         @RequestPart(value = "example", required = false) List<MultipartFile> exampleImage,
-                                        @RequestPart(value = "rep", required = false) MultipartFile repImage) throws IOException {
+                                        @RequestPart(value = "rep", required = false) MultipartFile repImage) throws IOException, InterruptedException {
 
         Challenge challenge = challengeMapper.challengePostDtoToChallenge(challengePostDto);
         challenge = challengeService.createChallenge(challenge, member, repImage, exampleImage);
@@ -114,7 +114,7 @@ public class ChallengeController {
     @NeedMember
     @PostMapping("/participate/{challengeId}")
     public ResponseEntity postMemberAndChallenge(Member member,
-                                                   @PathVariable("challengeId") @Positive Long challengeId) {
+                                                   @PathVariable("challengeId") @Positive Long challengeId) throws InterruptedException {
 
         Challenge challengeFromRepository = challengeService.findChallengeById(challengeId);
 
