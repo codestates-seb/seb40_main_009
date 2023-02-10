@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const MainContainer = styled.footer`
+export const MainContainer = styled.section`
   width: 100%;
 `;
 

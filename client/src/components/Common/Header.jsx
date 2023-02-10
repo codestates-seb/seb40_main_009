@@ -180,6 +180,7 @@ export default function Header() {
         <img
           style={{
             width: '9%',
+            height: '100%',
             // border: '1px solid red',
             cursor: 'pointer',
             marginLeft: '2%',
@@ -226,7 +227,7 @@ export default function Header() {
         </div>
         <Search>
           <input
-            id="search"
+            className="searchInput"
             type="text"
             placeholder="검색어를 입력해주세요."
             value={searchValue}
@@ -376,6 +377,7 @@ export default function Header() {
             }}
           >
             <img
+              width={'15%'}
               src={KakaoLoginButton}
               alt="로그인 버튼"
               onClick={handleLogin}

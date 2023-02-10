@@ -104,7 +104,7 @@ export default function MainPage() {
   });
 
   //early return pattern
-  if (loading) return <Loading />;
+  // if (loading) return <Loading />;
 
   return (
     <MainContainer>

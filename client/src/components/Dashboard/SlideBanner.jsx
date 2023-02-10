@@ -29,7 +29,7 @@ export default function SlideBanner() {
           console.debug('onAfterSliding(nextSlide): ', nextSlide),
       }}
     >
-      <Overlay>
+      <Overlay className="overlay">
         <Header />
         <Wrapper>
           <Title>
@@ -44,22 +44,31 @@ export default function SlideBanner() {
       <Slide
         shouldRenderMask
         background={{
+          width: `100%`,
           backgroundImageSrc: giauPass,
+          backgroundImageAlt: `image1`,
         }}
+        label="slide"
       />
 
       <Slide
         shouldRenderMask
         background={{
+          width: `100%`,
           backgroundImageSrc: bogliasco,
+          backgroundImageAlt: `image2`,
         }}
+        label="slide"
       />
 
       <Slide
         shouldRenderMask
         background={{
+          width: `100%`,
           backgroundImageSrc: craterRock,
+          backgroundImageAlt: `image3`,
         }}
+        label="slide"
       />
 
       <MenuNav />
