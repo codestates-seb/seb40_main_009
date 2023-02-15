@@ -48,5 +48,5 @@ public interface QuerydslRepository {
     MemberChallenge findByChallengeAndMember(Challenge challenge,Member member);
 
     List<Member> searchMemberName(String memberName);
-
+    MemberChallenge countSave(Challenge challenge, Member member);
 }

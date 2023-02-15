@@ -1,11 +1,15 @@
 package be.wiselife.member.repository;
 
+import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.quesrydslrepo.QuerydslRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long>, QuerydslRepository {
@@ -16,5 +20,11 @@ public interface MemberRepository extends JpaRepository<Member,Long>, QuerydslRe
     Optional<Member> findByMemberEmail(String memberEmail);
 
     Optional<Member> findByRefreshToken(String refreshToken);
+
     Optional<Page<Member>> findAllByMemberNameContaining(String memberName, Pageable pageable);
+
+    @Query(value = "SELECT m.memberId, m.memberName, m.createdAt, m.memberImagePath, m.memberBadge, m.followerCount FROM Member m")
+    List<Object[]> indexTester();
 }
+
+

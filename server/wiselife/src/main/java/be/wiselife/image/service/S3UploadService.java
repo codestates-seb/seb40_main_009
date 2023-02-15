@@ -8,11 +8,14 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import marvin.image.MarvinImage;
 import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +25,16 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import javax.persistence.LockModeType;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = false)
 @Slf4j
 public class S3UploadService {
 
@@ -64,6 +68,7 @@ public class S3UploadService {
      * @param multipartFile 리스트형태로 찬찬히 받아낸다.
      * @return
      */
+
     public List<String> uploadAsList(List<MultipartFile> multipartFile) {
         log.info("uploadAsList tx start");
         List<String> imageList = new ArrayList<>();
@@ -128,13 +133,12 @@ public class S3UploadService {
      * 이미지를 리사이징 너비 400에 고정하여 변환
      * @return
      */
-    @Transactional
     public MultipartFile resizer(String fileName, String fileFormat, MultipartFile originalImage, int width) {
 
         try {
-            BufferedImage image = ImageIO.read(originalImage.getInputStream());// MultipartFile -> BufferedImage Convert
-            // newWidth : newHeight = originWidth : originHeight
 
+            BufferedImage image = ImageIO.read(originalImage.getResource().getFile());// MultipartFile -> BufferedImage Convert
+            // newWidth : newHeight = originWidth : originHeight
             int originWidth = image.getWidth();
             int originHeight = image.getHeight();
 

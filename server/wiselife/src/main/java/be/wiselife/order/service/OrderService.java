@@ -155,7 +155,7 @@ public class OrderService {
      * 이메일을 통해서 맴버를 찾고
      * @return  맴버아이디와 일치되는 오더기록을 리턴한다.
      */
-    @Transactional(readOnly = true)
+
     public List<Order> getOrderList(String email) {
         log.info("getOrderList tx start");
         Member member = memberRepository.findByMemberEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));

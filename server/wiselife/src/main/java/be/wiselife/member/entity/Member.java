@@ -12,6 +12,7 @@ import lombok.*;
 
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -21,7 +22,10 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@Table(name="Member_Table",indexes = @Index(name = "idx__member", columnList = "memberName"))
+@Table(name="Member_Table",indexes = {
+        @Index(name = "idx__member", columnList = "memberName"),
+        @Index(name = "test2_idx", columnList = "memberId,memberName,createdAt,memberImagePath,memberBadge,followerCount")
+    })
 //Member는 생성일자만 있으면 되므로 TimeAudit만 상속 받는다.
 public class Member extends TimeAudit {
 
@@ -88,11 +92,11 @@ public class Member extends TimeAudit {
     @Column(nullable = false)
     private String providerId; // 플랫폼 아이디 값 저장하기 소셜 로그인에서 준 ID 번호
 
-    @Column(nullable = false)
+    @Column( nullable = false)
     private String memberImagePath="이미지";
 
     @Column(nullable = false)
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<String> roles = new ArrayList<>();
 
     // 주문내역 관련 필드

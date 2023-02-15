@@ -10,10 +10,14 @@ import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.memberchallenge.repository.MemberChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 @Service
 @Slf4j
@@ -31,31 +35,28 @@ public class MemberChallengeService {
      */
     public Challenge plusMemberAndChallenge(Challenge challenge, Member member) {
         log.info("plusMemberAndChallenge tx start");
+        MemberChallenge memberChallenge = null;
+        try {
+            sleep(4000);
+            if (member.getMemberMoney() < challenge.getChallengeFeePerPerson()) { //돈문제
+                throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_CHARGE_MONEY);
+            }
 
-        if (member.getMemberMoney() < challenge.getChallengeFeePerPerson()) {
-            throw new BusinessLogicException(ExceptionCode.YOU_NEED_TO_CHARGE_MONEY);
+            if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
+                throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
+            }
+            log.info("우리가 만든 쿼리");
+            memberChallenge = memberRepository.countSave(challenge, member);
+            challenge.getMemberChallenges().add(memberChallenge);
+            member.getMemberChallenges().add(memberChallenge);
+            log.info("patchMemberAndChallenge tx end");
+
+        } catch (Exception e){
+
         }
-        double challengeCurrentParty = challenge.getChallengeCurrentParty();
-        MemberChallenge memberChallenge = new MemberChallenge();
-
-        challenge.setChallengeCurrentParty(challengeCurrentParty+1);
-        if (challenge.getChallengeCurrentParty() > challenge.getChallengeMaxParty()) {
-            throw new BusinessLogicException(ExceptionCode.THIS_CHALLENGE_HAS_MAX_MEMBER);
-        }
-
-        memberChallenge.setExpectedRefundToMember(challenge.getChallengeFeePerPerson());
-        memberChallenge.setMember(member);
-        memberChallenge.setChallenge(challenge);
-
-        challenge.getMemberChallenges().add(memberChallenge);
-        challenge.setChallengeTotalReward(challenge.getChallengeTotalReward()+challenge.getChallengeFeePerPerson());
-        member.getMemberChallenges().add(memberChallenge);
-        member.setMemberMoney(member.getMemberMoney()-challenge.getChallengeFeePerPerson());
-
-        memberChallengeRepository.save(memberChallenge);
-        memberRepository.save(member);
-        log.info("patchMemberAndChallenge tx end");
-        return challengeRepository.save(challenge);
+        finally {
+            return memberChallenge.getChallenge();
+            }
     }
 
 

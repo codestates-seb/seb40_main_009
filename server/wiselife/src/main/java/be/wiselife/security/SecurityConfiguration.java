@@ -51,6 +51,7 @@ public class SecurityConfiguration{
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) //Oauth2에서는 인증에서 실패했을때 처리하는 로직
                 .accessDeniedHandler(new MemberAccessDeniedHandler()) //인가 에러 핸들링
                 .and()
+
                 /*-----추후 어느정도 구성이 완료되고 인가 관련 설정----*/
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/*/order/**").hasAnyRole("USER")
@@ -112,5 +113,6 @@ public class SecurityConfiguration{
         
         return source;
     }
+
 
 }

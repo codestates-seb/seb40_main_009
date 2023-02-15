@@ -7,6 +7,7 @@ import be.wiselife.dto.SingleResponseDto;
 import be.wiselife.member.dto.MemberDto;
 import be.wiselife.member.entity.Member;
 import be.wiselife.member.mapper.MemberMapper;
+import be.wiselife.member.repository.MemberRepository;
 import be.wiselife.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +72,16 @@ public class MemberController {
 
         return new ResponseEntity(
                 new MultiResponseDto<>(mapper.memberListResponses(allMembers),pageInformation),HttpStatus.OK);
+    }
+
+
+    @GetMapping("/index")
+    public ResponseEntity getAllMembers(){
+
+
+        return new ResponseEntity(
+                new SingleResponseDto<>( memberService.findAllOfThem()), HttpStatus.ACCEPTED
+        );
     }
 
     /**

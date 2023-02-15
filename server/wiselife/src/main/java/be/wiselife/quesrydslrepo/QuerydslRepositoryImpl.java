@@ -1,32 +1,39 @@
 package be.wiselife.quesrydslrepo;
 
 import be.wiselife.challenge.entity.Challenge;
-import be.wiselife.challengereview.entity.ChallengeReview;
 import be.wiselife.follow.entity.Follow;
 import be.wiselife.image.entity.*;
 import be.wiselife.member.entity.Member;
 import be.wiselife.memberchallenge.entity.MemberChallenge;
 import be.wiselife.order.entity.Order;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import static be.wiselife.follow.entity.QFollow.follow;
-import static be.wiselife.image.entity.QMemberImage.*;
-import static be.wiselife.image.entity.QReviewImage.*;
-import static be.wiselife.image.entity.QChallengeRepImage.*;
-import static be.wiselife.image.entity.QChallengeExamImage.*;
-import static be.wiselife.image.entity.QChallengeCertImage.*;
-import static be.wiselife.memberchallenge.entity.QMemberChallenge.*;
 
 import static be.wiselife.follow.entity.QFollow.follow;
-import static be.wiselife.order.entity.QOrder.order;
+import static be.wiselife.image.entity.QChallengeCertImage.challengeCertImage;
+import static be.wiselife.image.entity.QChallengeExamImage.challengeExamImage;
+import static be.wiselife.image.entity.QChallengeRepImage.challengeRepImage;
+import static be.wiselife.image.entity.QMemberImage.memberImage;
+import static be.wiselife.image.entity.QReviewImage.reviewImage;
 import static be.wiselife.member.entity.QMember.member;
+import static be.wiselife.memberchallenge.entity.QMemberChallenge.memberChallenge;
+import static be.wiselife.order.entity.QOrder.order;
+import static be.wiselife.challenge.entity.QChallenge.challenge;
+import static java.lang.Thread.sleep;
 
 @RequiredArgsConstructor
+@Slf4j
 public class QuerydslRepositoryImpl implements QuerydslRepository {
     private final JPAQueryFactory queryFactory;
+    private final EntityManager entityManager;
 
     @Override
     public Follow findByFollowerIdAndFollowing(Long followerId, Member following) {
@@ -187,4 +194,39 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .orderBy(member.createdAt.desc())
                 .fetch();
     }
+    //벌크연산?
+    @Override
+    public MemberChallenge countSave(Challenge beforeChallenge,Member beforeMember) {
+        MemberChallenge memberChallenge = new MemberChallenge();
+        memberChallenge.setExpectedRefundToMember(beforeChallenge.getChallengeFeePerPerson());
+        memberChallenge.setMember(beforeMember);
+        memberChallenge.setChallenge(beforeChallenge);
+
+//        queryFactory.
+//                update(memberChallenge).
+//                set(memberChallenge.expectedRefundToMember, (double) beforeChallenge.getChallengeFeePerPerson())
+//                .set(memberChallenge.member, beforeMember)
+//                .set(memberChallenge.challenge, beforeChallenge).execute();
+
+
+        queryFactory.
+                update(challenge)
+                .set(challenge.challengeTotalReward,
+                        challenge.challengeTotalReward.add(beforeChallenge.getChallengeTotalReward()))
+                .set(challenge.challengeCurrentParty, challenge.challengeCurrentParty.add(1))
+                .where(challenge.challengeId.eq(beforeChallenge.getChallengeId()))
+                .execute();
+
+        queryFactory.update(member)
+                .set(member.memberMoney, beforeMember.getMemberMoney() - beforeChallenge.getChallengeFeePerPerson())
+                .where(member.memberId.eq(beforeMember.getMemberId()))
+                .execute();
+
+
+        return memberChallenge;
+           }
+
+
+
+
 }
